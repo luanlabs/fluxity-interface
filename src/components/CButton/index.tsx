@@ -25,7 +25,7 @@ const CButton = ({ color, content, kind, logo }: ButtonProps) => {
 
   const kindStyles =
     kind === 'simple'
-      ? 'rounded-[30px] text-center text-[16px] px-6 h-[44px] flex flex-row justify-center items-center'
+      ? 'rounded-[30px] text-[#fff] text-center text-[16px] px-6 h-[44px] flex flex-row justify-center items-center'
       : '!bg-[#050142] rounded-[12px] w-[329px] h-[56px] text-[#fff] text-[16px] text-center flex justify-center items-center';
 
   return (

@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import WelcomeToFluxity from '../containers/WelcomeToFluxity';
+import CreateStreamPurple from '../containers/CreateStreamPurple';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta = {
   title: 'Components/CCard',
-  component: WelcomeToFluxity,
+  component: CreateStreamPurple,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/react/configure/story-layout
     layout: 'centered',
@@ -15,11 +15,11 @@ const meta = {
   tags: ['autodocs'],
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-} satisfies Meta<typeof WelcomeToFluxity>;
+} satisfies Meta<typeof CreateStreamPurple>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 
-export const Blue: Story = {};
+export const Purple: Story = {};
