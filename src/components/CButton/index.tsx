@@ -3,7 +3,7 @@ import Image from 'next/image';
 import cn from 'classnames';
 
 interface ButtonProps {
-  color?: 'orange' | 'purple' | 'white' | 'gray' | 'blue';
+  color?: 'orange' | 'purple' | 'white' | 'gray' | 'blue' | 'blueWhite';
   content: string;
   kind: 'simple' | 'form';
   logo?: string;
@@ -19,8 +19,10 @@ const CButton = ({ color, content, kind, logo }: ButtonProps) => {
     colorStyles = 'bg-[#F0EFFF] border border-[#050142] text-[#050142]';
   } else if (color === 'white') {
     colorStyles = 'bg-[#fff] border border-[#050142] text-[#333]';
-  } else {
+  } else if (color === 'blue') {
     colorStyles = 'bg-[#4c36d8]';
+  } else {
+    colorStyles = 'bg-[#fff] text-[#3A21D4] rounded-[11px] h-[36px] !px-3';
   }
 
   const kindStyles =
