@@ -35,14 +35,6 @@ export const SimpleOrange: Story = {
   },
 };
 
-export const SimpleOrangeNoLogo: Story = {
-  args: {
-    kind: 'simple',
-    color: 'orange',
-    content: 'Read Whitepaper',
-  },
-};
-
 export const SimplePurple: Story = {
   args: {
     kind: 'simple',
@@ -55,7 +47,7 @@ export const SimplePurple: Story = {
 export const SimpleTestNet: Story = {
   args: {
     kind: 'simple',
-    color: 'white',
+    color: 'gray',
     content: 'Testnet',
     logo: '',
   },
@@ -75,6 +67,15 @@ export const SimpleShare: Story = {
     kind: 'simple',
     color: 'blue',
     content: 'Share',
+    logo: '',
+  },
+};
+
+export const SimpleHelp: Story = {
+  args: {
+    kind: 'simple',
+    color: 'blueWhite',
+    content: 'Get Help',
     logo: '',
   },
 };

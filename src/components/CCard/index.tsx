@@ -9,11 +9,12 @@ interface CardProps {
   className: string;
 }
 
-const CCard = ({ children, bgColor, borderColor, className }: CardProps) => {
+const CCard = ({ children, bgColor, borderColor, className, ...props }: CardProps) => {
   return (
     <div
       className={cn(className, 'rounded-[14px] border')}
       style={{ backgroundColor: bgColor, border: 'solid 1px' + borderColor }}
+      {...props}
     >
       {children}
     </div>

@@ -1,11 +1,11 @@
 import React from 'react';
 import Image from 'next/image';
 
-import VectorSvg from '../../../public/images/vector.svg';
+import welcomeLogo from '../../../public/images/welcome.svg';
 
 import CCard from '../../components/CCard';
 
-const WelcomeToFluxity = () => {
+const WelcomeToFluxityCard = () => {
   return (
     <div className="w-[985px] h-[267px]">
       <CCard
@@ -20,11 +20,17 @@ const WelcomeToFluxity = () => {
           </p>
         </div>
         <div>
-          <Image src={VectorSvg} width={275} height={275} className="mr-10" alt="logo" />
+          <Image
+            src={welcomeLogo}
+            width={275}
+            height={275}
+            className="mr-10"
+            alt="logo"
+          />
         </div>
       </CCard>
     </div>
   );
 };
 
-export default WelcomeToFluxity;
+export default WelcomeToFluxityCard;

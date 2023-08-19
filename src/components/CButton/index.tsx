@@ -9,30 +9,32 @@ interface ButtonProps {
   logo?: string;
 }
 
-const CButton = ({ color, content, kind, logo }: ButtonProps) => {
+const CButton = ({ color, content, kind, logo, ...props }: ButtonProps) => {
   let colorStyles = '';
   if (color === 'orange') {
-    colorStyles = 'bg-[#cd5a41] h-[40px] text-[#fff]';
+    colorStyles = 'bg-mediumcoral h-[40px] text-[#fff]';
   } else if (color === 'purple') {
-    colorStyles = 'bg-[#852fda] h-[40px]';
+    colorStyles = 'bg-darklavender text-[#fff] h-[40px]';
   } else if (color === 'gray') {
-    colorStyles = 'bg-[#F0EFFF] border border-[#050142] text-[#050142]';
+    colorStyles = 'bg-lavenderblush border border-midnightblue text-midnightblue';
   } else if (color === 'white') {
-    colorStyles = 'bg-[#fff] border border-[#050142] text-[#333]';
+    colorStyles = 'bg-[#fff] border border-midnightblue text-midnightblue';
   } else if (color === 'blue') {
-    colorStyles = 'bg-[#4c36d8]';
+    colorStyles = 'bg-[#4c36d8] text-[#fff]';
   } else {
-    colorStyles = 'bg-[#fff] text-[#3A21D4] rounded-[11px] h-[36px] !px-3';
+    colorStyles = 'bg-[#fff] text-royalblue !rounded-[11px] h-[36px] !px-3';
   }
 
   const kindStyles =
     kind === 'simple'
-      ? 'rounded-[30px] text-[#fff] text-center text-[16px] px-6 h-[44px] flex flex-row justify-center items-center'
-      : '!bg-[#050142] rounded-[12px] w-[329px] h-[56px] text-[#fff] text-[16px] text-center flex justify-center items-center';
+      ? 'rounded-[30px] text-center text-[16px] px-6 h-[44px] flex flex-row justify-center items-center'
+      : '!bg-midnightblue rounded-[12px] w-[329px] h-[56px] !text-[#fff] text-[16px] text-center flex justify-center items-center';
 
   return (
-    <button className={cn(kindStyles, colorStyles)}>
-      {logo && <Image src={logo} width={25} height={25} alt="logo" className="mr-2" />}
+    <button className={cn(kindStyles, colorStyles)} {...props}>
+      {logo && (
+        <Image src={logo} width={25} height={25} alt="logo" className="mr-2" {...props} />
+      )}
       {content}
     </button>
   );
