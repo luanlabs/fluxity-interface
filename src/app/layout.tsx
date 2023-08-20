@@ -14,6 +14,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [isFolded, setIsFolded] = useState(false);
+  console.log(isFolded);
+
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -24,8 +26,8 @@ export default function RootLayout({
             </header>
             <section className="inline-flex basis-full gap-4 w-full h-5/6">
               <aside
-                className={`bg-white basis-${
-                  isFolded ? '1/12' : '3/12'
+                className={`bg-white ${
+                  isFolded ? 'basis-1/12 md:basis-1/12' : 'basis-3/12'
                 } md:basis-2/12 rounded-[14px]`}
               >
                 <button
