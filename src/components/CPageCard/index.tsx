@@ -6,7 +6,7 @@ import CCard from '../CCard';
 interface CPageCard {
   divider?: boolean;
   title?: JSX.Element | React.ReactNode;
-  children?: JSX.Element | React.ReactNode;
+  children: JSX.Element | React.ReactNode;
   className?: string;
 }
 
@@ -30,7 +30,7 @@ const CPageCard = ({ divider, title, children, className, ...props }: CPageCard)
     >
       {title && <div className="w-full">{title}</div>}
       {divider && <div className={dividerStyle} />}
-      {children && <div className={padding}>{children}</div>}
+      <div className={padding}>{children}</div>
     </CCard>
   );
 };

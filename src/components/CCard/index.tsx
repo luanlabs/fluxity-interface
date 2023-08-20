@@ -5,7 +5,7 @@ interface CardProps {
   color?: string;
   bgColor?: string;
   borderColor?: string;
-  children?: JSX.Element | React.ReactNode;
+  children: JSX.Element | React.ReactNode;
   className: string;
 }
 
