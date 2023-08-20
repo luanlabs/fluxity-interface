@@ -28,9 +28,9 @@ const CPageCard = ({ divider, title, children, className, ...props }: CPageCard)
       borderColor="rgba(5, 1, 66, 0.10)"
       {...props}
     >
-      <div className="w-full">{title}</div>
-      <div className={dividerStyle}></div>
-      <div className={padding}>{children}</div>
+      {title && <div className="w-full">{title}</div>}
+      {divider && <div className={dividerStyle} />}
+      {children && <div className={padding}>{children}</div>}
     </CCard>
   );
 };
