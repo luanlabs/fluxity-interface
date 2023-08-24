@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google';
 
 import '../styles/globals.css';
 import StyledComponentsRegistry from '../styles/registry';
+import CLink from 'src/components/CLink';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,7 +22,8 @@ export default function RootLayout({
         <StyledComponentsRegistry>
           <main className="bg-alabaster h-screen px-8 pt-[9px] pb-7">
             <header className="bg-white h-[72px] rounded-[14px] mb-3">
-              head
+              <CLink title="Documentation" url="/" />
+              <CLink title="Community" url="/" />
             </header>
             <section className="inline-flex basis-full gap-4 w-full h-5/6">
               <aside

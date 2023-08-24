@@ -27,6 +27,7 @@ const config: Config = {
         mistyrose: '#ffe8e3',
         midnightblue: '#050142',
         transparentmidnightblue: 'rgba(5, 1, 66, 0.5)',
+        DarkNavyBlue: 'rgba(5, 1, 66, 0.7)',
       },
       screens: {
         sm: { min: '640px', max: '767px' },
