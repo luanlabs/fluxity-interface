@@ -14,7 +14,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [isFolded, setIsFolded] = useState(false);
-  console.log(isFolded);
 
   return (
     <html lang="en">
