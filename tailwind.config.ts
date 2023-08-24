@@ -26,8 +26,9 @@ const config: Config = {
         lavender: '#f5ebff',
         mistyrose: '#ffe8e3',
         midnightblue: '#050142',
+        softSkyBlue: '#E4F6F9',
         transparentmidnightblue: 'rgba(5, 1, 66, 0.5)',
-        DarkNavyBlue: 'rgba(5, 1, 66, 0.7)',
+        darkNavyBlue: 'rgba(5, 1, 66, 0.7)',
       },
       screens: {
         sm: { min: '640px', max: '767px' },
