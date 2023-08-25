@@ -2,16 +2,19 @@ import React from 'react';
 import Image from 'next/image';
 import Select, { components } from 'react-select';
 
+import { ReactSelectOnChangeType } from 'src/models';
 import useCustomID from '../../hooks/useCustomId';
-import selectCustomStyle from './SelectCustomStyle';
+import selectCustomStyle from './selectCustomStyle';
+import CLabel from '../CLabel';
 
 import arrowLogo from '../../../public/images/arrow.svg';
 
 interface CSelectProps {
-  placeholder: string;
-  labelText: string;
+  placeholder?: string;
+  label?: string;
+  details?: string;
   className?: string;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: ReactSelectOnChangeType;
 }
 
 const options = [
@@ -45,9 +48,10 @@ const DropdownIndicator = () => {
 };
 
 const CSelect = ({
-  labelText,
+  label,
   placeholder,
   className,
+  details,
   onChange,
   ...props
 }: CSelectProps) => {
@@ -56,15 +60,8 @@ const CSelect = ({
   return (
     <div className={className}>
       <div className="w-full">
-        <div className="flex items-start">
-          <label
-            htmlFor={id}
-            className="text-midnightblue text-lg ml-1 font-normal leading-[18.78px] mb-[8px]"
-            {...props}
-          >
-            {labelText}
-          </label>
-        </div>
+        <CLabel label={label} details={details} htmlFor={id} />
+
         <Select
           options={options}
           components={{ Option, DropdownIndicator, Control }}

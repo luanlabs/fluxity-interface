@@ -20,4 +20,36 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
-export const DefaultInput: Story = {};
+export const DefaultCInput: Story = {
+  args: {
+    icon: 'a',
+    label: 'Receiver wallet address',
+    details: 'address',
+    placeholder: 'Address or Name in the Address Book',
+  },
+};
+
+export const CInputWithoutIcon: Story = {
+  args: {
+    label: 'Receiver wallet address',
+    details: 'address',
+    placeholder: 'Address or Name in the Address Book',
+  },
+};
+
+export const CInputWithoutLabel: Story = {
+  args: {
+    details: 'address',
+    placeholder: 'Address or Name in the Address Book',
+  },
+};
+
+export const CInputWithoutDetails: Story = {
+  args: {
+    placeholder: 'Address or Name in the Address Book',
+  },
+};
+
+export const CInputWithoutPlaceholder: Story = {
+  args: {},
+};

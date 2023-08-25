@@ -11,7 +11,7 @@ const DocumentationCard = () => {
         bgColor="mistyrose"
         borderColor="#D98F7F"
       >
-        <h1 className="text-[22px] mb-[10px] w-[32%] text-mediumcoral">Documentation</h1>
+        <h1 className="text-[22px] mb-[10px] w-[32%] text-darkcoral">Documentation</h1>
         <p className="text-[16px] w-[70%] mb-[30px] text-midnightblue leading-[20px]">
           Explore the opportunities created by token streaming and how Fluxity provides
           users with the most unique experience.{' '}

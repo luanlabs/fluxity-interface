@@ -1,4 +1,10 @@
-import { GroupBase, StylesConfig } from 'react-select';
+import {
+  GroupBase,
+  StylesConfig,
+  MultiValue,
+  SingleValue,
+  ActionMeta,
+} from 'react-select';
 
 type SelectItemType = {
   label: string;
@@ -10,3 +16,8 @@ export type ReactSelectType = StylesConfig<
   boolean,
   GroupBase<SelectItemType>
 >;
+
+export type ReactSelectOnChangeType = (
+  newValue: MultiValue<SelectItemType> | SingleValue<SelectItemType>,
+  actionMeta: ActionMeta<SelectItemType>,
+) => void;

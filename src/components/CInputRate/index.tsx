@@ -1,26 +1,20 @@
-import react from 'react';
 import Select from 'react-select';
 import Image from 'next/image';
 
 import CInput from '../CInput';
 import selectStyles from './selectStyles';
+import flowRateOptions from '../../constants/flowRates';
+import { ReactSelectOnChangeType } from 'src/models';
 
 import arrowLogo from '../../../public/images/arrow.svg';
-import summary from '../../../public/images/summary.svg';
 
 interface CInputRate {
   inputOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  selectOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  selectOnChange: ReactSelectOnChangeType;
+  placeHolder: string;
+  details?: string;
+  label: string;
 }
-
-const options = [
-  { value: 'minutes', label: 'Minutes' },
-  { value: 'hour', label: 'Hour' },
-  { value: 'day', label: 'Day' },
-  { value: 'week', label: 'Week' },
-  { value: 'month', label: 'Month' },
-  { value: 'year', label: 'Year' },
-];
 
 const DropdownIndicator = () => {
   return (
@@ -30,27 +24,32 @@ const DropdownIndicator = () => {
   );
 };
 
-const CInputRate = ({ inputOnChange, selectOnChange, ...props }: CInputRate) => {
+const CInputRate = ({
+  inputOnChange,
+  selectOnChange,
+  placeHolder,
+  details,
+  label,
+  ...props
+}: CInputRate) => {
   return (
     <div className="w-[306px] relative">
       <CInput
-        placeholderText="0.0"
-        labelText="Flow rate"
-        labelDetail={summary}
+        placeholder={placeHolder}
+        label={label}
+        details={details}
         className="mb-8"
-        title="Flowrate"
         onChange={inputOnChange}
         {...props}
       />
 
       <Select
-        options={options}
+        options={flowRateOptions}
         components={{ DropdownIndicator }}
         styles={selectStyles}
-        placeholder="Month"
         isSearchable={false}
+        defaultValue={flowRateOptions[4]}
         onChange={selectOnChange}
-        {...props}
       />
     </div>
   );

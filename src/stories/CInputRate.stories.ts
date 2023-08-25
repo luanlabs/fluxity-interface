@@ -20,4 +20,24 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
-export const FlowRate: Story = {};
+export const FlowRate: Story = {
+  args: {
+    label: 'Flow rate',
+    details: 'Flow rate',
+    placeHolder: '0.0',
+  },
+};
+
+export const FlowRateWithoutDetail: Story = {
+  args: {
+    label: 'Flow rate',
+    details: '',
+    placeHolder: '0.0',
+  },
+};
+
+export const FlowRateWithoutLabel: Story = {
+  args: {
+    placeHolder: '0.0',
+  },
+};
