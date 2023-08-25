@@ -6,7 +6,7 @@ import CLink from 'src/components/CLink';
 import LogoIcon from 'src/svgs/LogoIcon';
 import LogoTypography from 'src/svgs/LogoTypography';
 import RingBell from 'src/svgs/RingBell';
-import StellarLogo from 'src/svgs/StellarLogo';
+import Stellar from 'public/images/Stellar.svg';
 
 const Header = () => {
   return (
@@ -23,12 +23,7 @@ const Header = () => {
         <span className="bg-alabaster h-12 w-12 rounded-full flex justify-center items-center cursor-pointer">
           <RingBell />
         </span>
-        <CButton
-          kind="simple"
-          color="gray"
-          content="Test Net"
-          logo={<StellarLogo />}
-        />
+        <CButton kind="simple" color="gray" content="Test Net" logo={Stellar} />
       </div>
     </header>
   );

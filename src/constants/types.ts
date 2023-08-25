@@ -1,11 +1,16 @@
 export type Link = {
-  title: string;
   url: string;
+  title: string;
 };
 
-export type NavLink = {
-  title: string;
-  icon: JSX.Element | React.ReactNode;
+export interface NavLink {
   url: string;
-  isMinimized: boolean;
+  title: string;
+  isMinimized?: boolean;
+  icon: JSX.Element | React.ReactNode;
+  activeIcon: JSX.Element | React.ReactNode;
+}
+
+export type SvgProps = {
+  fill?: string;
 };

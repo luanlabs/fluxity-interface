@@ -1,23 +1,14 @@
 'use Client';
 
-import { useEffect, useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import CareRight from 'src/svgs/CareRight';
 import { NavLink as Type } from 'src/constants/types';
+import useIsActive from './useIsActive';
 
-const CNavLink = ({ title, icon, url, isMinimized }: Type) => {
-  const [isActive, setIsActive] = useState(false);
+const CNavLink = ({ title, icon, activeIcon, url, isMinimized }: Type) => {
   const router = useRouter();
-  const pathname = usePathname();
-
-  useEffect(() => {
-    if (pathname === url) {
-      setIsActive(true);
-    } else {
-      setIsActive(false);
-    }
-  }, [pathname, url]);
+  const isActive = useIsActive(url);
 
   const handleClick = () => {
     router.push(url);
@@ -30,21 +21,16 @@ const CNavLink = ({ title, icon, url, isMinimized }: Type) => {
         isMinimized ? 'justify-center' : 'justify-between'
       } items-center rounded-xl ${
         isActive ? ' bg-softSkyBlue' : ''
-      } w-full px-[10px] py-3 my-2`}
+      } w-full px-[10px] py-3 cursor-pointer`}
     >
       {isMinimized ? (
-        <div
-          className={`flex justify-center items-center ${
-            !isActive && 'fill-softSkyBlue'
-          }`}
-        >
-          {icon}
+        <div className={`flex justify-center items-center`}>
+          {isActive ? activeIcon : icon}
         </div>
       ) : (
         <>
           <span className="flex gap-2 items-center text-lg text-midnightblue">
-            <span className={`${!isActive && 'fill-softSkyBlue'}`}></span>
-            {icon}
+            {isActive ? activeIcon : icon}
             {title}
           </span>
           <span className="block lg:hidden md:hidden sm:hidden">
