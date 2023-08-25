@@ -3,13 +3,12 @@
 import { useState } from 'react';
 import { Inter } from 'next/font/google';
 
+import CNavLink from 'src/components/CNavLink';
+import Header from 'src/containers/Header';
+import CCard from 'src/components/CCard';
+
 import '../styles/globals.css';
 import StyledComponentsRegistry from '../styles/registry';
-import CLink from 'src/components/CLink';
-import CNavLink from 'src/components/CNavLink';
-import Header from 'src/containers/header';
-import CPageCard from 'src/components/CPageCard';
-import CCard from 'src/components/CCard';
 
 const inter = Inter({ subsets: ['latin'] });
 
