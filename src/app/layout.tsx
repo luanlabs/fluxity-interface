@@ -7,6 +7,9 @@ import '../styles/globals.css';
 import StyledComponentsRegistry from '../styles/registry';
 import CLink from 'src/components/CLink';
 import CNavLink from 'src/components/CNavLink';
+import Header from 'src/containers/header';
+import CPageCard from 'src/components/CPageCard';
+import CCard from 'src/components/CCard';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,10 +25,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <StyledComponentsRegistry>
           <main className="bg-alabaster h-screen px-8 pt-[9px] pb-7">
-            <header className="bg-white h-[72px] rounded-[14px] mb-3">
-              <CLink title="Documentation" url="/" />
-              <CLink title="Community" url="/" />
-            </header>
+            <CCard className="mb-3" bgColor="white">
+              <Header />
+            </CCard>
             <section className="inline-flex basis-full gap-4 w-full h-5/6">
               <aside
                 className={`bg-white px-[15px] ${

@@ -31,7 +31,7 @@ const config: Config = {
         darkNavyBlue: 'rgba(5, 1, 66, 0.7)',
       },
       screens: {
-        sm: { min: '640px', max: '767px' },
+        sm: { max: '767px' },
         md: { min: '768px', max: '1023px' },
         lg: { min: '1024px', max: '1279px' },
         xl: { min: '1280px', max: '1535px' },
