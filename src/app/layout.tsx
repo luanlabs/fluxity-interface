@@ -31,7 +31,7 @@ export default function RootLayout({
             <section className="inline-flex basis-full gap-4 w-full h-[87%]">
               <CCard
                 className={`${
-                  isMinimized ? 'basis-1/16 md:basis-1/12' : 'basis-[22%]'
+                  isMinimized ? 'basis-[5%] md:basis-1/12' : 'basis-[22%]'
                 } md:basis-2/12 px-[15px] py-[19px] relative`}
                 bgColor="white"
               >

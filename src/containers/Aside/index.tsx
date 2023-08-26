@@ -12,17 +12,20 @@ type AsideProps = {
 const Aside = ({ isMinimized, onClick }: AsideProps) => {
   return (
     <aside>
-      <button className="border-none outline-none ml-2 " onClick={onClick}>
+      <button
+        className={`border-none outline-none ${
+          isMinimized ? 'w-full flex justify-center items-center' : 'ml-2 '
+        } `}
+        onClick={onClick}
+      >
         <SquareHalf />
       </button>
       <hr className="mt-[18px] mb-3" />
-      {navLinks.map((item, index) => {
-        return (
-          <div key={index}>
-            <CNavLink {...item} isMinimized={isMinimized} />
-          </div>
-        );
-      })}
+      {navLinks.map((item, index) => (
+        <div key={index}>
+          <CNavLink {...item} isMinimized={isMinimized} />
+        </div>
+      ))}
       <hr className="my-3" />
       <CNavLink
         title="Get Help"
