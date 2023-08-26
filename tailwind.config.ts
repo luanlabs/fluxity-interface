@@ -1,5 +1,3 @@
-// tailwind.config.js
-
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
@@ -9,6 +7,7 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/containers/**/*.{js,ts,jsx,tsx,mdx}',
     './src/styles/**/*.{js,ts,jsx,tsx,mdx}',
+    './stories/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {

@@ -29,7 +29,7 @@ const CNavLink = ({ title, icon, activeIcon, url, isMinimized }: Type) => {
         </div>
       ) : (
         <>
-          <span className="flex gap-2 items-center text-lg text-midnightblue">
+          <span className="flex gap-2 items-center text-lg text-midnightblue md:text-base sm:text-sm whitespace-nowrap">
             {isActive ? activeIcon : icon}
             {title}
           </span>

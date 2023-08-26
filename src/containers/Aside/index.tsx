@@ -1,5 +1,7 @@
 import CNavLink from 'src/components/CNavLink';
+
 import { navLinks } from 'src/constants/navlinks';
+import { Pages } from 'src/constants/pages';
 
 import GearSix from 'src/svgs/GearSix';
 import LifeBuoy from 'src/svgs/LifeBuoy';
@@ -9,6 +11,7 @@ type AsideProps = {
   isMinimized: boolean;
   onClick: () => void;
 };
+
 const Aside = ({ isMinimized, onClick }: AsideProps) => {
   return (
     <aside>
@@ -31,7 +34,7 @@ const Aside = ({ isMinimized, onClick }: AsideProps) => {
         title="Get Help"
         icon={<LifeBuoy fill="#EBFDFF" />}
         activeIcon={<LifeBuoy />}
-        url="/get-help"
+        url={Pages.GET_HELP}
         isMinimized={isMinimized}
       />
       <div className="absolute bottom-5 left-[15px] right-[15px]">
@@ -39,7 +42,7 @@ const Aside = ({ isMinimized, onClick }: AsideProps) => {
           title="Settings"
           icon={<GearSix fill="#EBFDFF" />}
           activeIcon={<GearSix />}
-          url="/Settings"
+          url={Pages.SETTINGS}
           isMinimized={isMinimized}
         />
       </div>
