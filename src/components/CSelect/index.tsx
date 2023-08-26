@@ -4,7 +4,7 @@ import Select, { components } from 'react-select';
 
 import { ReactSelectOnChangeType } from 'src/models';
 import useCustomID from '../../hooks/useCustomId';
-import selectCustomStyle from './selectCustomStyle';
+import selectCustomStyles from './selectCustomStyles';
 import CLabel from '../CLabel';
 
 import arrowLogo from '../../../public/images/arrow.svg';
@@ -65,7 +65,7 @@ const CSelect = ({
         <Select
           options={options}
           components={{ Option, DropdownIndicator, Control }}
-          styles={selectCustomStyle()}
+          styles={selectCustomStyles()}
           placeholder={placeholder}
           isSearchable={false}
           id={id}

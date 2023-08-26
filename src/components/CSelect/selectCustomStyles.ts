@@ -1,4 +1,4 @@
-const selectCustomStyle = () => ({
+const selectCustomStyles = () => ({
   option: (provided: any, state: any) => ({
     ...provided,
     borderBottom: '1px solid rgba(5, 1, 66, 0.10)',
@@ -44,4 +44,4 @@ const selectCustomStyle = () => ({
   placeholder: (defaultStyles: any) => ({ ...defaultStyles, color: '#7D7B9B' }),
 });
 
-export default selectCustomStyle;
+export default selectCustomStyles;

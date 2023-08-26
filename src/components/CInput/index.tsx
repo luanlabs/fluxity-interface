@@ -2,7 +2,6 @@ import React from 'react';
 import Image from 'next/image';
 
 import useCustomID from '../../hooks/useCustomId';
-import search from '../../../public/images/search.svg';
 import CLabel from '../CLabel';
 
 interface CInputProps {
@@ -11,7 +10,6 @@ interface CInputProps {
   placeholder?: string;
   className?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  title?: string;
   details?: string;
 }
 
@@ -19,7 +17,6 @@ const CInput = ({
   icon,
   placeholder,
   className,
-  title,
   label,
   details,
   onChange,
@@ -33,7 +30,7 @@ const CInput = ({
       <div className="relative">
         {icon && (
           <div className="absolute bottom-4 left-3.5">
-            <Image src={icon} width={22} height={22} alt="search" {...props} />
+            <Image src={icon} width={22} height={22} alt="inputIcon" />
           </div>
         )}
         <input

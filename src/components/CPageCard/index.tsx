@@ -8,17 +8,9 @@ interface CPageCard {
   title?: JSX.Element | React.ReactNode;
   children: JSX.Element | React.ReactNode;
   className?: string;
-  titleText?: string;
 }
 
-const CPageCard = ({
-  divider,
-  title,
-  children,
-  className,
-  titleText,
-  ...props
-}: CPageCard) => {
+const CPageCard = ({ divider, title, children, className, ...props }: CPageCard) => {
   let dividerStyle = '';
   let padding = '';
 
@@ -36,11 +28,7 @@ const CPageCard = ({
       borderColor="rgba(5, 1, 66, 0.10)"
       {...props}
     >
-      {title && (
-        <div className="w-full" title={titleText}>
-          {title}
-        </div>
-      )}
+      {title && <div className="w-full">{title}</div>}
       {divider && <div className={dividerStyle} />}
       <div className={padding}>{children}</div>
     </CCard>

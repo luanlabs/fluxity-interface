@@ -14,7 +14,7 @@ const SummaryCard = () => {
 
   return (
     <div className="w-[329px]">
-      <CPageCard title={summaryTitle} titleText="mamad" className="px-3 py-4">
+      <CPageCard title={summaryTitle} className="px-3 py-4">
         Lists
       </CPageCard>
     </div>
