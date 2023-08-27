@@ -30,14 +30,14 @@ export default function RootLayout({
             </CCard>
             <section className="inline-flex basis-full gap-4 w-full h-[87%]">
               <CCard
-                className={`${
-                  isMinimized ? 'basis-[5%] md:basis-1/12' : 'basis-[22%]'
-                } md:basis-2/12 px-[15px] py-[19px] relative`}
+                className={`relative ${
+                  isMinimized ? 'basis-[3%]' : 'basis-[22%] md:basis-2/12'
+                } px-[15px] py-[19px]`}
                 bgColor="white"
               >
                 <Aside
                   isMinimized={isMinimized}
-                  onClick={() => setIsMinimized(!isMinimized)}
+                  onMinimized={() => setIsMinimized(!isMinimized)}
                 />
               </CCard>
               <CPageCard className="bg-white basis-full py-[23px] px-[27px]">

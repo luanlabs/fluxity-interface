@@ -9,27 +9,31 @@ import SquareHalf from 'src/svgs/SquareHalf';
 
 type AsideProps = {
   isMinimized: boolean;
-  onClick: () => void;
+  onMinimized: () => void;
 };
 
-const Aside = ({ isMinimized, onClick }: AsideProps) => {
+const Aside = ({ isMinimized, onMinimized }: AsideProps) => {
   return (
     <aside>
-      <button
-        className={`border-none outline-none ${
-          isMinimized ? 'w-full flex justify-center items-center' : 'ml-2 '
+      <div
+        className={`cursor-pointer ${
+          isMinimized ? 'w-full flex justify-center items-center' : 'ml-[10px]'
         } `}
-        onClick={onClick}
+        onClick={onMinimized}
       >
         <SquareHalf />
-      </button>
+      </div>
+
       <hr className="mt-[18px] mb-3" />
-      {navLinks.map((item, index) => (
-        <div key={index}>
+
+      {navLinks.map((item) => (
+        <div key={item.title}>
           <CNavLink {...item} isMinimized={isMinimized} />
         </div>
       ))}
+
       <hr className="my-3" />
+
       <CNavLink
         title="Get Help"
         icon={<LifeBuoy fill="#EBFDFF" />}
@@ -37,6 +41,7 @@ const Aside = ({ isMinimized, onClick }: AsideProps) => {
         url={Pages.GET_HELP}
         isMinimized={isMinimized}
       />
+
       <div className="absolute bottom-5 left-[15px] right-[15px]">
         <CNavLink
           title="Settings"

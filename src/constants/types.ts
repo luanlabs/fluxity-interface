@@ -1,9 +1,9 @@
-export type Link = {
+export type CLinkProps = {
   url: string;
   title: string;
 };
 
-export interface NavLink {
+export interface CNavLinkProps {
   url: string;
   title: string;
   isMinimized?: boolean;
