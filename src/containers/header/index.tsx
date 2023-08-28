@@ -22,7 +22,7 @@ const Header = () => {
         <FluxityLogo />
         <FluxityTypography />
       </div>
-      <div className="inline-flex gap-[12px] items-center md:hidden sm:hidden">
+      <div className="inline-flex gap-[12px] items-center sm:hidden">
         <span className="mr-3">
           <CLink title="Documentation" url="/" />
           <CLink title="Community" url="/" />
