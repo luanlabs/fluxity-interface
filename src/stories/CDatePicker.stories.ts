@@ -21,7 +21,23 @@ type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const DefaultCDatePicker: Story = {
+  args: {},
+};
+
+export const StartDate: Story = {
   args: {
     label: 'Start date (optional)',
+  },
+};
+
+export const EndDate: Story = {
+  args: {
+    label: 'End date (optional)',
+  },
+};
+
+export const CliffDate: Story = {
+  args: {
+    label: 'Cliff date (optional)',
   },
 };
