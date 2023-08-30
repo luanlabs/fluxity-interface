@@ -3,6 +3,11 @@
 import { useState } from 'react';
 import { Inter } from 'next/font/google';
 
+import Aside from 'src/containers/Aside';
+import CCard from 'src/components/CCard';
+import Header from 'src/containers/Header';
+import CPageCard from 'src/components/CPageCard';
+
 import '../styles/globals.css';
 import StyledComponentsRegistry from '../styles/registry';
 
@@ -13,34 +18,31 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [isFolded, setIsFolded] = useState(false);
-  console.log(isFolded);
+  const [isMinimized, setIsMinimized] = useState(false);
 
   return (
     <html lang="en">
       <body className={inter.className}>
         <StyledComponentsRegistry>
           <main className="bg-alabaster h-screen px-8 pt-[9px] pb-7">
-            <header className="bg-white h-[72px] rounded-[14px] mb-3">
-              head
-            </header>
-            <section className="inline-flex basis-full gap-4 w-full h-5/6">
-              <aside
-                className={`bg-white ${
-                  isFolded ? 'basis-1/12 md:basis-1/12' : 'basis-3/12'
-                } md:basis-2/12 rounded-[14px]`}
+            <CCard className="mb-[10px]" bgColor="white">
+              <Header />
+            </CCard>
+            <section className="inline-flex basis-full gap-4 w-full h-[87%]">
+              <CCard
+                className={`relative ${
+                  isMinimized ? 'basis-[3%]' : 'basis-[22%] md:basis-2/12'
+                } px-[15px] py-[19px]`}
+                bgColor="white"
               >
-                <button
-                  className="border-none outline-none"
-                  onClick={() => setIsFolded(!isFolded)}
-                >
-                  |-|
-                </button>
-                aside
-              </aside>
-              <article className="bg-white basis-full rounded-[14px]">
-                {children}
-              </article>
+                <Aside
+                  isMinimized={isMinimized}
+                  onMinimized={() => setIsMinimized(!isMinimized)}
+                />
+              </CCard>
+              <CPageCard className="bg-white basis-full py-[23px] px-[27px]">
+                <article>{children}</article>
+              </CPageCard>
             </section>
           </main>
         </StyledComponentsRegistry>
