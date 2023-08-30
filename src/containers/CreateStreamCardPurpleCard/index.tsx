@@ -12,7 +12,7 @@ const CreateStreamCardPurpleCard = () => {
         bgColor="#f5ebff"
         borderColor="#BE7CFF"
       >
-        <h1 className="text-[22px] mb-[25px] w-[32%] text-darklavender">Create Stream</h1>
+        <h1 className="text-[22px] mb-[25px] w-[32%] text-richlavender">Create Stream</h1>
         <p className="text-[16px] w-[60%] mb-[30px] text-midnightblue leading-[20px]">
           Initiate token streams effortlessly; streams tailored to respond to your needs.
         </p>

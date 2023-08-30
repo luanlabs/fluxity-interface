@@ -7,13 +7,22 @@ interface CardProps {
   borderColor?: string;
   children: JSX.Element | React.ReactNode;
   className: string;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const CCard = ({ children, bgColor, borderColor, className, ...props }: CardProps) => {
+const CCard = ({
+  children,
+  bgColor,
+  borderColor,
+  onClick,
+  className,
+  ...props
+}: CardProps) => {
   return (
     <div
       className={cn(className, 'rounded-[14px] border')}
-      style={{ backgroundColor: bgColor, border: 'solid 1px' + borderColor }}
+      style={{ backgroundColor: bgColor, border: 'solid 1px ' + borderColor }}
+      onClick={onClick}
       {...props}
     >
       {children}
