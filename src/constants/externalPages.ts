@@ -1,5 +1,5 @@
 export enum ExternalPages {
-  FluxityLanding = 'https://fluxity.finance',
+  LANDING = 'https://fluxity.finance',
   DOCUMENTATION = '/documentation',
   COMMUNITY = '/community',
 }

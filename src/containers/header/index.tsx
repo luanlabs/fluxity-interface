@@ -17,7 +17,7 @@ const Header = () => {
     <header className="flex justify-between items-center py-3 px-6">
       <div
         className="inline-flex gap-[14px] cursor-pointer"
-        onClick={() => router.push(ExternalPages.FluxityLanding)}
+        onClick={() => router.push(ExternalPages.LANDING)}
       >
         <FluxityLogo />
         <FluxityTypography />
