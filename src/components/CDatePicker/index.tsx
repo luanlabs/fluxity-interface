@@ -5,9 +5,9 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import CLabel from '../CLabel';
+import { Wrapper } from './datePickerStyles';
 import useCustomID from '../../hooks/useCustomId';
 import calendarLogo from '../../../public/images/calendar.svg';
-import { Wrapper } from './datePickerStyles';
 
 interface CDatePickerProps {
   label?: string;
@@ -30,6 +30,13 @@ const CDatePicker = ({ label, details, onChange }: CDatePickerProps) => {
     if (!isDatePickerUsed) {
       setIsDatePickerUsed(true);
     }
+  };
+
+  const filterPassedTime = (time: Date) => {
+    const currentDate = new Date();
+    const selectedDate = new Date(time);
+
+    return currentDate.getTime() < selectedDate.getTime();
   };
 
   const CustomInput = forwardRef<HTMLInputElement>(({ value, onClick }, ref) => (
@@ -63,6 +70,7 @@ const CDatePicker = ({ label, details, onChange }: CDatePickerProps) => {
             showTimeSelect
             timeFormat="HH:mm"
             timeIntervals={60}
+            filterTime={filterPassedTime}
             timeCaption="Time"
             dateFormat="MMMM d, yyyy h:mm aa"
           />
