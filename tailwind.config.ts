@@ -1,5 +1,3 @@
-// tailwind.config.js
-
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
@@ -10,6 +8,7 @@ const config: Config = {
     './src/containers/**/*.{js,ts,jsx,tsx,mdx}',
     './src/styles/**/*.{js,ts,jsx,tsx,mdx}',
     './node_modules/tailwind-datepicker-react/dist/**/*.js',
+    './stories/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
@@ -31,11 +30,17 @@ const config: Config = {
         lavender: '#f5ebff',
         mistyrose: '#ffe8e3',
         midnightblue: '#050142',
+        softSkyBlue: '#E4F6F9',
         transparentmidnightblue: 'rgba(5, 1, 66, 0.5)',
+        darkNavyBlue: 'rgba(5, 1, 66, 0.7)',
+        darkcoral: '#CD5A41',
+        powderblue: '#E4F6F9',
+        richlavender: '#852FDA',
         mutedblue: '#7D7B9B',
+        blueindigo: '#4c36d8',
       },
       screens: {
-        sm: { min: '640px', max: '767px' },
+        sm: { max: '767px' },
         md: { min: '768px', max: '1023px' },
         lg: { min: '1024px', max: '1279px' },
         xl: { min: '1280px', max: '1535px' },
