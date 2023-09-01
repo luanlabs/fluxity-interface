@@ -7,6 +7,7 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/containers/**/*.{js,ts,jsx,tsx,mdx}',
     './src/styles/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/tailwind-datepicker-react/dist/**/*.js',
     './stories/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
