@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Inter } from 'next/font/google';
 
 import '../styles/globals.css';
-import 'react-datepicker/dist/react-datepicker.css';
 import StyledComponentsRegistry from '../styles/registry';
 
 const inter = Inter({ subsets: ['latin'] });
