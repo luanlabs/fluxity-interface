@@ -33,11 +33,7 @@ const config: Config = {
         softSkyBlue: '#E4F6F9',
         transparentmidnightblue: 'rgba(5, 1, 66, 0.5)',
         darkNavyBlue: 'rgba(5, 1, 66, 0.7)',
-        darkcoral: '#CD5A41',
-        powderblue: '#E4F6F9',
-        richlavender: '#852FDA',
         mutedblue: '#7D7B9B',
-        blueindigo: '#4c36d8',
       },
       screens: {
         sm: { max: '767px' },
