@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Select, { components } from 'react-select';
+import cn from 'classnames';
 
 import { ReactSelectOnChangeType } from 'src/models';
 import useCustomID from '../../hooks/useCustomId';
@@ -58,10 +59,9 @@ const CSelect = ({
   const id = useCustomID('CSelect');
 
   return (
-    <div className={className}>
+    <div className={cn('w-full', className)}>
       <div className="w-full">
         <CLabel label={label} details={details} htmlFor={id} />
-
         <Select
           options={options}
           components={{ Option, DropdownIndicator, Control }}

@@ -6,14 +6,15 @@ const selectCustomStyles = () => ({
     display: 'flex',
     alignItems: 'center',
     cursor: 'pointer',
-    height: '60px',
+    height: '58px',
     backgroundColor: state.isSelected ? '#d1d1d1' : '##F5F5F5',
     '&:hover': {
       backgroundColor: state.isFocused ? '#e9e9e9' : '',
     },
   }),
 
-  control: () => ({
+  control: (provided: any, state: any) => ({
+    ...provided,
     width: '100%',
     display: 'flex',
     backgroundColor: '#F5F5F5',
@@ -23,6 +24,9 @@ const selectCustomStyles = () => ({
     padding: '0 10px',
     cursor: 'pointer',
     color: '#7D7B9B',
+    border: 'none',
+    transition: 'none',
+    outline: state.isFocused ? '2px solid rgb(156 163 175)' : 'none',
   }),
 
   indicatorSeparator: () => ({

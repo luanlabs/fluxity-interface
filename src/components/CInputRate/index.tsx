@@ -1,5 +1,6 @@
 import Select from 'react-select';
 import Image from 'next/image';
+import cn from 'classnames';
 
 import CInput from '../CInput';
 import selectStyles from './selectStyles';
@@ -9,11 +10,12 @@ import { ReactSelectOnChangeType } from 'src/models';
 import arrowLogo from '../../../public/images/arrow.svg';
 
 interface CInputRate {
-  inputOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  selectOnChange: ReactSelectOnChangeType;
-  placeHolder: string;
+  inputOnChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  selectOnChange?: ReactSelectOnChangeType;
+  placeholder: string;
   details?: string;
   label: string;
+  className?: string;
 }
 
 const DropdownIndicator = () => {
@@ -27,18 +29,18 @@ const DropdownIndicator = () => {
 const CInputRate = ({
   inputOnChange,
   selectOnChange,
-  placeHolder,
+  placeholder,
   details,
   label,
+  className,
   ...props
 }: CInputRate) => {
   return (
-    <div className="w-[306px] relative">
+    <div className={cn('w-full relative', className)}>
       <CInput
-        placeholder={placeHolder}
+        placeholder={placeholder}
         label={label}
         details={details}
-        className="mb-8"
         onChange={inputOnChange}
         {...props}
       />

@@ -31,7 +31,7 @@ const selectStyles: ReactSelectType = {
     fontSize: '12.6px',
     cursor: 'pointer',
     position: 'absolute',
-    bottom: '46px',
+    bottom: '15px',
     right: '15px',
   }),
 

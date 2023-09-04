@@ -1,6 +1,7 @@
 import React, { forwardRef, useState } from 'react';
 import Image from 'next/image';
 import DatePicker from 'react-datepicker';
+import cn from 'classnames';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -12,20 +13,29 @@ import calendarLogo from '../../../public/images/calendar.svg';
 interface CDatePickerProps {
   label?: string;
   details?: string;
-  onChange: (value: number) => void;
+  onChange?: (value: Date) => void;
+  className?: string;
+  minDate?: Date;
+  maxDate?: Date;
 }
 
-const CDatePicker = ({ label, details, onChange }: CDatePickerProps) => {
+const CDatePicker = ({
+  label,
+  details,
+  onChange,
+  className,
+  minDate,
+  maxDate,
+}: CDatePickerProps) => {
   const id = useCustomID('CDatePicker');
-  const [startDate, setStartDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(minDate || new Date());
   const [isDatePickerUsed, setIsDatePickerUsed] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleChange = (value: Date) => {
     setIsOpen(!isOpen);
-    const timeStamp = value.getTime();
-    setStartDate(value);
-    onChange(timeStamp);
+    setSelectedDate(value);
+    onChange(value);
 
     if (!isDatePickerUsed) {
       setIsDatePickerUsed(true);
@@ -33,20 +43,22 @@ const CDatePicker = ({ label, details, onChange }: CDatePickerProps) => {
   };
 
   const filterPassedTime = (time: Date) => {
-    const currentDate = new Date();
+    const currentDate = minDate || new Date();
     const selectedDate = new Date(time);
 
     return currentDate.getTime() < selectedDate.getTime();
   };
 
   const CustomInput = forwardRef<HTMLInputElement>(({ value, onClick }, ref) => (
-    <div className="relative w-[300px]">
+    <div className={cn('relative', className)}>
       <button
-        className="text-left rounded-[12px] h-14 px-[16px] outline-none focus:outline-gray-400 text-[18px] placeholder-[#7D7B9B] text-[#7D7B9B] leading-[18.78px] w-full bg-neutral-100 "
+        className="text-left rounded-[12px] h-14 px-[16px] outline-none focus:outline-gray-400 text-[18px] placeholder-[#7D7B9B] text-[#7D7B9B] leading-[18.78px] w-full bg-neutral-100"
         onClick={onClick}
         ref={ref}
       >
-        {!isDatePickerUsed ? 'Choose date' : value}
+        <span className={`${!isDatePickerUsed ? '' : 'text-[14px]'} `}>
+          {!isDatePickerUsed ? 'Choose date' : value}
+        </span>
       </button>
       <div className="absolute right-4 bottom-4">
         <Image src={calendarLogo} alt="calender" width={0} height={0} />
@@ -63,16 +75,17 @@ const CDatePicker = ({ label, details, onChange }: CDatePickerProps) => {
       <div>
         <Wrapper>
           <DatePicker
-            selected={startDate}
+            selected={selectedDate}
             onChange={handleChange}
             customInput={<CustomInput />}
-            minDate={new Date()}
+            minDate={minDate}
+            maxDate={maxDate}
             showTimeSelect
             timeFormat="HH:mm"
             timeIntervals={60}
             filterTime={filterPassedTime}
             timeCaption="Time"
-            dateFormat="MMMM d, yyyy h:mm aa"
+            dateFormat="MMMM dd, yyyy HH:mm"
           />
         </Wrapper>
       </div>
