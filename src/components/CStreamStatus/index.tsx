@@ -33,7 +33,8 @@ const CStreamStatus = ({ onChange }: CStreamStatusProps) => {
         <div
           key={item.label}
           className={`px-4 py-2 ${
-            activeStatus === item.value && 'bg-lavenderblush rounded-[63px]'
+            activeStatus === item.value &&
+            'bg-lavenderblush rounded-[63px] transition-all duration-700'
           }`}
           onClick={() => handleChange(item.value)}
         >
