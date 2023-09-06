@@ -26,8 +26,8 @@ const CStreamStatus = ({ onChange }: CStreamStatusProps) => {
 
   return (
     <div
-      className="inline-flex rounded-[55px] border-[1px] py-2 px-[10px]
-     border-midnightblue gap-[10px] cursor-pointer select-none"
+      className="inline-flex justify-center items-center rounded-[55px] border-[1px] py-2 px-[10px]
+     border-midnightblue gap-2 cursor-pointer select-none h-[52px]"
     >
       {streamStatuses.map((item) => (
         <div
