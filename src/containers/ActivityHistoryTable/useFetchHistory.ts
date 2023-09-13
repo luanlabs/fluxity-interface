@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
+
 interface IStreamHistory {
-  streamType: 'receive' | 'send';
+  streamType: "receive" | "send";
   address: string;
   completionPercentage: number;
   isActive: boolean;
@@ -8,7 +10,7 @@ interface IStreamHistory {
 }
 
 interface IStream {
-  model: 'linear' | 'exponential';
+  model: "linear" | "exponential";
   amountPerSecond: number;
   token: string;
   from: string;
@@ -22,44 +24,42 @@ interface IStream {
 
 const mockStreams: IStream[] = [
   {
-    model: 'linear',
+    model: "linear",
     amountPerSecond: 10,
-    token: 'ABC123',
-    from: 'UserA',
-    to: 'UserB',
+    token: "ABC123",
+    from: "UserA",
+    to: "UserB",
     streamId: 1,
-    startDate: new Date('2023-01-01'),
-    endDate: new Date('2023-02-01'),
-    cliffDate: new Date('2023-01-15'),
+    startDate: new Date("2023-01-01"),
+    endDate: new Date("2023-02-01"),
+    cliffDate: new Date("2023-01-15"),
     isCancellable: true,
   },
   {
-    model: 'exponential',
+    model: "exponential",
     amountPerSecond: 5,
-    token: 'XYZ789',
-    from: 'UserC',
-    to: 'UserD',
+    token: "XYZ789",
+    from: "UserC",
+    to: "UserD",
     streamId: 2,
-    startDate: new Date('2023-02-15'),
-    endDate: new Date('2023-03-15'),
-    cliffDate: new Date('2023-02-28'),
+    startDate: new Date("2023-02-15"),
+    endDate: new Date("2023-03-15"),
+    cliffDate: new Date("2023-02-28"),
     isCancellable: false,
   },
   {
-    model: 'linear',
+    model: "linear",
     amountPerSecond: 15,
-    token: 'DEF456',
-    from: 'UserE',
-    to: 'UserF',
+    token: "DEF456",
+    from: "UserE",
+    to: "UserF",
     streamId: 3,
-    startDate: new Date('2023-03-01'),
-    endDate: new Date('2023-04-01'),
-    cliffDate: new Date('2023-03-15'),
+    startDate: new Date("2023-03-01"),
+    endDate: new Date("2023-04-01"),
+    cliffDate: new Date("2023-03-15"),
     isCancellable: true,
   },
 ];
-
-const currentDate = new Date();
 
 const fetchStreams = async (address: string): Promise<IStream[]> => {
   return mockStreams;
@@ -86,22 +86,34 @@ function calculateCompletionPercentage(stream: IStream) {
   return completionPercentage;
 }
 
-const useFetchHistory = async (address: string) => {
-  const streams = await fetchStreams(address);
-  const streamHistories: IStreamHistory[] = streams.map((stream) => ({
-    streamType: address === stream.from ? 'send' : 'receive',
-    address: address === stream.from ? stream.to : stream.from,
-    completionPercentage: calculateCompletionPercentage(stream),
-    isActive:
-      currentDate < stream.endDate && currentDate > stream.startDate
-        ? true
-        : false,
-    token: stream.token,
-    amount:
-      (stream.endDate.getTime() - stream.startDate.getTime()) *
-      stream.amountPerSecond,
-  }));
-  return streams;
+const useFetchHistory = (address: string): IStreamHistory[] => {
+  const [streamList, setStreamList] = useState<IStreamHistory[]>([]);
+
+  const currentDate = new Date();
+
+  useEffect(() => {
+    fetchStreams(address).then((streams) => {
+      console.log("dsdskdk");
+
+      const streamHistories: IStreamHistory[] = streams.map((stream) => ({
+        streamType: address === stream.from ? "send" : "receive",
+        address: address === stream.from ? stream.to : stream.from,
+        completionPercentage: calculateCompletionPercentage(stream),
+        isActive:
+          currentDate < stream.endDate && currentDate > stream.startDate
+            ? true
+            : false,
+        token: stream.token,
+        amount:
+          (stream.endDate.getTime() - stream.startDate.getTime()) *
+          stream.amountPerSecond,
+      }));
+
+      setStreamList(streamHistories);
+    });
+  }, []);
+
+  return streamList;
 };
 
 export default useFetchHistory;

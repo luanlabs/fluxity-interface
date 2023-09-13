@@ -1,26 +1,24 @@
-import React, { useState } from 'react';
+"use client";
 
-import CCard from 'src/components/CCard';
-import CStreamStatus, { StreamStatus } from 'src/components/CStreamStatus';
+import React from "react";
 
-import Funnel from 'src/svgs/Funnel';
-import MagnifyingGlass from 'src/svgs/MagnifyingGlass';
+import CCard from "src/components/CCard";
+import CStreamStatus, { StreamStatus } from "src/components/CStreamStatus";
 
-import * as Styled from './styles';
-import useFetchHistory from './useFetchHistory';
+import Funnel from "src/svgs/Funnel";
+import MagnifyingGlass from "src/svgs/MagnifyingGlass";
+
+import * as Styled from "./styles";
+import useFetchHistory from "./useFetchHistory";
 
 const ActivityHistoryTable = () => {
-  const [streams, setStreams] = useState([]);
   const handleStreamStatusChange = (value: StreamStatus) => {
     console.log(value);
   };
 
-  const fetchHistory = useFetchHistory(
-    '0x61F13004967166f9496D6AE0B52db7Ee2Cabaf00'
-  );
-  fetchHistory.then((streams) => {
-    setStreams(streams);
-  });
+  const streams = useFetchHistory("0x61F13004967166f9496D6AE0B52db7Ee2Cabaf00");
+
+  console.log(streams);
 
   return (
     <>
@@ -36,13 +34,18 @@ const ActivityHistoryTable = () => {
         </span>
       </div>
 
-      {streams.map((streams, i) => (
+      {streams.map((stream, i) => (
         <CCard
           className="my-1 rounded-[14px] h-[74px] inline-flex items-center w-full px-[15px] py-[14px]"
           borderColor="#0000001A"
           key={i}
         >
-          .
+          {stream.token}
+          {stream.amount}
+          {stream.address}
+          {stream.isActive}
+          {stream.streamType}
+          {stream.completionPercentage}
         </CCard>
       ))}
     </>
