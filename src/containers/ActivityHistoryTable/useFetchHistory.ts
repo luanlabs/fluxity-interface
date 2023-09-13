@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 interface IStreamHistory {
-  streamType: "receive" | "send";
+  streamType: 'receive' | 'send';
   address: string;
-  completionPercentage: number;
+  completionPercentage: number | string;
   isActive: boolean;
   token: string;
   amount: number;
 }
 
 interface IStream {
-  model: "linear" | "exponential";
+  model: 'linear' | 'exponential';
   amountPerSecond: number;
   token: string;
   from: string;
@@ -24,40 +24,52 @@ interface IStream {
 
 const mockStreams: IStream[] = [
   {
-    model: "linear",
+    model: 'linear',
     amountPerSecond: 10,
-    token: "ABC123",
-    from: "UserA",
-    to: "UserB",
+    token: 'USDT',
+    from: '0x123456789',
+    to: '0x987654321',
     streamId: 1,
-    startDate: new Date("2023-01-01"),
-    endDate: new Date("2023-02-01"),
-    cliffDate: new Date("2023-01-15"),
+    startDate: new Date('2023-09-15T00:00:00Z'),
+    endDate: new Date('2023-09-30T00:00:00Z'),
+    cliffDate: new Date('2023-09-20T00:00:00Z'),
     isCancellable: true,
   },
   {
-    model: "exponential",
+    model: 'exponential',
     amountPerSecond: 5,
-    token: "XYZ789",
-    from: "UserC",
-    to: "UserD",
+    token: 'ETH',
+    from: '0xabcdef123',
+    to: '0x456789abc',
     streamId: 2,
-    startDate: new Date("2023-02-15"),
-    endDate: new Date("2023-03-15"),
-    cliffDate: new Date("2023-02-28"),
+    startDate: new Date('2023-09-10T00:00:00Z'),
+    endDate: new Date('2023-09-25T00:00:00Z'),
+    cliffDate: new Date('2023-09-15T00:00:00Z'),
     isCancellable: false,
   },
   {
-    model: "linear",
-    amountPerSecond: 15,
-    token: "DEF456",
-    from: "UserE",
-    to: "UserF",
+    model: 'linear',
+    amountPerSecond: 8,
+    token: 'BTC',
+    from: '0x567890abc',
+    to: '0xdef123456',
     streamId: 3,
-    startDate: new Date("2023-03-01"),
-    endDate: new Date("2023-04-01"),
-    cliffDate: new Date("2023-03-15"),
+    startDate: new Date('2023-09-08T00:00:00Z'),
+    endDate: new Date('2023-09-23T00:00:00Z'),
+    cliffDate: new Date('2023-09-13T00:00:00Z'),
     isCancellable: true,
+  },
+  {
+    model: 'exponential',
+    amountPerSecond: 12,
+    token: 'XRP',
+    from: '0x7890cdef1',
+    to: '0x234567890',
+    streamId: 4,
+    startDate: new Date('2023-09-12T00:00:00Z'),
+    endDate: new Date('2023-09-27T00:00:00Z'),
+    cliffDate: new Date('2023-09-17T00:00:00Z'),
+    isCancellable: false,
   },
 ];
 
@@ -85,20 +97,17 @@ function calculateCompletionPercentage(stream: IStream) {
 
   return completionPercentage;
 }
+const currentDate = new Date();
 
 const useFetchHistory = (address: string): IStreamHistory[] => {
   const [streamList, setStreamList] = useState<IStreamHistory[]>([]);
 
-  const currentDate = new Date();
-
   useEffect(() => {
     fetchStreams(address).then((streams) => {
-      console.log("dsdskdk");
-
       const streamHistories: IStreamHistory[] = streams.map((stream) => ({
-        streamType: address === stream.from ? "send" : "receive",
+        streamType: address === stream.from ? 'send' : 'receive',
         address: address === stream.from ? stream.to : stream.from,
-        completionPercentage: calculateCompletionPercentage(stream),
+        completionPercentage: calculateCompletionPercentage(stream).toFixed(),
         isActive:
           currentDate < stream.endDate && currentDate > stream.startDate
             ? true
@@ -111,7 +120,7 @@ const useFetchHistory = (address: string): IStreamHistory[] => {
 
       setStreamList(streamHistories);
     });
-  }, []);
+  }, [address]);
 
   return streamList;
 };

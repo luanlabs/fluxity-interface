@@ -1,22 +1,30 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
+import Image from 'next/image';
 
-import CCard from "src/components/CCard";
-import CStreamStatus, { StreamStatus } from "src/components/CStreamStatus";
+import CCard from 'src/components/CCard';
+import CStreamStatus, { StreamStatus } from 'src/components/CStreamStatus';
+import CStreamType from 'src/components/CStreamType';
 
-import Funnel from "src/svgs/Funnel";
-import MagnifyingGlass from "src/svgs/MagnifyingGlass";
+import clipText from 'src/utils/ClipText';
 
-import * as Styled from "./styles";
-import useFetchHistory from "./useFetchHistory";
+import divider from 'public/images/divider.svg';
+
+import Funnel from 'src/svgs/Funnel';
+import MagnifyingGlass from 'src/svgs/MagnifyingGlass';
+
+import * as Styled from './styles';
+import useFetchHistory from './useFetchHistory';
 
 const ActivityHistoryTable = () => {
   const handleStreamStatusChange = (value: StreamStatus) => {
     console.log(value);
   };
 
-  const streams = useFetchHistory("0x61F13004967166f9496D6AE0B52db7Ee2Cabaf00");
+  const address = '0x123456789';
+
+  const streams = useFetchHistory(address);
 
   console.log(streams);
 
@@ -40,12 +48,35 @@ const ActivityHistoryTable = () => {
           borderColor="#0000001A"
           key={i}
         >
-          {stream.token}
-          {stream.amount}
-          {stream.address}
-          {stream.isActive}
-          {stream.streamType}
-          {stream.completionPercentage}
+          <div className="flex items-center gap-4">
+            <CStreamType type={stream.streamType} />
+            <div className="flex gap-2">
+              <span
+                className={`text-transparentmidnightblue ${
+                  stream.streamType === 'send' && 'mr-4'
+                }`}
+              >
+                {stream.streamType === 'send' ? 'To' : 'From'}
+              </span>
+              {clipText(stream.address, 4)}
+            </div>
+            <Image src={divider} alt="divider" />
+            <span className="text-[14px]">
+              {stream.completionPercentage}% Completed
+              <div className="w-[190px] bg-[#EBEBEB] rounded-full h-1">
+                <div
+                  className="bg-royalBlue rounded-full h-1"
+                  style={{
+                    width: stream.completionPercentage + '%',
+                    transition: 'width 0.3s ease-in-out',
+                  }}
+                />
+              </div>
+            </span>
+            <span> {stream.isActive}</span>
+            <span> {stream.amount}</span>
+            <span> {stream.token}</span>
+          </div>
         </CCard>
       ))}
     </>

@@ -34,6 +34,10 @@ const config: Config = {
         transparentmidnightblue: 'rgba(5, 1, 66, 0.5)',
         darkNavyBlue: 'rgba(5, 1, 66, 0.7)',
         mutedblue: '#7D7B9B',
+        forestGreen: '#1C9B47',
+        paleMint: '#E4FFED',
+        royalBlue: '#3A21D4',
+        paleCyan: '#EBFDFF',
       },
       screens: {
         sm: { max: '767px' },
