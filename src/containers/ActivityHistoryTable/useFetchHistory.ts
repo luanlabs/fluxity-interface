@@ -95,7 +95,7 @@ function calculateCompletionPercentage(stream: IStream) {
 
   const completionPercentage = (elapsedMilliseconds / totalMilliseconds) * 100;
 
-  return completionPercentage;
+  return completionPercentage.toFixed();
 }
 const currentDate = new Date();
 
@@ -107,11 +107,9 @@ const useFetchHistory = (address: string): IStreamHistory[] => {
       const streamHistories: IStreamHistory[] = streams.map((stream) => ({
         streamType: address === stream.from ? 'send' : 'receive',
         address: address === stream.from ? stream.to : stream.from,
-        completionPercentage: calculateCompletionPercentage(stream).toFixed(),
+        completionPercentage: calculateCompletionPercentage(stream),
         isActive:
-          currentDate < stream.endDate && currentDate > stream.startDate
-            ? true
-            : false,
+          currentDate < stream.endDate && currentDate > stream.startDate,
         token: stream.token,
         amount:
           (stream.endDate.getTime() - stream.startDate.getTime()) *
