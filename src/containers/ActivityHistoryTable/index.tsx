@@ -48,46 +48,50 @@ const ActivityHistoryTable = () => {
           borderColor="#0000001A"
           key={stream.amount}
         >
-          <CStreamType type={stream.streamType} />
-
-          <div className="flex gap-2 w-32">
-            <span
-              className={`text-transparentmidnightblue ${
-                stream.streamType === 'send' && 'mr-5'
-              }`}
-            >
-              {stream.streamType === 'send' ? 'To' : 'From'}
-            </span>
-            {clipText(stream.address, 4)}
-          </div>
-
-          <Image src={divider} alt="divider" />
-
-          <span className="text-[14px]">
-            {stream.completionPercentage}% Completed
-            <div className="w-[190px] bg-[#EBEBEB] rounded-full h-1 mt-1">
-              <div
-                className="bg-royalBlue rounded-full h-1"
-                style={{
-                  width: stream.completionPercentage + '%',
-                  transition: 'width 0.3s ease-in-out',
-                }}
-              />
+          <div className="inline-flex  items-center">
+            <CStreamType type={stream.streamType} />
+            <div className="flex gap-2 ml-5 w-[140px]">
+              <span
+                className={`text-transparentmidnightblue ${
+                  stream.streamType === 'send' && 'pr-4 '
+                }`}
+              >
+                {stream.streamType === 'send' ? 'To' : 'From'}
+              </span>
+              {clipText(stream.address, 4)}
             </div>
-          </span>
-
-          <span
-            className={`select-none rounded-full px-4 py-0.5
+            <div className="flex flex-row gap-5">
+              <Image src={divider} alt="divider" className="mx-5" />
+              <span className="text-[14px]">
+                {stream.completionPercentage}% Completed
+                <div className="w-[190px] bg-[#EBEBEB] rounded-full h-1 mt-1">
+                  <div
+                    className="bg-royalBlue rounded-full h-1"
+                    style={{
+                      width: stream.completionPercentage + '%',
+                      transition: 'width 0.3s ease-in-out',
+                    }}
+                  />
+                </div>
+              </span>
+            </div>
+          </div>
+          <div className="inline-flex items-center gap-[47px]">
+            <div
+              className={`select-none rounded-full px-4 py-0.5
             ${
               stream.isActive
                 ? 'bg-paleMint text-forestGreen'
                 : 'bg-[#FFEDED] text-[#9B1C47]'
             }`}
-          >
-            {stream.isActive ? 'Active' : 'in Active'}
-          </span>
-          <span> {stream.amount}</span>
-          <span> {stream.token}</span>
+            >
+              {stream.isActive ? 'Active' : 'in Active'}
+            </div>
+            <div className="font-bold gap-2 max-w-[150px]">
+              <span> {stream.amount.toFixed(3)}</span>
+              <span> {stream.token}</span>
+            </div>
+          </div>
         </CCard>
       ))}
     </>

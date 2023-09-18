@@ -8,12 +8,12 @@ const ActivityHistory = () => {
   return (
     <CPageCard
       title={
-        <h1 className="text-[24px] text-midnightblue mb-[10px] pl-2">
+        <h1 className="text-[24px] text-midnightblue mb-[10px] pl-2 ">
           Activity History
         </h1>
       }
       divider
-      className="py-[15px] px-5"
+      className="py-[15px] px-5 overflow-auto"
     >
       <AllStreamCard />
       <div className="mt-5">
