@@ -41,9 +41,7 @@ export default function RootLayout({
                   onMinimized={() => setIsMinimized(!isMinimized)}
                 />
               </CCard>
-              <CPageCard className="bg-white basis-full py-[23px] px-[27px]">
-                <article>{children}</article>
-              </CPageCard>
+              <article className="basis-full">{children}</article>
             </section>
           </main>
         </StyledComponentsRegistry>
