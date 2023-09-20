@@ -1,14 +1,16 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 
 import CCard from 'src/components/CCard';
 import CStreamStatus, { StreamStatus } from 'src/components/CStreamStatus';
 import CStreamType from 'src/components/CStreamType';
 
-import clipText from 'src/utils/clipText';
+import { clipText } from 'src/utils/clipText';
+import { formatNumber } from 'src/utils/formatNumber';
 
+import usdt from 'public/images/usdt.svg';
 import divider from 'public/images/divider.svg';
 
 import Funnel from 'src/svgs/Funnel';
@@ -18,15 +20,20 @@ import * as Styled from './styles';
 import useFetchHistory from './useFetchHistory';
 
 const ActivityHistoryTable = () => {
-  const handleStreamStatusChange = (value: StreamStatus) => {
-    console.log(value);
-  };
+  const [selectedStatus, setSelectedStatus] = useState<StreamStatus | ''>(
+    StreamStatus.ONGOING
+  );
 
+  const handleStreamStatusChange = (value: StreamStatus) => {
+    setSelectedStatus(value);
+  };
   const address = '0x123456789';
 
   const streams = useFetchHistory(address);
 
-  console.log(streams);
+  const filteredStreams = selectedStatus
+    ? streams.filter((stream) => stream.streamStatus === selectedStatus)
+    : streams;
 
   return (
     <>
@@ -42,7 +49,7 @@ const ActivityHistoryTable = () => {
         </span>
       </div>
 
-      {streams.map((stream, i) => (
+      {filteredStreams.map((stream, i) => (
         <CCard
           className="my-1 rounded-[14px] h-[74px] inline-flex items-center w-full px-[15px] py-[14px] justify-between"
           borderColor="#0000001A"
@@ -80,16 +87,24 @@ const ActivityHistoryTable = () => {
             <div
               className={`select-none rounded-full px-4 py-0.5
             ${
-              stream.isActive
+              stream.streamStatus === StreamStatus.ONGOING
                 ? 'bg-paleMint text-forestGreen'
-                : 'bg-[#FFEDED] text-[#9B1C47]'
+                : stream.streamStatus === StreamStatus.PENDING
+                ? 'bg-paleCyan text-royalBlue'
+                : 'bg-gray-100 text-gray-500'
             }`}
             >
-              {stream.isActive ? 'Active' : 'in Active'}
+              {stream.streamStatus === StreamStatus.ONGOING
+                ? 'Active'
+                : stream.streamStatus}
             </div>
-            <div className="font-bold gap-2 max-w-[150px]">
-              <span> {stream.amount.toFixed(3)}</span>
+            <div className="inline-flex justify-end font-bold gap-2 w-[160px]">
+              <span> {formatNumber(stream.amount)}</span>
               <span> {stream.token}</span>
+              <span>
+                {/* use usdt as default until we get token assets  */}
+                <Image src={stream.token === 'USDT' ? usdt : usdt} alt="icon" />
+              </span>
             </div>
           </div>
         </CCard>
