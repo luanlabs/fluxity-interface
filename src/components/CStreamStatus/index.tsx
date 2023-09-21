@@ -6,18 +6,18 @@ export enum StreamStatus {
   EXPIRED = 'expired',
 }
 
+type CStreamStatusProps = {
+  onChange: (value: StreamStatus) => void;
+};
+
 const streamStatuses = [
   { label: 'Ongoing', value: StreamStatus.ONGOING },
   { label: 'Pending', value: StreamStatus.PENDING },
   { label: 'Expired', value: StreamStatus.EXPIRED },
 ];
 
-type CStreamStatusProps = {
-  onChange: (value: StreamStatus) => void;
-};
-
 const CStreamStatus = ({ onChange }: CStreamStatusProps) => {
-  const [activeStatus, setActiveStatus] = useState('ongoing');
+  const [activeStatus, setActiveStatus] = useState(StreamStatus.ONGOING);
 
   const handleChange = (value: StreamStatus) => {
     setActiveStatus(value);
@@ -25,10 +25,7 @@ const CStreamStatus = ({ onChange }: CStreamStatusProps) => {
   };
 
   return (
-    <div
-      className="inline-flex justify-center items-center rounded-[55px] border-[1px] py-2 px-[10px]
-     border-midnightblue gap-2 cursor-pointer select-none h-[52px]"
-    >
+    <div className="inline-flex justify-center items-center rounded-[55px] border-[1px] py-2 px-[10px] border-midnightblue gap-2 cursor-pointer select-none h-[52px]">
       {streamStatuses.map((item) => (
         <div
           key={item.label}

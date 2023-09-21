@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { StreamStatus } from 'src/components/CStreamStatus';
 
 interface IStreamHistory {
+  id: number | string;
   streamType: 'receive' | 'send';
   address: string;
   completionPercentage: number | string;
@@ -31,7 +32,7 @@ const mockStreams: IStream[] = [
     from: '0x123456789',
     to: '0x987654321',
     streamId: 1,
-    startDate: new Date('2023-09-01T00:00:00Z'), // EXPIRED
+    startDate: new Date('2023-09-01T00:00:00Z'),
     endDate: new Date('2023-09-10T00:00:00Z'),
     cliffDate: new Date('2023-09-05T00:00:00Z'),
     isCancellable: true,
@@ -43,7 +44,7 @@ const mockStreams: IStream[] = [
     from: '0xabcdef123',
     to: '0x456789abc',
     streamId: 2,
-    startDate: new Date('2023-09-05T00:00:00Z'), // PENDING
+    startDate: new Date('2023-09-05T00:00:00Z'),
     endDate: new Date('2023-09-15T00:00:00Z'),
     cliffDate: new Date('2023-09-08T00:00:00Z'),
     isCancellable: false,
@@ -55,7 +56,7 @@ const mockStreams: IStream[] = [
     from: '0x567890abc',
     to: '0xdef123456',
     streamId: 3,
-    startDate: new Date('2023-09-10T00:00:00Z'), // ONGOING
+    startDate: new Date('2023-09-10T00:00:00Z'),
     endDate: new Date('2023-09-20T00:00:00Z'),
     cliffDate: new Date('2023-09-12T00:00:00Z'),
     isCancellable: true,
@@ -117,9 +118,8 @@ function streamStatusHandler(stream: IStream) {
     return StreamStatus.PENDING;
   } else if (currentDate < stream.endDate) {
     return StreamStatus.ONGOING;
-  } else {
-    return StreamStatus.EXPIRED;
   }
+  return StreamStatus.EXPIRED;
 }
 
 const useFetchHistory = (address: string): IStreamHistory[] => {
@@ -132,6 +132,7 @@ const useFetchHistory = (address: string): IStreamHistory[] => {
         const streamStatus = streamStatusHandler(stream);
 
         return {
+          id: stream.streamId,
           streamType: address === stream.from ? 'send' : 'receive',
           address: address === stream.from ? stream.to : stream.from,
           completionPercentage,

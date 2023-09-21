@@ -3,8 +3,6 @@ import React from 'react';
 import SendIcon from 'src/svgs/SendIcon';
 import ReceiveIcon from 'src/svgs/ReceiveIcon';
 
-import capitalize from 'src/utils/capitalizeFirstLetter';
-
 type CStreamTypeProps = {
   type: 'receive' | 'send';
 };
@@ -19,7 +17,9 @@ const CStreamType = ({ type }: CStreamTypeProps) => {
       }`}
     >
       <span>{type === 'receive' ? <ReceiveIcon /> : <SendIcon />}</span>
-      <span className="gap-2"> {capitalize(type)} Stream</span>
+      <span className="gap-2">
+        {type === 'receive' ? 'Receive' : 'Send'} Stream
+      </span>
     </div>
   );
 };

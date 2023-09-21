@@ -1,7 +1,9 @@
 'use client';
+
 import React from 'react';
+
 import CPageCard from 'src/components/CPageCard';
-import ActivityHistoryTable from 'src/containers/ActivityHistoryTable';
+import Transactions from 'src/containers/Transactions';
 import AllStreamCard from 'src/containers/AllStreamCard';
 
 const ActivityHistory = () => {
@@ -17,7 +19,7 @@ const ActivityHistory = () => {
     >
       <AllStreamCard />
       <div className="mt-5">
-        <ActivityHistoryTable />
+        <Transactions />
       </div>
     </CPageCard>
   );

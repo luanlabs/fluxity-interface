@@ -3,31 +3,28 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 
+import Funnel from 'src/svgs/Funnel';
 import CCard from 'src/components/CCard';
-import CStreamStatus, { StreamStatus } from 'src/components/CStreamStatus';
-import CStreamType from 'src/components/CStreamType';
-
 import { clipText } from 'src/utils/clipText';
+import CStreamType from 'src/components/CStreamType';
 import { formatNumber } from 'src/utils/formatNumber';
+import MagnifyingGlass from 'src/svgs/MagnifyingGlass';
+import capitalize from 'src/utils/capitalizeFirstLetter';
+import CStreamStatus, { StreamStatus } from 'src/components/CStreamStatus';
 
 import usdt from 'public/images/usdt.svg';
 import divider from 'public/images/divider.svg';
 
-import Funnel from 'src/svgs/Funnel';
-import MagnifyingGlass from 'src/svgs/MagnifyingGlass';
-
 import * as Styled from './styles';
 import useFetchHistory from './useFetchHistory';
+import getStatusStyles from './getStatusStyle';
 
-const ActivityHistoryTable = () => {
-  const [selectedStatus, setSelectedStatus] = useState<StreamStatus | ''>(
+const Transactions = () => {
+  const [selectedStatus, setSelectedStatus] = useState<StreamStatus>(
     StreamStatus.ONGOING
   );
 
-  const handleStreamStatusChange = (value: StreamStatus) => {
-    setSelectedStatus(value);
-  };
-  const address = '0x123456789';
+  const address = 'GA3A24K44D5JXIJ4RDPZTZLGZCUCJTMO2HKCFJ5CK6FYTEVUEIICSIXW';
 
   const streams = useFetchHistory(address);
 
@@ -38,7 +35,7 @@ const ActivityHistoryTable = () => {
   return (
     <>
       <div className="inline-flex justify-between w-full mb-[17px]">
-        <CStreamStatus onChange={handleStreamStatusChange} />
+        <CStreamStatus onChange={setSelectedStatus} />
         <span className="inline-flex gap-2">
           <Styled.Circle>
             <MagnifyingGlass />
@@ -49,11 +46,11 @@ const ActivityHistoryTable = () => {
         </span>
       </div>
 
-      {filteredStreams.map((stream, i) => (
+      {filteredStreams.map((stream) => (
         <CCard
           className="my-1 rounded-[14px] h-[74px] inline-flex items-center w-full px-[15px] py-[14px] justify-between"
           borderColor="#0000001A"
-          key={stream.amount}
+          key={stream.id}
         >
           <div className="inline-flex  items-center">
             <CStreamType type={stream.streamType} />
@@ -76,7 +73,6 @@ const ActivityHistoryTable = () => {
                     className="bg-royalBlue rounded-full h-1"
                     style={{
                       width: stream.completionPercentage + '%',
-                      transition: 'width 0.3s ease-in-out',
                     }}
                   />
                 </div>
@@ -86,24 +82,17 @@ const ActivityHistoryTable = () => {
           <div className="inline-flex items-center gap-[47px]">
             <div
               className={`select-none rounded-full px-4 py-0.5
-            ${
-              stream.streamStatus === StreamStatus.ONGOING
-                ? 'bg-paleMint text-forestGreen'
-                : stream.streamStatus === StreamStatus.PENDING
-                ? 'bg-paleCyan text-royalBlue'
-                : 'bg-gray-100 text-gray-500'
-            }`}
+            ${getStatusStyles(stream.streamStatus)}`}
             >
               {stream.streamStatus === StreamStatus.ONGOING
                 ? 'Active'
-                : stream.streamStatus}
+                : capitalize(stream.streamStatus)}
             </div>
             <div className="inline-flex justify-end font-bold gap-2 w-[160px]">
               <span> {formatNumber(stream.amount)}</span>
               <span> {stream.token}</span>
               <span>
-                {/* use usdt as default until we get token assets  */}
-                <Image src={stream.token === 'USDT' ? usdt : usdt} alt="icon" />
+                <Image src={stream.token === 'USDT' ? usdt : ''} alt="icon" />
               </span>
             </div>
           </div>
@@ -113,4 +102,4 @@ const ActivityHistoryTable = () => {
   );
 };
 
-export default ActivityHistoryTable;
+export default Transactions;
