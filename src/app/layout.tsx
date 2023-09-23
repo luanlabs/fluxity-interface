@@ -27,7 +27,6 @@ export default function RootLayout({
               <CCard className="mb-[10px]" bgColor="white">
                 <Header />
               </CCard>
-
               <section className="inline-flex basis-full gap-4 w-full h-[87%]">
                 <CCard
                   className={`relative ${
