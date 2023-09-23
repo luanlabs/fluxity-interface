@@ -8,7 +8,7 @@ import CButton from '../../components/CButton';
 
 const AllStreamCard = () => {
   return (
-    <div className="w-[996px] relative">
+    <div className="w-full relative">
       <CCard
         className="flex justify-between w-full h-full"
         bgColor="#EBFDFF"
@@ -17,11 +17,17 @@ const AllStreamCard = () => {
         <div className="pl-[38px] pt-[29px] text-royalblue">
           <h1 className="text-[28px] w-full">All stream are Here!</h1>
           <p className="text-[15px] w-[90%] mt-[10px] mb-[20px]">
-            Keep all your present, future, and past streams under your touch. Enjoy
-            secure, efficient, and user-friendly experience of token streaming.
+            Keep all your present, future, and past streams under your touch.
+            Enjoy secure, efficient, and user-friendly experience of token
+            streaming.
           </p>
           <div className="pb-7">
-            <CButton kind="simple" color="blueWhite" content="Get Help" logo={helpLogo} />
+            <CButton
+              kind="simple"
+              color="blueWhite"
+              content="Get Help"
+              logo={helpLogo}
+            />
           </div>
         </div>
         <div className="h-full pb-4 w-[50%]">

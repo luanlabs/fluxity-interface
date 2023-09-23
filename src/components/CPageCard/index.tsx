@@ -10,7 +10,13 @@ interface CPageCard {
   className?: string;
 }
 
-const CPageCard = ({ divider, title, children, className, ...props }: CPageCard) => {
+const CPageCard = ({
+  divider,
+  title,
+  children,
+  className,
+  ...props
+}: CPageCard) => {
   let dividerStyle = '';
   let padding = '';
 
@@ -23,7 +29,7 @@ const CPageCard = ({ divider, title, children, className, ...props }: CPageCard)
   }
   return (
     <CCard
-      className={cn('flex flex-col justify-between w-full h-full', className)}
+      className={cn('flex flex-col w-full h-full', className)}
       bgColor="#fff"
       borderColor="rgba(5, 1, 66, 0.10)"
       {...props}

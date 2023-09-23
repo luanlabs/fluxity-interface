@@ -19,7 +19,7 @@ export type ReactSelectType = StylesConfig<
 
 export type ReactSelectOnChangeType = (
   newValue: MultiValue<SelectItemType> | SingleValue<SelectItemType>,
-  actionMeta: ActionMeta<SelectItemType>,
+  actionMeta: ActionMeta<SelectItemType>
 ) => void;
 
 export type SvgProps = {
