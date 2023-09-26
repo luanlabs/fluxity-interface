@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import Script from 'next/script';
+// import freighterApi from '@stellar/freighter-api';
 
 import CNavLink from 'src/components/CNavLink';
 
@@ -21,10 +23,20 @@ type AsideProps = {
 let address = 'GA3A24K44D5JXIJ4RDPZTZLGZCUCJTMO2HKCFJ5CK6FYTEVUEIICSIXW';
 
 const Aside = ({ isMinimized, onMinimized }: AsideProps) => {
-  const [isConnected, setIsConnected] = useState(false);
+  const [isFreighterConnected, setIsFreighterConnected] = useState(false);
+
+  const handleLoadScript = () => {};
+  if (window.freighterApi.isConnected()) {
+    setIsFreighterConnected(true);
+  }
 
   return (
     <aside>
+      <Script
+        src="https://cdnjs.cloudflare.com/ajax/libs/stellar-freighter-api/1.7.0/index.min.js"
+        onLoad={handleLoadScript}
+      />
+      ;
       <div
         className={`cursor-pointer ${
           isMinimized ? 'w-full flex justify-center items-center' : 'ml-[10px]'
@@ -33,17 +45,13 @@ const Aside = ({ isMinimized, onMinimized }: AsideProps) => {
       >
         <SquareHalf />
       </div>
-
       <hr className="mt-[18px] mb-3" />
-
       {navLinks.map((item) => (
         <div key={item.title}>
           <CNavLink {...item} isMinimized={isMinimized} />
         </div>
       ))}
-
       <hr className="my-3" />
-
       <CNavLink
         title="Get Help"
         icon={<LifeBuoy fill="#EBFDFF" />}
@@ -51,7 +59,6 @@ const Aside = ({ isMinimized, onMinimized }: AsideProps) => {
         url={Pages.GET_HELP}
         isMinimized={isMinimized}
       />
-
       <div className="absolute bottom-5 left-[15px] right-[15px]">
         <CNavLink
           title="Settings"
@@ -63,9 +70,9 @@ const Aside = ({ isMinimized, onMinimized }: AsideProps) => {
         <div
           className="py-2 px-4 rounded-xl bg-alabaster border border-midnightblue
          hover:bg-softSkyBlue transition-all duration-700 cursor-pointer relative select-none"
-          onClick={() => setIsConnected(!isConnected)}
+          onClick={() => setIsFreighterConnected(!isFreighterConnected)}
         >
-          {isConnected ? (
+          {isFreighterConnected ? (
             <div className="flex justify-between items-center">
               <div className="flex flex-col items-start">
                 <span
