@@ -3,60 +3,82 @@ import Image from 'next/image';
 
 import CModal from 'src/components/CModal';
 import CInput from 'src/components/CInput';
+import { SelectTokenType } from 'src/models';
 
 import searchLogo from 'public/images/search.svg';
+import arrowLogo from '../../../public/images/arrow.svg';
 import plusLogo from 'public/images/Plus.svg';
+import CLabel from 'src/components/CLabel';
+import useCustomID from 'src/hooks/useCustomId';
 
-const options = [
+const options: SelectTokenType[] = [
   { value: 'usdc', label: 'USDC', icon: 'usdc.svg' },
   { value: 'usdt', label: 'USDT', icon: 'usdt.svg' },
   { value: 'dai', label: 'DAI', icon: 'dai.svg' },
-  { value: 'usdc', label: 'USDC', icon: 'usdc.svg' },
-  { value: 'usdt', label: 'USDT', icon: 'usdt.svg' },
 ];
 
 interface selectTokenProps {
-  className: string;
+  onChange: (_: SelectTokenType) => void;
 }
 
-const SelectTokenContainer = ({ className }: selectTokenProps) => {
-  const [selectedToken, setSelectedToken] = useState(null);
+const SelectTokenContainer = ({ onChange }: selectTokenProps) => {
+  const [selectedToken, setSelectedToken] = useState<null | SelectTokenType>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
 
-  const handleTokenSelect = (token) => {
+  const handleTokenSelect = (token: SelectTokenType) => {
     setSelectedToken(token);
+    setIsOpen(false);
+    setSearchValue('');
+    onChange(token);
   };
 
-  const selectTokenButton = (
-    <div>
-      {selectedToken ? (
-        <div className="flex items-center justify-start">
-          <Image
-            src={require(`../../../public/images/assets/${selectedToken.icon}`).default}
-            width={35}
-            height={35}
-            alt={selectedToken.label}
-          />
-          <p className="ml-4">{selectedToken.label}</p>
-        </div>
-      ) : (
-        'Select token'
-      )}
-    </div>
+  const handleOpenModal = () => {
+    setIsOpen(true);
+  };
+
+  const id = useCustomID('selectToken');
+
+  const filteredOptions = options.filter((option) =>
+    option.label.toLowerCase().startsWith(searchValue.toLowerCase()),
   );
+
+  const handleInputChange = (e: any) => {
+    setSearchValue(e.target.value);
+  };
 
   return (
     <div>
-      <CModal
-        modalTitle="Select token"
-        buttonType="select"
-        selectedToken={selectTokenButton}
-        label="Select token"
-        details="Select token"
-        buttonClassName={className}
+      <CLabel label="Token" htmlFor={id} />
+      <button
+        className="flex justify-between w-[218px] items-center h-[56px] px-[16px] text-[18px] text-mutedblue rounded-[12px] bg-[#f5f5f5]"
+        onClick={handleOpenModal}
+        id={id}
       >
-        <CInput placeholder="Search name of token" icon={searchLogo} />
+        {selectedToken ? (
+          <div className="flex items-center justify-start">
+            <Image
+              src={require(`../../../public/images/assets/${selectedToken.icon}`).default}
+              width={35}
+              height={35}
+              alt={selectedToken.label}
+            />
+            <p className="ml-4 text-midnightblue">{selectedToken.label}</p>
+          </div>
+        ) : (
+          'Select token'
+        )}
+        <Image src={arrowLogo} alt="arrow" />
+      </button>
+
+      <CModal title="Select token" isOpen={isOpen} setIsOpen={setIsOpen}>
+        <CInput
+          placeholder="Search name of token"
+          icon={searchLogo}
+          onChange={handleInputChange}
+        />
         <div className="mt-[23px]">
-          {options.map((i) => (
+          {filteredOptions.map((i) => (
             <div
               className="flex items-center w-full cursor-pointer h-[72px] border-b last:border-none"
               key={i.value}
@@ -72,7 +94,7 @@ const SelectTokenContainer = ({ className }: selectTokenProps) => {
               </div>
 
               <div className="text-left w-full">
-                <p className="text-[#000] text-[16px] ml-[26px] font-bold	">{i.label}</p>
+                <p className="text-[#000] text-[16px] ml-[26px] font-bold">{i.label}</p>
               </div>
 
               <div className="h-[30px] w-[40px] rounded-[100px]  bg-lavenderblush hover:bg-[#f0efff95] flex justify-center items-center">
