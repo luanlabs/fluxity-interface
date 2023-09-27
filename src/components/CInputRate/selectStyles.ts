@@ -12,11 +12,12 @@ const selectStyles: ReactSelectType = {
     height: '25px',
     fontSize: '10px',
     color: '050142',
-    backgroundColor: state.isSelected ? '#e9e9e9' : '##F5F5F5',
+    backgroundColor: state.isSelected ? '#F0EFFF' : '##F5F5F5',
     border: 'none',
+    borderRadius: '6px',
 
     '&:hover': {
-      backgroundColor: state.isFocused ? '#e9e9e9' : '',
+      backgroundColor: state.isFocused ? '#f0EFFF' : '',
     },
   }),
 
@@ -28,7 +29,7 @@ const selectStyles: ReactSelectType = {
     backgroundColor: '#fff',
     color: '#050142',
     borderRadius: '6px',
-    fontSize: '12.6px',
+    fontSize: '12.8px',
     cursor: 'pointer',
     position: 'absolute',
     bottom: '15px',
@@ -45,14 +46,16 @@ const selectStyles: ReactSelectType = {
     overflow: 'hidden',
     width: '96px',
     right: '15px',
-    top: '-50px',
-    border: 'solid 1px rgba(5, 1, 66, 0.01)',
+    top: '-20px',
+    border: 'none',
+    boxShadow: 'none',
   }),
 
   menuList: () => ({
     backgroundColor: '#fff',
     width: '100%',
     overflow: 'hidden',
+    padding: '6px',
   }),
 
   placeholder: (defaultStyles: any) => ({ ...defaultStyles, color: '#050142' }),

@@ -26,6 +26,14 @@ const DropdownIndicator = () => {
   );
 };
 
+const inpNum = (e: KeyboardEvent<HTMLInputElement>) => {
+  const charCode = typeof e.which === 'undefined' ? e.keyCode : e.which;
+  const charStr = String.fromCharCode(charCode);
+  if (!charStr.match(/^[0-9]+$/)) {
+    e.preventDefault();
+  }
+};
+
 const CInputRate = ({
   inputOnChange,
   selectOnChange,
@@ -38,10 +46,12 @@ const CInputRate = ({
   return (
     <div className={cn('w-full relative', className)}>
       <CInput
+        type="number"
         placeholder={placeholder}
         label={label}
         details={details}
         onChange={inputOnChange}
+        onKeyPress={(e: any) => inpNum(e)}
         {...props}
       />
 
