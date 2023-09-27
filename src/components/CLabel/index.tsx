@@ -23,7 +23,7 @@ const CLabel = ({ label, details, htmlFor, className }: CLabelProps) => {
           <Image
             src={detailsLogo}
             alt="search"
-            className="ml-2 mb-[13px]"
+            className="ml-2 mb-[8px]"
             title={details}
           />
         )}
