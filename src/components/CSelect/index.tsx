@@ -58,6 +58,10 @@ const CSelect = ({
 }: CSelectProps) => {
   const id = useCustomID('CSelect');
 
+  const handleChange = (e) => {
+    onChange(e);
+  };
+
   return (
     <div className={cn('w-full', className)}>
       <div className="w-full">
@@ -69,7 +73,7 @@ const CSelect = ({
           placeholder={placeholder}
           isSearchable={false}
           id={id}
-          onChange={onChange}
+          onChange={handleChange}
           {...props}
         />
       </div>
