@@ -13,7 +13,7 @@ import calendarLogo from '../../../public/images/calendar.svg';
 interface CDatePickerProps {
   label?: string;
   details?: string;
-  onChange?: (value: Date) => void;
+  onChange: (value: Date) => void;
   className?: string;
   minDate?: Date;
   maxDate?: Date;
@@ -52,16 +52,16 @@ const CDatePicker = ({
   const CustomInput = forwardRef<HTMLInputElement>(({ value, onClick }, ref) => (
     <div className={cn('relative', className)}>
       <button
-        className="text-left rounded-[12px] h-14 px-[16px] outline-none focus:outline-gray-400 text-[18px] placeholder-[#7D7B9B] text-[#7D7B9B] leading-[18.78px] w-full bg-neutral-100"
+        className="text-left rounded-[12px] h-14 px-[16px] outline-none  text-[18px] placeholder-[#7D7B9B] text-[#7D7B9B] leading-[18.78px] w-full bg-neutral-100"
         onClick={onClick}
         ref={ref}
       >
-        <span className={`${!isDatePickerUsed ? '' : 'text-[14px]'} `}>
+        <span className={`${!isDatePickerUsed ? '' : 'text-[14px] text-midnightblue'} `}>
           {!isDatePickerUsed ? 'Choose date' : value}
         </span>
       </button>
       <div className="absolute right-4 bottom-4">
-        <Image src={calendarLogo} alt="calender" width={0} height={0} />
+        <Image src={calendarLogo} width={0} height={0} alt="calender" />
       </div>
     </div>
   ));
@@ -85,7 +85,7 @@ const CDatePicker = ({
             timeIntervals={60}
             filterTime={filterPassedTime}
             timeCaption="Time"
-            dateFormat="MMMM dd, yyyy HH:mm"
+            dateFormat="MMM dd, yyyy HH:mm"
           />
         </Wrapper>
       </div>
