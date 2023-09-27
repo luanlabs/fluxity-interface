@@ -13,7 +13,7 @@ interface CInputProps {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   details?: string;
   name?: string;
-  error: any;
+  error?: any;
 }
 
 const CInput = ({
@@ -39,14 +39,13 @@ const CInput = ({
           </div>
         )}
         <input
-          type="text"
           id={id}
           name={name}
           onChange={onChange}
           placeholder={placeholder}
           className={` ${
             icon ? 'px-12' : 'px-[16px]'
-          } self-stretch rounded-[12px] placeholder-[#7D7B9B] text-[#7D7B9B] text-[16px] w-full h-14 p-4 bg-neutral-100 justify-start items-center inline-flex outline-none focus:outline-gray-400`}
+          } self-stretch rounded-[12px] placeholder-[#7D7B9B] text-midnightblue text-[16px] w-full h-14 p-4 bg-neutral-100 justify-start items-center inline-flex outline-none`}
           {...props}
         />
       </div>
