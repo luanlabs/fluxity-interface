@@ -31,6 +31,7 @@ const CStreamingModelContainer = ({ label, details }: CStreamingModelContainer) 
           isSelected={selectedModel === 'exponential'}
           model="exponential"
           onClick={() => handleModelSelect('exponential')}
+          className=""
         />
       </div>
     </div>
