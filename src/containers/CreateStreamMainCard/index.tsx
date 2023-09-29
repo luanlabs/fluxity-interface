@@ -22,7 +22,7 @@ type FormValues = {
 const CreateStream = () => {
   const form = useForm<FormValues>({
     defaultValues: {
-      rateTime: 'Monthly',
+      rateTime: 'monthly',
     },
   });
   const { handleSubmit, control, getValues, setValue, watch } = form;
