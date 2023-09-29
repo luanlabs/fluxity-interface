@@ -20,7 +20,7 @@ const CStreamingModelContainer = ({ label, details }: CStreamingModelContainer) 
   };
   return (
     <div className="w-[532px] flex flex-col">
-      <CLabel label={label} details={details} />
+      <CLabel label={label} details={details} className="mb-1" />
       <div className="flex gap-2">
         <CStreamingModel
           isSelected={selectedModel === 'linear'}
@@ -31,6 +31,7 @@ const CStreamingModelContainer = ({ label, details }: CStreamingModelContainer) 
           isSelected={selectedModel === 'exponential'}
           model="exponential"
           onClick={() => handleModelSelect('exponential')}
+          className=""
         />
       </div>
     </div>

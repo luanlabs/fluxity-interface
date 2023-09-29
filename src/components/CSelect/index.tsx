@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Select, { components } from 'react-select';
+import cn from 'classnames';
 
 import { ReactSelectOnChangeType } from 'src/models';
 import useCustomID from '../../hooks/useCustomId';
@@ -57,11 +58,14 @@ const CSelect = ({
 }: CSelectProps) => {
   const id = useCustomID('CSelect');
 
+  const handleChange = (e) => {
+    onChange(e);
+  };
+
   return (
-    <div className={className}>
+    <div className={cn('w-full', className)}>
       <div className="w-full">
         <CLabel label={label} details={details} htmlFor={id} />
-
         <Select
           options={options}
           components={{ Option, DropdownIndicator, Control }}
@@ -69,7 +73,7 @@ const CSelect = ({
           placeholder={placeholder}
           isSearchable={false}
           id={id}
-          onChange={onChange}
+          onChange={handleChange}
           {...props}
         />
       </div>

@@ -6,10 +6,14 @@ import {
   ActionMeta,
 } from 'react-select';
 
-type SelectItemType = {
+export interface SelectItemType {
   label: string;
   value: string;
-};
+}
+
+export interface SelectTokenType extends SelectItemType {
+  icon: string;
+}
 
 export type ReactSelectType = StylesConfig<
   SelectItemType,
