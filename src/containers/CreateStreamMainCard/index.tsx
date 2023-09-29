@@ -7,8 +7,8 @@ import CPageCard from 'src/components/CPageCard';
 import SummaryContainer from '../SummaryContainer';
 import CInputRate from 'src/components/CInputRate';
 import CDatePicker from 'src/components/CDatePicker';
-import SelectTokenContainer from '../selectTokenContainer';
-import WalletAddressContainer from '../walletAddressContainer';
+import SelectTokenContainer from '../SelectTokenContainer';
+import WalletAddressContainer from '../WalletAddressContainer';
 
 type FormValues = {
   address: string;
@@ -17,7 +17,6 @@ type FormValues = {
   token: object;
   startDate: Date;
   endDate: Date;
-  cliffDate: Date;
 };
 
 const CreateStream = () => {
@@ -28,14 +27,14 @@ const CreateStream = () => {
   });
   const { handleSubmit, control, getValues, setValue, watch } = form;
 
-  watch(['startDate', 'endDate', 'cliffDate', 'rateTime']);
+  watch(['startDate', 'endDate', 'rateTime']);
 
   const onSubmit = (data: FormValues) => {
     console.log(data);
   };
 
-  const handleFlowRateSelect = (value: any) => {
-    setValue('rateTime', `${value.value}`);
+  const handleFlowRateSelect = (value: number) => {
+    setValue('rateTime', `${value}`);
   };
 
   const CreateStreamTitle = (

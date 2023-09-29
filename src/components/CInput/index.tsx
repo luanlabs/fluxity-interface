@@ -1,6 +1,5 @@
 import React from 'react';
 import Image from 'next/image';
-import { useForm } from 'react-hook-form';
 
 import useCustomID from '../../hooks/useCustomId';
 import CLabel from '../CLabel';
@@ -12,8 +11,6 @@ interface CInputProps {
   className?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   details?: string;
-  name?: string;
-  error?: any;
 }
 
 const CInput = ({
@@ -23,8 +20,6 @@ const CInput = ({
   label,
   details,
   onChange,
-  name,
-  error,
   ...props
 }: CInputProps) => {
   const id = useCustomID('Cinput');
@@ -32,15 +27,16 @@ const CInput = ({
   return (
     <div className={className}>
       <CLabel label={label} details={details} htmlFor={id} />
+
       <div className="relative w-full">
         {icon && (
           <div className="absolute bottom-4 left-3.5">
             <Image src={icon} width={22} height={22} alt="inputIcon" />
           </div>
         )}
+
         <input
           id={id}
-          name={name}
           onChange={onChange}
           placeholder={placeholder}
           className={` ${
@@ -49,7 +45,6 @@ const CInput = ({
           {...props}
         />
       </div>
-      {error && <p className="text-red-600">{error.message}</p>}
     </div>
   );
 };

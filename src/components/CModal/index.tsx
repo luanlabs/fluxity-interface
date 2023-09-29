@@ -7,13 +7,6 @@ import exitLogo from '../../../public/images/X.svg';
 interface ModalProps {
   children: JSX.Element | React.ReactNode;
   title: string;
-  buttonText?: string;
-  className?: string;
-  label?: string;
-  details?: string;
-  buttonType?: 'select' | 'input';
-  selectedToken?: JSX.Element | React.ReactNode;
-  buttonClassName?: string;
   isOpen: boolean;
   setIsOpen: (_: boolean) => void;
 }

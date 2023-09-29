@@ -15,6 +15,7 @@ const selectStyles: ReactSelectType = {
     backgroundColor: state.isSelected ? '#F0EFFF' : '##F5F5F5',
     border: 'none',
     borderRadius: '6px',
+    marginBottom: '5px',
 
     '&:hover': {
       backgroundColor: state.isFocused ? '#f0EFFF' : '',
@@ -22,7 +23,7 @@ const selectStyles: ReactSelectType = {
   }),
 
   control: () => ({
-    width: '96px',
+    width: '110px',
     height: '28px',
     paddingLeft: '5px',
     display: 'flex',
@@ -44,7 +45,7 @@ const selectStyles: ReactSelectType = {
     ...defaultStyles,
     borderRadius: '6px',
     overflow: 'hidden',
-    width: '96px',
+    width: '110px',
     right: '15px',
     top: '-20px',
     border: 'none',

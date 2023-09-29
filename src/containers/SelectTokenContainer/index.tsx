@@ -6,7 +6,7 @@ import CInput from 'src/components/CInput';
 import { SelectTokenType } from 'src/models';
 
 import searchLogo from 'public/images/search.svg';
-import arrowLogo from '../../../public/images/arrow.svg';
+import arrowLogo from 'public/images/arrow.svg';
 import plusLogo from 'public/images/Plus.svg';
 import CLabel from 'src/components/CLabel';
 import useCustomID from 'src/hooks/useCustomId';
@@ -25,6 +25,7 @@ const SelectTokenContainer = ({ onChange }: selectTokenProps) => {
   const [selectedToken, setSelectedToken] = useState<null | SelectTokenType>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const id = useCustomID('selectToken');
 
   const handleTokenSelect = (token: SelectTokenType) => {
     setSelectedToken(token);
@@ -37,13 +38,11 @@ const SelectTokenContainer = ({ onChange }: selectTokenProps) => {
     setIsOpen(true);
   };
 
-  const id = useCustomID('selectToken');
-
   const filteredOptions = options.filter((option) =>
     option.label.toLowerCase().startsWith(searchValue.toLowerCase()),
   );
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
 

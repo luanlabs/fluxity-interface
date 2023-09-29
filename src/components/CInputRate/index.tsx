@@ -26,12 +26,11 @@ const DropdownIndicator = () => {
   );
 };
 
-const inpNum = (e: KeyboardEvent<HTMLInputElement>) => {
+const inpNum = (e: React.KeyboardEvent<HTMLInputElement>) => {
   const charCode = typeof e.which === 'undefined' ? e.keyCode : e.which;
   const charStr = String.fromCharCode(charCode);
-  if (!charStr.match(/^[0-9]+$/)) {
-    e.preventDefault();
-  }
+
+  if (!charStr.match(/^[0-9]*\.?[0-9]*$/)) e.preventDefault();
 };
 
 const CInputRate = ({
@@ -51,7 +50,7 @@ const CInputRate = ({
         label={label}
         details={details}
         onChange={inputOnChange}
-        onKeyPress={(e: any) => inpNum(e)}
+        onKeyPress={inpNum}
         {...props}
       />
 
@@ -60,7 +59,7 @@ const CInputRate = ({
         components={{ DropdownIndicator }}
         styles={selectStyles}
         isSearchable={false}
-        defaultValue={flowRateOptions[4]}
+        defaultValue={flowRateOptions[2]}
         onChange={selectOnChange}
       />
     </div>
