@@ -1,22 +1,31 @@
 import Select from 'react-select';
 import Image from 'next/image';
 import cn from 'classnames';
+import { useState } from 'react';
 
 import CInput from '../CInput';
 import selectStyles from './selectStyles';
 import flowRateOptions from '../../constants/flowRates';
-import { ReactSelectOnChangeType } from 'src/models';
+import { SelectItemType } from 'src/models';
 
-import arrowLogo from '../../../public/images/arrow.svg';
+import arrowLogo from 'public/images/arrow.svg';
+
+export type CInputRateValue = { amount: string; rateTime: SelectItemType };
 
 interface CInputRate {
-  inputOnChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  selectOnChange?: ReactSelectOnChangeType;
   placeholder: string;
   details?: string;
   label: string;
   className?: string;
+  onChange: (values: CInputRateValue) => void;
 }
+
+const inpNum = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const charCode = typeof e.which === 'undefined' ? e.keyCode : e.which;
+  const charStr = String.fromCharCode(charCode);
+
+  if (!charStr.match(/^[0-9]*\.?[0-9]*$/)) e.preventDefault();
+};
 
 const DropdownIndicator = () => {
   return (
@@ -26,22 +35,35 @@ const DropdownIndicator = () => {
   );
 };
 
-const inpNum = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  const charCode = typeof e.which === 'undefined' ? e.keyCode : e.which;
-  const charStr = String.fromCharCode(charCode);
-
-  if (!charStr.match(/^[0-9]*\.?[0-9]*$/)) e.preventDefault();
-};
-
 const CInputRate = ({
-  inputOnChange,
-  selectOnChange,
   placeholder,
   details,
   label,
   className,
+  onChange,
   ...props
 }: CInputRate) => {
+  const [inputValue, setInputValue] = useState('');
+  const [selectValue, setSelectValue] = useState<SelectItemType>(flowRateOptions[2]);
+
+  const handleInputChange = (e: any) => {
+    onChange({
+      amount: e.target.value,
+      rateTime: selectValue,
+    });
+
+    setInputValue(e.target.value);
+  };
+
+  const handleSelectChange = (e: SelectItemType) => {
+    onChange({
+      amount: inputValue,
+      rateTime: e,
+    });
+
+    setSelectValue(e);
+  };
+
   return (
     <div className={cn('w-full relative', className)}>
       <CInput
@@ -49,9 +71,10 @@ const CInputRate = ({
         placeholder={placeholder}
         label={label}
         details={details}
-        onChange={inputOnChange}
         onKeyPress={inpNum}
         {...props}
+        value={inputValue}
+        onChange={handleInputChange}
       />
 
       <Select
@@ -60,7 +83,7 @@ const CInputRate = ({
         styles={selectStyles}
         isSearchable={false}
         defaultValue={flowRateOptions[2]}
-        onChange={selectOnChange}
+        onChange={handleSelectChange}
       />
     </div>
   );
