@@ -1,14 +1,12 @@
 import React, { forwardRef, useState } from 'react';
-import Image from 'next/image';
-import DatePicker from 'react-datepicker';
-import cn from 'classnames';
 
+import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import cn from 'classnames';
 
 import CLabel from '../CLabel';
 import { Wrapper } from './datePickerStyles';
 import useCustomID from '../../hooks/useCustomId';
-import calendarLogo from '../../../public/images/calendar.svg';
 
 interface CDatePickerProps {
   label?: string;
@@ -60,9 +58,17 @@ const CDatePicker = ({
           {!isDatePickerUsed ? 'Choose date' : value}
         </span>
       </button>
-      <div className="absolute right-4 bottom-4">
-        <Image src={calendarLogo} width={0} height={0} alt="calender" />
-      </div>
+      <div
+        className={`
+        absolute
+        right-4
+        bottom-[-22px]
+        w-[100px]
+        h-[100px]
+        bg-[url('public/images/calendar.svg')]
+        bg-no-repeat
+        bg-right`}
+      />
     </div>
   ));
 
@@ -86,6 +92,7 @@ const CDatePicker = ({
             filterTime={filterPassedTime}
             timeCaption="Time"
             dateFormat="MMM dd, yyyy HH:mm"
+            className="bg-[url('https://avatars.githubusercontent.com/u/67109815?s=48&v=4')] bg-no-repeat bg-right"
           />
         </Wrapper>
       </div>
