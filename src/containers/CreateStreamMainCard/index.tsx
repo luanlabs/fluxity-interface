@@ -5,36 +5,36 @@ import { useForm, Controller } from 'react-hook-form';
 
 import CPageCard from 'src/components/CPageCard';
 import SummaryContainer from '../SummaryContainer';
-import CInputRate from 'src/components/CInputRate';
+import CInputRate, { CInputRateValue } from 'src/components/CInputRate';
 import CDatePicker from 'src/components/CDatePicker';
 import SelectTokenContainer from '../SelectTokenContainer';
 import WalletAddressContainer from '../WalletAddressContainer';
+import { SelectItemType } from 'src/models';
+import CButton from 'src/components/CButton';
+import fluxityLogo from '../../../public/images/fluxity.svg';
 
-type FormValues = {
+export interface FormValues {
   address: string;
-  rate: string;
-  rateTime: string;
+  rate: CInputRateValue;
   token: object;
   startDate: Date;
   endDate: Date;
-};
+}
 
 const CreateStream = () => {
   const form = useForm<FormValues>({
-    defaultValues: {
-      rateTime: 'monthly',
-    },
+    defaultValues: {},
   });
-  const { handleSubmit, control, getValues, setValue, watch } = form;
+  const { handleSubmit, control, getValues, watch } = form;
 
-  watch(['startDate', 'endDate', 'rateTime']);
+  watch(['startDate', 'endDate', 'rate', 'token', 'address']);
 
   const onSubmit = (data: FormValues) => {
     console.log(data);
   };
 
-  const handleFlowRateSelect = (value: number) => {
-    setValue('rateTime', `${value}`);
+  const handleFlowRateSelect = (value: SelectItemType) => {
+    console.log(value);
   };
 
   const CreateStreamTitle = (
@@ -72,14 +72,12 @@ const CreateStream = () => {
               <Controller
                 name="rate"
                 control={control}
-                defaultValue=""
                 render={({ field }) => (
                   <CInputRate
                     placeholder="0.0"
                     label="Flow rate"
                     details="FlowRate"
                     className="basis-4/5"
-                    selectOnChange={handleFlowRateSelect}
                     {...field}
                   />
                 )}
@@ -126,7 +124,6 @@ const CreateStream = () => {
               <Controller
                 name="endDate"
                 control={control}
-                rules={{ required: true }}
                 render={({ field }) => (
                   <CDatePicker
                     {...field}
@@ -146,7 +143,9 @@ const CreateStream = () => {
       </CPageCard>
 
       <div className="ml-[24px]">
-        <SummaryContainer />
+        <SummaryContainer form={form}>
+          <CButton kind="form" content="Create Stream" logo={fluxityLogo} disabled />
+        </SummaryContainer>
       </div>
 
       <DevTool control={control} />
