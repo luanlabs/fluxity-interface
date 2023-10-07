@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import Script from 'next/script';
-// import freighterApi from '@stellar/freighter-api';
+import freighterApi from '@stellar/freighter-api';
 
 import CNavLink from 'src/components/CNavLink';
 
@@ -15,31 +16,38 @@ import SquareHalf from 'src/svgs/SquareHalf';
 import { clipText } from 'src/utils/clipText';
 import copyText from 'src/utils/copyText';
 
+import wallet from 'public/images/wallet.svg';
+
 type AsideProps = {
   isMinimized: boolean;
   onMinimized: () => void;
 };
 
-let address = 'GA3A24K44D5JXIJ4RDPZTZLGZCUCJTMO2HKCFJ5CK6FYTEVUEIICSIXW';
-
 const Aside = ({ isMinimized, onMinimized }: AsideProps) => {
   const [isFreighterConnected, setIsFreighterConnected] = useState(false);
+  const [address, setAddress] = useState('');
+  useEffect(() => {
+    if (window.freighterApi?.isConnected()) {
+      setIsFreighterConnected(true);
+    }
+  }, []);
 
   const handleLoadScript = () => {};
-  if (window.freighterApi.isConnected()) {
-    setIsFreighterConnected(true);
-  }
+  freighterApi.getPublicKey().then((address: any) => {
+    setAddress(address);
+  });
 
   return (
-    <aside>
+    <aside className="overflow-hidden">
       <Script
         src="https://cdnjs.cloudflare.com/ajax/libs/stellar-freighter-api/1.7.0/index.min.js"
         onLoad={handleLoadScript}
+        onReady={handleLoadScript}
       />
-      ;
+
       <div
         className={`cursor-pointer ${
-          isMinimized ? 'w-full flex justify-center items-center' : 'ml-[10px]'
+          isMinimized ? 'w-full ml-[10px]' : 'ml-[10px]'
         } `}
         onClick={onMinimized}
       >
@@ -68,12 +76,13 @@ const Aside = ({ isMinimized, onMinimized }: AsideProps) => {
           isMinimized={isMinimized}
         />
         <div
-          className="py-2 px-4 rounded-xl bg-alabaster border border-midnightblue
-         hover:bg-softSkyBlue transition-all duration-700 cursor-pointer relative select-none"
+          className={`flex items-center px-4 rounded-xl h-[72px] ${
+            isFreighterConnected ? 'bg-white' : 'bg-lavender'
+          }  border border-midnightblue cursor-pointer relative select-none`}
           onClick={() => setIsFreighterConnected(!isFreighterConnected)}
         >
           {isFreighterConnected ? (
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center ">
               <div className="flex flex-col items-start">
                 <span
                   className="text-midnightblue text-xl"
@@ -88,7 +97,13 @@ const Aside = ({ isMinimized, onMinimized }: AsideProps) => {
               <div className="bg-ufogreen h-[10px] w-[10px] rounded-full absolute right-5" />
             </div>
           ) : (
-            <p className="flex justify-center items-center"> Connect Wallet</p>
+            <div className="flex-col items-center w-full">
+              <span className="flex justify-between">
+                <p className="font-normal text-base"> Connect</p>
+                <Image src={wallet} alt="wallet" />
+              </span>
+              <p className="text-xs mt-1">connect your wallet</p>
+            </div>
           )}
         </div>
       </div>
