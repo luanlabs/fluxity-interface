@@ -27,20 +27,21 @@ const CInput = ({
   return (
     <div className={className}>
       <CLabel label={label} details={details} htmlFor={id} />
-      <div className="relative">
+
+      <div className="relative w-full">
         {icon && (
           <div className="absolute bottom-4 left-3.5">
             <Image src={icon} width={22} height={22} alt="inputIcon" />
           </div>
         )}
+
         <input
-          type="text"
           id={id}
           onChange={onChange}
           placeholder={placeholder}
           className={` ${
             icon ? 'px-12' : 'px-[16px]'
-          } self-stretch rounded-[12px] placeholder-[#7D7B9B] text-[#7D7B9B] text-[16px] leading-[18.78px] w-full h-14 p-4 bg-neutral-100 justify-start items-center inline-flex`}
+          } self-stretch rounded-[12px] placeholder-[#7D7B9B] text-midnightblue text-[16px] w-full h-14 p-4 bg-neutral-100 justify-start items-center inline-flex outline-none`}
           {...props}
         />
       </div>

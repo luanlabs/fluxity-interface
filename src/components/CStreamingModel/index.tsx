@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import cn from 'classnames';
 
 import CCard from '../CCard';
 import useStreamModel from './useStreamModel';
@@ -10,16 +11,27 @@ interface StreamingModel {
   model: Model;
   isSelected?: boolean;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
+  className?: string;
 }
 
-const CStreamingModel = ({ model, isSelected, onClick, ...props }: StreamingModel) => {
+const CStreamingModel = ({
+  model,
+  isSelected,
+  className,
+  onClick,
+  ...props
+}: StreamingModel) => {
   const { logo, title, description } = useStreamModel(model);
 
   return (
     <CCard
-      className={`flex justify-center items-center w-full h-[64px] px-[10px] py-[8px] cursor-pointer bg-[#fff] ${
-        isSelected ? 'bg-powderblue' : 'bg-[#fff]'
-      } ease-in duration-100`}
+      className={cn(
+        `flex justify-center items-center w-full h-[64px] px-[10px] py-[8px] cursor-pointer bg-[#fff] ${
+          isSelected ? 'bg-powderblue' : 'bg-[#fff]'
+        } 
+      ease-in duration-100`,
+        className,
+      )}
       borderColor="#000"
       onClick={onClick}
       {...props}
