@@ -6,5 +6,4 @@ export enum Pages {
   // ADDRESS_BOOK = '/address-book',
   // VESTING = '/vesting',
   GET_HELP = '/get-help',
-  SETTINGS = '/settings',
 }

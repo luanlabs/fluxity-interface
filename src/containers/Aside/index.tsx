@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
-import Script from 'next/script';
 import freighterApi from '@stellar/freighter-api';
 
 import CNavLink from 'src/components/CNavLink';
@@ -10,7 +9,6 @@ import CNavLink from 'src/components/CNavLink';
 import { navLinks } from 'src/constants/navlinks';
 import { Pages } from 'src/constants/pages';
 
-import GearSix from 'src/svgs/GearSix';
 import LifeBuoy from 'src/svgs/LifeBuoy';
 import SquareHalf from 'src/svgs/SquareHalf';
 import { clipText } from 'src/utils/clipText';
@@ -24,27 +22,16 @@ type AsideProps = {
 };
 
 const Aside = ({ isMinimized, onMinimized }: AsideProps) => {
-  const [isFreighterConnected, setIsFreighterConnected] = useState(false);
   const [address, setAddress] = useState('');
-  useEffect(() => {
-    if (window.freighterApi?.isConnected()) {
-      setIsFreighterConnected(true);
-    }
-  }, []);
 
-  const handleLoadScript = () => {};
-  freighterApi.getPublicKey().then((address: any) => {
-    setAddress(address);
-  });
+  const handleConnect = () => {
+    freighterApi.getPublicKey().then((address: any) => {
+      setAddress(address);
+    });
+  };
 
   return (
     <aside className="overflow-hidden">
-      <Script
-        src="https://cdnjs.cloudflare.com/ajax/libs/stellar-freighter-api/1.7.0/index.min.js"
-        onLoad={handleLoadScript}
-        onReady={handleLoadScript}
-      />
-
       <div
         className={`cursor-pointer ${
           isMinimized ? 'w-full ml-[10px]' : 'ml-[10px]'
@@ -68,20 +55,13 @@ const Aside = ({ isMinimized, onMinimized }: AsideProps) => {
         isMinimized={isMinimized}
       />
       <div className="absolute bottom-5 left-[15px] right-[15px]">
-        <CNavLink
-          title="Settings"
-          icon={<GearSix fill="#EBFDFF" />}
-          activeIcon={<GearSix />}
-          url={Pages.SETTINGS}
-          isMinimized={isMinimized}
-        />
         <div
           className={`flex items-center px-4 rounded-xl h-[72px] ${
-            isFreighterConnected ? 'bg-white' : 'bg-lavender'
+            address ? 'bg-white' : 'bg-lavender'
           }  border border-midnightblue cursor-pointer relative select-none`}
-          onClick={() => setIsFreighterConnected(!isFreighterConnected)}
+          onClick={handleConnect}
         >
-          {isFreighterConnected ? (
+          {address ? (
             <div className="flex justify-between items-center ">
               <div className="flex flex-col items-start">
                 <span
