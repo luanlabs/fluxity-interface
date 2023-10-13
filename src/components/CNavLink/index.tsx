@@ -28,7 +28,7 @@ const CNavLink = ({ title, icon, activeIcon, url, isMinimized }: Type) => {
           {isActive ? activeIcon : icon}
           {title}
         </span>
-        <span className="block lg:hidden md:hidden sm:hidden">
+        <span className="xxl:block hidden">
           <CareRight />
         </span>
       </div>

@@ -35,7 +35,7 @@ export default function RootLayout({
                     className={`relative overflow-hidden ${
                       isMinimized
                         ? 'basis-[80px] transition-all duration-500'
-                        : 'basis-[22%] md:basis-2/12 transition-all duration-500'
+                        : 'basis-[20%] transition-all duration-500'
                     } px-[15px] py-[19px]`}
                     bgColor="white"
                   >

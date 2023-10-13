@@ -5,5 +5,5 @@ export enum Pages {
   // NFTS = '/nfts',
   // ADDRESS_BOOK = '/address-book',
   // VESTING = '/vesting',
-  GET_HELP = '/get-help',
+  FAQ = '/faq',
 }
