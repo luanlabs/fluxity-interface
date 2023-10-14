@@ -1,9 +1,20 @@
+'use client';
+
 import React from 'react';
+import { useRouter } from 'next/navigation';
+
+import { ExternalPages } from 'src/constants/externalPages';
 
 import CCard from '../../components/CCard';
 import CButton from '../../components/CButton';
 
 const DocumentationCard = () => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(ExternalPages.WHITEPAPER);
+  };
+
   return (
     <div className="w-full">
       <CCard
@@ -20,6 +31,7 @@ const DocumentationCard = () => {
         </p>
         <div className="flex items-center gap-4 mt-4 pb-2">
           <CButton
+            onClick={handleClick}
             kind="simple"
             color="orange"
             content="Read Whitepaper"

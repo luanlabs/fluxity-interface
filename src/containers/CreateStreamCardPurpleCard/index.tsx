@@ -1,10 +1,21 @@
+'use client';
+
 import React from 'react';
+import { useRouter } from 'next/navigation';
+
+import { Pages } from 'src/constants/pages';
 
 import CCard from '../../components/CCard';
 import CButton from '../../components/CButton';
 import fluxityLogo from '../../../public/images/fluxity.svg';
 
 const CreateStreamCardPurpleCard = () => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(Pages.CREATE_STREAM);
+  };
+
   return (
     <div className="w-full">
       <CCard
@@ -21,6 +32,7 @@ const CreateStreamCardPurpleCard = () => {
         </p>
         <div className="flex items-center gap-4 mt-[20px] pb-2">
           <CButton
+            onClick={handleClick}
             kind="simple"
             color="purple"
             content="Create Stream"

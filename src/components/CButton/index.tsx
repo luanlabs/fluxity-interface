@@ -18,13 +18,32 @@ interface ButtonProps {
   content: string;
   kind: CButtonKindType;
   logo?: string;
+  onClick: () => void;
 }
 
-const CButton = ({ color, content, kind, logo, ...props }: ButtonProps) => {
+const CButton = ({
+  kind,
+  logo,
+  color,
+  onClick,
+  content,
+  ...props
+}: ButtonProps) => {
   return (
-    <button className={buttonCustomStyles(kind, color)} {...props}>
+    <button
+      className={buttonCustomStyles(kind, color)}
+      {...props}
+      onClick={onClick}
+    >
       {logo && (
-        <Image src={logo} width={25} height={25} alt="logo" className="mr-2" {...props} />
+        <Image
+          src={logo}
+          width={25}
+          height={25}
+          alt="logo"
+          className="mr-2"
+          {...props}
+        />
       )}
       {content}
     </button>
