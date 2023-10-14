@@ -13,6 +13,8 @@ import { ExternalPages } from 'src/constants/externalPages';
 const Header = () => {
   const router = useRouter();
 
+  const handleClick = () => {};
+
   return (
     <header className="flex justify-between items-center py-3 px-6">
       <div
@@ -30,7 +32,13 @@ const Header = () => {
         <span className="bg-alabaster hover:bg-lavenderblush h-12 w-12 rounded-full flex justify-center items-center cursor-pointer transition-all duration-700">
           <RingBell />
         </span>
-        <CButton kind="simple" color="gray" content="Test Net" logo={Stellar} />
+        <CButton
+          kind="simple"
+          color="gray"
+          content="Test Net"
+          logo={Stellar}
+          onClick={handleClick}
+        />
       </div>
     </header>
   );
