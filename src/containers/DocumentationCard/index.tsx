@@ -5,7 +5,7 @@ import CButton from '../../components/CButton';
 
 const DocumentationCard = () => {
   return (
-    <div className="w-1/2">
+    <div className="w-full">
       <CCard
         className="flex flex-col px-[21px] py-[13px] w-full h-full"
         bgColor="mistyrose"
