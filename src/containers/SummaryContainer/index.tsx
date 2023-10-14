@@ -7,12 +7,8 @@ import CPageCard from 'src/components/CPageCard';
 
 import fluxityLogo from '../../../public/images/fluxity.svg';
 import summaryLogo from '../../../public/images/summary.svg';
-import { Pages } from 'src/constants/pages';
-import { useRouter } from 'next/navigation';
 
 const SummaryContainer = () => {
-  const router = useRouter();
-
   const summaryTitle = (
     <div className="w-full flex justify-between items-center pb-4">
       <h1 className="text-[18px] text-midnightblue">Summary</h1>
@@ -20,9 +16,7 @@ const SummaryContainer = () => {
     </div>
   );
 
-  const handleClick = () => {
-    router.push(Pages.CREATE_STREAM);
-  };
+  const handleClick = () => {};
 
   return (
     <div>
