@@ -16,6 +16,8 @@ const SummaryContainer = () => {
     </div>
   );
 
+  const handleClick = () => {};
+
   return (
     <div>
       <CPageCard title={summaryTitle} className="px-3 py-4">
@@ -39,7 +41,12 @@ const SummaryContainer = () => {
         <p>100 XLM</p>
       </CCard>
 
-      <CButton kind="form" content="Create Stream" logo={fluxityLogo} />
+      <CButton
+        kind="form"
+        content="Create Stream"
+        logo={fluxityLogo}
+        onClick={handleClick}
+      />
     </div>
   );
 };

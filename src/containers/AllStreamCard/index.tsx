@@ -5,8 +5,16 @@ import cardLogo from '../../../public/images/card.svg';
 import helpLogo from '../../../public/images/help.svg';
 import CCard from '../../components/CCard';
 import CButton from '../../components/CButton';
+import { useRouter } from 'next/navigation';
+import { Pages } from 'src/constants/pages';
 
 const AllStreamCard = () => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(Pages.GET_HELP);
+  };
+
   return (
     <div className="w-full relative">
       <CCard
@@ -23,6 +31,7 @@ const AllStreamCard = () => {
           </p>
           <div className="pb-7">
             <CButton
+              onClick={handleClick}
               kind="simple"
               color="blueWhite"
               content="Get Help"
