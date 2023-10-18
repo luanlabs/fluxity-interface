@@ -8,6 +8,7 @@ import { setAddress } from 'src/reducers/userInfo';
 import { useAppDispatch, useAppSelector } from 'src/hooks/useRedux';
 
 import wallet from 'public/images/wallet.svg';
+import blackWallet from 'public/images/blackWallet.svg';
 
 const CConnectButton = () => {
   const dispatch = useAppDispatch();
@@ -21,33 +22,33 @@ const CConnectButton = () => {
 
   return (
     <div
-      className={`flex items-center px-4 rounded-xl h-[72px] ${
-        address ? 'bg-white' : 'bg-lavender'
-      }  border border-midnightblue cursor-pointer relative select-none`}
+      className={`flex items-center px-[10px] rounded-xl h-[56px] ${
+        address
+          ? 'bg-white border-midnightblue'
+          : 'bg-royalBlue text-white border-royalBlue'
+      }  border  cursor-pointer relative select-none`}
       onClick={handleConnect}
     >
       {address ? (
-        <div className="flex justify-between items-center ">
-          <div className="flex flex-col items-start">
-            <span
-              className="text-midnightblue text-xl"
-              onClick={() => {
-                copyText(address);
-              }}
-            >
-              {clipText(address, 4)}
-            </span>
-            <span className="text-[12px]">Wallet is connected</span>
-          </div>
-          <div className="bg-ufogreen h-[10px] w-[10px] rounded-full absolute right-5" />
+        <div className="flex justify-between items-center w-full">
+          <p
+            className="flex flex-col items-start whitespace-nowrap overflow-hidden"
+            onClick={() => {
+              copyText(address);
+            }}
+          >
+            {clipText(address, 4)}
+          </p>
+          <Image src={blackWallet} alt="wallet" width={24} height={24} />
         </div>
       ) : (
         <div className="flex-col items-center w-full">
           <span className="flex justify-between">
-            <p className="font-normal text-base"> Connect</p>
-            <Image src={wallet} alt="wallet" />
+            <p className="font-normal text-base whitespace-nowrap overflow-hidden">
+              Connect
+            </p>
+            <Image src={wallet} alt="wallet" width={24} height={24} />
           </span>
-          <p className="text-xs mt-1">connect your wallet</p>
         </div>
       )}
     </div>

@@ -19,7 +19,7 @@ const Aside = ({ isMinimized, onMinimized }: AsideProps) => {
   return (
     <aside className="overflow-hidden">
       <div
-        className={`cursor-pointer ${
+        className={`cursor-pointer select-none ${
           isMinimized ? 'w-full ml-[10px]' : 'ml-[10px]'
         } `}
         onClick={onMinimized}
