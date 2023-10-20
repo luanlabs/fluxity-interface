@@ -14,7 +14,10 @@ import blackWallet from 'public/images/blackWallet.svg';
 
 import Modal from './modal';
 
-const CConnectButton = () => {
+type CConnectButtonProps = {
+  isMinimized: boolean;
+};
+const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
   const [openModal, setOpenModal] = useState(false);
   const dispatch = useAppDispatch();
   const address = useAppSelector((state) => state.userInfo.address);
@@ -24,6 +27,8 @@ const CConnectButton = () => {
       dispatch(setAddress(address));
     });
   };
+  const handleDisconnect = () => {};
+
   const handleCopy = () => {
     copyText(address);
   };
@@ -34,24 +39,24 @@ const CConnectButton = () => {
 
   return (
     <div
-      className={`flex items-center px-[10px] rounded-xl h-[56px] ${
+      className={`flex items-center rounded-xl ${
         address
           ? openModal
             ? 'bg-midnightblue text-white'
-            : 'bg-white text-midnightblue border-midnightblue'
+            : 'bg-white text-midnightblue border-midnightblue hover:bg-lavenderblush'
           : 'bg-royalBlue text-white border-royalBlue'
       } transition-colors duration-500 border cursor-pointer select-none`}
       onClick={handleConnect}
     >
       {address ? (
         <div
-          className="flex justify-between items-center w-full"
+          className="flex justify-between items-center w-full px-[10px] h-[56px]"
           onClick={() => {
             setOpenModal(!openModal);
           }}
         >
           <p
-            className="flex flex-col items-start whitespace-nowrap overflow-hidden"
+            className="flex flex-col relative items-start whitespace-nowrap overflow-hidden"
             onClick={() => {
               copyText(address);
             }}
@@ -69,11 +74,13 @@ const CConnectButton = () => {
               address={address}
               handleCopy={handleCopy}
               closeModal={closeModal}
+              isMinimized={isMinimized}
+              handleDisconnect={handleDisconnect}
             />
           )}
         </div>
       ) : (
-        <div className="flex-col items-center w-full">
+        <div className="flex-col items-center w-full px-[10px] h-[56px]">
           <span className="flex justify-between">
             <p className="font-normal text-base whitespace-nowrap overflow-hidden">
               Connect

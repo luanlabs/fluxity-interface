@@ -11,10 +11,19 @@ import { clipText } from 'src/utils/clipText';
 type ModalProps = {
   open: boolean;
   address: string;
+  isMinimized: boolean;
   handleCopy: () => void;
   closeModal: () => void;
+  handleDisconnect: () => void;
 };
-const Modal = ({ open, address, handleCopy, closeModal }: ModalProps) => {
+const Modal = ({
+  open,
+  address,
+  handleCopy,
+  closeModal,
+  isMinimized,
+  handleDisconnect,
+}: ModalProps) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -41,15 +50,19 @@ const Modal = ({ open, address, handleCopy, closeModal }: ModalProps) => {
   return (
     <div
       ref={modalRef}
-      className={`bg-midnightblue py-[10px] px-[5px] rounded-[10px] ${
-        open ? 'fixed bottom-[64px] left-[265px] w-[203px] z-50' : 'hidden'
+      className={`bg-midnightblue p-[6px] rounded-[10px] ${
+        open
+          ? `fixed bottom-[64px] ${
+              isMinimized ? 'left-[100px]' : 'left-[265px]'
+            } w-[203px] z-50`
+          : 'hidden'
       }`}
     >
       <div className="h-[48px] px-2 rounded-md bg-white text-midnightblue flex justify-between items-center w-full">
         <span>{clipText(address, 4)}</span>
         <Image src={copy} alt="copy" onClick={handleCopy} />
       </div>
-      <div className="mt-3 px-2 text-white">
+      <div className="flex flex-col divide-y divide-slate-700 mt-2 px-2 text-white">
         <div className="py-2 flex justify-between items-center w-full">
           <Link
             href="https://stellar.expert/explorer/public/"
@@ -59,8 +72,10 @@ const Modal = ({ open, address, handleCopy, closeModal }: ModalProps) => {
             <Image src={arrowRight} alt="arrow" />
           </Link>
         </div>
-        <hr />
-        <div className="py-2 flex justify-between items-center w-full">
+        <div
+          className="py-2 flex justify-between items-center w-full"
+          onClick={handleDisconnect}
+        >
           <span>Disconnect Wallet</span>
           <Image src={power} alt="power" />
         </div>
