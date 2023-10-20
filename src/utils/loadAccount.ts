@@ -1,5 +1,15 @@
-import { Server } from 'stellar-sdk';
+import { AccountResponse, Server } from 'stellar-sdk';
 
 const server = new Server('https://horizon-futurenet.stellar.org');
 
-const account = await server.loadAccount(sourcePublicKey);
+export type getAccountResult = Promise<AccountResponse | null>;
+
+const loadAccount = async (publicKey: string) => {
+  try {
+    const account = await server.loadAccount(publicKey);
+    return account;
+  } catch (error) {
+    return null;
+  }
+};
+export default loadAccount;

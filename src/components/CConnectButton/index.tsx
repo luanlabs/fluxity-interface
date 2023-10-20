@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import freighterApi from '@stellar/freighter-api';
 
 import copyText from 'src/utils/copyText';
 import { clipText } from 'src/utils/clipText';
-import { setAddress } from 'src/reducers/userInfo';
+import { setAddress, removeAddress } from 'src/reducers/userInfo';
 import { useAppDispatch, useAppSelector } from 'src/hooks/useRedux';
 
 import wallet from 'public/images/wallet.svg';
@@ -27,7 +27,10 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
       dispatch(setAddress(address));
     });
   };
-  const handleDisconnect = () => {};
+
+  const handleDisconnect = () => {
+    dispatch(removeAddress());
+  };
 
   const handleCopy = () => {
     copyText(address);
@@ -39,7 +42,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
 
   return (
     <div
-      className={`flex items-center rounded-xl ${
+      className={`relative flex items-center rounded-xl ${
         address
           ? openModal
             ? 'bg-midnightblue text-white'
@@ -56,7 +59,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
           }}
         >
           <p
-            className="flex flex-col relative items-start whitespace-nowrap overflow-hidden"
+            className="flex flex-col items-start whitespace-nowrap overflow-hidden"
             onClick={() => {
               copyText(address);
             }}
@@ -80,8 +83,8 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
           )}
         </div>
       ) : (
-        <div className="flex-col items-center w-full px-[10px] h-[56px]">
-          <span className="flex justify-between">
+        <div className="w-full">
+          <span className="flex justify-between items-center px-[10px] h-[56px]">
             <p className="font-normal text-base whitespace-nowrap overflow-hidden">
               Connect
             </p>

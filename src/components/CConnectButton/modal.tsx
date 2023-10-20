@@ -52,8 +52,8 @@ const Modal = ({
       ref={modalRef}
       className={`bg-midnightblue p-[6px] rounded-[10px] ${
         open
-          ? `fixed bottom-[64px] ${
-              isMinimized ? 'left-[100px]' : 'left-[265px]'
+          ? `fixed bottom-[40px] ${
+              isMinimized ? 'left-[100px]' : 'left-[17.5%]'
             } w-[203px] z-50`
           : 'hidden'
       }`}
@@ -67,6 +67,7 @@ const Modal = ({
           <Link
             href="https://stellar.expert/explorer/public/"
             className="flex justify-between w-full"
+            target="_blank"
           >
             <span>Open Explorer</span>
             <Image src={arrowRight} alt="arrow" />
