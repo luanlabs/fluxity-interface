@@ -3,4 +3,5 @@ export enum ExternalPages {
   DOCUMENTATION = '/documentation',
   COMMUNITY = '/community',
   WHITEPAPER = '/white-paper',
+  EXPLORER = 'https://futurenet.stellarchain.io/accounts',
 }

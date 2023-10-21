@@ -30,10 +30,12 @@ export default function RootLayout({
                 <CCard className="mb-[10px]" bgColor="white">
                   <Header />
                 </CCard>
-                <section className="inline-flex basis-full gap-4 w-full h-[87%]">
+                <section className="inline-flex basis-full gap-4 w-full h-[90%] overflow-hidden">
                   <CCard
-                    className={`relative ${
-                      isMinimized ? 'basis-[3%]' : 'basis-[22%] md:basis-2/12'
+                    className={`relative overflow-hidden ${
+                      isMinimized
+                        ? 'basis-[80px] transition-all duration-500'
+                        : 'basis-[20%] transition-all duration-500'
                     } px-[15px] py-[19px]`}
                     bgColor="white"
                   >

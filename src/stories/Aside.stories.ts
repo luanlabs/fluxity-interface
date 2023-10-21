@@ -19,13 +19,13 @@ type Story = StoryObj<typeof meta>;
 export const MinimizedAside: Story = {
   args: {
     isMinimized: true,
-    onClick: () => {},
+    onMinimized: () => {},
   },
 };
 
 export const MaximizedAside: Story = {
   args: {
     isMinimized: false,
-    onClick: () => {},
+    onMinimized: () => {},
   },
 };

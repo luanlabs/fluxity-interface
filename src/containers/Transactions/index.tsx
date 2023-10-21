@@ -3,17 +3,18 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 
-import Funnel from 'src/svgs/Funnel';
 import CCard from 'src/components/CCard';
-import { clipText } from 'src/utils/clipText';
 import CStreamType from 'src/components/CStreamType';
 import { formatNumber } from 'src/utils/formatNumber';
-import MagnifyingGlass from 'src/svgs/MagnifyingGlass';
 import capitalize from 'src/utils/capitalizeFirstLetter';
+import { shortenAddress } from 'src/utils/shortenAddress';
 import CStreamStatus, { StreamStatus } from 'src/components/CStreamStatus';
 
-import usdt from 'public/images/usdt.svg';
+import Funnel from 'src/svgs/Funnel';
 import divider from 'public/images/divider.svg';
+
+import usdt from 'public/images/usdt.svg';
+import MagnifyingGlass from 'src/svgs/MagnifyingGlass';
 
 import * as Styled from './styles';
 import useFetchHistory from './useFetchHistory';
@@ -62,7 +63,7 @@ const Transactions = () => {
               >
                 {stream.streamType === 'send' ? 'To' : 'From'}
               </span>
-              {clipText(stream.address, 4)}
+              {shortenAddress(stream.address, 4)}
             </div>
             <div className="flex flex-row gap-5">
               <Image src={divider} alt="divider" className="mx-5" />
