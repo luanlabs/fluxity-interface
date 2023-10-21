@@ -18,6 +18,8 @@ interface CInputRate {
   label: string;
   className?: string;
   onChange: (values: CInputRateValue) => void;
+  errorMsg?: string;
+  error?: boolean;
 }
 
 const inpNum = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -41,6 +43,8 @@ const CInputRate = ({
   label,
   className,
   onChange,
+  errorMsg,
+  error,
   ...props
 }: CInputRate) => {
   const [inputValue, setInputValue] = useState('');
@@ -75,6 +79,8 @@ const CInputRate = ({
         {...props}
         value={inputValue}
         onChange={handleInputChange}
+        errorMsg={errorMsg}
+        error={error}
       />
 
       <Select
