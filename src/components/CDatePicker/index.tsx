@@ -6,6 +6,7 @@ import cn from 'classnames';
 import CLabel from '../CLabel';
 import { Wrapper } from './datePickerStyles';
 import useCustomID from '../../hooks/useCustomId';
+import CalenderLogo from '../../../public/images/calendar.svg';
 
 interface CDatePickerProps {
   label?: string;
@@ -63,7 +64,7 @@ const CDatePicker = ({
         bottom-[-22px]
         w-[100px]
         h-[100px]
-        bg-[url('public/images/calendar.svg')]
+        bg-calendar
         bg-no-repeat
         bg-right`}
         />

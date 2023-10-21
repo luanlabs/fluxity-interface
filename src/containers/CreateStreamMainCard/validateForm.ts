@@ -1,6 +1,6 @@
 import { FormValues } from './index';
 import { CustomError } from 'src/models';
-import { rateInNumbers } from '../../utils/rateInNumber';
+import { rateInNumber } from '../../utils/rateInNumber';
 import BN from 'src/utils/BN';
 import { calculateTotalAmount } from '../SummaryContainer/calculateTotalAmount';
 import { userData } from '../SummaryContainer/userData';
@@ -40,7 +40,7 @@ const validateForm = (values: FormValues, setIsFormValidated) => {
     values.startDate,
     values.endDate,
     new BN(values.rate.amount),
-    rateInNumbers(values.rate.rateTime.value),
+    rateInNumber(values.rate.rateTime.value),
   );
 
   const checkBalance = () => {

@@ -5,7 +5,7 @@ import { StrKey } from 'stellar-sdk';
 import CModal from 'src/components/CModal';
 import CInput from 'src/components/CInput';
 import CLabel from 'src/components/CLabel';
-import { shortenCryptoAddress } from 'src/utils/shortenAddress';
+import { shortenAddress } from 'src/utils/shortenAddress';
 
 import walletLogo from 'public/images/inputWallet.svg';
 import trashLogo from 'public/images/trash.svg';
@@ -75,8 +75,8 @@ const WalletAddressContainer = ({
     });
   };
 
-  const longAddress = shortenCryptoAddress(recipientWalletAddress, 20);
-  const shortAddress = shortenCryptoAddress(recipientWalletAddress, 11);
+  const longAddress = shortenAddress(recipientWalletAddress, 20);
+  const shortAddress = shortenAddress(recipientWalletAddress, 11);
 
   return (
     <div>

@@ -21,17 +21,7 @@ interface ButtonProps {
   disabled?: boolean;
   type?: 'button' | 'submit';
   className: string;
-}
-
-const CButton = ({
-  color,
-  content,
-  kind,
-  logo,
-  disabled,
-  type,
-  className,
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const CButton = ({
@@ -39,6 +29,9 @@ const CButton = ({
   logo,
   color,
   onClick,
+  className,
+  type,
+  disabled,
   content,
   ...props
 }: ButtonProps) => {
@@ -48,19 +41,10 @@ const CButton = ({
       className={cn(buttonCustomStyles(kind, color), className)}
       disabled={disabled}
       {...props}
-      className={buttonCustomStyles(kind, color)}
-      {...props}
       onClick={onClick}
     >
       {logo && (
-        <Image
-          src={logo}
-          width={25}
-          height={25}
-          alt="logo"
-          className="mr-2"
-          {...props}
-        />
+        <Image src={logo} width={25} height={25} alt="logo" className="mr-2" {...props} />
       )}
       {content}
     </button>

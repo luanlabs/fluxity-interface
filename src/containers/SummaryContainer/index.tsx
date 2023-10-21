@@ -5,7 +5,7 @@ import { UseFormReturn } from 'react-hook-form';
 
 import CCard from 'src/components/CCard';
 import CPageCard from 'src/components/CPageCard';
-import { shortenCryptoAddress } from 'src/utils/shortenAddress';
+import { shortenAddress } from 'src/utils/shortenAddress';
 import { FormValues } from '../CreateStreamMainCard';
 import BN from '../../utils/BN';
 
@@ -60,7 +60,7 @@ const SummaryContainer = ({ form, isFormValidated, errorMsg }: SummaryProps) => 
       }
 
       if (label === 'address') {
-        return { label: 'To', value: shortenCryptoAddress(value, 4) };
+        return { label: 'To', value: shortenAddress(value, 4) };
       }
 
       return {
@@ -81,7 +81,7 @@ const SummaryContainer = ({ form, isFormValidated, errorMsg }: SummaryProps) => 
       values.startDate,
       values.endDate,
       new BN(values?.rate.amount),
-      rateInNumbers(values?.rate.rateTime.value),
+      rateInNumber(values?.rate.rateTime.value),
     );
   }
 
@@ -91,8 +91,6 @@ const SummaryContainer = ({ form, isFormValidated, errorMsg }: SummaryProps) => 
       <Image src={summaryLogo} alt="summary" width={0} height={0} />
     </div>
   );
-
-  const handleClick = () => {};
 
   return (
     <div>
@@ -142,7 +140,6 @@ const SummaryContainer = ({ form, isFormValidated, errorMsg }: SummaryProps) => 
           )}
         </div>
       )}
-
     </div>
   );
 };
