@@ -1,22 +1,19 @@
 import React, { forwardRef, useState } from 'react';
-import Image from 'next/image';
 import DatePicker from 'react-datepicker';
-import cn from 'classnames';
-
 import 'react-datepicker/dist/react-datepicker.css';
+import cn from 'classnames';
 
 import CLabel from '../CLabel';
 import { Wrapper } from './datePickerStyles';
 import useCustomID from '../../hooks/useCustomId';
-import calendarLogo from '../../../public/images/calendar.svg';
 
 interface CDatePickerProps {
   label?: string;
   details?: string;
   onChange: (value: Date) => void;
   className?: string;
-  minDate?: Date;
-  maxDate?: Date;
+  minDate: Date;
+  maxDate: Date;
 }
 
 const CDatePicker = ({
@@ -43,10 +40,10 @@ const CDatePicker = ({
   };
 
   const filterPassedTime = (time: Date) => {
-    const currentDate = minDate || new Date();
-    const selectedDate = new Date(time);
-
-    return currentDate.getTime() < selectedDate.getTime();
+    if (!maxDate) {
+      return minDate.getTime() < time.getTime();
+    }
+    return minDate.getTime() < time.getTime() && maxDate.getTime() > time.getTime();
   };
 
   const CustomInput = forwardRef<HTMLInputElement>(({ value, onClick }, ref) => (
@@ -59,10 +56,18 @@ const CDatePicker = ({
         <span className={`${!isDatePickerUsed ? '' : 'text-[14px] text-midnightblue'} `}>
           {!isDatePickerUsed ? 'Choose date' : value}
         </span>
+        <div
+          className={`
+        absolute
+        right-4
+        bottom-[-22px]
+        w-[100px]
+        h-[100px]
+        bg-[url('public/images/calendar.svg')]
+        bg-no-repeat
+        bg-right`}
+        />
       </button>
-      <div className="absolute right-4 bottom-4">
-        <Image src={calendarLogo} width={0} height={0} alt="calender" />
-      </div>
     </div>
   ));
 
@@ -86,6 +91,7 @@ const CDatePicker = ({
             filterTime={filterPassedTime}
             timeCaption="Time"
             dateFormat="MMM dd, yyyy HH:mm"
+            className="bg-[url('https://avatars.githubusercontent.com/u/67109815?s=48&v=4')] bg-no-repeat bg-right"
           />
         </Wrapper>
       </div>

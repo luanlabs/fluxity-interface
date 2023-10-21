@@ -18,6 +18,19 @@ interface ButtonProps {
   content: string;
   kind: CButtonKindType;
   logo?: string;
+  disabled?: boolean;
+  type?: 'button' | 'submit';
+  className: string;
+}
+
+const CButton = ({
+  color,
+  content,
+  kind,
+  logo,
+  disabled,
+  type,
+  className,
   onClick: () => void;
 }
 
@@ -31,6 +44,10 @@ const CButton = ({
 }: ButtonProps) => {
   return (
     <button
+      type={type}
+      className={cn(buttonCustomStyles(kind, color), className)}
+      disabled={disabled}
+      {...props}
       className={buttonCustomStyles(kind, color)}
       {...props}
       onClick={onClick}

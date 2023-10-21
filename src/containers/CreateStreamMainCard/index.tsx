@@ -1,40 +1,47 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { DevTool } from '@hookform/devtools';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, useFormState } from 'react-hook-form';
 
 import CPageCard from 'src/components/CPageCard';
 import SummaryContainer from '../SummaryContainer';
-import CInputRate from 'src/components/CInputRate';
+import CInputRate, { CInputRateValue } from 'src/components/CInputRate';
 import CDatePicker from 'src/components/CDatePicker';
 import SelectTokenContainer from '../SelectTokenContainer';
 import WalletAddressContainer from '../WalletAddressContainer';
+import CButton from 'src/components/CButton';
+import fluxityLogo from '../../../public/images/fluxity.svg';
+import validateForm from './validateForm';
 
-type FormValues = {
+export interface FormValues {
   address: string;
-  rate: string;
-  rateTime: string;
+  rate: CInputRateValue;
   token: object;
   startDate: Date;
   endDate: Date;
-};
+}
 
 const CreateStream = () => {
-  const form = useForm<FormValues>({
-    defaultValues: {
-      rateTime: 'monthly',
-    },
-  });
-  const { handleSubmit, control, getValues, setValue, watch } = form;
+  const [isFormValidated, setIsFormValidated] = useState(false);
 
-  watch(['startDate', 'endDate', 'rateTime']);
+  const form = useForm<FormValues>({
+    mode: 'onChange',
+    resolver: (formValues) => validateForm(formValues, setIsFormValidated),
+  });
+
+  const {
+    handleSubmit,
+    control,
+    getValues,
+    watch,
+    resetField,
+    formState: { errors, isValid, isValidating },
+  } = form;
+
+  watch(['startDate', 'endDate', 'rate', 'token', 'address']);
 
   const onSubmit = (data: FormValues) => {
     console.log(data);
-  };
-
-  const handleFlowRateSelect = (value: number) => {
-    setValue('rateTime', `${value}`);
   };
 
   const CreateStreamTitle = (
@@ -43,22 +50,43 @@ const CreateStream = () => {
     </div>
   );
 
+  const checkValues = () => {
+    if (
+      getValues('address') ||
+      getValues('token') ||
+      getValues('rate') ||
+      getValues('startDate') ||
+      getValues('endDate')
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');
+
   return (
-    <div className="flex w-full">
-      <CPageCard
-        title={CreateStreamTitle}
-        divider
-        className="w-[580px]
+    <form method="" onSubmit={handleSubmit(onSubmit)}>
+      <div className="flex w-full">
+        <CPageCard
+          title={CreateStreamTitle}
+          divider
+          className="w-[580px]
         pl-[30px] pr-[18px] py-[15px]"
-      >
-        <div className=" w-full">
-          <form method="" onSubmit={handleSubmit(onSubmit)}>
+        >
+          <div className=" w-full">
             <div className="mb-[24px]">
               <Controller
                 name="address"
                 control={control}
-                defaultValue=""
-                render={({ field }) => <WalletAddressContainer {...field} />}
+                render={({ field }) => (
+                  <div>
+                    <WalletAddressContainer
+                      clearInputClick={() => resetField('address')}
+                      {...field}
+                    />
+                  </div>
+                )}
               />
             </div>
 
@@ -72,16 +100,18 @@ const CreateStream = () => {
               <Controller
                 name="rate"
                 control={control}
-                defaultValue=""
                 render={({ field }) => (
-                  <CInputRate
-                    placeholder="0.0"
-                    label="Flow rate"
-                    details="FlowRate"
-                    className="basis-4/5"
-                    selectOnChange={handleFlowRateSelect}
-                    {...field}
-                  />
+                  <div className="w-full">
+                    <CInputRate
+                      placeholder="0.0"
+                      label="Flow rate"
+                      details="FlowRate"
+                      className="basis-4/5"
+                      errorMsg={errors.rate && errors.rate.message}
+                      error={errors.rate?.message ? true : false}
+                      {...field}
+                    />
+                  </div>
                 )}
               />
             </div>
@@ -119,6 +149,7 @@ const CreateStream = () => {
                     className="w-[236px]"
                     label="Start date (optional)"
                     minDate={new Date()}
+                    maxDate={getValues('endDate') && getValues('endDate')}
                   />
                 )}
               />
@@ -126,7 +157,6 @@ const CreateStream = () => {
               <Controller
                 name="endDate"
                 control={control}
-                rules={{ required: true }}
                 render={({ field }) => (
                   <CDatePicker
                     {...field}
@@ -137,20 +167,36 @@ const CreateStream = () => {
                         ? new Date(getValues('startDate'))
                         : new Date()
                     }
+                    maxDate={INFINITY_DATE}
                   />
                 )}
               />
             </div>
-          </form>
+          </div>
+        </CPageCard>
+
+        <div className="ml-[24px] transition-all duration-700 ease-in">
+          {checkValues() && (
+            <SummaryContainer
+              form={form}
+              isFormValidated={isFormValidated}
+              errorMsg={errors.total && errors.total.message}
+            />
+          )}
+
+          <CButton
+            type="submit"
+            kind="form"
+            content="Create Stream"
+            logo={fluxityLogo}
+            className={!isFormValidated ? '!bg-slate-400' : '!bg-midnightblue'}
+            disabled={!isValid || isValidating || !isFormValidated}
+          />
         </div>
-      </CPageCard>
 
-      <div className="ml-[24px]">
-        <SummaryContainer />
+        <DevTool control={control} />
       </div>
-
-      <DevTool control={control} />
-    </div>
+    </form>
   );
 };
 

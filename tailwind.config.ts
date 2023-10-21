@@ -38,6 +38,8 @@ const config: Config = {
         paleMint: '#E4FFED',
         royalBlue: '#3A21D4',
         paleCyan: '#EBFDFF',
+        error: '#FF7474',
+        darkBlue: '#050142',
       },
       screens: {
         sm: { max: '767px' },
