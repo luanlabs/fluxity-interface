@@ -4,7 +4,7 @@ const server = new Server('https://horizon-futurenet.stellar.org');
 
 export type getAccountResult = Promise<AccountResponse | null>;
 
-const loadAccount = async (publicKey: string) => {
+const getAccount = async (publicKey: string) => {
   try {
     const account = await server.loadAccount(publicKey);
     return account;
@@ -12,4 +12,4 @@ const loadAccount = async (publicKey: string) => {
     return null;
   }
 };
-export default loadAccount;
+export default getAccount;

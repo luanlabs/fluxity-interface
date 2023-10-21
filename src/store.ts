@@ -1,10 +1,10 @@
 'use client';
 
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import userInfo from 'src/reducers/userInfo';
+import user from 'src/reducers/user';
 
 const rootReducer = combineReducers({
-  userInfo,
+  user,
 });
 
 export const store = configureStore({

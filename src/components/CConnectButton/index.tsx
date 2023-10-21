@@ -6,13 +6,14 @@ import freighterApi from '@stellar/freighter-api';
 
 import copyText from 'src/utils/copyText';
 import { clipText } from 'src/utils/clipText';
-import { setAddress, removeAddress } from 'src/reducers/userInfo';
+import { setAddress, loadAccount } from 'src/reducers/user';
 import { useAppDispatch, useAppSelector } from 'src/hooks/useRedux';
 
 import wallet from 'public/images/wallet.svg';
 import blackWallet from 'public/images/blackWallet.svg';
 
 import Modal from './modal';
+import getAccount from 'src/utils/getAccount';
 
 type CConnectButtonProps = {
   isMinimized: boolean;
@@ -20,20 +21,17 @@ type CConnectButtonProps = {
 const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
   const [openModal, setOpenModal] = useState(false);
   const dispatch = useAppDispatch();
-  const address = useAppSelector((state) => state.userInfo.address);
+  const address = useAppSelector((state) => state.user.address);
 
   const handleConnect = () => {
-    freighterApi.getPublicKey().then((address: string) => {
-      dispatch(setAddress(address));
-    });
-  };
-
-  const handleDisconnect = () => {
-    dispatch(removeAddress());
-  };
-
-  const handleCopy = () => {
-    copyText(address);
+    if (!address) {
+      freighterApi.getPublicKey().then((address: string) => {
+        getAccount(address).then((info) => {
+          dispatch(loadAccount(info));
+        });
+        dispatch(setAddress(address));
+      });
+    }
   };
 
   const closeModal = () => {
@@ -75,10 +73,8 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
             <Modal
               open={openModal}
               address={address}
-              handleCopy={handleCopy}
               closeModal={closeModal}
               isMinimized={isMinimized}
-              handleDisconnect={handleDisconnect}
             />
           )}
         </div>

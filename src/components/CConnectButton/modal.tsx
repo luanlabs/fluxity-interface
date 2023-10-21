@@ -6,25 +6,29 @@ import copy from 'public/images/copy.svg';
 import power from 'public/images/power.svg';
 import arrowRight from 'public/images/arrowCircleRight.svg';
 
+import copyText from 'src/utils/copyText';
 import { clipText } from 'src/utils/clipText';
+import { ExternalPages } from 'src/constants/externalPages';
+import { disconnect } from 'src/reducers/user';
+import { useAppDispatch } from 'src/hooks/useRedux';
 
 type ModalProps = {
   open: boolean;
   address: string;
   isMinimized: boolean;
-  handleCopy: () => void;
   closeModal: () => void;
-  handleDisconnect: () => void;
 };
-const Modal = ({
-  open,
-  address,
-  handleCopy,
-  closeModal,
-  isMinimized,
-  handleDisconnect,
-}: ModalProps) => {
+const Modal = ({ open, address, closeModal, isMinimized }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
+  const dispatch = useAppDispatch();
+
+  const handleDisconnect = () => {
+    dispatch(disconnect());
+  };
+
+  const handleCopy = () => {
+    copyText(address);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -65,7 +69,7 @@ const Modal = ({
       <div className="flex flex-col divide-y divide-slate-700 mt-2 px-2 text-white">
         <div className="py-2 flex justify-between items-center w-full">
           <Link
-            href="https://stellar.expert/explorer/public/"
+            href={`${ExternalPages.EXPLORER}/${address}`}
             className="flex justify-between w-full"
             target="_blank"
           >
