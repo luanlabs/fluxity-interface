@@ -7,11 +7,10 @@ import CCard from 'src/components/CCard';
 import CPageCard from 'src/components/CPageCard';
 import { shortenCryptoAddress } from 'src/utils/shortenAddress';
 import { FormValues } from '../CreateStreamMainCard';
-import { balances } from './userData';
 import BN from '../../utils/BN';
 
 import summaryLogo from '../../../public/images/summary.svg';
-import { rateInNumbers } from 'src/utils/rateInNumbers';
+import { rateInNumber } from 'src/utils/rateInNumber';
 import { calculateTotalAmount } from './calculateTotalAmount';
 
 interface SummaryProps {

@@ -1,6 +1,6 @@
 import { FormValues } from './index';
 import { CustomError } from 'src/models';
-import { rateInNumbers } from '../../utils/rateInNumbers';
+import { rateInNumbers } from '../../utils/rateInNumber';
 import BN from 'src/utils/BN';
 import { calculateTotalAmount } from '../SummaryContainer/calculateTotalAmount';
 import { userData } from '../SummaryContainer/userData';

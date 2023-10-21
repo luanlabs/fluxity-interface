@@ -7,8 +7,7 @@ import CInput from 'src/components/CInput';
 import CLabel from 'src/components/CLabel';
 import { shortenCryptoAddress } from 'src/utils/shortenAddress';
 
-import walletLogo from 'public/images/wallet.svg';
-import plusLogo from 'public/images/Plus.svg';
+import walletLogo from 'public/images/inputWallet.svg';
 import trashLogo from 'public/images/trash.svg';
 
 import { generateRandomHexColor } from './generateRandomHexColor';
