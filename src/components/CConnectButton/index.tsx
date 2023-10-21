@@ -5,19 +5,19 @@ import Image from 'next/image';
 import freighterApi from '@stellar/freighter-api';
 
 import copyText from 'src/utils/copyText';
-import { clipText } from 'src/utils/clipText';
+import getAccount from 'src/utils/getAccount';
+import { shortenAddress } from 'src/utils/shortenAddress';
 import { setAddress, loadAccount } from 'src/reducers/user';
 import { useAppDispatch, useAppSelector } from 'src/hooks/useRedux';
 
+import Modal from './modal';
 import wallet from 'public/images/wallet.svg';
 import blackWallet from 'public/images/blackWallet.svg';
-
-import Modal from './modal';
-import getAccount from 'src/utils/getAccount';
 
 type CConnectButtonProps = {
   isMinimized: boolean;
 };
+
 const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
   const [openModal, setOpenModal] = useState(false);
   const dispatch = useAppDispatch();
@@ -62,7 +62,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
               copyText(address);
             }}
           >
-            {clipText(address, 4)}
+            {shortenAddress(address, 4)}
           </p>
           {openModal ? (
             <Image src={wallet} alt="wallet" width={24} height={24} />

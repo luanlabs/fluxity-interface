@@ -2,13 +2,12 @@
 
 import CNavLink from 'src/components/CNavLink';
 
-import { navLinks } from 'src/constants/navlinks';
 import { Pages } from 'src/constants/pages';
+import { navLinks } from 'src/constants/navlinks';
+import CConnectButton from 'src/components/CConnectButton';
 
 import LifeBuoy from 'src/svgs/LifeBuoy';
 import SquareHalf from 'src/svgs/SquareHalf';
-
-import CConnectButton from 'src/components/CConnectButton';
 
 type AsideProps = {
   isMinimized: boolean;
