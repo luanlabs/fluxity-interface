@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { AccountResponse, Horizon } from 'stellar-sdk';
 
+import BN from 'src/utils/BN';
 import CModal from 'src/components/CModal';
 import CInput from 'src/components/CInput';
 import { SelectTokenType } from 'src/models';
+import CLabel from 'src/components/CLabel';
+import useCustomID from 'src/hooks/useCustomId';
+import { userData } from '../SummaryContainer/userData';
 
 import searchLogo from 'public/images/search.svg';
 import arrowLogo from 'public/images/arrow.svg';
 import plusLogo from 'public/images/Plus.svg';
-import CLabel from 'src/components/CLabel';
-import useCustomID from 'src/hooks/useCustomId';
-import { userData } from '../SummaryContainer/userData';
-import BN from 'src/utils/BN';
-import { AccountResponse, Horizon } from 'stellar-sdk';
 
 const options: SelectTokenType[] = [
   { value: 'usdc', label: 'USDC', icon: 'usdc.svg' },
@@ -59,12 +59,7 @@ const SelectTokenContainer = ({ onChange }: selectTokenProps) => {
       >
         {selectedToken ? (
           <div className="flex items-center justify-start">
-            <Image
-              src={require(`../../../public/images/assets/${options[0].icon}`).default}
-              width={35}
-              height={35}
-              alt="a"
-            />
+            <Image src="" width={35} height={35} alt="" />
             <p className="ml-4 text-midnightblue">{selectedToken.asset_code}</p>
           </div>
         ) : (

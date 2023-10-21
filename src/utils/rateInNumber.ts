@@ -1,12 +1,11 @@
-import { FormValues } from 'src/containers/CreateStreamMainCard';
 import { UseFormReturn } from 'react-hook-form';
 
-interface rateInNumbers {
+interface rateInNumber {
   form: UseFormReturn<any, undefined>;
   isFormValidated: boolean;
 }
 
-export const rateInNumbers = (rateTime: string) => {
+export const rateInNumber = (rateTime: string) => {
   const daily = 1000 * 60 * 60 * 24;
   const time = {
     daily: daily,

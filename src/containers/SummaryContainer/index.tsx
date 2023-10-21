@@ -70,41 +70,6 @@ const SummaryContainer = ({ form, isFormValidated, errorMsg }: SummaryProps) => 
       };
     });
 
-  // const calculateTotalAmount = (amount: string, time: number) => {
-  //   const amountAsNumber = new BN(amount);
-
-  //   let timeStampStartDate = new BN(new Date().getTime());
-  //   let timeStampEndDate = new BN(endDate.getTime());
-
-  //   if (startDate) {
-  //     timeStampStartDate = new BN(startDate.getTime());
-  //   }
-
-  //   const calulateTime = timeStampEndDate.minus(timeStampStartDate);
-
-  //   return amountAsNumber.times(calulateTime).div(new BN(time));
-  // };
-
-  // let totalAmount;
-
-  // if (isFormValidated) {
-  //   totalAmount = calculateTotalAmount(
-  //     values.rate.amount,
-  //     rateInNumbers(values.rate.rateTime.value),
-  //   );
-  // }
-
-  // let showError;
-
-  // if (totalAmount) {
-  //   if (totalAmount.isGreaterThan(balances[0].balance)) {
-  //     showError = 'The account balance is insufficient';
-  //   }
-  //   if (totalAmount.isNaN()) {
-  //     console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhoy NAAAAAAAAAAAAAAAAAAAAAAAAAAANe');
-  //   }
-  // }
-
   let totalAmount = new BN(0);
 
   if (

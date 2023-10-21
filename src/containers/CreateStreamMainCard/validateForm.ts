@@ -46,9 +46,8 @@ const validateForm = (values: FormValues, setIsFormValidated) => {
   const checkBalance = () => {
     const findToken = userData.find(({ asset_code }) => asset_code);
     if (!findToken) {
-      return {};
+      return { errors, values };
     }
-    console.log('amamamamamama', findToken);
 
     if (totalAmount.isGreaterThan(new BN(findToken.balance))) {
       errors.total = {
