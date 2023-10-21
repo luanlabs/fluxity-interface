@@ -36,8 +36,8 @@ const CModal = ({ children, title, isOpen, setIsOpen }: ModalProps) => {
             <div className="fixed inset-0 bg-black bg-opacity-25" />
           </Transition.Child>
 
-          <div className="fixed inset-0 overflow-y-auto ">
-            <div className="flex min-h-full items-center justify-center p-4 text-center ">
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
@@ -47,20 +47,14 @@ const CModal = ({ children, title, isOpen, setIsOpen }: ModalProps) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-[574px] transform overflow-hidden rounded-[20px] bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="text-[28px] text-midnightblue font-medium leading-6 flex justify-between mb-[32px]"
+                    className="text-[28px]  text-midnightblue font-medium leading-6 flex justify-between mb-[14px]"
                   >
                     {title}
-                    <Image
-                      src={exitLogo}
-                      alt="closeModal"
-                      onClick={closeModal}
-                      className="cursor-pointer"
-                    />
                   </Dialog.Title>
-                  <div className="mt-2">{children}</div>
+                  <div className="mt-2 ">{children}</div>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
