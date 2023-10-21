@@ -13,8 +13,8 @@ interface CDatePickerProps {
   details?: string;
   onChange: (value: Date) => void;
   className?: string;
-  minDate?: Date;
-  maxDate?: Date;
+  minDate: Date;
+  maxDate: Date;
 }
 
 const CDatePicker = ({
@@ -41,10 +41,10 @@ const CDatePicker = ({
   };
 
   const filterPassedTime = (time: Date) => {
-    const currentDate = minDate || new Date();
-    const selectedDate = new Date(time);
-
-    return currentDate.getTime() < selectedDate.getTime();
+    if (!maxDate) {
+      return minDate.getTime() < time.getTime();
+    }
+    return minDate.getTime() < time.getTime() && maxDate.getTime() > time.getTime();
   };
 
   const CustomInput = forwardRef<HTMLInputElement>(({ value, onClick }, ref) => (
@@ -57,9 +57,8 @@ const CDatePicker = ({
         <span className={`${!isDatePickerUsed ? '' : 'text-[14px] text-midnightblue'} `}>
           {!isDatePickerUsed ? 'Choose date' : value}
         </span>
-      </button>
-      <div
-        className={`
+        <div
+          className={`
         absolute
         right-4
         bottom-[-22px]
@@ -68,7 +67,8 @@ const CDatePicker = ({
         bg-[url('public/images/calendar.svg')]
         bg-no-repeat
         bg-right`}
-      />
+        />
+      </button>
     </div>
   ));
 
