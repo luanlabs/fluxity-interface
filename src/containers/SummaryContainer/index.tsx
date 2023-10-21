@@ -92,6 +92,8 @@ const SummaryContainer = ({ form, isFormValidated, errorMsg }: SummaryProps) => 
     </div>
   );
 
+  const handleClick = () => {};
+
   return (
     <div>
       <CPageCard title={summaryTitle} className="px-3 py-4 mb-[16px]">
@@ -140,6 +142,7 @@ const SummaryContainer = ({ form, isFormValidated, errorMsg }: SummaryProps) => 
           )}
         </div>
       )}
+
     </div>
   );
 };

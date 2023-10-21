@@ -17,25 +17,21 @@ const CNavLink = ({ title, icon, activeIcon, url, isMinimized }: Type) => {
   return (
     <div
       onClick={handleClick}
-      className={` ${
-        isMinimized ? 'flex justify-center' : 'inline-flex justify-between'
+      className={`select-none w-full ${
+        isMinimized ? 'flex justify-start' : 'inline-flex justify-between'
       } items-center rounded-xl ${
         isActive && ' bg-softSkyBlue transition-all duration-500'
-      } w-full px-[10px] h-[52px] cursor-pointer`}
+      } w-full px-[10px] h-[52px] cursor-pointer overflow-hidden`}
     >
-      {isMinimized ? (
-        <div>{isActive ? activeIcon : icon}</div>
-      ) : (
-        <>
-          <span className="inline-flex gap-2 items-center text-lg text-midnightblue md:text-base sm:text-sm whitespace-nowrap">
-            {isActive ? activeIcon : icon}
-            {title}
-          </span>
-          <span className="block lg:hidden md:hidden sm:hidden">
-            <CareRight />
-          </span>
-        </>
-      )}
+      <div className="flex justify-between items-center w-full overflow-hidden whitespace-nowrap">
+        <span className="inline-flex gap-2 items-center text-lg text-midnightblue md:text-base sm:text-sm whitespace-nowrap">
+          {isActive ? activeIcon : icon}
+          {title}
+        </span>
+        <span className="xxl:block hidden">
+          <CareRight />
+        </span>
+      </div>
     </div>
   );
 };

@@ -31,6 +31,15 @@ const CButton = ({
   disabled,
   type,
   className,
+  onClick: () => void;
+}
+
+const CButton = ({
+  kind,
+  logo,
+  color,
+  onClick,
+  content,
   ...props
 }: ButtonProps) => {
   return (
@@ -39,9 +48,19 @@ const CButton = ({
       className={cn(buttonCustomStyles(kind, color), className)}
       disabled={disabled}
       {...props}
+      className={buttonCustomStyles(kind, color)}
+      {...props}
+      onClick={onClick}
     >
       {logo && (
-        <Image src={logo} width={25} height={25} alt="logo" className="mr-2" {...props} />
+        <Image
+          src={logo}
+          width={25}
+          height={25}
+          alt="logo"
+          className="mr-2"
+          {...props}
+        />
       )}
       {content}
     </button>
