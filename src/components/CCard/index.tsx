@@ -20,7 +20,7 @@ const CCard = ({
 }: CardProps) => {
   return (
     <div
-      className={cn(className, 'rounded-[14px] border')}
+      className={cn(className, `rounded-[14px] border bg-${bgColor}`)}
       style={{ backgroundColor: bgColor, border: 'solid 1px ' + borderColor }}
       onClick={onClick}
       {...props}
