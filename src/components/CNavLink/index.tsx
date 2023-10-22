@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
-import CareRight from 'src/svgs/CareRight';
+import CareRight from 'src/assets/CareRight';
 import { CNavLinkProps as Type } from 'src/constants/types';
 import useIsActive from './useIsActive';
 

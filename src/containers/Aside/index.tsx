@@ -5,8 +5,8 @@ import CNavLink from 'src/components/CNavLink';
 import { navLinks } from 'src/constants/navLinks';
 import CConnectButton from 'src/components/CConnectButton';
 
-import LifeBuoy from 'src/svgs/LifeBuoy';
-import SquareHalf from 'src/svgs/SquareHalf';
+import LifeBuoy from 'src/assets/LifeBuoy';
+import SquareHalf from 'src/assets/SquareHalf';
 
 type AsideProps = {
   isMinimized: boolean;

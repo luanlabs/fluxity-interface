@@ -10,11 +10,11 @@ import capitalize from 'src/utils/capitalizeFirstLetter';
 import { shortenAddress } from 'src/utils/shortenAddress';
 import CStreamStatus, { StreamStatus } from 'src/components/CStreamStatus';
 
-import Funnel from 'src/svgs/Funnel';
+import Funnel from 'src/assets/Funnel';
 import divider from 'public/images/divider.svg';
 
 import usdt from 'public/images/usdt.svg';
-import MagnifyingGlass from 'src/svgs/MagnifyingGlass';
+import MagnifyingGlass from 'src/assets/MagnifyingGlass';
 
 import * as Styled from './styles';
 import useFetchHistory from './useFetchHistory';
