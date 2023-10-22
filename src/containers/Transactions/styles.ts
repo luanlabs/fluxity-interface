@@ -14,3 +14,10 @@ export const Circle = styled.div`
     transition: all 700ms;
   }
 `;
+export const Scroll = styled.div`
+  height: fit-content;
+  overflow-y: auto;
+  @media (max-width: 1919px) {
+    height: 35vh;
+  }
+`;
