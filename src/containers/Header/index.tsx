@@ -5,7 +5,6 @@ import CLink from 'src/components/CLink';
 
 import FluxityLogo from 'src/assets/FluxityLogo';
 import FluxityTypography from 'src/assets/FluxityTypography';
-import RingBell from 'src/assets/RingBell';
 import Stellar from 'public/images/Stellar.svg';
 import { useRouter } from 'next/navigation';
 import { ExternalPages } from 'src/constants/externalPages';
@@ -32,7 +31,7 @@ const Header = () => {
         <CButton
           variant="simple"
           color="gray"
-          content="Test Net"
+          content="Testnet"
           logo={Stellar}
           onClick={handleClick}
         />
