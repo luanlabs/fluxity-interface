@@ -4,7 +4,7 @@ export const calculateTotalAmount = (
   startDate: Date,
   endDate: Date,
   amount: BN,
-  rate: number,
+  rate: number
 ) => {
   const amountAsNumber = new BN(amount);
 
@@ -15,7 +15,7 @@ export const calculateTotalAmount = (
     timeStampStartDate = new BN(startDate.getTime());
   }
 
-  const calulateTime = timeStampEndDate.minus(timeStampStartDate);
+  const calculateTime = timeStampEndDate.minus(timeStampStartDate);
 
-  return amountAsNumber.times(calulateTime).div(new BN(rate));
+  return amountAsNumber.times(calculateTime).div(new BN(rate));
 };

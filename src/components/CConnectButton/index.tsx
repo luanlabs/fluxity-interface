@@ -43,15 +43,15 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
       className={`relative flex items-center rounded-xl ${
         address
           ? openModal
-            ? 'bg-midnightblue text-white'
-            : 'bg-white text-midnightblue border-midnightblue hover:bg-lavenderblush'
+            ? 'bg-midnightBlue text-white'
+            : 'bg-white text-midnightBlue border-midnightBlue hover:bg-lavenderblush'
           : 'bg-royalBlue text-white border-royalBlue'
       } transition-colors duration-500 border cursor-pointer select-none`}
       onClick={handleConnect}
     >
       {address ? (
         <div
-          className="flex justify-between items-center w-full px-[10px] h-[56px]"
+          className="flex justify-between items-center w-full px-[10px] h-14"
           onClick={() => {
             setOpenModal(!openModal);
           }}
@@ -80,7 +80,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
         </div>
       ) : (
         <div className="w-full">
-          <span className="flex justify-between items-center px-[10px] h-[56px]">
+          <span className="flex justify-between items-center px-[10px] h-14">
             <p className="font-normal text-base whitespace-nowrap overflow-hidden">
               Connect
             </p>

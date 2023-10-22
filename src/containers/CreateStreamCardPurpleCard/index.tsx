@@ -3,11 +3,11 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 
+import CCard from 'src/components/CCard';
+import CButton from 'src/components/CButton';
 import { Pages } from 'src/constants/pages';
 
-import CCard from '../../components/CCard';
-import CButton from '../../components/CButton';
-import fluxityLogo from '../../../public/images/fluxity.svg';
+import fluxityLogo from 'public/images/fluxity.svg';
 
 const CreateStreamCardPurpleCard = () => {
   const router = useRouter();
@@ -23,22 +23,22 @@ const CreateStreamCardPurpleCard = () => {
         bgColor="#f5ebff"
         borderColor="#BE7CFF"
       >
-        <h1 className="text-[22px] mb-[25px] whitespace-nowrap text-richlavender">
+        <h1 className="text-[22px] mb-[25px] whitespace-nowrap text-richLavender">
           Create Stream
         </h1>
-        <p className="text-[16px] w-[70%] text-midnightblue leading-[20px]">
+        <p className="text-base w-[70%] text-midnightBlue leading-[20px]">
           Initiate token streams effortlessly; streams tailored to respond to
           your needs.
         </p>
         <div className="absolute left-4 bottom-4 flex items-center gap-4">
           <CButton
             onClick={handleClick}
-            kind="simple"
+            variant="simple"
             color="purple"
             content="Create Stream"
             logo={fluxityLogo}
           />
-          <a href="#" className="text-[14px]">
+          <a href="#" className="text-sm">
             Learn more
           </a>
         </div>

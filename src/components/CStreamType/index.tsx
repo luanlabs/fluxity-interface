@@ -1,7 +1,7 @@
 import React from 'react';
 
-import SendIcon from 'src/svgs/SendIcon';
-import ReceiveIcon from 'src/svgs/ReceiveIcon';
+import SendIcon from 'src/assets/SendIcon';
+import ReceiveIcon from 'src/assets/ReceiveIcon';
 
 type CStreamTypeProps = {
   type: 'receive' | 'send';

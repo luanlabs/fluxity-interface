@@ -5,6 +5,22 @@
 html,
 body {
   font-family: 'Aeonik', sans-serif;
+  ::-webkit-scrollbar-track {
+    border-radius: 15px;
+    background-color: white;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0;
+  }
+
+  :hover::-webkit-scrollbar {
+    background-color: white;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    transition: ease-in 0.3s;
+  }
 }
 
 @font-face {

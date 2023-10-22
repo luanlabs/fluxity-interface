@@ -3,10 +3,9 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 
+import CCard from 'src/components/CCard';
+import CButton from 'src/components/CButton';
 import { ExternalPages } from 'src/constants/externalPages';
-
-import CCard from '../../components/CCard';
-import CButton from '../../components/CButton';
 
 const DocumentationCard = () => {
   const router = useRouter();
@@ -22,20 +21,20 @@ const DocumentationCard = () => {
         bgColor="mistyrose"
         borderColor="#D98F7F"
       >
-        <h1 className="text-[22px] mb-[10px] text-darkcoral">Documentation</h1>
-        <p className="text-[16px] w-[70%] text-midnightblue leading-[20px]">
+        <h1 className="text-[22px] mb-[10px] text-darkCoral">Documentation</h1>
+        <p className="text-base w-[70%] text-midnightBlue leading-[20px]">
           Explore the opportunities created by token streaming and how Fluxity
           provides users with the most unique experience.
         </p>
         <div className="absolute left-4 bottom-4 flex items-center gap-4">
           <CButton
             onClick={handleClick}
-            kind="simple"
+            variant="simple"
             color="orange"
             content="Read Whitepaper"
             logo=""
           />
-          <a href="#" className="text-[14px]">
+          <a href="#" className="text-sm">
             Learn more
           </a>
         </div>

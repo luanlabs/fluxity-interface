@@ -2,12 +2,13 @@ import React from 'react';
 
 import { CNavLinkProps as Type } from './types';
 
-import HomeIcon from 'src/svgs/Home';
-import ActivityIcon from 'src/svgs/Activity';
-// import CopyIcon from 'src/svgs/Copy';
-// import NotebookIcon from 'src/svgs/Notebook';
-// import StairsIcon from 'src/svgs/Stairs';
-import StreamLinesIcon from 'src/svgs/StreamLines';
+import HomeIcon from 'src/assets/Home';
+import ActivityIcon from 'src/assets/Activity';
+import StreamLinesIcon from 'src/assets/StreamLines';
+// import CopyIcon from 'src/assets/Copy';
+// import NotebookIcon from 'src/assets/Notebook';
+// import StairsIcon from 'src/assets/Stairs';
+
 import { Pages } from './pages';
 
 export const navLinks: Type[] = [

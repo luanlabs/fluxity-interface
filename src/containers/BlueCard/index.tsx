@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CCard from '../../components/CCard';
+import CCard from 'src/components/CCard';
 
 const BlueCard = () => {
   return (
@@ -9,7 +9,9 @@ const BlueCard = () => {
         className="flex flex-col justify-between w-full h-full px-3 py-4"
         bgColor="royalblue"
         borderColor="rgba(0, 0, 0, 0.10)"
-      />
+      >
+        Blue card
+      </CCard>
     </div>
   );
 };

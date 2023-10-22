@@ -1,17 +1,20 @@
 'use client';
+
 import React, { useState } from 'react';
 import { DevTool } from '@hookform/devtools';
-import { useForm, Controller, useFormState } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 
+import CButton from 'src/components/CButton';
 import CPageCard from 'src/components/CPageCard';
-import SummaryContainer from '../SummaryContainer';
-import CInputRate, { CInputRateValue } from 'src/components/CInputRate';
 import CDatePicker from 'src/components/CDatePicker';
+import CInputRate, { CInputRateValue } from 'src/components/CInputRate';
+
+import validateForm from './validateForm';
+import SummaryContainer from '../SummaryContainer';
 import SelectTokenContainer from '../SelectTokenContainer';
 import WalletAddressContainer from '../WalletAddressContainer';
-import CButton from 'src/components/CButton';
-import fluxityLogo from '../../../public/images/fluxity.svg';
-import validateForm from './validateForm';
+
+import fluxityLogo from 'public/images/fluxity.svg';
 
 export interface FormValues {
   address: string;
@@ -46,7 +49,7 @@ const CreateStream = () => {
 
   const CreateStreamTitle = (
     <div className="w-full flex justify-between items-center pb-2">
-      <h1 className="text-[24px] text-midnightblue pl-2 mt-2">Create Stream</h1>
+      <h1 className="text-[24px] text-midnightBlue pl-2 mt-2">Create Stream</h1>
     </div>
   );
 
@@ -75,7 +78,7 @@ const CreateStream = () => {
         pl-[30px] pr-[18px] py-[15px]"
         >
           <div className=" w-full">
-            <div className="mb-[24px]">
+            <div className="mb-6">
               <Controller
                 name="address"
                 control={control}
@@ -116,9 +119,9 @@ const CreateStream = () => {
               />
             </div>
 
-            <hr className="my-[24px]" />
+            <hr className="my-6" />
 
-            {/* <div className="mb-[24px]">
+            {/* <div className="mb-6">
               <Controller
                 name="cliffDate"
                 control={control}
@@ -175,7 +178,7 @@ const CreateStream = () => {
           </div>
         </CPageCard>
 
-        <div className="ml-[24px] transition-all duration-700 ease-in">
+        <div className="ml-6 transition-all duration-700 ease-in">
           {checkValues() && (
             <SummaryContainer
               form={form}
@@ -186,10 +189,10 @@ const CreateStream = () => {
 
           <CButton
             type="submit"
-            kind="form"
+            variant="form"
             content="Create Stream"
             logo={fluxityLogo}
-            className={!isFormValidated ? '!bg-slate-400' : '!bg-midnightblue'}
+            className={!isFormValidated ? '!bg-slate-400' : '!bg-midnightBlue'}
             disabled={!isValid || isValidating || !isFormValidated}
           />
         </div>

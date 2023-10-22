@@ -22,14 +22,14 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const Form: Story = {
   args: {
-    kind: 'form',
+    variant: 'form',
     content: 'Create Stream',
   },
 };
 
 export const SimpleOrange: Story = {
   args: {
-    kind: 'simple',
+    variant: 'simple',
     color: 'orange',
     content: 'Read Whitepaper',
   },
@@ -37,7 +37,7 @@ export const SimpleOrange: Story = {
 
 export const SimplePurple: Story = {
   args: {
-    kind: 'simple',
+    variant: 'simple',
     color: 'purple',
     content: 'Create Stream',
     logo: '',
@@ -46,7 +46,7 @@ export const SimplePurple: Story = {
 
 export const SimpleTestNet: Story = {
   args: {
-    kind: 'simple',
+    variant: 'simple',
     color: 'gray',
     content: 'Testnet',
     logo: '',
@@ -55,7 +55,7 @@ export const SimpleTestNet: Story = {
 
 export const SimpleWhithdraw: Story = {
   args: {
-    kind: 'simple',
+    variant: 'simple',
     color: 'white',
     content: 'Withdraw',
     logo: '',
@@ -64,7 +64,7 @@ export const SimpleWhithdraw: Story = {
 
 export const SimpleShare: Story = {
   args: {
-    kind: 'simple',
+    variant: 'simple',
     color: 'blue',
     content: 'Share',
     logo: '',
@@ -73,7 +73,7 @@ export const SimpleShare: Story = {
 
 export const SimpleHelp: Story = {
   args: {
-    kind: 'simple',
+    variant: 'simple',
     color: 'blueWhite',
     content: 'Get Help',
     logo: '',
