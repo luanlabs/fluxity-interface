@@ -25,13 +25,13 @@ const CStreamStatus = ({ onChange }: CStreamStatusProps) => {
   };
 
   return (
-    <div className="inline-flex justify-center items-center rounded-[55px] border-[1px] py-2 px-[10px] border-midnightblue gap-2 cursor-pointer select-none h-[52px]">
+    <div className="inline-flex justify-center items-center rounded-[55px] border-[1px] py-2 px-[10px] border-midnightBlue gap-2 cursor-pointer select-none h-[52px]">
       {streamStatuses.map((item) => (
         <div
           key={item.label}
           className={`px-4 py-2 ${
             activeStatus === item.value &&
-            'bg-lavenderblush rounded-[63px] transition-all duration-700'
+            'bg-lavenderBlush rounded-[63px] transition-all duration-700'
           }`}
           onClick={() => handleChange(item.value)}
         >

@@ -7,9 +7,9 @@ import CCard from 'src/components/CCard';
 import CPageCard from 'src/components/CPageCard';
 import { shortenAddress } from 'src/utils/shortenAddress';
 import { FormValues } from '../CreateStreamMainCard';
-import BN from '../../utils/BN';
+import BN from 'src/utils/BN';
 
-import summaryLogo from '../../../public/images/summary.svg';
+import summaryLogo from 'public/images/summary.svg';
 import { rateInNumber } from 'src/utils/rateInNumber';
 import { calculateTotalAmount } from './calculateTotalAmount';
 
@@ -19,9 +19,18 @@ interface SummaryProps {
   errorMsg: string;
 }
 
-const options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric' };
+const options = {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  hour: 'numeric',
+};
 
-const SummaryContainer = ({ form, isFormValidated, errorMsg }: SummaryProps) => {
+const SummaryContainer = ({
+  form,
+  isFormValidated,
+  errorMsg,
+}: SummaryProps) => {
   const values: FormValues = form.getValues();
 
   const newValues = Object.entries(values)
@@ -48,15 +57,24 @@ const SummaryContainer = ({ form, isFormValidated, errorMsg }: SummaryProps) => 
       }
 
       if (label === 'rate') {
-        return { label: 'Flow Rate', value: `${value.amount} / ${value.rateTime.label}` };
+        return {
+          label: 'Flow Rate',
+          value: `${value.amount} / ${value.rateTime.label}`,
+        };
       }
 
       if (label === 'startDate') {
-        return { label: 'Start Date', value: value.toLocaleDateString('en-US', options) };
+        return {
+          label: 'Start Date',
+          value: value.toLocaleDateString('en-US', options),
+        };
       }
 
       if (label === 'endDate') {
-        return { label: 'End Date', value: value.toLocaleDateString('en-US', options) };
+        return {
+          label: 'End Date',
+          value: value.toLocaleDateString('en-US', options),
+        };
       }
 
       if (label === 'address') {
@@ -81,25 +99,25 @@ const SummaryContainer = ({ form, isFormValidated, errorMsg }: SummaryProps) => 
       values.startDate,
       values.endDate,
       new BN(values?.rate.amount),
-      rateInNumber(values?.rate.rateTime.value),
+      rateInNumber(values?.rate.rateTime.value)
     );
   }
 
   const summaryTitle = (
     <div className="w-full flex justify-between items-center pb-4">
-      <h1 className="text-[18px] text-midnightblue">Summary</h1>
+      <h1 className="text-lg text-midnightBlue">Summary</h1>
       <Image src={summaryLogo} alt="summary" width={0} height={0} />
     </div>
   );
 
   return (
     <div>
-      <CPageCard title={summaryTitle} className="px-3 py-4 mb-[16px]">
-        <ul className="grid gap-2 text-midnightblue">
+      <CPageCard title={summaryTitle} className="px-3 py-4 mb-4">
+        <ul className="grid gap-2 text-midnightBlue">
           {newValues.map((x) => (
             <li
               key={x.label}
-              className="flex justify-between items-center bg-alabaster h-[40px] px-[16px] text-[14px] rounded-[10px]"
+              className="flex justify-between items-center bg-alabaster h-10 px-4 text-sm rounded-[10px]"
             >
               <span>{x.label}</span>
               <div className="flex">
@@ -109,7 +127,7 @@ const SummaryContainer = ({ form, isFormValidated, errorMsg }: SummaryProps) => 
                     alt="logo"
                     width={20}
                     height={20}
-                    className="mr-[8px]"
+                    className="mr-2"
                   />
                 )}
 
@@ -126,7 +144,7 @@ const SummaryContainer = ({ form, isFormValidated, errorMsg }: SummaryProps) => 
             bgColor="#F5EBFF"
             borderColor="#BE7CFF"
             className={cn(
-              'flex justify-between items-center text-richlavender h-[56px] my-[16px] px-[10px] text-[18px]',
+              'flex justify-between items-center text-richLavender h-14 my-4 px-[10px] text-lg'
             )}
           >
             <p>Total Amount</p>
@@ -134,7 +152,7 @@ const SummaryContainer = ({ form, isFormValidated, errorMsg }: SummaryProps) => 
           </CCard>
 
           {errorMsg && (
-            <div className="text-red-500 flex items-center my-1 mb-[16px] w-full">
+            <div className="text-red-500 flex items-center my-1 mb-4 w-full">
               {errorMsg}
             </div>
           )}

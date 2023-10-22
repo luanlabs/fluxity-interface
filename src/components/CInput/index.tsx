@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 
-import useCustomID from '../../hooks/useCustomId';
+import useCustomID from 'src/hooks/useCustomId';
 import CLabel from '../CLabel';
 
 import alertLogo from 'public/images/error.png';
@@ -22,6 +22,7 @@ interface CInputProps {
   clipboardText?: string;
   handlePaste: (event: React.MouseEventHandler<HTMLDivElement>) => void;
   border?: boolean;
+  value?: string | number | any;
 }
 
 const CInput = ({
@@ -38,6 +39,7 @@ const CInput = ({
   paste,
   border,
   handlePaste,
+  value,
   ...props
 }: CInputProps) => {
   const id = useCustomID('Cinput');
@@ -61,7 +63,7 @@ const CInput = ({
 
         {paste && (
           <div
-            className="bg-white text-[#050142] text-[14px] px-[14px] py-[6px] rounded-[8px] absolute bottom-3 right-3.5 cursor-pointer transition hover:bg-[#E6E6EC]"
+            className="bg-white text-midnightBlue text-sm px-[14px] py-[6px] rounded-lg absolute bottom-3 right-3.5 cursor-pointer transition hover:bg-[#E6E6EC]"
             onClick={handlePaste}
           >
             <span>Paste</span>
@@ -86,17 +88,18 @@ const CInput = ({
           onChange={onChange}
           placeholder={placeholder}
           autoComplete="off"
-          className={`${icon ? 'px-12' : 'px-[16px]'}
-           self-stretch rounded-[12px] placeholder-mutedblue text-midnightblue text-[16px] w-full h-14 p-4 bg-neutral-100 justify-start items-center inline-flex outline-none border
+          className={`${icon ? 'px-12' : 'px-4'}
+           self-stretch rounded-xl placeholder-mutedBlue text-midnightBlue text-base w-full h-14 p-4 bg-neutral-100 justify-start items-center inline-flex outline-none border
            ${border ? 'focus:border-darkBlue' : 'border-transparent'}  
            ${error && 'border !border-error'}
           `}
+          value={value}
           {...props}
         />
 
         <div className="h-[20px] absolute mt-[6px] ml-1">
           {error && errorMsg && (
-            <span className="text-error text-[14px]">{errorMsg}</span>
+            <span className="text-error text-sm">{errorMsg}</span>
           )}
         </div>
       </div>

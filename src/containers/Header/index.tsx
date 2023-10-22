@@ -33,7 +33,7 @@ const Header = () => {
           <RingBell />
         </span>
         <CButton
-          kind="simple"
+          variant="simple"
           color="gray"
           content="Test Net"
           logo={Stellar}

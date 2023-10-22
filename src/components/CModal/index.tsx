@@ -1,8 +1,5 @@
-import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import Image from 'next/image';
-
-import exitLogo from '../../../public/images/X.svg';
+import { Dialog, Transition } from '@headlessui/react';
 
 interface ModalProps {
   children: JSX.Element | React.ReactNode;
@@ -50,7 +47,7 @@ const CModal = ({ children, title, isOpen, setIsOpen }: ModalProps) => {
                 <Dialog.Panel className="w-[574px] transform overflow-hidden rounded-[20px] bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="text-[28px]  text-midnightblue font-medium leading-6 flex justify-between mb-[14px]"
+                    className="text-[28px] text-midnightBlue font-medium leading-6 flex justify-between mb-[14px]"
                   >
                     {title}
                   </Dialog.Title>

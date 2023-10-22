@@ -4,7 +4,7 @@ import cn from 'classnames';
 
 import buttonCustomStyles from './buttonCustomStyles';
 
-export type CButtonKindType = 'simple' | 'form';
+export type CButtonVariantType = 'simple' | 'form';
 export type CButtonColorType =
   | 'orange'
   | 'purple'
@@ -16,16 +16,16 @@ export type CButtonColorType =
 interface ButtonProps {
   color?: CButtonColorType;
   content: string;
-  kind: CButtonKindType;
+  variant: CButtonVariantType;
   logo?: string;
   disabled?: boolean;
   type?: 'button' | 'submit';
-  className: string;
+  className?: string;
   onClick?: () => void;
 }
 
 const CButton = ({
-  kind,
+  variant,
   logo,
   color,
   onClick,
@@ -38,13 +38,20 @@ const CButton = ({
   return (
     <button
       type={type}
-      className={cn(buttonCustomStyles(kind, color), className)}
+      className={cn(buttonCustomStyles(variant, color), className)}
       disabled={disabled}
       {...props}
       onClick={onClick}
     >
       {logo && (
-        <Image src={logo} width={25} height={25} alt="logo" className="mr-2" {...props} />
+        <Image
+          src={logo}
+          width={25}
+          height={25}
+          alt="logo"
+          className="mr-2"
+          {...props}
+        />
       )}
       {content}
     </button>

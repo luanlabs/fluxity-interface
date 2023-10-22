@@ -57,7 +57,7 @@ const Transactions = () => {
             <CStreamType type={stream.streamType} />
             <div className="flex gap-2 ml-5 w-[140px]">
               <span
-                className={`text-transparentmidnightblue ${
+                className={`text-transparentMidnightBlue ${
                   stream.streamType === 'send' && 'pr-4 '
                 }`}
               >
@@ -67,7 +67,7 @@ const Transactions = () => {
             </div>
             <div className="flex flex-row gap-5">
               <Image src={divider} alt="divider" className="mx-5" />
-              <span className="text-[14px]">
+              <span className="text-sm">
                 {stream.completionPercentage}% Completed
                 <div className="w-[190px] bg-[#EBEBEB] rounded-full h-1 mt-1">
                   <div

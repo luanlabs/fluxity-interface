@@ -1,27 +1,31 @@
-import { CButtonKindType, CButtonColorType } from './index';
+import { CButtonVariantType, CButtonColorType } from './index';
 
-const buttonCustomStyles = (kind: CButtonKindType, color?: CButtonColorType) => {
+const buttonCustomStyles = (
+  variant: CButtonVariantType,
+  color?: CButtonColorType
+) => {
   let colorStyles = '';
   if (color === 'orange') {
-    colorStyles = 'bg-darkcoral h-[40px] text-[#fff]';
+    colorStyles = 'bg-darkCoral h-10 text-white';
   } else if (color === 'purple') {
-    colorStyles = 'bg-richlavender text-[#fff] h-[40px]';
+    colorStyles = 'bg-richLavender text-white h-10';
   } else if (color === 'gray') {
-    colorStyles = 'bg-lavenderblush border border-midnightblue text-midnightblue';
+    colorStyles =
+      'bg-lavenderBlush border border-midnightBlue text-midnightBlue';
   } else if (color === 'white') {
-    colorStyles = 'bg-[#fff] border border-midnightblue text-midnightblue';
+    colorStyles = 'bg-white border border-midnightBlue text-midnightBlue';
   } else if (color === 'blue') {
-    colorStyles = 'bg-blueindigo text-[#fff]';
+    colorStyles = 'bg-blueIndigo text-white';
   } else {
-    colorStyles = 'bg-[#fff] text-royalblue !rounded-[11px] h-[36px] !px-3';
+    colorStyles = 'bg-white text-royalBlue !rounded-[11px] h-9!px-3';
   }
 
-  const kindStyles =
-    kind === 'simple'
-      ? 'rounded-[30px] text-center text-[16px] px-6 h-[44px] flex flex-row justify-center items-center'
-      : '!bg-midnightblue rounded-[12px] w-[329px] h-[56px] !text-[#fff] text-[16px] text-center flex justify-center items-center';
+  const VariantStyles =
+    variant === 'simple'
+      ? 'rounded-[30px] text-center text-base px-6 h-11 flex flex-row justify-center items-center'
+      : '!bg-midnightBlue rounded-xl w-[329px] h-14 !text-white text-base text-center flex justify-center items-center';
 
-  return `${colorStyles} ${kindStyles}`;
+  return `${colorStyles} ${VariantStyles}`;
 };
 
 export default buttonCustomStyles;

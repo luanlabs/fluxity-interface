@@ -1,18 +1,19 @@
 import React from 'react';
 import Image from 'next/image';
-
-import cardLogo from '../../../public/images/card.svg';
-import helpLogo from '../../../public/images/help.svg';
-import CCard from '../../components/CCard';
-import CButton from '../../components/CButton';
 import { useRouter } from 'next/navigation';
+
+import CCard from 'src/components/CCard';
 import { Pages } from 'src/constants/pages';
+import CButton from 'src/components/CButton';
+
+import cardLogo from 'public/images/card.svg';
+import helpLogo from 'public/images/help.svg';
 
 const AllStreamCard = () => {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(Pages.GET_HELP);
+    router.push(Pages.FAQ);
   };
 
   return (
@@ -22,9 +23,9 @@ const AllStreamCard = () => {
         bgColor="#EBFDFF"
         borderColor="rgba(58, 33, 212, 0.2)"
       >
-        <div className="pl-[38px] pt-[29px] text-royalblue">
+        <div className="pl-[38px] pt-[29px] text-royalBlue">
           <h1 className="text-[28px] w-full">All stream are Here!</h1>
-          <p className="text-[15px] w-[90%] mt-[10px] mb-[20px]">
+          <p className="text-[15px] w-[90%] mt-[10px] mb-5">
             Keep all your present, future, and past streams under your touch.
             Enjoy secure, efficient, and user-friendly experience of token
             streaming.
@@ -32,7 +33,7 @@ const AllStreamCard = () => {
           <div className="pb-7">
             <CButton
               onClick={handleClick}
-              kind="simple"
+              variant="simple"
               color="blueWhite"
               content="Get Help"
               logo={helpLogo}

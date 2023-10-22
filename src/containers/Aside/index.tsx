@@ -1,9 +1,8 @@
 'use client';
 
-import CNavLink from 'src/components/CNavLink';
-
 import { Pages } from 'src/constants/pages';
-import { navLinks } from 'src/constants/navlinks';
+import CNavLink from 'src/components/CNavLink';
+import { navLinks } from 'src/constants/navLinks';
 import CConnectButton from 'src/components/CConnectButton';
 
 import LifeBuoy from 'src/svgs/LifeBuoy';

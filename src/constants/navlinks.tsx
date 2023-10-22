@@ -4,10 +4,11 @@ import { CNavLinkProps as Type } from './types';
 
 import HomeIcon from 'src/svgs/Home';
 import ActivityIcon from 'src/svgs/Activity';
+import StreamLinesIcon from 'src/svgs/StreamLines';
 // import CopyIcon from 'src/svgs/Copy';
 // import NotebookIcon from 'src/svgs/Notebook';
 // import StairsIcon from 'src/svgs/Stairs';
-import StreamLinesIcon from 'src/svgs/StreamLines';
+
 import { Pages } from './pages';
 
 export const navLinks: Type[] = [

@@ -1,12 +1,15 @@
 import React, { forwardRef, useState } from 'react';
+
+import cn from 'classnames';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import cn from 'classnames';
+
+import useCustomID from 'src/hooks/useCustomId';
 
 import CLabel from '../CLabel';
 import { Wrapper } from './datePickerStyles';
-import useCustomID from '../../hooks/useCustomId';
-import CalenderLogo from '../../../public/images/calendar.svg';
+
+import CalenderLogo from 'public/images/calendar.svg';
 
 interface CDatePickerProps {
   label?: string;
@@ -44,21 +47,28 @@ const CDatePicker = ({
     if (!maxDate) {
       return minDate.getTime() < time.getTime();
     }
-    return minDate.getTime() < time.getTime() && maxDate.getTime() > time.getTime();
+    return (
+      minDate.getTime() < time.getTime() && maxDate.getTime() > time.getTime()
+    );
   };
 
-  const CustomInput = forwardRef<HTMLInputElement>(({ value, onClick }, ref) => (
-    <div className={cn('relative', className)}>
-      <button
-        className="text-left rounded-[12px] h-14 px-[16px] outline-none  text-[18px] placeholder-[#7D7B9B] text-[#7D7B9B] leading-[18.78px] w-full bg-neutral-100"
-        onClick={onClick}
-        ref={ref}
-      >
-        <span className={`${!isDatePickerUsed ? '' : 'text-[14px] text-midnightblue'} `}>
-          {!isDatePickerUsed ? 'Choose date' : value}
-        </span>
-        <div
-          className={`
+  const CustomInput = forwardRef<HTMLInputElement>(
+    ({ value, onClick }, ref) => (
+      <div className={cn('relative', className)}>
+        <button
+          className="text-left rounded-xl h-14 px-4 outline-none text-lg placeholder-[#7D7B9B] text-[#7D7B9B] leading-[18.78px] w-full bg-neutral-100"
+          onClick={onClick}
+          ref={ref}
+        >
+          <span
+            className={`${
+              !isDatePickerUsed ? '' : 'text-sm text-midnightBlue'
+            } `}
+          >
+            {!isDatePickerUsed ? 'Choose date' : value}
+          </span>
+          <div
+            className={`
         absolute
         right-4
         bottom-[-22px]
@@ -67,10 +77,11 @@ const CDatePicker = ({
         bg-calendar
         bg-no-repeat
         bg-right`}
-        />
-      </button>
-    </div>
-  ));
+          />
+        </button>
+      </div>
+    )
+  );
 
   CustomInput.displayName = 'datepickerCustomInput';
 

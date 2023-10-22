@@ -9,9 +9,9 @@ export type Model = 'linear' | 'exponential';
 
 interface StreamingModel {
   model: Model;
+  className?: string;
   isSelected?: boolean;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
-  className?: string;
 }
 
 const CStreamingModel = ({
@@ -26,11 +26,11 @@ const CStreamingModel = ({
   return (
     <CCard
       className={cn(
-        `flex justify-center items-center w-full h-[64px] px-[10px] py-[8px] cursor-pointer bg-[#fff] ${
-          isSelected ? 'bg-powderblue' : 'bg-[#fff]'
+        `flex justify-center items-center w-full h-16 px-[10px] py-2 cursor-pointer bg-white ${
+          isSelected ? 'bg-powderBlue' : 'bg-white'
         } 
       ease-in duration-100`,
-        className,
+        className
       )}
       borderColor="#000"
       onClick={onClick}
@@ -39,9 +39,9 @@ const CStreamingModel = ({
       <div className="h-full flex items-center">
         <Image src={logo} alt={title} width={67} height={67} />
       </div>
-      <div className="text-midnightblue w-full ml-[9px] flex flex-col justify-center items-start">
-        <span className="text-[16px]">{title}</span>
-        <p className="text-[10px] leading-[12px] w-[90%]">{description}</p>
+      <div className="text-midnightBlue w-full ml-[9px] flex flex-col justify-center items-start">
+        <span className="text-base">{title}</span>
+        <p className="text-[10px] leading-3 w-[90%]">{description}</p>
       </div>
     </CCard>
   );

@@ -54,15 +54,15 @@ const Modal = ({ open, address, closeModal, isMinimized }: ModalProps) => {
   return (
     <div
       ref={modalRef}
-      className={`bg-midnightblue p-[6px] rounded-[10px] ${
+      className={`bg-midnightBlue p-[6px] rounded-[10px] ${
         open
-          ? `fixed bottom-[40px] ${
+          ? `fixed bottom-10 ${
               isMinimized ? 'left-[100px]' : 'left-[17.5%]'
             } w-[203px] z-50`
           : 'hidden'
       }`}
     >
-      <div className="h-[48px] px-2 rounded-md bg-white text-midnightblue flex justify-between items-center w-full">
+      <div className="h-12 px-2 rounded-md bg-white text-midnightBlue flex justify-between items-center w-full">
         <span>{shortenAddress(address, 4)}</span>
         <Image src={copy} alt="copy" onClick={handleCopy} />
       </div>

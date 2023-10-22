@@ -25,7 +25,8 @@ interface selectTokenProps {
 }
 
 const SelectTokenContainer = ({ onChange }: selectTokenProps) => {
-  const [selectedToken, setSelectedToken] = useState<null | Horizon.BalanceLine>(null);
+  const [selectedToken, setSelectedToken] =
+    useState<null | Horizon.BalanceLine>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const id = useCustomID('selectToken');
@@ -34,7 +35,11 @@ const SelectTokenContainer = ({ onChange }: selectTokenProps) => {
     setSelectedToken(token);
     setIsOpen(false);
     setSearchValue('');
-    onChange({ value: token.asset_code, label: token.asset_code, icon: 'dai.svg' });
+    onChange({
+      value: token.asset_code,
+      label: token.asset_code,
+      icon: 'dai.svg',
+    });
   };
 
   const handleOpenModal = () => {
@@ -42,7 +47,7 @@ const SelectTokenContainer = ({ onChange }: selectTokenProps) => {
   };
 
   const filteredOptions = userData.filter((option) =>
-    option.asset_code?.toLowerCase().startsWith(searchValue.toLowerCase()),
+    option.asset_code?.toLowerCase().startsWith(searchValue.toLowerCase())
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,14 +58,14 @@ const SelectTokenContainer = ({ onChange }: selectTokenProps) => {
     <div>
       <CLabel label="Token" htmlFor={id} />
       <button
-        className="flex justify-between w-[218px] items-center h-[56px] px-[16px] text-[18px] text-mutedblue rounded-[12px] bg-[#f5f5f5]"
+        className="flex justify-between w-[218px] items-center h-14 px-4 text-lg text-mutedBlue rounded-xl bg-[#f5f5f5]"
         onClick={handleOpenModal}
         id={id}
       >
         {selectedToken ? (
           <div className="flex items-center justify-start">
             <Image src="" width={35} height={35} alt="" />
-            <p className="ml-4 text-midnightblue">{selectedToken.asset_code}</p>
+            <p className="ml-4 text-midnightBlue">{selectedToken.asset_code}</p>
           </div>
         ) : (
           'Select token'
@@ -85,7 +90,8 @@ const SelectTokenContainer = ({ onChange }: selectTokenProps) => {
                 <div className="w-[70px]">
                   <Image
                     src={
-                      require(`../../../public/images/assets/${options[0].icon}`).default
+                      require(`../../../public/images/assets/${options[0].icon}`)
+                        .default
                     }
                     width={45}
                     height={45}
@@ -93,15 +99,15 @@ const SelectTokenContainer = ({ onChange }: selectTokenProps) => {
                   />
                 </div>
                 <div className="text-left w-full">
-                  <p className="text-[#000] text-[16px] w-full font-bold">
+                  <p className="text-black text-base w-full font-bold">
                     {i.asset_code}
                   </p>
                 </div>
               </div>
 
               <div className="flex items-center">
-                <span className="mr-[20px]">{new BN(i.balance).toFixed(3)}</span>
-                <div className="h-[35px] w-[35px] rounded-[100px] bg-lavenderblush hover:bg-[#f0efff95] flex justify-center items-center">
+                <span className="mr-5">{new BN(i.balance).toFixed(3)}</span>
+                <div className="h-[35px] w-[35px] rounded-[100px] bg-lavenderBlush hover:bg-[#f0efff95] flex justify-center items-center">
                   <Image src={plusLogo} width={0} height={0} alt="plusLogo" />
                 </div>
               </div>

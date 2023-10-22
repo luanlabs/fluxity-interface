@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 
-import CStreamingModel from 'src/components/CStreamingModel';
 import CLabel from 'src/components/CLabel';
+import CStreamingModel from 'src/components/CStreamingModel';
 
 interface CStreamingModelContainer {
   label?: string;
   details?: string;
 }
 
-const CStreamingModelContainer = ({ label, details }: CStreamingModelContainer) => {
+const CStreamingModelContainer = ({
+  label,
+  details,
+}: CStreamingModelContainer) => {
   const [selectedModel, setSelectedModel] = useState<string | null>(null);
 
   const handleModelSelect = (model: string) => {
@@ -31,7 +34,6 @@ const CStreamingModelContainer = ({ label, details }: CStreamingModelContainer) 
           isSelected={selectedModel === 'exponential'}
           model="exponential"
           onClick={() => handleModelSelect('exponential')}
-          className=""
         />
       </div>
     </div>
