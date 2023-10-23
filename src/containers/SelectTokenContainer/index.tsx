@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { AccountResponse, Horizon } from 'stellar-sdk';
+import { Horizon } from 'stellar-sdk';
 
 import BN from 'src/utils/BN';
 import CModal from 'src/components/CModal';
 import CInput from 'src/components/CInput';
-import { SelectTokenType } from 'src/models';
 import CLabel from 'src/components/CLabel';
 import useCustomID from 'src/hooks/useCustomId';
+import { SelectTokenType } from 'src/models';
 import { userData } from '../SummaryContainer/userData';
 
 import searchLogo from 'public/images/search.svg';
@@ -25,8 +25,7 @@ interface selectTokenProps {
 }
 
 const SelectTokenContainer = ({ onChange }: selectTokenProps) => {
-  const [selectedToken, setSelectedToken] =
-    useState<null | Horizon.BalanceLine>(null);
+  const [selectedToken, setSelectedToken] = useState<null | Horizon.BalanceLine>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const id = useCustomID('selectToken');
@@ -35,9 +34,10 @@ const SelectTokenContainer = ({ onChange }: selectTokenProps) => {
     setSelectedToken(token);
     setIsOpen(false);
     setSearchValue('');
+
     onChange({
-      value: token.asset_code,
-      label: token.asset_code,
+      value: token,
+      label: token.asset_code || 'XLM',
       icon: 'dai.svg',
     });
   };
@@ -47,7 +47,7 @@ const SelectTokenContainer = ({ onChange }: selectTokenProps) => {
   };
 
   const filteredOptions = userData.filter((option) =>
-    option.asset_code?.toLowerCase().startsWith(searchValue.toLowerCase())
+    option.asset_code?.toLowerCase().startsWith(searchValue.toLowerCase()),
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,7 +64,12 @@ const SelectTokenContainer = ({ onChange }: selectTokenProps) => {
       >
         {selectedToken ? (
           <div className="flex items-center justify-start">
-            <Image src="" width={35} height={35} alt="" />
+            <Image
+              src={require(`../../../public/images/assets/${options[0].icon}`).default}
+              width={35}
+              height={35}
+              alt=""
+            />
             <p className="ml-4 text-midnightBlue">{selectedToken.asset_code}</p>
           </div>
         ) : (
@@ -90,8 +95,7 @@ const SelectTokenContainer = ({ onChange }: selectTokenProps) => {
                 <div className="w-[70px]">
                   <Image
                     src={
-                      require(`../../../public/images/assets/${options[0].icon}`)
-                        .default
+                      require(`../../../public/images/assets/${options[0].icon}`).default
                     }
                     width={45}
                     height={45}
@@ -99,9 +103,7 @@ const SelectTokenContainer = ({ onChange }: selectTokenProps) => {
                   />
                 </div>
                 <div className="text-left w-full">
-                  <p className="text-black text-base w-full font-bold">
-                    {i.asset_code}
-                  </p>
+                  <p className="text-black text-base w-full font-bold">{i.asset_code}</p>
                 </div>
               </div>
 
