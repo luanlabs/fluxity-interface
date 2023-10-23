@@ -2,21 +2,21 @@ import React from 'react';
 import Image from 'next/image';
 import cn from 'classnames';
 import { UseFormReturn } from 'react-hook-form';
+import BN from 'src/utils/BN';
 
 import CCard from 'src/components/CCard';
 import CPageCard from 'src/components/CPageCard';
 import { shortenAddress } from 'src/utils/shortenAddress';
 import { FormValues } from '../CreateStreamMainCard';
-import BN from 'src/utils/BN';
+import { rateInNumber } from 'src/utils/rateInNumber';
+import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
+import { checkBalance } from 'src/utils/checkBalance';
 
 import summaryLogo from 'public/images/summary.svg';
-import { rateInNumber } from 'src/utils/rateInNumber';
-import { calculateTotalAmount } from './calculateTotalAmount';
 
 interface SummaryProps {
   form: UseFormReturn<any, undefined>;
   isFormValidated: boolean;
-  errorMsg: string;
 }
 
 const options = {
@@ -26,11 +26,7 @@ const options = {
   hour: 'numeric',
 };
 
-const SummaryContainer = ({
-  form,
-  isFormValidated,
-  errorMsg,
-}: SummaryProps) => {
+const SummaryContainer = ({ form, isFormValidated }: SummaryProps) => {
   const values: FormValues = form.getValues();
 
   const newValues = Object.entries(values)
@@ -51,7 +47,7 @@ const SummaryContainer = ({
       if (label === 'token') {
         return {
           label: 'Token',
-          value: value.value.toUpperCase(),
+          value: value.label,
           icon: value.icon,
         };
       }
@@ -88,6 +84,7 @@ const SummaryContainer = ({
     });
 
   let totalAmount = new BN(0);
+  let errorMessage;
 
   if (
     values.startDate &&
@@ -99,8 +96,11 @@ const SummaryContainer = ({
       values.startDate,
       values.endDate,
       new BN(values?.rate.amount),
-      rateInNumber(values?.rate.rateTime.value)
+      rateInNumber(values?.rate.rateTime.value),
     );
+
+    const [isSuccessful, errorMsg] = checkBalance(values.token.value, totalAmount);
+    errorMessage = errorMsg;
   }
 
   const summaryTitle = (
@@ -112,12 +112,12 @@ const SummaryContainer = ({
 
   return (
     <div>
-      <CPageCard title={summaryTitle} className="px-3 py-4 mb-4">
+      <CPageCard title={summaryTitle} className="px-3 py-4 mb-4 w-[80%] ">
         <ul className="grid gap-2 text-midnightBlue">
           {newValues.map((x) => (
             <li
               key={x.label}
-              className="flex justify-between items-center bg-alabaster h-10 px-4 text-sm rounded-[10px]"
+              className="flex justify-between w-full whitespace-nowrap overflow-hidden text-clip items-center bg-alabaster h-10 px-4 text-sm rounded-[10px]"
             >
               <span>{x.label}</span>
               <div className="flex">
@@ -131,33 +131,33 @@ const SummaryContainer = ({
                   />
                 )}
 
-                <span>{x.value}</span>
+                <span className="w-full text-right">{x.value}</span>
               </div>
             </li>
           ))}
         </ul>
       </CPageCard>
 
-      {totalAmount && !totalAmount.isNaN() && totalAmount.isGreaterThan(0) && (
-        <div>
-          <CCard
-            bgColor="#F5EBFF"
-            borderColor="#BE7CFF"
-            className={cn(
-              'flex justify-between items-center text-richLavender h-14 my-4 px-[10px] text-lg'
-            )}
-          >
-            <p>Total Amount</p>
-            <p>{totalAmount.toFixed(3).toString()}</p>
-          </CCard>
+      <div>
+        <CCard
+          bgColor="#F5EBFF"
+          borderColor="#BE7CFF"
+          className={cn(
+            'flex justify-between items-center w-full text-richLavender mb-4 h-14 mt-4 px-[10px] text-lg',
+          )}
+        >
+          <p className="w-full">Total Amount</p>
+          <p className="font-bold w-[80%] text-clip overflow-hidden text-right">
+            {totalAmount.isZero() ? '0' : totalAmount.toFixed(3).toString()}
+          </p>
+        </CCard>
 
-          {errorMsg && (
-            <div className="text-red-500 flex items-center my-1 mb-4 w-full">
-              {errorMsg}
-            </div>
+        <div className="text-red-500 flex items-center w-full">
+          {errorMessage && (
+            <span className="h-[15px] flex items-center mb-4">{errorMessage}</span>
           )}
         </div>
-      )}
+      </div>
     </div>
   );
 };
