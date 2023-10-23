@@ -1,14 +1,13 @@
 'use client';
-
 import React, { useState } from 'react';
 import { DevTool } from '@hookform/devtools';
 import { useForm, Controller } from 'react-hook-form';
+import { useAppSelector } from 'src/hooks/useRedux';
 
 import CButton from 'src/components/CButton';
 import CPageCard from 'src/components/CPageCard';
 import CDatePicker from 'src/components/CDatePicker';
 import CInputRate, { CInputRateValue } from 'src/components/CInputRate';
-
 import validateForm from './validateForm';
 import SummaryContainer from '../SummaryContainer';
 import SelectTokenContainer from '../SelectTokenContainer';
@@ -26,6 +25,7 @@ export interface FormValues {
 
 const CreateStream = () => {
   const [isFormValidated, setIsFormValidated] = useState(false);
+  const balances = useAppSelector((state) => state.user.info?.balances);
 
   const form = useForm<FormValues>({
     mode: 'onChange',
@@ -47,24 +47,13 @@ const CreateStream = () => {
     console.log(data);
   };
 
+  console.log('aaa', isFormValidated);
+
   const CreateStreamTitle = (
     <div className="w-full flex justify-between items-center pb-2">
       <h1 className="text-[24px] text-midnightBlue pl-2 mt-2">Create Stream</h1>
     </div>
   );
-
-  const checkValues = () => {
-    if (
-      getValues('address') ||
-      getValues('token') ||
-      getValues('rate') ||
-      getValues('startDate') ||
-      getValues('endDate')
-    ) {
-      return true;
-    }
-    return false;
-  };
 
   const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');
 
@@ -179,20 +168,19 @@ const CreateStream = () => {
         </CPageCard>
 
         <div className="ml-6 transition-all duration-700 ease-in">
-          {checkValues() && (
-            <SummaryContainer
-              form={form}
-              isFormValidated={isFormValidated}
-              errorMsg={errors.total && errors.total.message}
-            />
-          )}
+          <SummaryContainer form={form} isFormValidated={isFormValidated} />
 
           <CButton
             type="submit"
             variant="form"
             content="Create Stream"
             logo={fluxityLogo}
-            className={!isFormValidated ? '!bg-slate-400' : '!bg-midnightBlue'}
+            fill={!isFormValidated ? '#050142' : '#fff'}
+            className={
+              !isFormValidated
+                ? '!bg-[#E6E6EC] !text-[#050142]'
+                : '!bg-darkBlue text-white'
+            }
             disabled={!isValid || isValidating || !isFormValidated}
           />
         </div>
