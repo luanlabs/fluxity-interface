@@ -2,7 +2,7 @@
 
 import { Pages } from 'src/constants/pages';
 import CNavLink from 'src/components/CNavLink';
-import { navLinks } from 'src/constants/navLinks';
+import { navLinks } from 'src/constants/navlinks';
 import CConnectButton from 'src/components/CConnectButton';
 
 import LifeBuoy from 'src/assets/LifeBuoy';
