@@ -38,6 +38,8 @@ const config: Config = {
         paleCyan: '#EBFDFF',
         error: '#FF7474',
         darkBlue: '#050142',
+        lavenderGray: '#E6E6EC',
+        buttonHover: '#1C0894',
       },
       screens: {
         sm: { max: '767px' },
