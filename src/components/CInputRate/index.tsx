@@ -23,10 +23,20 @@ interface CInputRate {
 }
 
 const inpNum = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  const charCode = typeof e.which === 'undefined' ? e.keyCode : e.which;
+  const {
+    which,
+    keyCode,
+    target: { value },
+  } = e;
+
+  const charCode = typeof which === 'undefined' ? keyCode : which;
   const charStr = String.fromCharCode(charCode);
 
-  if (!charStr.match(/^[0-9]*\.?[0-9]*$/)) e.preventDefault();
+  if (!value && charStr === '.') {
+    e.preventDefault();
+  } else if (value && value.includes('.') && charStr === '.') {
+    e.preventDefault();
+  } else if (!charStr.match(/^[0-9]*\.?[0-9]*$/)) e.preventDefault();
 };
 
 const DropdownIndicator = () => {
@@ -68,10 +78,21 @@ const CInputRate = ({
     setSelectValue(e);
   };
 
+  const handleOnPaste = (e) => {
+    let paste = (e.clipboardData || window.clipboardData).getData('text');
+
+    if (!paste.match(/^[0-9]*\.?[0-9]*$/)) {
+      e.preventDefault();
+    }
+    if (paste.match(e.target.value)) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <div className={cn('w-full relative', className)}>
       <CInput
-        type="number"
+        type="text"
         placeholder={placeholder}
         label={label}
         details={details}
@@ -81,6 +102,7 @@ const CInputRate = ({
         onChange={handleInputChange}
         errorMsg={errorMsg}
         error={error}
+        onPaste={handleOnPaste}
       />
 
       <Select
