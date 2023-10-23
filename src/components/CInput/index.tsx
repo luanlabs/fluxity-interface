@@ -5,7 +5,7 @@ import useCustomID from 'src/hooks/useCustomId';
 import CLabel from '../CLabel';
 
 import alertLogo from 'public/images/error.png';
-import clearInputLogo from 'public/images/trash.svg';
+import clearInputLogo from 'public/images/x.svg';
 
 interface CInputProps {
   icon?: string;
@@ -16,11 +16,11 @@ interface CInputProps {
   details?: string;
   error?: boolean;
   errorMsg?: string;
-  clearInput: boolean;
+  clearInput?: boolean;
   clearInputClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   paste?: boolean;
   clipboardText?: string;
-  handlePaste: (event: React.MouseEventHandler<HTMLDivElement>) => void;
+  handlePaste?: (event: React.MouseEventHandler<HTMLDivElement>) => void;
   border?: boolean;
   value?: string | number | any;
 }
@@ -98,9 +98,7 @@ const CInput = ({
         />
 
         <div className="h-[20px] absolute mt-[6px] ml-1">
-          {error && errorMsg && (
-            <span className="text-error text-sm">{errorMsg}</span>
-          )}
+          {error && errorMsg && <span className="text-error text-sm">{errorMsg}</span>}
         </div>
       </div>
     </div>
