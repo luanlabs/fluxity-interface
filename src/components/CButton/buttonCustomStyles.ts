@@ -1,17 +1,13 @@
 import { CButtonVariantType, CButtonColorType } from './index';
 
-const buttonCustomStyles = (
-  variant: CButtonVariantType,
-  color?: CButtonColorType
-) => {
+const buttonCustomStyles = (variant: CButtonVariantType, color?: CButtonColorType) => {
   let colorStyles = '';
   if (color === 'orange') {
     colorStyles = 'bg-darkCoral h-10 text-white';
   } else if (color === 'purple') {
     colorStyles = 'bg-richLavender text-white h-10';
   } else if (color === 'gray') {
-    colorStyles =
-      'bg-lavenderBlush border border-midnightBlue text-midnightBlue';
+    colorStyles = 'bg-lavenderBlush border border-midnightBlue text-midnightBlue';
   } else if (color === 'white') {
     colorStyles = 'bg-white border border-midnightBlue text-midnightBlue';
   } else if (color === 'blue') {
@@ -23,7 +19,7 @@ const buttonCustomStyles = (
   const VariantStyles =
     variant === 'simple'
       ? 'rounded-[30px] text-center text-base px-6 h-11 flex flex-row justify-center items-center'
-      : '!bg-midnightBlue rounded-xl w-[329px] h-14 !text-white text-base text-center flex justify-center items-center';
+      : 'bg-midnightBlue rounded-xl w-[329px] h-14 text-white text-base text-center flex justify-center items-center';
 
   return `${colorStyles} ${VariantStyles}`;
 };

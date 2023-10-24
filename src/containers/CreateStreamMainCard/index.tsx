@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { DevTool } from '@hookform/devtools';
 import { useForm, Controller } from 'react-hook-form';
-import { useAppSelector } from 'src/hooks/useRedux';
 
 import CButton from 'src/components/CButton';
 import CPageCard from 'src/components/CPageCard';
@@ -12,8 +11,8 @@ import validateForm from './validateForm';
 import SummaryContainer from '../SummaryContainer';
 import SelectTokenContainer from '../SelectTokenContainer';
 import WalletAddressContainer from '../WalletAddressContainer';
-
-import fluxityLogo from 'public/images/fluxity.svg';
+import CStreamingModelContainer from '../CStreamingModelContainer';
+import { Model } from 'src/components/CStreamingModel';
 
 export interface FormValues {
   address: string;
@@ -21,33 +20,36 @@ export interface FormValues {
   token: object;
   startDate: Date;
   endDate: Date;
+  streamingModel: Model;
 }
 
 const CreateStream = () => {
   const [isFormValidated, setIsFormValidated] = useState(false);
-  const balances = useAppSelector((state) => state.user.info?.balances);
+  // const balances = useAppSelector((state) => state.user.info?.balances);
 
   const form = useForm<FormValues>({
     mode: 'onChange',
     resolver: (formValues) => validateForm(formValues, setIsFormValidated),
+    defaultValues: {
+      streamingModel: 'linear',
+    },
   });
 
   const {
     handleSubmit,
     control,
     getValues,
+    setValue,
     watch,
     resetField,
     formState: { errors, isValid, isValidating },
   } = form;
 
-  watch(['startDate', 'endDate', 'rate', 'token', 'address']);
+  watch(['startDate', 'endDate', 'rate', 'token', 'address', 'streamingModel']);
 
   const onSubmit = (data: FormValues) => {
     console.log(data);
   };
-
-  console.log('aaa', isFormValidated);
 
   const CreateStreamTitle = (
     <div className="w-full flex justify-between items-center pb-2">
@@ -67,6 +69,24 @@ const CreateStream = () => {
         pl-[30px] pr-[18px] py-[15px]"
         >
           <div className=" w-full">
+            <div>
+              <Controller
+                name="streamingModel"
+                control={control}
+                render={({ field }) => (
+                  <div>
+                    <CStreamingModelContainer
+                      label="Streaming model"
+                      details="Streaming model"
+                      {...field}
+                    />
+                  </div>
+                )}
+              />
+            </div>
+
+            <hr className="my-6" />
+
             <div className="mb-6">
               <Controller
                 name="address"
@@ -167,14 +187,13 @@ const CreateStream = () => {
           </div>
         </CPageCard>
 
-        <div className="ml-6 transition-all duration-700 ease-in">
+        <div className="ml-6">
           <SummaryContainer form={form} isFormValidated={isFormValidated} />
 
           <CButton
             type="submit"
             variant="form"
             content="Create Stream"
-            logo={fluxityLogo}
             fill={!isFormValidated ? '#050142' : '#fff'}
             className={
               !isFormValidated

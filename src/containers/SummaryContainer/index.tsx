@@ -6,11 +6,11 @@ import BN from 'src/utils/BN';
 
 import CCard from 'src/components/CCard';
 import CPageCard from 'src/components/CPageCard';
-import { shortenAddress } from 'src/utils/shortenAddress';
 import { FormValues } from '../CreateStreamMainCard';
 import { rateInNumber } from 'src/utils/rateInNumber';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 import { checkBalance } from 'src/utils/checkBalance';
+import { getFormValues } from './formValues';
 
 import summaryLogo from 'public/images/summary.svg';
 
@@ -19,69 +19,8 @@ interface SummaryProps {
   isFormValidated: boolean;
 }
 
-const options = {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-  hour: 'numeric',
-};
-
 const SummaryContainer = ({ form, isFormValidated }: SummaryProps) => {
   const values: FormValues = form.getValues();
-
-  const newValues = Object.entries(values)
-    .filter((value) => value[1])
-    .filter((value) => {
-      if (value[0] === 'rate') {
-        if (value[1].amount && value[1].amount != 0) {
-          return true;
-        }
-
-        return false;
-      }
-
-      return true;
-    })
-
-    .map(([label, value]) => {
-      if (label === 'token') {
-        return {
-          label: 'Token',
-          value: value.label,
-          icon: value.icon,
-        };
-      }
-
-      if (label === 'rate') {
-        return {
-          label: 'Flow Rate',
-          value: `${value.amount} / ${value.rateTime.label}`,
-        };
-      }
-
-      if (label === 'startDate') {
-        return {
-          label: 'Start Date',
-          value: value.toLocaleDateString('en-US', options),
-        };
-      }
-
-      if (label === 'endDate') {
-        return {
-          label: 'End Date',
-          value: value.toLocaleDateString('en-US', options),
-        };
-      }
-
-      if (label === 'address') {
-        return { label: 'To', value: shortenAddress(value, 4) };
-      }
-
-      return {
-        label,
-        value,
-      };
-    });
 
   let totalAmount = new BN(0);
   let errorMessage;
@@ -114,27 +53,28 @@ const SummaryContainer = ({ form, isFormValidated }: SummaryProps) => {
     <div>
       <CPageCard title={summaryTitle} className="px-3 py-4 mb-4 w-[80%] ">
         <ul className="grid gap-2 text-midnightBlue">
-          {newValues.map((x) => (
-            <li
-              key={x.label}
-              className="flex justify-between w-full whitespace-nowrap overflow-hidden text-clip items-center bg-alabaster h-10 px-4 text-sm rounded-[10px]"
-            >
-              <span>{x.label}</span>
-              <div className="flex">
-                {x.icon && (
-                  <Image
-                    src={require(`/public/images/assets/${x.icon}`)}
-                    alt="logo"
-                    width={20}
-                    height={20}
-                    className="mr-2"
-                  />
-                )}
+          {getFormValues(values).length > 1 &&
+            getFormValues(values).map((x) => (
+              <li
+                key={x.label}
+                className="flex justify-between w-full whitespace-nowrap overflow-hidden text-clip items-center bg-alabaster h-10 px-4 text-sm rounded-[10px]"
+              >
+                <span>{x.label}</span>
+                <div className="flex">
+                  {x.icon && (
+                    <Image
+                      src={require(`/public/images/assets/${x.icon}`)}
+                      alt="logo"
+                      width={20}
+                      height={20}
+                      className="mr-2"
+                    />
+                  )}
 
-                <span className="w-full text-right">{x.value}</span>
-              </div>
-            </li>
-          ))}
+                  <span className="w-full text-right">{x.value}</span>
+                </div>
+              </li>
+            ))}
         </ul>
       </CPageCard>
 

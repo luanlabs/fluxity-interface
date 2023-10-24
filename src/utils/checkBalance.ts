@@ -1,7 +1,7 @@
 import BN from 'src/utils/BN';
 import { userData } from 'src/containers/SummaryContainer/userData';
 
-export const checkBalance = (token, totalAmount) => {
+export const checkBalance = (token, totalAmount: BN) => {
   const foundToken = userData.find(
     (balance) =>
       balance.asset_code === token.asset_code &&

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import CLabel from 'src/components/CLabel';
 import CStreamingModel from 'src/components/CStreamingModel';
@@ -8,33 +8,13 @@ interface CStreamingModelContainer {
   details?: string;
 }
 
-const CStreamingModelContainer = ({
-  label,
-  details,
-}: CStreamingModelContainer) => {
-  const [selectedModel, setSelectedModel] = useState<string | null>(null);
-
-  const handleModelSelect = (model: string) => {
-    if (selectedModel === model) {
-      setSelectedModel(null);
-    } else {
-      setSelectedModel(model);
-    }
-  };
+const CStreamingModelContainer = ({ label, details }: CStreamingModelContainer) => {
   return (
     <div className="w-[532px] flex flex-col">
       <CLabel label={label} details={details} className="mb-1" />
       <div className="flex gap-2">
-        <CStreamingModel
-          isSelected={selectedModel === 'linear'}
-          model="linear"
-          onClick={() => handleModelSelect('linear')}
-        />
-        <CStreamingModel
-          isSelected={selectedModel === 'exponential'}
-          model="exponential"
-          onClick={() => handleModelSelect('exponential')}
-        />
+        <CStreamingModel isSelected={true} model="linear" />
+        <CStreamingModel model="exponential" disabled />
       </div>
     </div>
   );

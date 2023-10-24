@@ -17,7 +17,13 @@ const validateForm = (values: FormValues, setIsFormValidated) => {
 
   setIsFormValidated(false);
 
-  if (!values.address || !values.token || !values.rate.amount || !values.endDate) {
+  if (
+    !values.address ||
+    !values.token ||
+    !values.rate.amount ||
+    new BN(values.rate.amount).isZero() ||
+    !values.endDate
+  ) {
     return {
       values,
       errors,
