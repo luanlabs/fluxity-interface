@@ -8,7 +8,7 @@ import CPageCard from 'src/components/CPageCard';
 import CDatePicker from 'src/components/CDatePicker';
 import CInputRate, { CInputRateValue } from 'src/components/CInputRate';
 import validateForm from './validateForm';
-import SummaryContainer from '../SummaryContainer';
+import SummaryContainer from '../Summary';
 import SelectTokenContainer from '../SelectTokenContainer';
 import WalletAddressContainer from '../WalletAddressContainer';
 import CStreamingModelContainer from '../CStreamingModelContainer';
@@ -39,7 +39,6 @@ const CreateStream = () => {
     handleSubmit,
     control,
     getValues,
-    setValue,
     watch,
     resetField,
     formState: { errors, isValid, isValidating },

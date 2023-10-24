@@ -1,5 +1,5 @@
 import BN from 'src/utils/BN';
-import { userData } from 'src/containers/SummaryContainer/userData';
+import { userData } from 'src/containers/Summary/userData';
 
 export const checkBalance = (token, totalAmount: BN) => {
   const foundToken = userData.find(

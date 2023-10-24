@@ -8,7 +8,7 @@ import CInput from 'src/components/CInput';
 import CLabel from 'src/components/CLabel';
 import useCustomID from 'src/hooks/useCustomId';
 import { SelectTokenType } from 'src/models';
-import { userData } from '../SummaryContainer/userData';
+import { userData } from '../Summary/userData';
 
 import searchLogo from 'public/images/search.svg';
 import arrowLogo from 'public/images/arrow.svg';

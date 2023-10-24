@@ -30,8 +30,6 @@ const validateForm = (values: FormValues, setIsFormValidated) => {
     };
   }
 
-  console.log(values.rate.amount);
-
   if (values.rate.amount === undefined) {
     errors.rate = {
       type: 'error',

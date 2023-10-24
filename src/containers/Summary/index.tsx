@@ -19,7 +19,7 @@ interface SummaryProps {
   isFormValidated: boolean;
 }
 
-const SummaryContainer = ({ form, isFormValidated }: SummaryProps) => {
+const Summary = ({ form, isFormValidated }: SummaryProps) => {
   const values: FormValues = form.getValues();
 
   let totalAmount = new BN(0);
@@ -102,4 +102,4 @@ const SummaryContainer = ({ form, isFormValidated }: SummaryProps) => {
   );
 };
 
-export default SummaryContainer;
+export default Summary;
