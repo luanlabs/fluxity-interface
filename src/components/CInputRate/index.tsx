@@ -1,12 +1,13 @@
-import Select from 'react-select';
-import Image from 'next/image';
-import cn from 'classnames';
 import { useState } from 'react';
+import Image from 'next/image';
+import Select from 'react-select';
+import cn from 'classnames';
 
 import CInput from '../CInput';
 import selectStyles from './selectStyles';
-import flowRateOptions from '../../constants/flowRates';
+import flowRateOptions from 'src/constants/flowRates';
 import { SelectItemType } from 'src/models';
+import { forceInputNumber } from 'src/utils/forceInputNumber';
 
 import arrowLogo from 'public/images/arrow.svg';
 
@@ -21,23 +22,6 @@ interface CInputRate {
   errorMsg?: string;
   error?: boolean;
 }
-
-const inpNum = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  const {
-    which,
-    keyCode,
-    target: { value },
-  } = e;
-
-  const charCode = typeof which === 'undefined' ? keyCode : which;
-  const charStr = String.fromCharCode(charCode);
-
-  if (!value && charStr === '.') {
-    e.preventDefault();
-  } else if (value && value.includes('.') && charStr === '.') {
-    e.preventDefault();
-  } else if (!charStr.match(/^[0-9]*\.?[0-9]*$/)) e.preventDefault();
-};
 
 const DropdownIndicator = () => {
   return (
@@ -84,7 +68,7 @@ const CInputRate = ({
     if (!paste.match(/^[0-9]*\.?[0-9]*$/)) {
       e.preventDefault();
     }
-    if (paste.match(e.target.value)) {
+    if (e.target.value.includes('.') && paste.includes('.')) {
       e.preventDefault();
     }
   };
@@ -96,7 +80,7 @@ const CInputRate = ({
         placeholder={placeholder}
         label={label}
         details={details}
-        onKeyPress={inpNum}
+        onKeyPress={forceInputNumber}
         {...props}
         value={inputValue}
         onChange={handleInputChange}

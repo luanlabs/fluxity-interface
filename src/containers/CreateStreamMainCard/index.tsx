@@ -9,7 +9,7 @@ import CDatePicker from 'src/components/CDatePicker';
 import CInputRate, { CInputRateValue } from 'src/components/CInputRate';
 import validateForm from './validateForm';
 import SummaryContainer from '../Summary';
-import SelectTokenContainer from '../SelectTokenContainer';
+import SelectTokenContainer from '../SelectToken';
 import WalletAddressContainer from '../WalletAddressContainer';
 import CStreamingModelContainer from '../CStreamingModelContainer';
 import { Model } from 'src/components/CStreamingModel';
@@ -22,6 +22,8 @@ export interface FormValues {
   endDate: Date;
   streamingModel: Model;
 }
+
+const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');
 
 const CreateStream = () => {
   const [isFormValidated, setIsFormValidated] = useState(false);
@@ -44,7 +46,7 @@ const CreateStream = () => {
     formState: { errors, isValid, isValidating },
   } = form;
 
-  watch(['startDate', 'endDate', 'rate', 'token', 'address', 'streamingModel']);
+  watch(['startDate', 'endDate', 'rate', 'token', 'address']);
 
   const onSubmit = (data: FormValues) => {
     console.log(data);
@@ -55,8 +57,6 @@ const CreateStream = () => {
       <h1 className="text-[24px] text-midnightBlue pl-2 mt-2">Create Stream</h1>
     </div>
   );
-
-  const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');
 
   return (
     <form method="" onSubmit={handleSubmit(onSubmit)}>

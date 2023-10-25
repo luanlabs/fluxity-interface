@@ -12,7 +12,7 @@ type Validation = {
   a: CustomError;
 };
 
-const validateForm = (values: FormValues, setIsFormValidated) => {
+const validateForm = (values: FormValues, setIsFormValidated: (_: boolean) => void) => {
   const errors = {} as Validation;
 
   setIsFormValidated(false);
@@ -24,18 +24,6 @@ const validateForm = (values: FormValues, setIsFormValidated) => {
     new BN(values.rate.amount).isZero() ||
     !values.endDate
   ) {
-    return {
-      values,
-      errors,
-    };
-  }
-
-  if (values.rate.amount === undefined) {
-    errors.rate = {
-      type: 'error',
-      message: 'Invalid Number',
-    };
-
     return {
       values,
       errors,

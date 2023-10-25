@@ -9,7 +9,7 @@ const options = {
   hour: 'numeric',
 };
 
-export const getFormValues = (values: FormValues) => {
+export const mapFormValues = (values: FormValues) => {
   const newValues = Object.entries(values)
     .filter((value) => value[1])
     .filter((value) => {
@@ -54,7 +54,7 @@ export const getFormValues = (values: FormValues) => {
       }
 
       if (label === 'address') {
-        return { label: 'To', value: shortenAddress(value, 4) };
+        return { label: 'To', value: shortenAddress(value, 5) };
       }
 
       if (label === 'streamingModel') {

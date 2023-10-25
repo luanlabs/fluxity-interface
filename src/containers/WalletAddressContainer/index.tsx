@@ -75,8 +75,7 @@ const WalletAddressContainer = ({
     });
   };
 
-  const longAddress = shortenAddress(recipientWalletAddress, 20);
-  const shortAddress = shortenAddress(recipientWalletAddress, 11);
+  const shortAddress = shortenAddress(recipientWalletAddress, 5);
 
   return (
     <div>
@@ -90,7 +89,7 @@ const WalletAddressContainer = ({
           {inputValue === '' ? (
             'Enter wallet address'
           ) : (
-            <p className="text-midnightBlue">{longAddress}</p>
+            <p className="text-midnightBlue">{shortAddress}</p>
           )}
 
           <div className="absolute bottom-4 left-3.5">
