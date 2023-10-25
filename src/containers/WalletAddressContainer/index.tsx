@@ -6,11 +6,11 @@ import CModal from 'src/components/CModal';
 import CInput from 'src/components/CInput';
 import CLabel from 'src/components/CLabel';
 import { shortenAddress } from 'src/utils/shortenAddress';
+import { generateRandomHexColor } from 'src/utils/generateRandomHexColor';
 
 import walletLogo from 'public/images/inputWallet.svg';
-import trashLogo from 'public/images/trash.svg';
-
-import { generateRandomHexColor } from './generateRandomHexColor';
+import trashLogo from 'public/images/x.svg';
+import tickLogo from 'public/images/tick.svg';
 
 interface WalletAddressContainer {
   onChange: (value: string) => void;
@@ -66,7 +66,7 @@ const WalletAddressContainer = ({
   };
 
   const isValidateAddress = StrKey.isValidEd25519PublicKey(
-    recipientWalletAddress.toUpperCase()
+    recipientWalletAddress.toUpperCase(),
   );
 
   const handlePaste = () => {
@@ -75,8 +75,7 @@ const WalletAddressContainer = ({
     });
   };
 
-  const longAddress = shortenAddress(recipientWalletAddress, 20);
-  const shortAddress = shortenAddress(recipientWalletAddress, 11);
+  const shortAddress = shortenAddress(recipientWalletAddress, 5);
 
   return (
     <div>
@@ -84,13 +83,13 @@ const WalletAddressContainer = ({
 
       <div className="relative">
         <button
-          className="self-stretch w-[530px] overflow-hidden relative px-12 rounded-xl placeholder-[#7D7B9B] text-[#7D7B9B] text-base h-14 p-4 bg-neutral-100 justify-start items-center inline-flex outline-none"
+          className="self-stretch w-full overflow-hidden relative px-12 rounded-xl placeholder-[#7D7B9B] text-[#7D7B9B] text-base h-14 p-4 bg-neutral-100 justify-start items-center inline-flex outline-none"
           onClick={handleOpenModal}
         >
           {inputValue === '' ? (
             'Enter wallet address'
           ) : (
-            <p className="text-midnightBlue">{longAddress}</p>
+            <p className="text-midnightBlue">{shortAddress}</p>
           )}
 
           <div className="absolute bottom-4 left-3.5">
@@ -108,11 +107,7 @@ const WalletAddressContainer = ({
         )}
       </div>
 
-      <CModal
-        title="Receiver wallet address"
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-      >
+      <CModal title="Receiver wallet address" isOpen={isOpen} setIsOpen={setIsOpen}>
         <CInput
           placeholder="Enter wallet address"
           icon={walletLogo}
@@ -140,24 +135,24 @@ const WalletAddressContainer = ({
                     {isValidateAddress && shortAddress}
                   </span>
                 </div>
+                <div className="flex items-center">
+                  <Image src={tickLogo} alt="tickLogo" width={0} height={0} />
+                </div>
               </div>
             </div>
           )}
         </div>
 
         <div className="flex items-center justify-end mt-[35px] ">
-          <button
-            className="text-base text-midnightBlue mr-4"
-            onClick={handleCloseModal}
-          >
+          <button className="text-base text-midnightBlue mr-6" onClick={handleCloseModal}>
             Close
           </button>
           <button
             className={` ${
               !isValidateAddress
-                ? 'bg-[#e9e9e9] text-[#c2c2c2]'
-                : 'bg-softSkyBlue hover:bg-[#ddf9ff]'
-            }  px-6 py-[11px] text-base rounded-[10px] text-midnightBlue`}
+                ? 'bg-lavenderGray text-darkBlue '
+                : 'bg-royalBlue text-white hover:bg-buttonHover'
+            }  px-[24px] py-[14px] text-base rounded-[10px] text-midnightBlue`}
             disabled={!isValidateAddress}
             onClick={handleButtonModal}
           >

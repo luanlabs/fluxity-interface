@@ -1,8 +1,8 @@
 import React from 'react';
-import Image from 'next/image';
 import cn from 'classnames';
 
 import buttonCustomStyles from './buttonCustomStyles';
+import FluxityLogoButton from 'src/assets/FluxityLogoButton';
 
 export type CButtonVariantType = 'simple' | 'form';
 export type CButtonColorType =
@@ -17,22 +17,22 @@ interface ButtonProps {
   color?: CButtonColorType;
   content: string;
   variant: CButtonVariantType;
-  logo?: string;
   disabled?: boolean;
   type?: 'button' | 'submit';
   className?: string;
+  fill?: string;
   onClick?: () => void;
 }
 
 const CButton = ({
   variant,
-  logo,
   color,
   onClick,
   className,
   type,
   disabled,
   content,
+  fill,
   ...props
 }: ButtonProps) => {
   return (
@@ -43,15 +43,10 @@ const CButton = ({
       {...props}
       onClick={onClick}
     >
-      {logo && (
-        <Image
-          src={logo}
-          width={25}
-          height={25}
-          alt="logo"
-          className="mr-2"
-          {...props}
-        />
+      {fill && (
+        <div className="mr-[10px]">
+          <FluxityLogoButton fill={fill} />
+        </div>
       )}
       {content}
     </button>

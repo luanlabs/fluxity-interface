@@ -4,7 +4,7 @@ export const calculateTotalAmount = (
   startDate: Date,
   endDate: Date,
   amount: BN,
-  rate: number
+  rate: number,
 ) => {
   const amountAsNumber = new BN(amount);
 
