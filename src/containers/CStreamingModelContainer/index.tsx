@@ -1,9 +1,8 @@
 import React from 'react';
-import toast, { Toaster } from 'react-hot-toast';
 
 import CLabel from 'src/components/CLabel';
 import CStreamingModel from 'src/components/CStreamingModel';
-import { toastError } from 'src/components/CToast/toastContent';
+import toast from 'src/components/CToast/index';
 
 interface CStreamingModelContainer {
   label?: string;
@@ -20,10 +19,9 @@ const CStreamingModelContainer = ({ label, details }: CStreamingModelContainer) 
           model="exponential"
           disabled
           onClick={() =>
-            toastError(toast, true, 'Exponential streams are saved for a later version.')
+            toast(true, 'Exponential streams are saved for a later version.')
           }
         />
-        <Toaster position="bottom-center" />
       </div>
     </div>
   );

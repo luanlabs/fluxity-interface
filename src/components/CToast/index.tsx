@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import toast from 'react-hot-toast';
+import t from 'react-hot-toast';
 
 import exitLight from '/public/images/exitLight.svg';
 import successLogo from '/public/images/success.svg';
@@ -15,17 +15,24 @@ const toastStyle = {
   },
 };
 
-export const toastError = (t, error: boolean, alertMsg: string) => {
-  toast(
+const toast = (error: boolean, alertMsg: string) => {
+  t(
     <div className="flex items-center justify-between w-full">
       <div className="items-center">
-        <Image src={error ? errorLogo : successLogo} width={35} height={35} alt="error" />
+        <Image
+          src={error ? errorLogo : successLogo}
+          width={35}
+          height={35}
+          alt="tostIcon"
+        />
       </div>
       <span className="w-full text-lg ml-3">{alertMsg}</span>
-      <button onClick={() => toast.dismiss(t.id)} className="">
+      <button onClick={() => t.dismiss()}>
         <Image src={exitLight} width={0} height={0} alt="error" />
       </button>
     </div>,
     toastStyle,
   );
 };
+
+export default toast;

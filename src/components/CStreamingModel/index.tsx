@@ -28,7 +28,7 @@ const CStreamingModel = ({
   return (
     <CCard
       className={cn(
-        `flex justify-center items-center w-full h-16 px-[10px] py-2 cursor-pointer bg-white ${
+        `flex justify-center items-center w-full h-16 px-[10px] py-2 cursor-pointer bg-white select-none ${
           isSelected ? '!bg-[#E4F6F9]' : 'bg-white'
         } 
       ease-in duration-100`,
