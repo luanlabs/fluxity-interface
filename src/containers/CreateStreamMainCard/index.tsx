@@ -13,7 +13,6 @@ import SelectTokenContainer from '../SelectToken';
 import WalletAddressContainer from '../WalletAddressContainer';
 import CStreamingModelContainer from '../CStreamingModelContainer';
 import { Model } from 'src/components/CStreamingModel';
-import Toast from 'src/components/CToast';
 
 export interface FormValues {
   address: string;

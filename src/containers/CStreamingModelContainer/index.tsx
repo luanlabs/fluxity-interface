@@ -2,7 +2,7 @@ import React from 'react';
 
 import CLabel from 'src/components/CLabel';
 import CStreamingModel from 'src/components/CStreamingModel';
-import toast from 'src/components/CToast/index';
+import toast from 'src/components/CToast';
 
 interface CStreamingModelContainer {
   label?: string;
@@ -19,7 +19,7 @@ const CStreamingModelContainer = ({ label, details }: CStreamingModelContainer) 
           model="exponential"
           disabled
           onClick={() =>
-            toast(true, 'Exponential streams are saved for a later version.')
+            toast('error', 'Exponential streams are saved for a later version.')
           }
         />
       </div>
