@@ -85,7 +85,7 @@ export const Wrapper = styled.div`
   .react-datepicker__day.react-datepicker__day--selected {
     border: none;
     border-radius: 6px;
-    background-color: ${({ theme }) => theme.colors.royalBlue};
+    background-color: #3a21d4;
     color: white;
   }
 
@@ -94,7 +94,7 @@ export const Wrapper = styled.div`
   }
 
   .react-datepicker__time-list-item.react-datepicker__time-list-item--selected {
-    background-color: ${({ theme }) => theme.colors.royalBlue};
+    background-color: #3a21d4;
   }
 
   .react-datepicker__time-container
@@ -102,7 +102,7 @@ export const Wrapper = styled.div`
     .react-datepicker__time-box
     ul.react-datepicker__time-list
     li.react-datepicker__time-list-item--selected {
-    background-color: ${({ theme }) => theme.colors.royalBlue};
+    background-color: #3a21d4;
   }
 
   .react-datepicker__time-container {

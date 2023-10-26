@@ -19,5 +19,5 @@ export const CConnectButtonMinimized: Story = {
   args: { isMinimized: true },
 };
 export const CConnectButtonNotMinimized: Story = {
-  args: { isMinimized: true },
+  args: { isMinimized: false },
 };
