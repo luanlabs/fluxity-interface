@@ -1,9 +1,9 @@
-import { FormValues } from './index';
-import { CustomError } from 'src/models';
-import { rateInNumber } from '../../utils/rateInNumber';
 import BN from 'src/utils/BN';
-import { calculateTotalAmount } from '../SummaryContainer/calculateTotalAmount';
-import { userData } from '../SummaryContainer/userData';
+import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
+import { checkBalance } from 'src/utils/checkBalance';
+import { rateInNumber } from 'src/utils/rateInNumber';
+import { CustomError } from 'src/models';
+import { FormValues } from './index';
 
 type Validation = {
   address: CustomError;
@@ -12,24 +12,18 @@ type Validation = {
   a: CustomError;
 };
 
-const validateForm = (values: FormValues, setIsFormValidated) => {
+const validateForm = (values: FormValues, setIsFormValidated: (_: boolean) => void) => {
   const errors = {} as Validation;
 
   setIsFormValidated(false);
 
-  if (!values.address || !values.token.label || !values.rate.amount || !values.endDate) {
-    return {
-      values,
-      errors,
-    };
-  }
-
-  if (new BN(values.rate.amount).isZero()) {
-    errors.rate = {
-      type: 'error',
-      message: 'Invalid Number',
-    };
-
+  if (
+    !values.address ||
+    !values.token ||
+    !values.rate.amount ||
+    new BN(values.rate.amount).isZero() ||
+    !values.endDate
+  ) {
     return {
       values,
       errors,
@@ -43,25 +37,14 @@ const validateForm = (values: FormValues, setIsFormValidated) => {
     rateInNumber(values.rate.rateTime.value),
   );
 
-  const checkBalance = () => {
-    const findToken = userData.find(({ asset_code }) => asset_code);
-    if (!findToken) {
-      return { errors, values };
-    }
+  const [isSuccessful, errorMessage] = checkBalance(values.token.value, totalAmount);
 
-    if (totalAmount.isGreaterThan(new BN(findToken.balance))) {
-      errors.total = {
-        type: 'error',
-        message: 'The account balance is insufficient',
-      };
-
-      return {
-        values,
-        errors,
-      };
-    }
-  };
-  checkBalance();
+  if (!isSuccessful) {
+    return {
+      values,
+      errors,
+    };
+  }
 
   setIsFormValidated(true);
 

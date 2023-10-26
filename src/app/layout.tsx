@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
+import { Toaster } from 'react-hot-toast';
 
 import { store } from 'src/store';
 import Aside from 'src/containers/Aside';
@@ -13,11 +14,7 @@ import '../styles/globals.css';
 import theme from '../styles/theme';
 import StyledComponentsRegistry from '../styles/registry';
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [isMinimized, setIsMinimized] = useState(false);
 
   return (
@@ -46,6 +43,7 @@ export default function RootLayout({
                   </CCard>
                   <article className="basis-full">{children}</article>
                 </section>
+                <Toaster position="bottom-center" />
               </main>
             </ThemeProvider>
           </StyledComponentsRegistry>

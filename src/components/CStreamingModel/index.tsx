@@ -11,6 +11,7 @@ interface StreamingModel {
   model: Model;
   className?: string;
   isSelected?: boolean;
+  disabled?: boolean;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
@@ -19,6 +20,7 @@ const CStreamingModel = ({
   isSelected,
   className,
   onClick,
+  disabled,
   ...props
 }: StreamingModel) => {
   const { logo, title, description } = useStreamModel(model);
@@ -26,11 +28,12 @@ const CStreamingModel = ({
   return (
     <CCard
       className={cn(
-        `flex justify-center items-center w-full h-16 px-[10px] py-2 cursor-pointer bg-white ${
-          isSelected ? 'bg-powderBlue' : 'bg-white'
+        `flex justify-center items-center w-full h-16 px-[10px] py-2 cursor-pointer bg-white select-none ${
+          isSelected ? '!bg-[#E4F6F9]' : 'bg-white'
         } 
       ease-in duration-100`,
-        className
+        className,
+        disabled && ' opacity-[35%]',
       )}
       borderColor="#000"
       onClick={onClick}
