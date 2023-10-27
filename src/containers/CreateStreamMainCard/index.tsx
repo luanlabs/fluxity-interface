@@ -13,6 +13,8 @@ import SelectTokenContainer from '../SelectToken';
 import WalletAddressContainer from '../WalletAddressContainer';
 import CStreamingModelContainer from '../CStreamingModelContainer';
 import { Model } from 'src/components/CStreamingModel';
+import ClaimTokens from '../ClaimTokens';
+import { useAppSelector } from 'src/hooks/useRedux';
 
 export interface FormValues {
   address: string;
@@ -28,6 +30,8 @@ const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');
 const CreateStream = () => {
   const [isFormValidated, setIsFormValidated] = useState(false);
   // const balances = useAppSelector((state) => state.user.info?.balances);
+
+  const address = useAppSelector((state) => state.user.address);
 
   const form = useForm<FormValues>({
     mode: 'onChange',
@@ -185,25 +189,30 @@ const CreateStream = () => {
             </div>
           </div>
         </CPageCard>
+        <div className="relative ml-6">
+          <div>
+            <SummaryContainer form={form} isFormValidated={isFormValidated} />
 
-        <div className="ml-6">
-          <SummaryContainer form={form} isFormValidated={isFormValidated} />
-
-          <CButton
-            type="submit"
-            variant="form"
-            content="Create Stream"
-            fill={!isFormValidated ? '#050142' : '#fff'}
-            className={
-              !isFormValidated
-                ? '!bg-[#E6E6EC] !text-[#050142]'
-                : '!bg-darkBlue text-white'
-            }
-            disabled={!isValid || isValidating || !isFormValidated}
-          />
+            <CButton
+              type="submit"
+              variant="form"
+              content="Create Stream"
+              fill={!isFormValidated ? '#050142' : '#fff'}
+              className={
+                !isFormValidated
+                  ? '!bg-[#E6E6EC] !text-[#050142]'
+                  : '!bg-darkBlue text-white'
+              }
+              disabled={!isValid || isValidating || !isFormValidated}
+            />
+          </div>
+          <DevTool control={control} />
+          {address && (
+            <div className="absolute bottom-0">
+              <ClaimTokens />
+            </div>
+          )}
         </div>
-
-        <DevTool control={control} />
       </div>
     </form>
   );

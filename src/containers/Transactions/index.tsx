@@ -13,7 +13,7 @@ import CStreamStatus, { StreamStatus } from 'src/components/CStreamStatus';
 import Funnel from 'src/assets/Funnel';
 import divider from 'public/images/divider.svg';
 
-import usdt from 'public/images/usdt.svg';
+import usdc from 'public/images/usdc.svg';
 import MagnifyingGlass from 'src/assets/MagnifyingGlass';
 
 import * as Styled from './styles';
@@ -93,7 +93,7 @@ const Transactions = () => {
                 <span> {formatNumber(stream.amount)}</span>
                 <span> {stream.token}</span>
                 <span>
-                  <Image src={stream.token === 'USDT' ? usdt : ''} alt="icon" />
+                  <Image src={stream.token === 'usdc' ? usdc : ''} alt="icon" />
                 </span>
               </div>
             </div>

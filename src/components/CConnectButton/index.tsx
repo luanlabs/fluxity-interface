@@ -45,7 +45,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
           ? openModal
             ? 'bg-midnightBlue text-white'
             : 'bg-white text-midnightBlue border-midnightBlue hover:bg-lavenderblush'
-          : 'bg-royalBlue text-white border-royalBlue'
+          : 'bg-royalBlue text-white border-royalBlue hover:bg-buttonHover'
       } transition-colors duration-500 border cursor-pointer select-none`}
       onClick={handleConnect}
     >

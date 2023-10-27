@@ -1,5 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
+import Image from 'next/image';
 
 import buttonCustomStyles from './buttonCustomStyles';
 import FluxityLogoButton from 'src/assets/FluxityLogoButton';
@@ -22,6 +23,7 @@ interface ButtonProps {
   className?: string;
   fill?: string;
   onClick?: () => void;
+  logo?: string;
 }
 
 const CButton = ({
@@ -33,6 +35,7 @@ const CButton = ({
   disabled,
   content,
   fill,
+  logo,
   ...props
 }: ButtonProps) => {
   return (
@@ -47,6 +50,9 @@ const CButton = ({
         <div className="mr-[10px]">
           <FluxityLogoButton fill={fill} />
         </div>
+      )}
+      {logo && (
+        <Image src={logo} width={25} height={25} alt="logo" className="mr-2" />
       )}
       {content}
     </button>
