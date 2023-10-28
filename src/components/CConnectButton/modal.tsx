@@ -56,7 +56,7 @@ const Modal = ({ open, address, closeModal, isMinimized }: ModalProps) => {
       ref={modalRef}
       className={`bg-midnightBlue p-[6px] rounded-[10px] ${
         open
-          ? `fixed bottom-10 ${
+          ? `fixed bottom-11 ${
               isMinimized ? 'left-[100px]' : 'left-[17.5%]'
             } w-[203px] z-50`
           : 'hidden'

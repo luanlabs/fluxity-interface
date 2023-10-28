@@ -71,7 +71,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
     >
       {address ? (
         <div
-          className="flex justify-between items-center w-full px-[10px] h-14"
+          className="flex justify-between items-center w-full px-[10px] h-12"
           onClick={() => {
             setOpenModal(!openModal);
           }}
@@ -100,7 +100,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
         </div>
       ) : (
         <div className="w-full">
-          <span className="flex justify-between items-center px-[10px] h-14">
+          <span className="flex justify-between items-center px-[10px] h-12">
             <p className="font-normal text-base whitespace-nowrap overflow-hidden">
               Connect
             </p>

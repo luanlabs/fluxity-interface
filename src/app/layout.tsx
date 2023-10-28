@@ -14,7 +14,11 @@ import '../styles/globals.css';
 import theme from '../styles/theme';
 import StyledComponentsRegistry from '../styles/registry';
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [isMinimized, setIsMinimized] = useState(false);
 
   return (
