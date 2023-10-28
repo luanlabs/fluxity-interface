@@ -4,28 +4,59 @@ import Image from 'next/image';
 import CCard from 'src/components/CCard';
 import CModal from 'src/components/CModal';
 import CInput from 'src/components/CInput';
+import toast from 'src/components/CToast';
 import CButton from 'src/components/CButton';
-import { useAppSelector } from 'src/hooks/useRedux';
+import CProcessModal from 'src/components/CProcessModal';
+
+import { shortenAddress } from 'src/utils/shortenAddress';
+import { ExternalPages } from 'src/constants/externalPages';
+
+import { loadTestnetTokens } from 'src/reducers/user';
+import { useAppSelector, useAppDispatch } from 'src/hooks/useRedux';
 
 import glass from 'public/images/glass.svg';
 import wallet from 'public/images/blackWallet.svg';
 import usdc from 'public/images/usdc.svg';
 import modalImage from 'public/images/modalImage.png';
 import blueDivider from 'public/images/blueDivider.svg';
-import { shortenAddress } from 'src/utils/shortenAddress';
-import CProcessModal from 'src/components/CProcessModal';
 
 const ClaimTokens = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openSecondModal, setOpenSecondModal] = useState(false);
+
+  const dispatch = useAppDispatch();
   const address = useAppSelector((state) => state.user.address);
+  const testnetInfo = useAppSelector((state) => state.user.testnetInfo);
 
   const handleClick = () => {
     setIsOpen(true);
   };
+
   const handleClaim = () => {
     setIsOpen(false);
     setOpenSecondModal(true);
+
+    const intervalId = setInterval(() => {
+      fetch(ExternalPages.FRIENDBOT + address)
+        .then((response) => response.json())
+        .then((data) => {
+          setOpenSecondModal(false);
+          clearInterval(intervalId);
+          dispatch(loadTestnetTokens(data));
+          if (data.status !== 400) {
+            toast(
+              'success',
+              'Test tokens have been transferred to your wallet successfully.'
+            );
+          } else {
+            toast('error', 'Error occurred during your Test token transfer.');
+          }
+        })
+        .catch((error) => {
+          toast('error', 'Error occurred during your Test token transfer.');
+          clearInterval(intervalId);
+        });
+    }, 12000);
   };
 
   return (
@@ -42,8 +73,7 @@ const ClaimTokens = () => {
           content="Claim Tokens"
           variant="simple"
           logo={glass}
-          className="w-[161px] font-medium border-royalBlue border
-           hover:bg-lavenderBlush transition-all duration-700"
+          className="w-[161px] font-medium border-royalBlue border hover:bg-lavenderBlush transition-all duration-700"
         />
       </div>
       <CModal
@@ -87,7 +117,7 @@ const ClaimTokens = () => {
                 onClick={handleClaim}
                 content="Claim Tokens"
                 variant="form"
-                className="!bg-royalBlue text-white w-[151px] hover:!bg-buttonHover transition-all duration-700"
+                className="!bg-royalBlue text-white !w-[151px] hover:!bg-buttonHover transition-all duration-700"
               />
             </div>
           </div>

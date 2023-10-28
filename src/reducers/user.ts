@@ -6,11 +6,13 @@ import { AccountResponse } from 'stellar-sdk';
 interface IUser {
   address: string;
   info: AccountResponse | null;
+  testnetInfo: any | null;
 }
 
 const initialState: IUser = {
   address: '',
   info: null,
+  testnetInfo: null,
 };
 
 export const user = createSlice({
@@ -27,9 +29,13 @@ export const user = createSlice({
       state.info = null;
       state.address = '';
     },
+    loadTestnetTokens: (state, action: PayloadAction<any | null>) => {
+      state.testnetInfo = action.payload;
+    },
   },
 });
 
-export const { setAddress, disconnect, loadAccount } = user.actions;
+export const { setAddress, disconnect, loadAccount, loadTestnetTokens } =
+  user.actions;
 
 export default user.reducer;
