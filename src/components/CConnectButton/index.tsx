@@ -31,8 +31,15 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
     if (address) {
       return;
     }
-
     setIsOpen(true);
+
+    freighterApi.isConnected().then((isConnected) => {
+      if (!isConnected) {
+        toast('error', 'Freighter wallet is not installed.');
+        setIsOpen(false);
+      }
+    });
+
     try {
       const address = await freighterApi.getPublicKey();
       getAccount(address).then((info) => {
