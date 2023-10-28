@@ -8,6 +8,7 @@ type CProcessModalType = {
   setIsOpen: (_: boolean) => void;
   title: string;
   message: string;
+  height?: string;
 };
 
 const CProcessModal = ({
@@ -15,10 +16,15 @@ const CProcessModal = ({
   setIsOpen,
   title,
   message,
+  height,
 }: CProcessModalType) => {
   return (
     <CModal isOpen={isOpen} setIsOpen={setIsOpen} width="396px">
-      <div className="flex justify-center items-center flex-col h-[336px]">
+      <div
+        className={`flex !justify-center !items-center flex-col ${
+          height ? `h-${height}` : 'h-[336px]'
+        }`}
+      >
         <div className="flex justify-center items-center h-12 w-12 rounded-full bg-midnightBlue">
           <Image src={rolling} alt="rolling" />
         </div>

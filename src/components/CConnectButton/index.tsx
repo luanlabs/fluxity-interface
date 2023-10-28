@@ -13,6 +13,8 @@ import { useAppDispatch, useAppSelector } from 'src/hooks/useRedux';
 import Modal from './modal';
 import wallet from 'public/images/wallet.svg';
 import blackWallet from 'public/images/blackWallet.svg';
+import toast from '../CToast';
+import CProcessModal from '../CProcessModal';
 
 type CConnectButtonProps = {
   isMinimized: boolean;
@@ -20,17 +22,25 @@ type CConnectButtonProps = {
 
 const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
   const [openModal, setOpenModal] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
   const dispatch = useAppDispatch();
   const address = useAppSelector((state) => state.user.address);
-
   const handleConnect = () => {
     if (!address) {
+      setIsOpen(true);
       freighterApi.getPublicKey().then((address: string) => {
-        getAccount(address).then((info) => {
-          dispatch(loadAccount(info));
-        });
-        dispatch(setAddress(address));
+        if (address) {
+          getAccount(address).then((info) => {
+            dispatch(loadAccount(info));
+          });
+          dispatch(setAddress(address));
+          toast('success', 'Wallet has been successfully connected.');
+          setIsOpen(false);
+        }
       });
+    } else {
+      setIsOpen(false);
     }
   };
 
@@ -44,7 +54,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
         address
           ? openModal
             ? 'bg-midnightBlue text-white'
-            : 'bg-white text-midnightBlue border-midnightBlue hover:bg-lavenderblush'
+            : 'bg-white text-midnightBlue border-midnightBlue hover:bg-lavenderBlush'
           : 'bg-royalBlue text-white border-royalBlue hover:bg-buttonHover'
       } transition-colors duration-500 border cursor-pointer select-none`}
       onClick={handleConnect}
@@ -62,7 +72,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
               copyText(address);
             }}
           >
-            {shortenAddress(address, 4)}
+            {shortenAddress(address, 5)}
           </p>
           {openModal ? (
             <Image src={wallet} alt="wallet" width={24} height={24} />
@@ -88,6 +98,12 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
           </span>
         </div>
       )}
+      <CProcessModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        title="Waiting for wallet connection"
+        message="You are connecting your wallet to Fluxity."
+      />
     </div>
   );
 };
