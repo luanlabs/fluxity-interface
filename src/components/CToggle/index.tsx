@@ -19,12 +19,12 @@ const CToggle = ({ onChange }: CToggleProps) => {
         <button
           className={`${
             checked ? 'bg-togglePurple' : 'bg-gray-200'
-          } relative inline-flex h-[30px] w-11 items-center rounded-[50px]`}
+          } relative inline-flex h-[25px] w-[36px] items-center rounded-[20px]`}
         >
           <span
             className={`${
-              checked ? 'translate-x-5' : 'translate-x-1'
-            } inline-block h-[22px] w-[22px] transform rounded-[50px] bg-white transition`}
+              checked ? 'translate-x-3' : 'translate-x-1'
+            } inline-block h-[20px] w-[21px] transform rounded-[100px] bg-white transition shadow-lg`}
           />
         </button>
       )}

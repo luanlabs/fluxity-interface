@@ -51,6 +51,7 @@ const config: Config = {
       },
       backgroundImage: {
         calendar: "url('/images/calendar.svg')",
+        disableCalendar: "url('/images/disableCalendar.svg')",
       },
     },
   },
