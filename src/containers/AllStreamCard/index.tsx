@@ -6,7 +6,7 @@ import CCard from 'src/components/CCard';
 import { Pages } from 'src/constants/pages';
 import CButton from 'src/components/CButton';
 
-import cardLogo from 'public/images/card.svg';
+import cardLogo from 'public/images/cardLogo.svg';
 import helpLogo from 'public/images/help.svg';
 
 const AllStreamCard = () => {
@@ -17,15 +17,15 @@ const AllStreamCard = () => {
   };
 
   return (
-    <div className="w-full relative">
+    <div className="w-full">
       <CCard
         className="flex justify-between w-full h-full"
         bgColor="#EBFDFF"
-        borderColor="rgba(58, 33, 212, 0.2)"
+        borderColor="#3A21D433"
       >
-        <div className="pl-[38px] pt-[29px] text-royalBlue">
+        <div className="pl-[38px] pt-4 text-royalBlue">
           <h1 className="text-[28px] w-full">All stream are Here!</h1>
-          <p className="text-[15px] w-[90%] mt-[10px] mb-5">
+          <p className="text-[15px] w-2/3 mt-[10px] mb-5">
             Keep all your present, future, and past streams under your touch.
             Enjoy secure, efficient, and user-friendly experience of token
             streaming.
@@ -35,20 +35,12 @@ const AllStreamCard = () => {
               onClick={handleClick}
               variant="simple"
               color="blueWhite"
-              content="Get Help"
+              content="FAQ"
               logo={helpLogo}
             />
           </div>
         </div>
-        <div className="h-full pb-4 w-[50%]">
-          <Image
-            src={cardLogo}
-            width={343}
-            height={343}
-            alt="logo"
-            className="absolute bottom-0 right-0"
-          />
-        </div>
+        <Image src={cardLogo} alt="logo" />
       </CCard>
     </div>
   );

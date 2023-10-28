@@ -40,6 +40,10 @@ const config: Config = {
         darkBlue: '#050142',
         lavenderGray: '#E6E6EC',
         buttonHover: '#1C0894',
+        grayish: '#6A6C74',
+        platinum: '#E1E1E9',
+        lemonChiffon: '#FFF59A',
+        bronzeYellow: '#947000',
       },
       screens: {
         sm: { max: '767px' },

@@ -12,6 +12,7 @@ import CStreamStatus, { StreamStatus } from 'src/components/CStreamStatus';
 
 import Funnel from 'src/assets/Funnel';
 import divider from 'public/images/divider.svg';
+import noStreams from 'public/images/noStreams.svg';
 
 import usdt from 'public/images/usdt.svg';
 import MagnifyingGlass from 'src/assets/MagnifyingGlass';
@@ -19,13 +20,14 @@ import MagnifyingGlass from 'src/assets/MagnifyingGlass';
 import * as Styled from './styles';
 import useFetchHistory from './useFetchHistory';
 import getStatusStyles from './getStatusStyle';
+import { useAppSelector } from 'src/hooks/useRedux';
 
 const Transactions = () => {
   const [selectedStatus, setSelectedStatus] = useState<StreamStatus>(
     StreamStatus.ONGOING
   );
 
-  const address = 'GA3A24K44D5JXIJ4RDPZTZLGZCUCJTMO2HKCFJ5CK6FYTEVUEIICSIXW';
+  const address = useAppSelector((state) => state.user.address);
 
   const streams = useFetchHistory(address);
 
@@ -54,7 +56,10 @@ const Transactions = () => {
             key={stream.id}
           >
             <div className="inline-flex  items-center">
-              <CStreamType type={stream.streamType} />
+              <CStreamType
+                type={stream.streamType}
+                streamStatus={stream.streamStatus}
+              />
               <div className="flex gap-2 ml-5 w-[140px]">
                 <span
                   className={`text-transparentMidnightBlue ${
@@ -66,17 +71,41 @@ const Transactions = () => {
                 {shortenAddress(stream.address, 4)}
               </div>
               <div className="flex flex-row gap-5">
-                <Image src={divider} alt="divider" className="mx-5" />
-                <span className="text-sm">
-                  {stream.completionPercentage}% Completed
-                  <div className="w-[190px] bg-[#EBEBEB] rounded-full h-1 mt-1">
-                    <div
-                      className="bg-royalBlue rounded-full h-1"
-                      style={{
-                        width: stream.completionPercentage + '%',
-                      }}
-                    />
-                  </div>
+                <Image
+                  src={divider}
+                  alt="divider"
+                  className={`mx-5 ${
+                    stream.streamStatus === StreamStatus.PENDING
+                      ? 'hidden'
+                      : 'block'
+                  }`}
+                />
+                <span
+                  className={`text-sm ${
+                    stream.streamStatus === StreamStatus.PENDING
+                      ? 'hidden'
+                      : 'block'
+                  }
+                  ${
+                    stream.streamStatus === StreamStatus.EXPIRED &&
+                    'flex items-center '
+                  }`}
+                >
+                  {stream.streamStatus === StreamStatus.EXPIRED ? (
+                    <span className="text-base font-medium">Completed</span>
+                  ) : (
+                    <>
+                      {stream.completionPercentage}% Completed
+                      <div className="w-[190px] bg-[#EBEBEB] rounded-full h-1 mt-1">
+                        <div
+                          className="bg-royalBlue rounded-full h-1"
+                          style={{
+                            width: stream.completionPercentage + '%',
+                          }}
+                        />
+                      </div>
+                    </>
+                  )}
                 </span>
               </div>
             </div>
@@ -98,7 +127,19 @@ const Transactions = () => {
               </div>
             </div>
           </CCard>
-        ))}{' '}
+        ))}
+
+        {!filteredStreams.length && (
+          <div className="flex flex-col justify-center items-center w-full">
+            <Image src={noStreams} alt="icon" />
+            <p className="font-medium text-2xl text-[#8F8F8F]">
+              No {selectedStatus} Streams
+            </p>
+            <p className="mt-2 font-medium text-base text-[#8F8F8F] leading-4">
+              There are no active streams at the moment.
+            </p>
+          </div>
+        )}
       </Styled.Scroll>
     </>
   );

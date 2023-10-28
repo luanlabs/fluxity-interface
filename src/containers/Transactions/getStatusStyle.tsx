@@ -5,9 +5,9 @@ const getStatusStyles = (streamStatus: StreamStatus) => {
     case StreamStatus.ONGOING:
       return 'bg-paleMint text-forestGreen';
     case StreamStatus.PENDING:
-      return 'bg-paleCyan text-royalBlue';
+      return 'bg-lemonChiffon text-bronzeYellow';
     default:
-      return 'bg-gray-100 text-gray-500';
+      return 'bg-platinum text-grayish';
   }
 };
 export default getStatusStyles;
