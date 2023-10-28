@@ -54,7 +54,7 @@ const Summary = ({ form, isFormValidated }: SummaryProps) => {
     <div>
       <CPageCard title={summaryTitle} className="px-3 py-4 mb-4 w-[80%] ">
         <ul className="grid gap-2 text-midnightBlue">
-          {getFormValues.length > 1 &&
+          {getFormValues.length > 2 &&
             getFormValues.map((x) => (
               <li
                 key={x.label}

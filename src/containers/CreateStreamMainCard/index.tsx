@@ -13,6 +13,7 @@ import SelectTokenContainer from '../SelectToken';
 import WalletAddressContainer from '../WalletAddressContainer';
 import CStreamingModelContainer from '../CStreamingModelContainer';
 import { Model } from 'src/components/CStreamingModel';
+import CancellableStream, { ToggleStatus } from '../CancellableStream';
 
 export interface FormValues {
   address: string;
@@ -21,6 +22,7 @@ export interface FormValues {
   startDate: Date;
   endDate: Date;
   streamingModel: Model;
+  isCancellable: ToggleStatus;
 }
 
 const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');
@@ -34,6 +36,7 @@ const CreateStream = () => {
     resolver: (formValues) => validateForm(formValues, setIsFormValidated),
     defaultValues: {
       streamingModel: 'linear',
+      isCancellable: 'OFF',
     },
   });
 
@@ -124,6 +127,16 @@ const CreateStream = () => {
                     />
                   </div>
                 )}
+              />
+            </div>
+
+            <hr className="my-6" />
+
+            <div className="mb-6">
+              <Controller
+                name="isCancellable"
+                control={control}
+                render={({ field }) => <CancellableStream {...field} />}
               />
             </div>
 
