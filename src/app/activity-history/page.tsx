@@ -18,9 +18,7 @@ const ActivityHistory = () => {
       className="py-[15px] px-5 overflow-auto"
     >
       <AllStreamCard />
-      <div className="mt-5">
-        <Transactions />
-      </div>
+      <Transactions />
     </CPageCard>
   );
 };

@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -6,23 +8,38 @@ import CCard from 'src/components/CCard';
 import { Pages } from 'src/constants/pages';
 import CButton from 'src/components/CButton';
 
-import cardLogo from 'public/images/cardLogo.svg';
+import close from 'public/images/close.svg';
 import helpLogo from 'public/images/help.svg';
+import cardLogo from 'public/images/cardLogo.svg';
 
 const AllStreamCard = () => {
+  const [isClosed, setIsClosed] = useState(false);
+
   const router = useRouter();
 
   const handleClick = () => {
     router.push(Pages.FAQ);
   };
 
+  const handleClose = () => {
+    setIsClosed(true);
+  };
+
   return (
     <div className="w-full">
       <CCard
-        className="flex justify-between w-full h-full"
+        className={`relative ${
+          isClosed ? 'hidden' : 'flex'
+        } justify-between w-full h-full transition-all duration-700 mb-5`}
         bgColor="#EBFDFF"
         borderColor="#3A21D433"
       >
+        <Image
+          src={close}
+          alt="close"
+          onClick={handleClose}
+          className="absolute top-[18px] right-[21px] cursor-pointer"
+        />
         <div className="pl-[38px] pt-4 text-royalBlue">
           <h1 className="text-[28px] w-full">All stream are Here!</h1>
           <p className="text-[15px] w-2/3 mt-[10px] mb-5">

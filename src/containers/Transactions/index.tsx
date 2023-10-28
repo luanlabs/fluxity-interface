@@ -48,14 +48,14 @@ const Transactions = () => {
           </Styled.Circle>
         </span>
       </div>
-      <Styled.Scroll>
+      <div className="h-full">
         {filteredStreams.map((stream) => (
           <CCard
             className="my-1 rounded-[14px] h-[74px] inline-flex items-center w-full px-[15px] py-[14px] justify-between"
             borderColor="#0000001A"
             key={stream.id}
           >
-            <div className="inline-flex  items-center">
+            <div className="inline-flex items-center">
               <CStreamType
                 type={stream.streamType}
                 streamStatus={stream.streamStatus}
@@ -130,7 +130,7 @@ const Transactions = () => {
         ))}
 
         {!filteredStreams.length && (
-          <div className="flex flex-col justify-center items-center w-full">
+          <div className="flex flex-col justify-center items-center w-full select-none">
             <Image src={noStreams} alt="icon" />
             <p className="font-medium text-2xl text-[#8F8F8F]">
               No {selectedStatus} Streams
@@ -140,7 +140,7 @@ const Transactions = () => {
             </p>
           </div>
         )}
-      </Styled.Scroll>
+      </div>
     </>
   );
 };
