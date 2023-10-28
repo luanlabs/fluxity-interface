@@ -11,8 +11,7 @@ import CProcessModal from 'src/components/CProcessModal';
 import { shortenAddress } from 'src/utils/shortenAddress';
 import { ExternalPages } from 'src/constants/externalPages';
 
-import { loadTestnetTokens } from 'src/reducers/user';
-import { useAppSelector, useAppDispatch } from 'src/hooks/useRedux';
+import { useAppSelector } from 'src/hooks/useRedux';
 
 import glass from 'public/images/glass.svg';
 import wallet from 'public/images/blackWallet.svg';
@@ -24,39 +23,34 @@ const ClaimTokens = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openSecondModal, setOpenSecondModal] = useState(false);
 
-  const dispatch = useAppDispatch();
-  const address = useAppSelector((state) => state.user.address);
-  const testnetInfo = useAppSelector((state) => state.user.testnetInfo);
+  const { address, info } = useAppSelector((state) => state.user);
 
   const handleClick = () => {
     setIsOpen(true);
   };
 
-  const handleClaim = () => {
+  const handleClaim = async () => {
     setIsOpen(false);
     setOpenSecondModal(true);
 
-    const intervalId = setInterval(() => {
-      fetch(ExternalPages.FRIENDBOT + address)
-        .then((response) => response.json())
-        .then((data) => {
-          setOpenSecondModal(false);
-          clearInterval(intervalId);
-          dispatch(loadTestnetTokens(data));
-          if (data.status !== 400) {
-            toast(
-              'success',
-              'Test tokens have been transferred to your wallet successfully.'
-            );
-          } else {
-            toast('error', 'Error occurred during your Test token transfer.');
-          }
-        })
-        .catch((error) => {
-          toast('error', 'Error occurred during your Test token transfer.');
-          clearInterval(intervalId);
-        });
-    }, 12000);
+    if (!info) {
+      const data = await fetch(
+        ExternalPages.FRIENDBOT + encodeURIComponent(address)
+      ).then((response) => response.json());
+      setOpenSecondModal(false);
+      if (
+        (data.status === 400 &&
+          data.detail.includes('createAccountAlreadyExist')) ||
+        data.status === 200
+      ) {
+        toast(
+          'success',
+          'Test tokens have been transferred to your wallet successfully.'
+        );
+      } else {
+        toast('error', 'Error occurred during your Test token transfer.');
+      }
+    }
   };
 
   return (

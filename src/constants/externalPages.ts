@@ -4,5 +4,5 @@ export enum ExternalPages {
   COMMUNITY = '/community',
   WHITEPAPER = '/white-paper',
   EXPLORER = 'https://futurenet.stellarchain.io/accounts',
-  FRIENDBOT = 'https://friendbot.stellar.org/?addr=',
+  FRIENDBOT = 'https://friendbot-futurenet.stellar.org/?addr=',
 }

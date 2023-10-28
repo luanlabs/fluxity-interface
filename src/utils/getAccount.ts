@@ -7,6 +7,7 @@ export type getAccountResult = Promise<AccountResponse | null>;
 const getAccount = async (publicKey: string) => {
   try {
     const account = await server.loadAccount(publicKey);
+
     return account;
   } catch (error) {
     return null;

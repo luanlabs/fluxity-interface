@@ -26,20 +26,23 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
 
   const dispatch = useAppDispatch();
   const address = useAppSelector((state) => state.user.address);
-  const handleConnect = () => {
-    if (!address) {
-      setIsOpen(true);
-      freighterApi.getPublicKey().then((address: string) => {
-        if (address) {
-          getAccount(address).then((info) => {
-            dispatch(loadAccount(info));
-          });
-          dispatch(setAddress(address));
-          toast('success', 'Wallet has been successfully connected.');
-          setIsOpen(false);
-        }
+
+  const handleConnect = async () => {
+    if (address) {
+      return;
+    }
+
+    setIsOpen(true);
+    try {
+      const address = await freighterApi.getPublicKey();
+      getAccount(address).then((info) => {
+        dispatch(loadAccount(info));
       });
-    } else {
+      dispatch(setAddress(address));
+      toast('success', 'Wallet has been successfully connected.');
+    } catch (e) {
+      toast('error', 'User has declined to be connected.');
+    } finally {
       setIsOpen(false);
     }
   };
