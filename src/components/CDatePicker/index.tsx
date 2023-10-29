@@ -9,7 +9,6 @@ import useCustomID from 'src/hooks/useCustomId';
 import CLabel from '../CLabel';
 import { Wrapper } from './datePickerStyles';
 
-import CalenderLogo from 'public/images/calendar.svg';
 import CToggle from '../CToggle';
 
 interface CDatePickerProps {
@@ -19,6 +18,7 @@ interface CDatePickerProps {
   className?: string;
   minDate: Date;
   maxDate: Date;
+  readonly?: boolean;
 }
 
 const CDatePicker = ({
@@ -28,6 +28,7 @@ const CDatePicker = ({
   className,
   minDate,
   maxDate,
+  readonly,
 }: CDatePickerProps) => {
   const id = useCustomID('CDatePicker');
   const [selectedDate, setSelectedDate] = useState(minDate || new Date());
@@ -69,7 +70,7 @@ const CDatePicker = ({
         bottom-[10px]
         w-[25px]
         h-[30px]
-        ${disabled ? 'bg-calendar' : 'bg-disableCalendar'}
+        ${disabled || readonly ? 'bg-calendar' : 'bg-disableCalendar'}
         bg-no-repeat
         bg-right
         `}
@@ -82,7 +83,7 @@ const CDatePicker = ({
 
   const handleToggleStatus = (value: boolean) => {
     console.log(value);
-    setDisabled(value);
+    setDisabled(!value);
   };
 
   return (
@@ -90,7 +91,7 @@ const CDatePicker = ({
       <div className="flex items-center">
         <CLabel label={label} details={details} htmlFor={id} className="mr-[10px]" />
         <div>
-          <CToggle onChange={handleToggleStatus} />
+          <CToggle onChange={handleToggleStatus} readonly={readonly} />
         </div>
       </div>
 

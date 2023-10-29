@@ -194,6 +194,7 @@ const CreateStream = () => {
                         : new Date()
                     }
                     maxDate={INFINITY_DATE}
+                    readonly
                   />
                 )}
               />

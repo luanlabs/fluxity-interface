@@ -3,18 +3,19 @@ import { Switch } from '@headlessui/react';
 
 interface CToggleProps {
   onChange: (value: boolean) => void;
+  readonly?: boolean;
 }
 
-const CToggle = ({ onChange }: CToggleProps) => {
+const CToggle = ({ onChange, readonly }: CToggleProps) => {
   const [enabled, setEnabled] = useState(false);
 
   const handleChange = (value: boolean) => {
     setEnabled(value);
-    onChange(value);
+    onChange(enabled);
   };
 
   return (
-    <Switch checked={enabled} onChange={handleChange} as={Fragment}>
+    <Switch checked={readonly ? true : enabled} onChange={handleChange} as={Fragment}>
       {({ checked }) => (
         <button
           className={`${

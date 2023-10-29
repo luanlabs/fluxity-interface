@@ -9,7 +9,7 @@ interface CancellableStreamProps {
 
 const CancellableStream = ({ onChange }: CancellableStreamProps) => {
   const handleToggleChecker = (value: boolean) => {
-    onChange(value ? 'ON' : 'OFF');
+    onChange(!value ? 'ON' : 'OFF');
   };
 
   return (
