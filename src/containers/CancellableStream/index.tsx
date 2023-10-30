@@ -13,7 +13,7 @@ const CancellableStream = ({ onChange }: CancellableStreamProps) => {
   };
 
   return (
-    <div className=" flex items-center justify-between">
+    <div className="w-full flex items-center justify-between">
       <div className="flex items-center">
         <span className="text-[18px] text-darkBlue">Cancellable stream</span>
         <CLabel details="Turn on this feature if you want to create a cancellable stream" />

@@ -11,7 +11,6 @@ const CToggle = ({ onChange, readonly }: CToggleProps) => {
 
   const handleChange = (value: boolean) => {
     if (!readonly) {
-      console.log('value toggle : ', value);
       setEnabled(value);
       onChange(value);
     }
