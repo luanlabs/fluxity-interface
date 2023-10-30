@@ -9,17 +9,18 @@ interface CancellableStreamProps {
 
 const CancellableStream = ({ onChange }: CancellableStreamProps) => {
   const handleToggleChecker = (value: boolean) => {
-    onChange(!value ? 'ON' : 'OFF');
+    onChange(value ? 'ON' : 'OFF');
   };
 
   return (
-    <div className="w-full flex items-center justify-between">
+    <div className=" flex items-center justify-between">
       <div className="flex items-center">
         <span className="text-[18px] text-darkBlue">Cancellable stream</span>
-        <CLabel details="aa" />
+        <CLabel details="Turn on this feature if you want to create a cancellable stream" />
       </div>
-
-      <CToggle onChange={handleToggleChecker} />
+      <div className="flex items-center">
+        <CToggle onChange={handleToggleChecker} />
+      </div>
     </div>
   );
 };

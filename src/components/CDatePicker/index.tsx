@@ -34,7 +34,7 @@ const CDatePicker = ({
   const [selectedDate, setSelectedDate] = useState(minDate || new Date());
   const [isDatePickerUsed, setIsDatePickerUsed] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [disabled, setDisabled] = useState(false);
+  const [enabled, setEnabled] = useState(false);
 
   const handleChange = (value: Date) => {
     setIsOpen(!isOpen);
@@ -51,6 +51,10 @@ const CDatePicker = ({
       return minDate.getTime() < time.getTime();
     }
     return minDate.getTime() < time.getTime() && maxDate.getTime() > time.getTime();
+  };
+
+  const handleToggleStatus = (value: boolean) => {
+    setEnabled(value);
   };
 
   const CustomInput = forwardRef<HTMLInputElement>(({ value, onClick }, ref) => (
@@ -70,7 +74,7 @@ const CDatePicker = ({
         bottom-[10px]
         w-[25px]
         h-[30px]
-        ${disabled || readonly ? 'bg-calendar' : 'bg-disableCalendar'}
+        ${enabled || readonly ? 'bg-calendar' : 'bg-disableCalendar'}
         bg-no-repeat
         bg-right
         `}
@@ -80,11 +84,6 @@ const CDatePicker = ({
   ));
 
   CustomInput.displayName = 'datepickerCustomInput';
-
-  const handleToggleStatus = (value: boolean) => {
-    console.log(value);
-    setDisabled(!value);
-  };
 
   return (
     <div>
@@ -109,8 +108,7 @@ const CDatePicker = ({
             filterTime={filterPassedTime}
             timeCaption="Time"
             dateFormat="MMM dd, yyyy HH:mm"
-            disabled={!disabled}
-            className="bg-[url('https://avatars.githubusercontent.com/u/67109815?s=48&v=4')] bg-no-repeat bg-right"
+            disabled={!enabled && !readonly}
           />
         </Wrapper>
       </div>
