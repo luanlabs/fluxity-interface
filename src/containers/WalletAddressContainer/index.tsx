@@ -79,7 +79,10 @@ const WalletAddressContainer = ({
 
   return (
     <div>
-      <CLabel label="Receiver wallet address" />
+      <CLabel
+        label="Receiver wallet address"
+        details="Identify the address you want to stream tokens to."
+      />
 
       <div className="relative">
         <button

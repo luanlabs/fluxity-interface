@@ -9,7 +9,6 @@ type Validation = {
   address: CustomError;
   rate: CustomError;
   total: CustomError;
-  a: CustomError;
 };
 
 const validateForm = (values: FormValues, setIsFormValidated: (_: boolean) => void) => {

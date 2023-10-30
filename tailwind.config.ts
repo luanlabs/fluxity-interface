@@ -40,6 +40,7 @@ const config: Config = {
         darkBlue: '#050142',
         lavenderGray: '#E6E6EC',
         buttonHover: '#1C0894',
+        togglePurple: '#3A21D4',
       },
       screens: {
         sm: { max: '767px' },
@@ -50,6 +51,7 @@ const config: Config = {
       },
       backgroundImage: {
         calendar: "url('/images/calendar.svg')",
+        disableCalendar: "url('/images/disableCalendar.svg')",
       },
     },
   },

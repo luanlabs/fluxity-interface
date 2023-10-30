@@ -13,6 +13,7 @@ import SelectTokenContainer from '../SelectToken';
 import WalletAddressContainer from '../WalletAddressContainer';
 import CStreamingModelContainer from '../CStreamingModelContainer';
 import { Model } from 'src/components/CStreamingModel';
+import CancellableStream, { ToggleStatus } from '../CancellableStream';
 
 export interface FormValues {
   address: string;
@@ -21,6 +22,7 @@ export interface FormValues {
   startDate: Date;
   endDate: Date;
   streamingModel: Model;
+  isCancellable: ToggleStatus;
 }
 
 const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');
@@ -34,6 +36,7 @@ const CreateStream = () => {
     resolver: (formValues) => validateForm(formValues, setIsFormValidated),
     defaultValues: {
       streamingModel: 'linear',
+      isCancellable: 'OFF',
     },
   });
 
@@ -76,7 +79,7 @@ const CreateStream = () => {
                   <div>
                     <CStreamingModelContainer
                       label="Streaming model"
-                      details="Streaming model"
+                      details="Choose your streaming model. Linear offers a steady flow, while Exponential adapts dynamically. "
                       {...field}
                     />
                   </div>
@@ -116,7 +119,7 @@ const CreateStream = () => {
                     <CInputRate
                       placeholder="0.0"
                       label="Flow rate"
-                      details="FlowRate"
+                      details="You can specify the rate of token transfer per various intervals."
                       className="basis-4/5"
                       errorMsg={errors.rate && errors.rate.message}
                       error={errors.rate?.message ? true : false}
@@ -124,6 +127,16 @@ const CreateStream = () => {
                     />
                   </div>
                 )}
+              />
+            </div>
+
+            <hr className="my-6" />
+
+            <div className="mb-6">
+              <Controller
+                name="isCancellable"
+                control={control}
+                render={({ field }) => <CancellableStream {...field} />}
               />
             </div>
 
@@ -158,7 +171,8 @@ const CreateStream = () => {
                   <CDatePicker
                     {...field}
                     className="w-[236px]"
-                    label="Start date (optional)"
+                    label="Start date"
+                    details="Cliff time specifies the date until which the stream should be withheld. When this date arrives, the accumulated amount from the stream start date until cliff date will be sent at once and the rest of the stream continues normally. "
                     minDate={new Date()}
                     maxDate={getValues('endDate') && getValues('endDate')}
                   />
@@ -173,12 +187,14 @@ const CreateStream = () => {
                     {...field}
                     className="w-[236px]"
                     label="End date"
+                    details="By specifying the end date of your stream, the total amount to be streamed will be calculated."
                     minDate={
                       getValues('startDate')
                         ? new Date(getValues('startDate'))
                         : new Date()
                     }
                     maxDate={INFINITY_DATE}
+                    readonly
                   />
                 )}
               />
