@@ -25,6 +25,8 @@ const ClaimTokens = () => {
 
   const { address, info } = useAppSelector((state) => state.user);
 
+  const userObj = { user: address };
+
   const handleClick = () => {
     setIsOpen(true);
   };
@@ -51,6 +53,18 @@ const ClaimTokens = () => {
         toast('error', 'Error occurred during your Test token transfer.');
       }
     }
+
+    // const apiData = await fetch(ExternalPages.FLUXITY_API + '/token/mint', {
+    //   method: 'POST',
+    //   body: JSON.stringify(userObj),
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // })
+    //   .then((response) => response.json())
+    //   .catch((error) => console.error(error));
+
+    // console.log(apiData);
   };
 
   return (

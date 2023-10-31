@@ -53,7 +53,7 @@ const CreateStream = () => {
   watch(['startDate', 'endDate', 'rate', 'token', 'address']);
 
   const onSubmit = (data: FormValues) => {
-    console.log(data);
+    // console.log(data);
   };
 
   const CreateStreamTitle = (
