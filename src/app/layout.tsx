@@ -24,7 +24,7 @@ export default function RootLayout({
   const [isMinimized, setIsMinimized] = useState(false);
 
   const pathname = usePathname();
-  const isHidden = Object.values(Pages).includes(pathname as Pages);
+  const knownRoutes = Object.values(Pages).includes(pathname as Pages);
 
   return (
     <html lang="en">
@@ -41,7 +41,7 @@ export default function RootLayout({
                 >
                   <CCard
                     className={`relative overflow-hidden ${
-                      !isHidden && 'hidden'
+                      !knownRoutes && 'hidden'
                     } ${
                       isMinimized
                         ? 'basis-[80px] transition-all duration-500'

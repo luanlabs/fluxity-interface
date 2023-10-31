@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-import Logo from 'public/images/404.svg';
+import logo from 'public/images/404.svg';
 import CButton from 'src/components/CButton';
 import { Pages } from 'src/constants/pages';
 
@@ -16,7 +16,7 @@ export default function NotFound() {
 
   return (
     <div className="h-full w-full flex justify-center items-center flex-col">
-      <Image src={Logo} alt="404 image" />
+      <Image src={logo} alt="404 image" />
       <p className="mt-5 text-2xl font-medium">Page not found</p>
       <p className="mt-4 text-base font-medium">
         Sorry, but we cannot locate your requested page.
