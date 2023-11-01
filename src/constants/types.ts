@@ -14,3 +14,9 @@ export interface CNavLinkProps {
 export type SvgProps = {
   fill?: string;
 };
+
+export interface IFluxityAPIResponse {
+  status: 'error' | 'success';
+  message: string;
+  result: object | string | null | undefined;
+}

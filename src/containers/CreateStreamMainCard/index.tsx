@@ -31,7 +31,9 @@ const CreateStream = () => {
   const [isFormValidated, setIsFormValidated] = useState(false);
   // const balances = useAppSelector((state) => state.user.info?.balances);
 
-  const { address, loading } = useAppSelector((state) => state.user);
+  const { address, loading, hasReceivedTokens } = useAppSelector(
+    (state) => state.user
+  );
 
   const form = useForm<FormValues>({
     mode: 'onChange',
@@ -206,7 +208,7 @@ const CreateStream = () => {
             />
           </div>
           <DevTool control={control} />
-          {address && !loading && (
+          {address && !loading && !hasReceivedTokens && (
             <div className="absolute bottom-0">
               <ClaimTokens />
             </div>

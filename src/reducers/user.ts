@@ -7,12 +7,16 @@ interface IUser {
   address: string;
   info: AccountResponse | null;
   loading: boolean;
+  testTokens: object | string | null | undefined;
+  hasReceivedTokens: boolean;
 }
 
 const initialState: IUser = {
   address: '',
   info: null,
   loading: true,
+  testTokens: '',
+  hasReceivedTokens: false,
 };
 
 export const user = createSlice({
@@ -32,9 +36,25 @@ export const user = createSlice({
       state.address = '';
       state.loading = true;
     },
+    LoadTestTokens: (
+      state,
+      action: PayloadAction<object | string | null | undefined>
+    ) => {
+      state.testTokens = action.payload;
+    },
+    hasTestnetTokens: (state, action: PayloadAction<boolean>) => {
+      state.hasReceivedTokens = action.payload;
+      state.loading = false;
+    },
   },
 });
 
-export const { setAddress, disconnect, loadAccount } = user.actions;
+export const {
+  setAddress,
+  disconnect,
+  loadAccount,
+  LoadTestTokens,
+  hasTestnetTokens,
+} = user.actions;
 
 export default user.reducer;

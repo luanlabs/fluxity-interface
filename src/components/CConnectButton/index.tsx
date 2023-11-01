@@ -4,10 +4,11 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import freighterApi from '@stellar/freighter-api';
 
+import fetch from 'src/utils/request';
 import copyText from 'src/utils/copyText';
 import getAccount from 'src/utils/getAccount';
 import { shortenAddress } from 'src/utils/shortenAddress';
-import { setAddress, loadAccount } from 'src/reducers/user';
+import { setAddress, loadAccount, hasTestnetTokens } from 'src/reducers/user';
 import { useAppDispatch, useAppSelector } from 'src/hooks/useRedux';
 
 import Modal from './modal';
@@ -15,6 +16,8 @@ import wallet from 'public/images/wallet.svg';
 import blackWallet from 'public/images/blackWallet.svg';
 import toast from '../CToast';
 import CProcessModal from '../CProcessModal';
+import { ExternalPages } from 'src/constants/externalPages';
+import { IFluxityAPIResponse } from 'src/constants/types';
 
 type CConnectButtonProps = {
   isMinimized: boolean;
@@ -47,6 +50,22 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
       });
       dispatch(setAddress(address));
       toast('success', 'Wallet has been successfully connected.');
+      // try {
+      //   await fetch<IFluxityAPIResponse>(
+      //     ExternalPages.FLUXITY_API + '/token/mint',
+      //     {
+      //       method: 'POST',
+      //       body: JSON.stringify({ user: address }),
+      //       headers: {
+      //         'Content-Type': 'application/json',
+      //       },
+      //     }
+      //   );
+      // } catch (error: any) {
+      //   if (error.data.message === 'User has already minted tokens') {
+      //     dispatch(hasTestnetTokens(true));
+      //   }
+      // }
     } catch (e) {
       toast('error', 'User has declined to be connected.');
     } finally {

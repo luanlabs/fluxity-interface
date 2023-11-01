@@ -11,11 +11,16 @@ import CProcessModal from 'src/components/CProcessModal';
 import { shortenAddress } from 'src/utils/shortenAddress';
 import { ExternalPages } from 'src/constants/externalPages';
 
-import { useAppSelector } from 'src/hooks/useRedux';
+import fetch from 'src/utils/request';
+import { LoadTestTokens } from 'src/reducers/user';
+import { IFluxityAPIResponse } from 'src/constants/types';
+import { useAppSelector, useAppDispatch } from 'src/hooks/useRedux';
 
 import glass from 'public/images/glass.svg';
 import wallet from 'public/images/blackWallet.svg';
-import usdc from 'public/images/usdc.svg';
+import usdc from 'public/images/assets/usdc.svg';
+import dai from 'public/images/assets/dai.svg';
+import yxlm from 'public/images/assets/yxlm.png';
 import modalImage from 'public/images/modalImage.png';
 import blueDivider from 'public/images/blueDivider.svg';
 
@@ -24,8 +29,7 @@ const ClaimTokens = () => {
   const [openSecondModal, setOpenSecondModal] = useState(false);
 
   const { address, info } = useAppSelector((state) => state.user);
-
-  const userObj = { user: address };
+  const dispatch = useAppDispatch();
 
   const handleClick = () => {
     setIsOpen(true);
@@ -36,35 +40,32 @@ const ClaimTokens = () => {
     setOpenSecondModal(true);
 
     if (!info) {
-      const data = await fetch(
-        ExternalPages.FRIENDBOT + encodeURIComponent(address)
-      ).then((response) => response.json());
-      setOpenSecondModal(false);
-      if (
-        (data.status === 400 &&
-          data.detail.includes('createAccountAlreadyExist')) ||
-        data.status === 200
-      ) {
-        toast(
-          'success',
-          'Test tokens have been transferred to your wallet successfully.'
-        );
-      } else {
-        toast('error', 'Error occurred during your Test token transfer.');
-      }
+      try {
+        await fetch(ExternalPages.FRIENDBOT + encodeURIComponent(address));
+      } catch (e) {}
     }
+    try {
+      const { data } = await fetch<IFluxityAPIResponse>(
+        ExternalPages.FLUXITY_API + '/token/mint',
+        {
+          method: 'POST',
+          body: JSON.stringify({ user: address }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
-    // const apiData = await fetch(ExternalPages.FLUXITY_API + '/token/mint', {
-    //   method: 'POST',
-    //   body: JSON.stringify(userObj),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // })
-    //   .then((response) => response.json())
-    //   .catch((error) => console.error(error));
-
-    // console.log(apiData);
+      dispatch(LoadTestTokens(data.result));
+      toast(
+        'success',
+        'Test tokens have been transferred to your wallet successfully.'
+      );
+    } catch (error) {
+      toast('error', 'Failed to claim tokens, try again later.');
+    } finally {
+      setOpenSecondModal(false);
+    }
   };
 
   return (
@@ -89,17 +90,21 @@ const ClaimTokens = () => {
         setIsOpen={setIsOpen}
         hasCloseButton
         headerImage={modalImage}
-        imageClassName="bg-[#9CFFBE]"
+        imageClassName="bg-[#9CFFBE] select-none"
       >
         <>
           <div className="flex gap-2 absolute top-14 left-6">
-            <span className="flex bg-white rounded-full gap-1 p-[10px]">
+            <span className="flex bg-white rounded-full gap-1 p-[10px] items-center">
               <Image src={usdc} alt="usdc" />
               <p> fUSDC</p>
             </span>
-            <span className="flex bg-white rounded-full gap-1 p-[10px]">
-              <Image src={usdc} alt="usdc" />
-              <p> fUSDC</p>
+            <span className="flex bg-white rounded-full gap-1 p-[10px] pr-4 items-center">
+              <Image src={dai} alt="dai" />
+              <p> fDAI</p>
+            </span>
+            <span className="flex bg-white rounded-full gap-1 p-[10px] pr-4 items-center">
+              <Image src={yxlm} alt="xlm" width={32} height={32} />
+              <p> XLM</p>
             </span>
           </div>
           <div className="py-4 px-[23px]">

@@ -94,7 +94,7 @@ const CInput = ({
            self-stretch rounded-xl placeholder-mutedBlue text-midnightBlue text-base w-full h-14 p-4 bg-neutral-100 justify-start items-center inline-flex outline-none border
            ${border ? 'focus:border-darkBlue' : 'border-transparent'}  
            ${error && 'border !border-error'}
-           ${disabled && 'cursor-not-allowed select-none text-mutedBlue'}
+           ${disabled && 'cursor-not-allowed !select-none text-mutedBlue'}
           `}
           value={value}
           disabled={disabled}
