@@ -11,15 +11,18 @@ const buttonCustomStyles = (variant: CButtonVariantType, color?: CButtonColorTyp
   } else if (color === 'white') {
     colorStyles = 'bg-white border border-midnightBlue text-midnightBlue';
   } else if (color === 'blue') {
-    colorStyles = 'bg-blueIndigo text-white';
+    colorStyles = 'bg-blueIndigo text-white transition hover:bg-buttonHover';
+  } else if (color === 'outline') {
+    colorStyles =
+      'bg-white text-royalBlue border border-royalBlue !rounded-[10px] transition hover:bg-lavenderBlush';
   } else {
     colorStyles = 'bg-white text-royalBlue !rounded-[11px] h-9!px-3';
   }
 
   const VariantStyles =
     variant === 'simple'
-      ? 'rounded-[30px] text-center text-base px-6 h-11 flex flex-row justify-center items-center'
-      : 'bg-midnightBlue rounded-xl w-[329px] h-14 text-white text-base text-center flex justify-center items-center';
+      ? 'rounded-[30px] w-full text-center text-base px-6 h-11 flex flex-row justify-center items-center outline-none'
+      : 'bg-midnightBlue w-full rounded-xl h-14 text-white text-base text-center flex justify-center items-center outline-none';
 
   return `${colorStyles} ${VariantStyles}`;
 };
