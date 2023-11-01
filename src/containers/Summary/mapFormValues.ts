@@ -19,6 +19,7 @@ export const mapFormValues = (values: FormValues) => {
         }
         return false;
       }
+
       return true;
     })
 

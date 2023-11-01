@@ -14,6 +14,8 @@ import WalletAddressContainer from '../WalletAddressContainer';
 import CStreamingModelContainer from '../CStreamingModelContainer';
 import { Model } from 'src/components/CStreamingModel';
 import CancellableStream, { ToggleStatus } from '../CancellableStream';
+import ApproveFormModal from '../ApproveFormModal';
+import { useAppSelector } from 'src/hooks/useRedux';
 
 export interface FormValues {
   address: string;
@@ -29,7 +31,7 @@ const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');
 
 const CreateStream = () => {
   const [isFormValidated, setIsFormValidated] = useState(false);
-  // const balances = useAppSelector((state) => state.user.info?.balances);
+  const balances = useAppSelector((state) => state.user.info?.balances);
 
   const form = useForm<FormValues>({
     mode: 'onChange',
@@ -37,6 +39,7 @@ const CreateStream = () => {
     defaultValues: {
       streamingModel: 'linear',
       isCancellable: 'OFF',
+      startDate: new Date(),
     },
   });
 
@@ -54,6 +57,14 @@ const CreateStream = () => {
   const onSubmit = (data: FormValues) => {
     console.log(data);
   };
+
+  const [isOpenApprove, setIsOpenApprove] = useState(false);
+
+  const handleApproveModal = () => {
+    setIsOpenApprove(true);
+  };
+
+  const isFormCompleteValidition = !isValid || isValidating || !isFormValidated || !balances;
 
   const CreateStreamTitle = (
     <div className="w-full flex justify-between items-center pb-2">
@@ -188,11 +199,7 @@ const CreateStream = () => {
                     className="w-[236px]"
                     label="End date"
                     details="By specifying the end date of your stream, the total amount to be streamed will be calculated."
-                    minDate={
-                      getValues('startDate')
-                        ? new Date(getValues('startDate'))
-                        : new Date()
-                    }
+                    minDate={getValues('startDate') ? new Date(getValues('startDate')) : new Date()}
                     maxDate={INFINITY_DATE}
                     readonly
                   />
@@ -209,18 +216,20 @@ const CreateStream = () => {
             type="submit"
             variant="form"
             content="Create Stream"
-            fill={!isFormValidated ? '#050142' : '#fff'}
+            fill={isFormCompleteValidition ? '#050142' : '#fff'}
             className={
-              !isFormValidated
+              isFormCompleteValidition
                 ? '!bg-[#E6E6EC] !text-[#050142]'
-                : '!bg-darkBlue text-white'
+                : '!bg-darkBlue !text-white'
             }
-            disabled={!isValid || isValidating || !isFormValidated}
+            disabled={isFormCompleteValidition}
+            onClick={handleApproveModal}
           />
         </div>
 
         <DevTool control={control} />
       </div>
+      <ApproveFormModal isOpen={isOpenApprove} setIsOpen={setIsOpenApprove} />
     </form>
   );
 };

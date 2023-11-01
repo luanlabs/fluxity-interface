@@ -26,12 +26,11 @@ const Summary = ({ form, isFormValidated }: SummaryProps) => {
   let totalAmount = new BN(0);
   let errorMessage;
 
-  if (
-    values.startDate &&
-    values.endDate &&
-    values?.rate?.amount &&
-    values?.rate?.rateTime?.value
-  ) {
+  if (!values.startDate) {
+    values.startDate = new Date();
+  }
+
+  if (values.startDate && values.endDate && values?.rate?.amount && values?.rate?.rateTime?.value) {
     totalAmount = calculateTotalAmount(
       values.startDate,
       values.endDate,
@@ -51,10 +50,10 @@ const Summary = ({ form, isFormValidated }: SummaryProps) => {
   );
 
   return (
-    <div>
-      <CPageCard title={summaryTitle} className="px-3 py-4 mb-4 w-[80%] ">
+    <div className="w-[329px]">
+      <CPageCard title={summaryTitle} className="px-3 py-4 mb-4 w-full ">
         <ul className="grid gap-2 text-midnightBlue">
-          {getFormValues.length > 2 &&
+          {getFormValues.length > 3 &&
             getFormValues.map((x) => (
               <li
                 key={x.label}
@@ -94,9 +93,7 @@ const Summary = ({ form, isFormValidated }: SummaryProps) => {
         </CCard>
 
         <div className="text-red-500 flex items-center w-full">
-          {errorMessage && (
-            <span className="h-[15px] flex items-center mb-4">{errorMessage}</span>
-          )}
+          {errorMessage && <span className="h-[15px] flex items-center mb-4">{errorMessage}</span>}
         </div>
       </div>
     </div>
