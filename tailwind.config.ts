@@ -53,6 +53,11 @@ const config: Config = {
         calendar: "url('/images/calendar.svg')",
         disableCalendar: "url('/images/disableCalendar.svg')",
       },
+      fontFamily: {
+        reg: 'Aeonik-Reg',
+        med: 'Aeonik-Med',
+        bld: 'Aeonik-Bold',
+      },
     },
   },
   plugins: [],
