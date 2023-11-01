@@ -21,9 +21,7 @@ import useFetchHistory from './useFetchHistory';
 import getStatusStyles from './getStatusStyle';
 
 const Transactions = () => {
-  const [selectedStatus, setSelectedStatus] = useState<StreamStatus>(
-    StreamStatus.ONGOING
-  );
+  const [selectedStatus, setSelectedStatus] = useState<StreamStatus>(StreamStatus.ONGOING);
 
   const address = 'GA3A24K44D5JXIJ4RDPZTZLGZCUCJTMO2HKCFJ5CK6FYTEVUEIICSIXW';
 
