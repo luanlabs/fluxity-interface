@@ -16,6 +16,11 @@ import { Model } from 'src/components/CStreamingModel';
 import CancellableStream, { ToggleStatus } from '../CancellableStream';
 import ApproveFormModal from '../ApproveFormModal';
 import { useAppSelector } from 'src/hooks/useRedux';
+import CProcessModal from 'src/components/CProcessModal';
+import CreateStreamConfirmModal from '../CreateStreamConfirmModal';
+import timeout from 'src/utils/timeout';
+import TransactionSuccessModal from '../TransactionSuccessModal';
+import toast from 'src/components/CToast';
 
 export interface FormValues {
   address: string;
@@ -31,7 +36,16 @@ const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');
 
 const CreateStream = () => {
   const [isFormValidated, setIsFormValidated] = useState(false);
+  const [isOpenApproveModal, setIsOpenApproveModal] = useState(false);
+  const [isTokenAccessModal, setIsTokenAccessModal] = useState(false);
+  const [isWaitTransactionModal, setIsWaitTransactionModal] = useState(false);
+  const [isCreateStreamConfirmModal, setIsCreateStreamConfirmModal] = useState(false);
+  const [isWaitTransactionConfirmModal, setIsWaitTransactionConfirmModal] = useState(false);
+  const [isCompleteTransactionModal, setIsCompleteTransactionModal] = useState(false);
+  const [isOpenTransactionSuccessModal, setIsOpenTransactionSuccessModal] = useState(false);
+
   const balances = useAppSelector((state) => state.user.info?.balances);
+  const address = useAppSelector((state) => state.user.address);
 
   const form = useForm<FormValues>({
     mode: 'onChange',
@@ -58,13 +72,57 @@ const CreateStream = () => {
     console.log(data);
   };
 
-  const [isOpenApprove, setIsOpenApprove] = useState(false);
-
   const handleApproveModal = () => {
-    setIsOpenApprove(true);
+    setIsOpenApproveModal(true);
   };
 
-  const isFormCompleteValidition = !isValid || isValidating || !isFormValidated || !balances;
+  const handleApproveModalClick = async () => {
+    setIsOpenApproveModal(false);
+    setIsTokenAccessModal(true);
+
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
+    setIsTokenAccessModal(false);
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    setIsWaitTransactionModal(true);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    toast('success', 'Transaction has been approved successfully.');
+
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    setIsWaitTransactionModal(false);
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    setIsCreateStreamConfirmModal(true);
+  };
+
+  const handleCreateStreamConfirmClick = async () => {
+    setIsCreateStreamConfirmModal(false);
+    setIsWaitTransactionConfirmModal(true);
+
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
+    setIsWaitTransactionConfirmModal(false);
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    setIsCompleteTransactionModal(true);
+
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    setIsCompleteTransactionModal(false);
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    setIsOpenTransactionSuccessModal(true);
+  };
+
+  const handleCloseTransactionSuccessModal = () => {
+    setIsOpenTransactionSuccessModal(false);
+  };
+
+  const isFormCompleteValidition = !isValid || isValidating || !isFormValidated || !address;
 
   const CreateStreamTitle = (
     <div className="w-full flex justify-between items-center pb-2">
@@ -73,15 +131,14 @@ const CreateStream = () => {
   );
 
   return (
-    <form method="" onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex w-full">
+    <form method="" onSubmit={handleSubmit(onSubmit)} className="h-full">
+      <div className="flex w-full h-full">
         <CPageCard
           title={CreateStreamTitle}
           divider
-          className="w-[580px]
-        pl-[30px] pr-[18px] py-[15px]"
+          className="w-[580px] pl-[30px] pr-[18px] py-[15px] max-h-full"
         >
-          <div className=" w-full">
+          <div className="w-full">
             <div>
               <Controller
                 name="streamingModel"
@@ -229,7 +286,54 @@ const CreateStream = () => {
 
         <DevTool control={control} />
       </div>
-      <ApproveFormModal isOpen={isOpenApprove} setIsOpen={setIsOpenApprove} />
+      <ApproveFormModal
+        isOpen={isOpenApproveModal}
+        setIsOpen={setIsOpenApproveModal}
+        onClick={handleApproveModalClick}
+      />
+
+      <CProcessModal
+        title="Waiting for token access approval"
+        message="You are granting Fluxity access to your tokens equal to your total order amount."
+        isOpen={isTokenAccessModal}
+        setIsOpen={setIsTokenAccessModal}
+      />
+
+      <CProcessModal
+        title="Waiting for transaction approval"
+        isOpen={isWaitTransactionModal}
+        setIsOpen={setIsWaitTransactionModal}
+      />
+
+      <CreateStreamConfirmModal
+        hash="GAGRCJ46TZ5D7E7JODLUQ5DLTVGXXMKJM5YAXATLXTO4C6H5VOPUJZ6C"
+        from="SCIBRPJHZFRHS4KYBMCL53XK6PILIB6PBEHUYVZZ7EZ6FKZO2P7IZSMT"
+        to="GAGRCJ46TZ5D7E7JODLUQ5DLTVGXXMKJM5YAXATLXTO4C6H5VOPUJZ6C"
+        amount="200"
+        isOpen={isCreateStreamConfirmModal}
+        setIsOpen={setIsCreateStreamConfirmModal}
+        onClick={handleCreateStreamConfirmClick}
+      />
+
+      <CProcessModal
+        title="Waiting for transaction confirmation"
+        isOpen={isWaitTransactionConfirmModal}
+        setIsOpen={setIsWaitTransactionConfirmModal}
+      />
+
+      <CProcessModal
+        title="Completing stream creation transaction"
+        isOpen={isCompleteTransactionModal}
+        setIsOpen={setIsCompleteTransactionModal}
+      />
+
+      <TransactionSuccessModal
+        isOpen={isOpenTransactionSuccessModal}
+        setIsOpen={setIsOpenTransactionSuccessModal}
+        hash="GAGRCJ46TZ5D7E7JODLUQ5DLTVGXXMKJM5YAXATLXTO4C6H5VOPUJZ6C"
+        closeOnClick={handleCloseTransactionSuccessModal}
+        address={address}
+      />
     </form>
   );
 };
