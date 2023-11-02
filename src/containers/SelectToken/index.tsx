@@ -73,7 +73,12 @@ const SelectToken = ({ onChange }: selectTokenProps) => {
       </button>
 
       <CModal title="Select token" isOpen={isOpen} setIsOpen={setIsOpen}>
-        <CInput placeholder="Search name of token" icon={searchLogo} onChange={handleInputChange} />
+        <CInput
+          placeholder="Search name of token"
+          icon={searchLogo}
+          onChange={handleInputChange}
+          disabled={!isConnectWallet}
+        />
         <div className="mt-[23px]">
           {isConnectWallet ? (
             <TokenList filteredOptions={filteredOptions} handleTokenSelect={handleTokenSelect} />
