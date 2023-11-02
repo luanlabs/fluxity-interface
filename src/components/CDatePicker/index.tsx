@@ -5,11 +5,9 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import useCustomID from 'src/hooks/useCustomId';
-
+import CToggle from '../CToggle';
 import CLabel from '../CLabel';
 import { Wrapper } from './datePickerStyles';
-
-import CToggle from '../CToggle';
 
 interface CDatePickerProps {
   label?: string;
@@ -65,7 +63,9 @@ const CDatePicker = ({
         ref={ref}
       >
         <span className={`${!isDatePickerUsed ? '' : 'text-sm text-midnightBlue'} `}>
-          {!isDatePickerUsed ? 'Choose date' : value}
+          <span className={!enabled && !readonly ? 'text-[#a2a1b7]' : ''}>
+            {!isDatePickerUsed ? 'Choose date' : value}
+          </span>
         </span>
         <div
           className={`
@@ -92,7 +92,7 @@ const CDatePicker = ({
           label={label}
           details={details}
           htmlFor={id}
-          className={`mr-[10px] ${enabled || readonly ? '' : 'text-[#817fa0]'}`}
+          className={`mr-[10px] ${enabled || readonly ? '' : '!text-[#817fa0]'}`}
           detailslogoDisabled={!enabled && !readonly ? true : false}
         />
         <div>
