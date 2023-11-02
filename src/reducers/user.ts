@@ -36,14 +36,14 @@ export const user = createSlice({
       state.address = '';
       state.loading = true;
     },
-    LoadTestTokens: (
+    loadTestTokens: (
       state,
       action: PayloadAction<object | string | null | undefined>
     ) => {
       state.testTokens = action.payload;
     },
-    hasTestnetTokens: (state, action: PayloadAction<boolean>) => {
-      state.hasReceivedTokens = action.payload;
+    hasTestnetTokens: (state) => {
+      state.hasReceivedTokens = true;
       state.loading = false;
     },
   },
@@ -53,7 +53,7 @@ export const {
   setAddress,
   disconnect,
   loadAccount,
-  LoadTestTokens,
+  loadTestTokens,
   hasTestnetTokens,
 } = user.actions;
 

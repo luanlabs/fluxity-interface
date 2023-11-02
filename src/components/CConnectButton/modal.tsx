@@ -63,7 +63,7 @@ const Modal = ({ open, address, closeModal, isMinimized }: ModalProps) => {
       }`}
     >
       <div className="h-12 px-2 rounded-md bg-white text-midnightBlue flex justify-between items-center w-full">
-        <span>{shortenAddress(address, 4)}</span>
+        <span>{shortenAddress(address, 5)}</span>
         <Image src={copy} alt="copy" onClick={handleCopy} />
       </div>
       <div className="flex flex-col divide-y divide-slate-700 mt-2 px-2 text-white">

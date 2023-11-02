@@ -63,7 +63,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
       //   );
       // } catch (error: any) {
       //   if (error.data.message === 'User has already minted tokens') {
-      //     dispatch(hasTestnetTokens(true));
+      //     dispatch(hasTestnetTokens());
       //   }
       // }
     } catch (e) {

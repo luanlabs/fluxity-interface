@@ -12,7 +12,7 @@ import { shortenAddress } from 'src/utils/shortenAddress';
 import { ExternalPages } from 'src/constants/externalPages';
 
 import fetch from 'src/utils/request';
-import { LoadTestTokens } from 'src/reducers/user';
+import { loadTestTokens, hasTestnetTokens } from 'src/reducers/user';
 import { IFluxityAPIResponse } from 'src/constants/types';
 import { useAppSelector, useAppDispatch } from 'src/hooks/useRedux';
 
@@ -56,7 +56,8 @@ const ClaimTokens = () => {
         }
       );
 
-      dispatch(LoadTestTokens(data.result));
+      dispatch(loadTestTokens(data.result));
+      dispatch(hasTestnetTokens());
       toast(
         'success',
         'Test tokens have been transferred to your wallet successfully.'
