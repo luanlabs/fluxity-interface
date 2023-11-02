@@ -30,7 +30,13 @@ const Summary = ({ form, isFormValidated }: SummaryProps) => {
     values.startDate = new Date();
   }
 
-  if (values.startDate && values.endDate && values?.rate?.amount && values?.rate?.rateTime?.value) {
+  if (
+    values.startDate &&
+    values.endDate &&
+    values?.rate?.amount &&
+    values?.rate?.rateTime?.value &&
+    values.token
+  ) {
     totalAmount = calculateTotalAmount(
       values.startDate,
       values.endDate,
@@ -57,7 +63,7 @@ const Summary = ({ form, isFormValidated }: SummaryProps) => {
             getFormValues.map((x) => (
               <li
                 key={x.label}
-                className="flex justify-between w-full whitespace-nowrap overflow-hidden text-clip items-center bg-alabaster h-10 px-4 text-sm rounded-[10px]"
+                className="flex justify-between w-full overflow-hidden whitespace-nowrap items-center bg-alabaster h-10 px-4 text-sm rounded-[10px]"
               >
                 <span>{x.label}</span>
                 <div className="flex">
@@ -71,7 +77,7 @@ const Summary = ({ form, isFormValidated }: SummaryProps) => {
                     />
                   )}
 
-                  <span className="w-full text-right">{x.value}</span>
+                  <span>{x.value}</span>
                 </div>
               </li>
             ))}
@@ -87,8 +93,14 @@ const Summary = ({ form, isFormValidated }: SummaryProps) => {
           )}
         >
           <p className="w-full">Total Amount</p>
-          <p className="font-bold w-[80%] text-clip overflow-hidden text-right">
-            {totalAmount.isZero() ? '0' : totalAmount.toFixed(3).toString()}
+          <p className="font-bold w-full overflow-hidden text-right">
+            {totalAmount.isZero() ? (
+              '0'
+            ) : (
+              <div className="flex justify-end">
+                <p className="text-right overflow-hidden">{totalAmount.toFixed(3).toString()}</p>
+              </div>
+            )}
           </p>
         </CCard>
 
