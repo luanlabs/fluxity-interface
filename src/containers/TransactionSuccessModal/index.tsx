@@ -1,8 +1,10 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 import CModal from 'src/components/CModal';
 import CButton from 'src/components/CButton';
 import { shortenAddress } from 'src/utils/shortenAddress';
+import { ExternalPages } from 'src/constants/externalPages';
 
 import successLogo from 'public/images/success-normal-size.svg';
 import exploreLogo from 'public/images/explore.svg';
@@ -10,12 +12,14 @@ import exploreLogo from 'public/images/explore.svg';
 interface TransactionSuccessModal {
   hash: string;
   isOpen: boolean;
+  address: string;
   setIsOpen: (_: boolean) => void;
   closeOnClick: () => void;
 }
 
 const TransactionSuccessModal = ({
   hash,
+  address,
   isOpen,
   setIsOpen,
   closeOnClick,
@@ -29,14 +33,15 @@ const TransactionSuccessModal = ({
             Transaction successful
           </h1>
           <p className="text-[18px] text-center mt-[32px]">{hash && shortenAddress(hash, 5)}</p>
-
-          <CButton
-            content="See in explorer"
-            variant="simple"
-            color="outline"
-            logo={exploreLogo}
-            className="h-[56px] mt-[32px] text-base"
-          />
+          <Link href={`${ExternalPages.EXPLORER}/${address}`} target="_blank" className="w-full">
+            <CButton
+              content="See in explorer"
+              variant="simple"
+              color="outline"
+              logo={exploreLogo}
+              className="h-[56px] mt-[32px] text-base"
+            />
+          </Link>
 
           <div className="flex flex-row items-center justify-end w-full mt-[24px] ">
             <a
