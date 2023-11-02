@@ -87,6 +87,7 @@ const CInputRate = ({
         errorMsg={errorMsg}
         error={error}
         onPaste={handleOnPaste}
+        maxlength="15"
       />
 
       <Select
