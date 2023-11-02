@@ -3,29 +3,25 @@ import Image from 'next/image';
 import cn from 'classnames';
 
 import detailsLogo from 'public/images/summary.svg';
+import DetailLogo from 'src/assets/detail';
 
 interface CLabelProps {
   details?: string;
   label?: string;
   htmlFor?: string;
   className?: string;
+  detailslogoDisabled?: boolean;
 }
 
-const CLabel = ({ label, details, htmlFor, className }: CLabelProps) => {
+const CLabel = ({ label, details, htmlFor, className, detailslogoDisabled }: CLabelProps) => {
   return (
-    <div className={cn('flex items-start ml-1', className)}>
-      <label
-        htmlFor={htmlFor}
-        className="text-slate-900 text-lg font-normal mb-2 flex"
-      >
+    <div className={cn('flex items-start ml-1 text-midnightBlue', className)}>
+      <label htmlFor={htmlFor} className="text-lg font-normal mb-2 flex ">
         {label}
         {details && (
-          <Image
-            src={detailsLogo}
-            alt="search"
-            className="ml-2 mb-px"
-            title={details}
-          />
+          <div className="ml-2 mb-px" title={details}>
+            <DetailLogo fill={detailslogoDisabled ? '#817fa0' : '#050142'} />
+          </div>
         )}
       </label>
     </div>

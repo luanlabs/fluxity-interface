@@ -88,7 +88,13 @@ const CDatePicker = ({
   return (
     <div>
       <div className="flex items-center">
-        <CLabel label={label} details={details} htmlFor={id} className="mr-[10px]" />
+        <CLabel
+          label={label}
+          details={details}
+          htmlFor={id}
+          className={`mr-[10px] ${enabled || readonly ? '' : 'text-[#817fa0]'}`}
+          detailslogoDisabled={!enabled && !readonly ? true : false}
+        />
         <div>
           <CToggle onChange={handleToggleStatus} readonly={readonly} />
         </div>
