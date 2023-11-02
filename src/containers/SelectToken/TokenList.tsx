@@ -16,7 +16,7 @@ const TokenList = ({ filteredOptions, handleTokenSelect }: TokenListProps) => {
     <>
       {filteredOptions.map((i) => (
         <div
-          className="flex items-center w-full cursor-pointer h-[72px] border-b last:border-none"
+          className="flex items-center w-full text-midnightBlue tracking-wide cursor-pointer h-[72px] border-b last:border-none"
           key={i.asset_code}
           onClick={() => handleTokenSelect(i)}
         >
@@ -25,12 +25,12 @@ const TokenList = ({ filteredOptions, handleTokenSelect }: TokenListProps) => {
               <Image src={logo} width={0} height={0} alt="a" />
             </div>
             <div className="text-left w-full">
-              <p className="text-black text-base w-full font-bold">{i.asset_code || 'XLM'}</p>
+              <p className=" text-base w-full font-med">{i.asset_code || 'XLM'}</p>
             </div>
           </div>
 
           <div className="flex items-center">
-            <span className="mr-5">{new BN(i.balance).toFixed(3)}</span>
+            <span className="mr-5 font-med text-base">{new BN(i.balance).toFixed(3)}</span>
             <div className="h-[35px] w-[35px] rounded-[100px] bg-lavenderBlush hover:bg-[#f0efff95] flex justify-center items-center">
               <Image src={plusLogo} width={0} height={0} alt="plusLogo" />
             </div>
