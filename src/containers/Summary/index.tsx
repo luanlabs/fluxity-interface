@@ -24,14 +24,13 @@ const Summary = ({ form, isFormValidated }: SummaryProps) => {
   const getFormValues = mapFormValues(values);
 
   let totalAmount = new BN(0);
-  let errorMessage;
+  let errorMessage = '';
 
-  if (
-    values.startDate &&
-    values.endDate &&
-    values?.rate?.amount &&
-    values?.rate?.rateTime?.value
-  ) {
+  if (!values.startDate) {
+    values.startDate = new Date();
+  }
+
+  if (values.endDate && values?.rate?.amount && values?.rate?.rateTime?.value && values.token) {
     totalAmount = calculateTotalAmount(
       values.startDate,
       values.endDate,
@@ -40,7 +39,7 @@ const Summary = ({ form, isFormValidated }: SummaryProps) => {
     );
 
     const [isSuccessful, errorMsg] = checkBalance(values.token.value, totalAmount);
-    errorMessage = errorMsg;
+    errorMessage = errorMsg.toString();
   }
 
   const summaryTitle = (
@@ -51,14 +50,14 @@ const Summary = ({ form, isFormValidated }: SummaryProps) => {
   );
 
   return (
-    <div>
-      <CPageCard title={summaryTitle} className="px-3 py-4 mb-4 w-[80%] ">
+    <div className="w-[329px]">
+      <CPageCard title={summaryTitle} className="px-3 py-4 mb-4 w-full ">
         <ul className="grid gap-2 text-midnightBlue">
-          {getFormValues.length > 2 &&
+          {getFormValues.length > 3 &&
             getFormValues.map((x) => (
               <li
                 key={x.label}
-                className="flex justify-between w-full whitespace-nowrap overflow-hidden text-clip items-center bg-alabaster h-10 px-4 text-sm rounded-[10px]"
+                className="flex justify-between w-full overflow-hidden whitespace-nowrap items-center bg-alabaster h-10 px-4 text-sm rounded-[10px]"
               >
                 <span>{x.label}</span>
                 <div className="flex">
@@ -72,7 +71,7 @@ const Summary = ({ form, isFormValidated }: SummaryProps) => {
                     />
                   )}
 
-                  <span className="w-full text-right">{x.value}</span>
+                  <span>{x.value}</span>
                 </div>
               </li>
             ))}
@@ -88,15 +87,19 @@ const Summary = ({ form, isFormValidated }: SummaryProps) => {
           )}
         >
           <p className="w-full">Total Amount</p>
-          <p className="font-bold w-[80%] text-clip overflow-hidden text-right">
-            {totalAmount.isZero() ? '0' : totalAmount.toFixed(3).toString()}
+          <p className="font-medium w-full overflow-hidden text-right">
+            {totalAmount.isZero() ? (
+              '0'
+            ) : (
+              <div className="flex justify-end">
+                <p className="text-right overflow-hidden">{totalAmount.toFixed(3).toString()}</p>
+              </div>
+            )}
           </p>
         </CCard>
 
         <div className="text-red-500 flex items-center w-full">
-          {errorMessage && (
-            <span className="h-[15px] flex items-center mb-4">{errorMessage}</span>
-          )}
+          {errorMessage && <span className="h-[15px] flex items-center mb-4">{errorMessage}</span>}
         </div>
       </div>
     </div>

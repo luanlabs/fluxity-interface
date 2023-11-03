@@ -3,18 +3,15 @@ import { Dialog, Transition } from '@headlessui/react';
 
 interface ModalProps {
   children: JSX.Element | React.ReactNode;
-  title: string;
+  title?: string;
   isOpen: boolean;
   setIsOpen: (_: boolean) => void;
+  width?: string;
 }
 
-const CModal = ({ children, title, isOpen, setIsOpen }: ModalProps) => {
+const CModal = ({ children, title, isOpen, setIsOpen, width }: ModalProps) => {
   const closeModal = () => {
     setIsOpen(false);
-  };
-
-  const openModal = () => {
-    setIsOpen(true);
   };
 
   return (
@@ -44,10 +41,15 @@ const CModal = ({ children, title, isOpen, setIsOpen }: ModalProps) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-[574px] transform overflow-hidden rounded-[20px] bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel
+                  className="transform overflow-hidden rounded-[20px] bg-white p-6 text-left align-middle shadow-xl transition-all"
+                  style={{
+                    width: width ? width : '576px',
+                  }}
+                >
                   <Dialog.Title
                     as="h3"
-                    className="text-[28px] text-midnightBlue font-medium leading-6 flex justify-between mb-[14px]"
+                    className="text-[28px] font-med text-midnightBlue leading-6 flex justify-between mb-[14px]"
                   >
                     {title}
                   </Dialog.Title>

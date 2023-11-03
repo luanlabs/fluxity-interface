@@ -2,23 +2,19 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { Horizon } from 'stellar-sdk';
 
-import BN from 'src/utils/BN';
 import CModal from 'src/components/CModal';
 import CInput from 'src/components/CInput';
 import CLabel from 'src/components/CLabel';
 import useCustomID from 'src/hooks/useCustomId';
 import { SelectTokenType } from 'src/models';
-import { userData } from '../Summary/userData';
+import { userData } from 'src/containers/Summary/userData';
+import { useAppSelector } from 'src/hooks/useRedux';
 
-import searchLogo from 'public/images/search.svg';
+import TokenList from './TokenList';
+
 import arrowLogo from 'public/images/arrow.svg';
-import plusLogo from 'public/images/Plus.svg';
-
-const options: SelectTokenType[] = [
-  { value: 'usdc', label: 'USDC', icon: 'usdc.svg' },
-  { value: 'usdt', label: 'USDT', icon: 'usdt.svg' },
-  { value: 'dai', label: 'DAI', icon: 'dai.svg' },
-];
+import searchLogo from 'public/images/search.svg';
+import tokenLogo from 'public/images/explore.svg';
 
 interface selectTokenProps {
   onChange: (_: SelectTokenType) => void;
@@ -29,6 +25,8 @@ const SelectToken = ({ onChange }: selectTokenProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const id = useCustomID('selectToken');
+
+  const isConnectWallet = useAppSelector((state) => state.user.address);
 
   const handleTokenSelect = (token: Horizon.BalanceLine) => {
     setSelectedToken(token);
@@ -66,12 +64,7 @@ const SelectToken = ({ onChange }: selectTokenProps) => {
       >
         {selectedToken ? (
           <div className="flex items-center justify-start">
-            <Image
-              src={require(`../../../public/images/assets/${options[0].icon}`).default}
-              width={35}
-              height={35}
-              alt=""
-            />
+            <Image src={tokenLogo} width={0} height={0} alt="a" />
             <p className="ml-4 text-midnightBlue">{selectedToken.asset_code || 'XLM'}</p>
           </div>
         ) : (
@@ -85,40 +78,16 @@ const SelectToken = ({ onChange }: selectTokenProps) => {
           placeholder="Search name of token"
           icon={searchLogo}
           onChange={handleInputChange}
+          disabled={!isConnectWallet}
         />
         <div className="mt-[23px]">
-          {filteredOptions.map((i) => (
-            <div
-              className="flex items-center w-full cursor-pointer h-[72px] border-b last:border-none"
-              key={i.asset_code}
-              onClick={() => handleTokenSelect(i)}
-            >
-              <div className="flex w-full items-center">
-                <div className="w-[70px]">
-                  <Image
-                    src={
-                      require(`../../../public/images/assets/${options[0].icon}`).default
-                    }
-                    width={45}
-                    height={45}
-                    alt="a"
-                  />
-                </div>
-                <div className="text-left w-full">
-                  <p className="text-black text-base w-full font-bold">
-                    {i.asset_code || 'XLM'}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center">
-                <span className="mr-5">{new BN(i.balance).toFixed(3)}</span>
-                <div className="h-[35px] w-[35px] rounded-[100px] bg-lavenderBlush hover:bg-[#f0efff95] flex justify-center items-center">
-                  <Image src={plusLogo} width={0} height={0} alt="plusLogo" />
-                </div>
-              </div>
+          {isConnectWallet ? (
+            <TokenList filteredOptions={filteredOptions} handleTokenSelect={handleTokenSelect} />
+          ) : (
+            <div className=" w-full text-center text-2xl font-med h-[200px] flex justify-center items-center text-[#8f8f8f]">
+              You need to connect you wallet first.
             </div>
-          ))}
+          )}
         </div>
       </CModal>
     </div>

@@ -1,6 +1,5 @@
 'use client';
 import React, { useState } from 'react';
-import { DevTool } from '@hookform/devtools';
 import { useForm, Controller } from 'react-hook-form';
 
 import CButton from 'src/components/CButton';
@@ -8,12 +7,14 @@ import CPageCard from 'src/components/CPageCard';
 import CDatePicker from 'src/components/CDatePicker';
 import CInputRate, { CInputRateValue } from 'src/components/CInputRate';
 import validateForm from './validateForm';
-import SummaryContainer from '../Summary';
-import SelectTokenContainer from '../SelectToken';
-import WalletAddressContainer from '../WalletAddressContainer';
+import SummaryContainer from 'src/containers/Summary';
+import SelectTokenContainer from 'src/containers/SelectToken';
+import WalletAddressContainer from 'src/containers/WalletAddressContainer';
 import CStreamingModelContainer from '../CStreamingModelContainer';
-import { Model } from 'src/components/CStreamingModel';
 import CancellableStream, { ToggleStatus } from '../CancellableStream';
+import ConfirmTransaction from '../ConfirmTransaction';
+import { useAppSelector } from 'src/hooks/useRedux';
+import { Model } from 'src/components/CStreamingModel';
 
 export interface FormValues {
   address: string;
@@ -29,7 +30,9 @@ const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');
 
 const CreateStream = () => {
   const [isFormValidated, setIsFormValidated] = useState(false);
-  // const balances = useAppSelector((state) => state.user.info?.balances);
+  const [isConfirm, setIsConfirm] = useState(false);
+
+  const address = useAppSelector((state) => state.user.address);
 
   const form = useForm<FormValues>({
     mode: 'onChange',
@@ -37,6 +40,7 @@ const CreateStream = () => {
     defaultValues: {
       streamingModel: 'linear',
       isCancellable: 'OFF',
+      startDate: new Date(),
     },
   });
 
@@ -55,6 +59,12 @@ const CreateStream = () => {
     console.log(data);
   };
 
+  const handleOpenModals = () => {
+    setIsConfirm(true);
+  };
+
+  const isFormCompleteValidition = !isValid || isValidating || !isFormValidated || !address;
+
   const CreateStreamTitle = (
     <div className="w-full flex justify-between items-center pb-2">
       <h1 className="text-[24px] text-midnightBlue pl-2 mt-2">Create Stream</h1>
@@ -62,15 +72,14 @@ const CreateStream = () => {
   );
 
   return (
-    <form method="" onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex w-full">
+    <form method="" onSubmit={handleSubmit(onSubmit)} className="h-full">
+      <div className="flex w-full h-full">
         <CPageCard
           title={CreateStreamTitle}
           divider
-          className="w-[580px]
-        pl-[30px] pr-[18px] py-[15px]"
+          className="w-[580px] pl-[30px] pr-[18px] py-[15px] max-h-full"
         >
-          <div className=" w-full">
+          <div className="w-full">
             <div>
               <Controller
                 name="streamingModel"
@@ -188,11 +197,7 @@ const CreateStream = () => {
                     className="w-[236px]"
                     label="End date"
                     details="By specifying the end date of your stream, the total amount to be streamed will be calculated."
-                    minDate={
-                      getValues('startDate')
-                        ? new Date(getValues('startDate'))
-                        : new Date()
-                    }
+                    minDate={getValues('startDate') ? new Date(getValues('startDate')) : new Date()}
                     maxDate={INFINITY_DATE}
                     readonly
                   />
@@ -209,18 +214,19 @@ const CreateStream = () => {
             type="submit"
             variant="form"
             content="Create Stream"
-            fill={!isFormValidated ? '#050142' : '#fff'}
+            fill={isFormCompleteValidition ? '#050142' : '#fff'}
             className={
-              !isFormValidated
+              isFormCompleteValidition
                 ? '!bg-[#E6E6EC] !text-[#050142]'
-                : '!bg-darkBlue text-white'
+                : '!bg-darkBlue !text-white'
             }
-            disabled={!isValid || isValidating || !isFormValidated}
+            disabled={isFormCompleteValidition}
+            onClick={handleOpenModals}
           />
         </div>
-
-        <DevTool control={control} />
       </div>
+
+      <ConfirmTransaction form={form} isConfirm={isConfirm} setIsConfirm={setIsConfirm} />
     </form>
   );
 };
