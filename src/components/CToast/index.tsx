@@ -13,7 +13,6 @@ const toastStyle = {
     width: 'auto',
     minWidth: '550px',
   },
-
   duration: 2000,
 };
 
