@@ -7,13 +7,14 @@ import CInput from 'src/components/CInput';
 import CLabel from 'src/components/CLabel';
 import useCustomID from 'src/hooks/useCustomId';
 import { SelectTokenType } from 'src/models';
-import { userData } from '../Summary/userData';
+import { userData } from 'src/containers/Summary/userData';
 import { useAppSelector } from 'src/hooks/useRedux';
+
 import TokenList from './TokenList';
 
 import arrowLogo from 'public/images/arrow.svg';
 import searchLogo from 'public/images/search.svg';
-import logo from 'public/images/explore.svg';
+import tokenLogo from 'public/images/explore.svg';
 
 interface selectTokenProps {
   onChange: (_: SelectTokenType) => void;
@@ -63,7 +64,7 @@ const SelectToken = ({ onChange }: selectTokenProps) => {
       >
         {selectedToken ? (
           <div className="flex items-center justify-start">
-            <Image src={logo} width={0} height={0} alt="a" />
+            <Image src={tokenLogo} width={0} height={0} alt="a" />
             <p className="ml-4 text-midnightBlue">{selectedToken.asset_code || 'XLM'}</p>
           </div>
         ) : (
