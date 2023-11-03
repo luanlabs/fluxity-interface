@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import ApproveModal from '../containers/ApproveFormModal';
+import ApproveModal from '../containers/Modals/ApproveFormModal';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta = {
@@ -22,4 +22,9 @@ type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 
-export const ApproveFormModal: Story = {};
+export const ApproveFormModal: Story = {
+  args: {
+    isOpen: true,
+    setIsOpen: true,
+  },
+};

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import CreateStreamConfirmModal from '../containers/CreateStreamConfirmModal';
+import CreateStreamConfirmModal from '../containers/Modals/CreateStreamConfirmModal';
 
 const meta = {
   title: 'Components/Modal',
@@ -16,4 +16,9 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const CreateStreamConfirm: Story = {};
+export const CreateStreamConfirm: Story = {
+  args: {
+    isOpen: true,
+    setIsOpen: true,
+  },
+};
