@@ -24,19 +24,13 @@ const Summary = ({ form, isFormValidated }: SummaryProps) => {
   const getFormValues = mapFormValues(values);
 
   let totalAmount = new BN(0);
-  let errorMessage;
+  let errorMessage = '';
 
   if (!values.startDate) {
     values.startDate = new Date();
   }
 
-  if (
-    values.startDate &&
-    values.endDate &&
-    values?.rate?.amount &&
-    values?.rate?.rateTime?.value &&
-    values.token
-  ) {
+  if (values.endDate && values?.rate?.amount && values?.rate?.rateTime?.value && values.token) {
     totalAmount = calculateTotalAmount(
       values.startDate,
       values.endDate,
@@ -45,7 +39,7 @@ const Summary = ({ form, isFormValidated }: SummaryProps) => {
     );
 
     const [isSuccessful, errorMsg] = checkBalance(values.token.value, totalAmount);
-    errorMessage = errorMsg;
+    errorMessage = errorMsg.toString();
   }
 
   const summaryTitle = (
@@ -93,7 +87,7 @@ const Summary = ({ form, isFormValidated }: SummaryProps) => {
           )}
         >
           <p className="w-full">Total Amount</p>
-          <p className="font-bold w-full overflow-hidden text-right">
+          <p className="font-medium w-full overflow-hidden text-right">
             {totalAmount.isZero() ? (
               '0'
             ) : (
