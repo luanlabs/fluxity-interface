@@ -8,19 +8,14 @@ import CPageCard from 'src/components/CPageCard';
 import CDatePicker from 'src/components/CDatePicker';
 import CInputRate, { CInputRateValue } from 'src/components/CInputRate';
 import validateForm from './validateForm';
-import SummaryContainer from '../Summary';
-import SelectTokenContainer from '../SelectToken';
-import WalletAddressContainer from '../WalletAddressContainer';
+import SummaryContainer from 'src/containers/Summary';
+import SelectTokenContainer from 'src/containers/SelectToken';
+import WalletAddressContainer from 'src/containers/WalletAddressContainer';
 import CStreamingModelContainer from '../CStreamingModelContainer';
-import { Model } from 'src/components/CStreamingModel';
 import CancellableStream, { ToggleStatus } from '../CancellableStream';
-import ApproveFormModal from '../ApproveFormModal';
+import ConfirmTransaction from '../ConfirmTransaction';
 import { useAppSelector } from 'src/hooks/useRedux';
-import CProcessModal from 'src/components/CProcessModal';
-import CreateStreamConfirmModal from '../CreateStreamConfirmModal';
-import timeout from 'src/utils/timeout';
-import TransactionSuccessModal from '../TransactionSuccessModal';
-import toast from 'src/components/CToast';
+import { Model } from 'src/components/CStreamingModel';
 
 export interface FormValues {
   address: string;
@@ -36,15 +31,8 @@ const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');
 
 const CreateStream = () => {
   const [isFormValidated, setIsFormValidated] = useState(false);
-  const [isOpenApproveModal, setIsOpenApproveModal] = useState(false);
-  const [isTokenAccessModal, setIsTokenAccessModal] = useState(false);
-  const [isWaitTransactionModal, setIsWaitTransactionModal] = useState(false);
-  const [isCreateStreamConfirmModal, setIsCreateStreamConfirmModal] = useState(false);
-  const [isWaitTransactionConfirmModal, setIsWaitTransactionConfirmModal] = useState(false);
-  const [isCompleteTransactionModal, setIsCompleteTransactionModal] = useState(false);
-  const [isOpenTransactionSuccessModal, setIsOpenTransactionSuccessModal] = useState(false);
+  const [isConfirm, setIsConfirm] = useState(false);
 
-  const balances = useAppSelector((state) => state.user.info?.balances);
   const address = useAppSelector((state) => state.user.address);
 
   const form = useForm<FormValues>({
@@ -72,54 +60,8 @@ const CreateStream = () => {
     console.log(data);
   };
 
-  const handleApproveModal = () => {
-    setIsOpenApproveModal(true);
-  };
-
-  const handleApproveModalClick = async () => {
-    setIsOpenApproveModal(false);
-    setIsTokenAccessModal(true);
-
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-
-    setIsTokenAccessModal(false);
-    await new Promise((resolve) => setTimeout(resolve, 100));
-
-    setIsWaitTransactionModal(true);
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    toast('success', 'Transaction has been approved successfully.');
-
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    setIsWaitTransactionModal(false);
-    await new Promise((resolve) => setTimeout(resolve, 100));
-
-    setIsCreateStreamConfirmModal(true);
-  };
-
-  const handleCreateStreamConfirmClick = async () => {
-    setIsCreateStreamConfirmModal(false);
-    setIsWaitTransactionConfirmModal(true);
-
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-
-    setIsWaitTransactionConfirmModal(false);
-
-    await new Promise((resolve) => setTimeout(resolve, 100));
-
-    setIsCompleteTransactionModal(true);
-
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    setIsCompleteTransactionModal(false);
-
-    await new Promise((resolve) => setTimeout(resolve, 100));
-
-    setIsOpenTransactionSuccessModal(true);
-  };
-
-  const handleCloseTransactionSuccessModal = () => {
-    setIsOpenTransactionSuccessModal(false);
+  const handleOpenModals = () => {
+    setIsConfirm(true);
   };
 
   const isFormCompleteValidition = !isValid || isValidating || !isFormValidated || !address;
@@ -280,60 +222,12 @@ const CreateStream = () => {
                 : '!bg-darkBlue !text-white'
             }
             disabled={isFormCompleteValidition}
-            onClick={handleApproveModal}
+            onClick={handleOpenModals}
           />
         </div>
-
-        <DevTool control={control} />
       </div>
-      <ApproveFormModal
-        isOpen={isOpenApproveModal}
-        setIsOpen={setIsOpenApproveModal}
-        onClick={handleApproveModalClick}
-      />
 
-      <CProcessModal
-        title="Waiting for token access approval"
-        message="You are granting Fluxity access to your tokens equal to your total order amount."
-        isOpen={isTokenAccessModal}
-        setIsOpen={setIsTokenAccessModal}
-      />
-
-      <CProcessModal
-        title="Waiting for transaction approval"
-        isOpen={isWaitTransactionModal}
-        setIsOpen={setIsWaitTransactionModal}
-      />
-
-      <CreateStreamConfirmModal
-        hash="GAGRCJ46TZ5D7E7JODLUQ5DLTVGXXMKJM5YAXATLXTO4C6H5VOPUJZ6C"
-        from="SCIBRPJHZFRHS4KYBMCL53XK6PILIB6PBEHUYVZZ7EZ6FKZO2P7IZSMT"
-        to="GAGRCJ46TZ5D7E7JODLUQ5DLTVGXXMKJM5YAXATLXTO4C6H5VOPUJZ6C"
-        amount="200"
-        isOpen={isCreateStreamConfirmModal}
-        setIsOpen={setIsCreateStreamConfirmModal}
-        onClick={handleCreateStreamConfirmClick}
-      />
-
-      <CProcessModal
-        title="Waiting for transaction confirmation"
-        isOpen={isWaitTransactionConfirmModal}
-        setIsOpen={setIsWaitTransactionConfirmModal}
-      />
-
-      <CProcessModal
-        title="Completing stream creation transaction"
-        isOpen={isCompleteTransactionModal}
-        setIsOpen={setIsCompleteTransactionModal}
-      />
-
-      <TransactionSuccessModal
-        isOpen={isOpenTransactionSuccessModal}
-        setIsOpen={setIsOpenTransactionSuccessModal}
-        hash="GAGRCJ46TZ5D7E7JODLUQ5DLTVGXXMKJM5YAXATLXTO4C6H5VOPUJZ6C"
-        closeOnClick={handleCloseTransactionSuccessModal}
-        address={address}
-      />
+      <ConfirmTransaction form={form} isConfirm={isConfirm} />
     </form>
   );
 };
