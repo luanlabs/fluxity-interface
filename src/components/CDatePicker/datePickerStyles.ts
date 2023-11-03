@@ -6,7 +6,7 @@ export const Wrapper = styled.div`
     border: none;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
     padding: 0 10px;
-    font-family: 'Aeonik-reg';
+    font-family: 'Aeonik';
   }
 
   .react-datepicker__day--disabled {
