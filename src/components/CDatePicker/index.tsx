@@ -93,7 +93,7 @@ const CDatePicker = ({
           details={details}
           htmlFor={id}
           className={`mr-[10px] ${enabled || readonly ? '' : '!text-[#817fa0]'}`}
-          detailslogoDisabled={!enabled && !readonly ? true : false}
+          disabled={!enabled && !readonly ? true : false}
         />
         <div>
           <CToggle onChange={handleToggleStatus} readonly={readonly} />

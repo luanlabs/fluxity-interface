@@ -10,17 +10,17 @@ interface CLabelProps {
   label?: string;
   htmlFor?: string;
   className?: string;
-  detailslogoDisabled?: boolean;
+  disabled?: boolean;
 }
 
-const CLabel = ({ label, details, htmlFor, className, detailslogoDisabled }: CLabelProps) => {
+const CLabel = ({ label, details, htmlFor, className, disabled }: CLabelProps) => {
   return (
     <div className={cn('flex items-start ml-1 text-midnightBlue', className)}>
       <label htmlFor={htmlFor} className="text-lg font-normal mb-2 flex ">
         {label}
         {details && (
           <div className="ml-2 mb-px" title={details}>
-            <DetailLogo fill={detailslogoDisabled ? '#817fa0' : '#050142'} />
+            <DetailLogo fill={disabled ? '#817fa0' : '#050142'} />
           </div>
         )}
       </label>
