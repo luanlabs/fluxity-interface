@@ -1,9 +1,10 @@
 import Image from 'next/image';
+import { Horizon } from 'stellar-sdk';
 
 import BN from 'src/utils/BN';
+
 import plusLogo from 'public/images/Plus.svg';
 import logo from 'public/images/explore.svg';
-import { Horizon } from 'stellar-sdk';
 
 interface TokenListProps {
   // TODO: change the type
