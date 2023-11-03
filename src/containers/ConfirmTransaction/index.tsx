@@ -9,11 +9,12 @@ import toast from 'src/components/CToast';
 import timeout from 'src/utils/timeout';
 
 interface ConfirmTransactions {
-  isConfirm?: boolean;
+  isConfirm: boolean;
+  setIsConfirm: (_: boolean) => void;
   form: UseFormReturn<any, undefined>;
 }
 
-const ConfirmTransaction = ({ isConfirm, form }: ConfirmTransactions) => {
+const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactions) => {
   const [isOpenApproveModal, setIsOpenApproveModal] = useState(false);
   const [isTokenAccessModal, setIsTokenAccessModal] = useState(false);
   const [isWaitTransactionModal, setIsWaitTransactionModal] = useState(false);
@@ -29,6 +30,10 @@ const ConfirmTransaction = ({ isConfirm, form }: ConfirmTransactions) => {
       return;
     }
   }, [isConfirm]);
+
+  useEffect(() => {
+    setIsConfirm(false);
+  }, [isOpenApproveModal]);
 
   const handleApproveModalClick = async () => {
     setIsOpenApproveModal(false);

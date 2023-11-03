@@ -1,6 +1,5 @@
 'use client';
 import React, { useState } from 'react';
-import { DevTool } from '@hookform/devtools';
 import { useForm, Controller } from 'react-hook-form';
 
 import CButton from 'src/components/CButton';
@@ -227,7 +226,7 @@ const CreateStream = () => {
         </div>
       </div>
 
-      <ConfirmTransaction form={form} isConfirm={isConfirm} />
+      <ConfirmTransaction form={form} isConfirm={isConfirm} setIsConfirm={setIsConfirm} />
     </form>
   );
 };
