@@ -36,12 +36,6 @@ export const user = createSlice({
       state.address = '';
       state.loading = true;
     },
-    loadTestTokens: (
-      state,
-      action: PayloadAction<object | string | null | undefined>
-    ) => {
-      state.testTokens = action.payload;
-    },
     hasTestnetTokens: (state) => {
       state.hasReceivedTokens = true;
       state.loading = false;
@@ -49,12 +43,7 @@ export const user = createSlice({
   },
 });
 
-export const {
-  setAddress,
-  disconnect,
-  loadAccount,
-  loadTestTokens,
-  hasTestnetTokens,
-} = user.actions;
+export const { setAddress, disconnect, loadAccount, hasTestnetTokens } =
+  user.actions;
 
 export default user.reducer;

@@ -1,7 +1,7 @@
 import CPageCard from 'src/components/CPageCard';
-import CreateStreamCardPurpleCard from 'src/containers/CreateStreamCardPurpleCard';
 import DocumentationCard from 'src/containers/DocumentationCard';
 import WelcomeToFluxityCard from 'src/containers/WelcomeToFluxityCard';
+import CreateStreamCardPurpleCard from 'src/containers/CreateStreamCardPurpleCard';
 
 export default function Home() {
   return (

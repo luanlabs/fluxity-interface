@@ -1,23 +1,22 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import freighterApi from '@stellar/freighter-api';
 
-import fetch from 'src/utils/request';
 import copyText from 'src/utils/copyText';
 import getAccount from 'src/utils/getAccount';
 import { shortenAddress } from 'src/utils/shortenAddress';
-import { setAddress, loadAccount, hasTestnetTokens } from 'src/reducers/user';
 import { useAppDispatch, useAppSelector } from 'src/hooks/useRedux';
+import { setAddress, loadAccount, hasTestnetTokens } from 'src/reducers/user';
 
-import Modal from './modal';
 import wallet from 'public/images/wallet.svg';
 import blackWallet from 'public/images/blackWallet.svg';
+
+import Modal from './modal';
 import toast from '../CToast';
 import CProcessModal from '../CProcessModal';
-import { ExternalPages } from 'src/constants/externalPages';
-import { IResponseAlreadyMinted } from 'src/constants/types';
+import { getAlreadyMinted } from 'src/features/getAlreadyMinted';
 
 type CConnectButtonProps = {
   isMinimized: boolean;
@@ -50,12 +49,11 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
       });
       dispatch(setAddress(address));
       toast('success', 'Wallet has been successfully connected.');
-      const { data } = await fetch<IResponseAlreadyMinted>(
-        `${ExternalPages.FLUXITY_API}/token/already-minted/${address}`
-      );
-      if (data.result.minted) {
-        dispatch(hasTestnetTokens());
-      }
+      getAlreadyMinted(address).then((isMinted) => {
+        if (isMinted) {
+          dispatch(hasTestnetTokens());
+        }
+      });
     } catch (e) {
       toast('error', 'User has declined to be connected.');
     } finally {

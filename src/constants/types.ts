@@ -27,3 +27,13 @@ export interface IResponseAlreadyMintedResult {
 
 export type IResponseAlreadyMinted =
   IFluxityAPIResponse<IResponseAlreadyMintedResult>;
+
+export interface IResponseToken {
+  address: string;
+  decimals: string;
+  name: string;
+  symbol: string;
+  _id: string;
+}
+
+export type IResponseTokenResult = IFluxityAPIResponse<IResponseToken[]>;

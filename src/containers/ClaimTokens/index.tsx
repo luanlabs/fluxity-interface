@@ -12,8 +12,9 @@ import { shortenAddress } from 'src/utils/shortenAddress';
 import { ExternalPages } from 'src/constants/externalPages';
 
 import fetch from 'src/utils/request';
-import { loadTestTokens, hasTestnetTokens } from 'src/reducers/user';
-import { IFluxityAPIResponse } from 'src/constants/types';
+import { loadTokens } from 'src/reducers/tokens';
+import { hasTestnetTokens } from 'src/reducers/user';
+import { IResponseTokenResult } from 'src/constants/types';
 import { useAppSelector, useAppDispatch } from 'src/hooks/useRedux';
 
 import glass from 'public/images/glass.svg';
@@ -45,7 +46,7 @@ const ClaimTokens = () => {
       } catch (e) {}
     }
     try {
-      const { data } = await fetch<IFluxityAPIResponse<any>>(
+      const { data } = await fetch<IResponseTokenResult>(
         ExternalPages.FLUXITY_API + '/token/mint',
         {
           method: 'POST',
@@ -56,7 +57,10 @@ const ClaimTokens = () => {
         }
       );
 
-      dispatch(loadTestTokens(data.result));
+      const mappedTokens = data.result.map((token) => {
+        return { ...token, balance: '10000000000' };
+      });
+      dispatch(loadTokens(mappedTokens));
       dispatch(hasTestnetTokens());
       toast(
         'success',
