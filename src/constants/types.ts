@@ -15,8 +15,15 @@ export type SvgProps = {
   fill?: string;
 };
 
-export interface IFluxityAPIResponse {
+export interface IFluxityAPIResponse<T> {
   status: 'error' | 'success';
   message: string;
-  result: object | string | null | undefined;
+  result: T;
 }
+
+export interface IResponseAlreadyMintedResult {
+  minted: boolean;
+}
+
+export type IResponseAlreadyMinted =
+  IFluxityAPIResponse<IResponseAlreadyMintedResult>;

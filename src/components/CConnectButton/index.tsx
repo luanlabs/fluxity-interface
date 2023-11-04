@@ -17,7 +17,7 @@ import blackWallet from 'public/images/blackWallet.svg';
 import toast from '../CToast';
 import CProcessModal from '../CProcessModal';
 import { ExternalPages } from 'src/constants/externalPages';
-import { IFluxityAPIResponse } from 'src/constants/types';
+import { IResponseAlreadyMinted } from 'src/constants/types';
 
 type CConnectButtonProps = {
   isMinimized: boolean;
@@ -50,22 +50,12 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
       });
       dispatch(setAddress(address));
       toast('success', 'Wallet has been successfully connected.');
-      // try {
-      //   await fetch<IFluxityAPIResponse>(
-      //     ExternalPages.FLUXITY_API + '/token/mint',
-      //     {
-      //       method: 'POST',
-      //       body: JSON.stringify({ user: address }),
-      //       headers: {
-      //         'Content-Type': 'application/json',
-      //       },
-      //     }
-      //   );
-      // } catch (error: any) {
-      //   if (error.data.message === 'User has already minted tokens') {
-      //     dispatch(hasTestnetTokens());
-      //   }
-      // }
+      const { data } = await fetch<IResponseAlreadyMinted>(
+        `${ExternalPages.FLUXITY_API}/token/already-minted/${address}`
+      );
+      if (data.result.minted) {
+        dispatch(hasTestnetTokens());
+      }
     } catch (e) {
       toast('error', 'User has declined to be connected.');
     } finally {

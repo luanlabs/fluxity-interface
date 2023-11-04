@@ -45,7 +45,7 @@ const ClaimTokens = () => {
       } catch (e) {}
     }
     try {
-      const { data } = await fetch<IFluxityAPIResponse>(
+      const { data } = await fetch<IFluxityAPIResponse<any>>(
         ExternalPages.FLUXITY_API + '/token/mint',
         {
           method: 'POST',
