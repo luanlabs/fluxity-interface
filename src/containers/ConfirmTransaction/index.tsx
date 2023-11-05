@@ -4,18 +4,19 @@ import BN from 'src/utils/BN';
 
 import CreateStreamConfirmModal from 'src/containers/Modals/CreateStreamConfirmModal';
 import TransactionSuccessModal from 'src/containers/Modals/TransactionSuccessModal';
-import finalizeTransaction from 'src/features/CreateStream/finalizeTransaction';
-import sendTransaction from 'src/features/CreateStream/sendTransaction';
+import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
+import sendTransaction from 'src/features/soroban/sendTransaction';
 import ApproveFormModal from 'src/containers/Modals/ApproveFormModal';
 import CProcessModal from 'src/components/CProcessModal';
 import toast from 'src/components/CToast';
-import signedXdr from 'src/utils/freighterApi';
+import signedXdr from 'src/utils/soroban/signTransaction';
 import timeout from 'src/utils/timeout';
-import allowance from 'src/features/CreateStream/allowance';
+import getERC20Allowance from 'src/features/soroban/getERC20Allowance';
 import { useAppSelector } from 'src/hooks/useRedux';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 import { FormValues } from '../CreateStreamMainCard';
 import { FLUXITY_CONTRACT } from 'src/constants/contracts';
+import toDecimals from 'src/utils/createStream/toDecimals';
 
 interface ConfirmTransactions {
   isConfirm: boolean;
@@ -58,9 +59,9 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
     await timeout(100);
     setIsWaitTransactionModal(true);
 
-    const checkAllowance = await allowance(address, FLUXITY_CONTRACT);
+    const checkAllowance = await getERC20Allowance(address, FLUXITY_CONTRACT);
 
-    if (calculateTotalAmount(values) <= new BN(checkAllowance)) {
+    if (toDecimals(calculateTotalAmount(values)) <= BigInt(checkAllowance)) {
       setIsWaitTransactionModal(false);
       setIsCreateStreamConfirmModal(true);
       toast('success', 'Transaction has been approved successfully.');
