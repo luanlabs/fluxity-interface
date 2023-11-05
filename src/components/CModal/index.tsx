@@ -61,13 +61,15 @@ const CModal = ({
               >
                 <Dialog.Panel
                   className={cn(
-                    `${
-                      width ? `w-[${width}]` : 'w-[574px]'
-                    } transform overflow-hidden rounded-[20px] ${
-                      headerImage ? 'p-0' : 'p-4'
-                    }  bg-white text-left align-middle shadow-xl transition-all`,
-                    className
+                    `
+                     transform overflow-hidden rounded-[20px] ${
+                       headerImage ? 'p-0' : 'p-4'
+                     }  bg-white text-left align-middle shadow-xl transition-all`,
+                    className,
                   )}
+                  style={{
+                    width: width ? width : '574px',
+                  }}
                 >
                   {hasCloseButton && (
                     <Image
