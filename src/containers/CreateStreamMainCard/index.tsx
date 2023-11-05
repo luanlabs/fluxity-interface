@@ -11,16 +11,18 @@ import SummaryContainer from 'src/containers/Summary';
 import SelectTokenContainer from 'src/containers/SelectToken';
 import WalletAddressContainer from 'src/containers/WalletAddressContainer';
 import CStreamingModelContainer from '../CStreamingModelContainer';
-import { useAppSelector } from 'src/hooks/useRedux';
 import { Model } from 'src/components/CStreamingModel';
+import { ISelectToken } from 'src/models';
 import { useAppSelector } from 'src/hooks/useRedux';
 
 import ClaimTokens from '../ClaimTokens';
+import ConfirmTransaction from '../ConfirmTransaction';
+import CancellableStream, { ToggleStatus } from '../CancellableStream';
 
 export interface FormValues {
   address: string;
   rate: CInputRateValue;
-  token: object;
+  token: ISelectToken;
   startDate: Date;
   endDate: Date;
   streamingModel: Model;
@@ -34,10 +36,8 @@ const CreateStream = () => {
   const [isConfirm, setIsConfirm] = useState(false);
 
   const address = useAppSelector((state) => state.user.address);
-
-  const { address, loading, hasReceivedTokens } = useAppSelector(
-    (state) => state.user
-  );
+  const loading = useAppSelector((state) => state.user.loading);
+  const hasReceivedTokens = useAppSelector((state) => state.user.hasReceivedTokens);
 
   const form = useForm<FormValues>({
     mode: 'onChange',
@@ -228,12 +228,12 @@ const CreateStream = () => {
             onClick={handleOpenModals}
           />
         </div>
-          
-                    {address && !loading && !hasReceivedTokens && (
-            <div className="absolute bottom-0">
-              <ClaimTokens />
-            </div>
-          )}
+
+        {address && !loading && !hasReceivedTokens && (
+          <div className="absolute bottom-0 right-0">
+            <ClaimTokens />
+          </div>
+        )}
       </div>
 
       <ConfirmTransaction form={form} isConfirm={isConfirm} setIsConfirm={setIsConfirm} />

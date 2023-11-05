@@ -7,7 +7,6 @@ interface IUser {
   address: string;
   info: AccountResponse | null;
   loading: boolean;
-  testTokens: object | string | null | undefined;
   hasReceivedTokens: boolean;
 }
 
@@ -15,7 +14,6 @@ const initialState: IUser = {
   address: '',
   info: null,
   loading: true,
-  testTokens: '',
   hasReceivedTokens: false,
 };
 
@@ -35,6 +33,7 @@ export const user = createSlice({
       state.info = null;
       state.address = '';
       state.loading = true;
+      state.hasReceivedTokens = false;
     },
     hasTestnetTokens: (state) => {
       state.hasReceivedTokens = true;
@@ -43,7 +42,6 @@ export const user = createSlice({
   },
 });
 
-export const { setAddress, disconnect, loadAccount, hasTestnetTokens } =
-  user.actions;
+export const { setAddress, disconnect, loadAccount, hasTestnetTokens } = user.actions;
 
 export default user.reducer;

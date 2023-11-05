@@ -6,14 +6,18 @@ import ToScVal from 'src/utils/createStream/scVal';
 import getContract from 'src/utils/createStream/getContract';
 import createTransaction from 'src/utils/soroban/baseTransaction';
 
-const getERC20Allowance = async (address: string, spenderAddress: string) => {
+const getERC20Allowance = async (
+  contractAddress: string,
+  owner: string,
+  spenderAddress: string,
+) => {
   const server = getServer();
-  const account = await getAccount(address);
+  const account = await getAccount(owner);
 
-  const from = ToScVal.address(address);
+  const from = ToScVal.address(owner);
   const spender = ToScVal.address(spenderAddress);
 
-  const contract = getContract('CASS3CUNR7W4ASUCEGOMK3TUWITT7KKDS6DQ2TS27UPKRAAKTSHHUJPB');
+  const contract = getContract(contractAddress);
   const call = contract.call('allowance', from, spender);
 
   const txXdr = createTransaction(account, call);

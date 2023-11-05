@@ -14,6 +14,11 @@ export const tokens = createSlice({
     loadTokens: (_, action: PayloadAction<IToken[]>) => {
       return action.payload;
     },
+    clearTokenBalances: (state) => {
+      for (let i = 0; i < state.length; ++i) {
+        state[i].balance = '0';
+      }
+    },
   },
 });
 

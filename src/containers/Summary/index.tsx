@@ -32,8 +32,11 @@ const Summary = ({ form }: SummaryProps) => {
   if (values.endDate && values?.rate?.amount && values?.rate?.rate?.value && values.token) {
     totalAmount = calculateTotalAmount(values);
 
-    const [isSuccessful, errorMsg] = checkBalance(values.token.value, totalAmount);
-    errorMessage = errorMsg.toString();
+    const isSuccessful = checkBalance(values.token.value, totalAmount);
+
+    if (!isSuccessful) {
+      errorMessage = 'Insufficient balance';
+    }
   }
 
   const summaryTitle = (

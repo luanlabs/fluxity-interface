@@ -1,34 +1,35 @@
-import Image from "next/image";
-import React, { useState } from "react";
+import Image from 'next/image';
+import React, { useState } from 'react';
 
-import BN from "src/utils/BN";
-import CModal from "src/components/CModal";
-import CInput from "src/components/CInput";
-import CLabel from "src/components/CLabel";
-import { SelectTokenType } from "src/models";
-import useCustomID from "src/hooks/useCustomId";
+import BN from 'src/utils/BN';
+import CModal from 'src/components/CModal';
+import CInput from 'src/components/CInput';
+import CLabel from 'src/components/CLabel';
+import { ISelectToken } from 'src/models';
+import useCustomID from 'src/hooks/useCustomId';
 
-import plusLogo from "public/images/Plus.svg";
-import arrowLogo from "public/images/arrow.svg";
-import searchLogo from "public/images/search.svg";
-import { useAppSelector } from "src/hooks/useRedux";
-import { IToken } from "src/reducers/tokens";
-import tokenToLogo from "src/utils/tokenToLogo";
+import plusLogo from 'public/images/Plus.svg';
+import arrowLogo from 'public/images/arrow.svg';
+import searchLogo from 'public/images/search.svg';
+import { useAppSelector } from 'src/hooks/useRedux';
+import { IToken } from 'src/reducers/tokens';
+import tokenToLogo from 'src/utils/tokenToLogo';
+import fromDecimals from 'src/utils/soroban/fromDecimals';
 
-interface selectTokenProps {
-  onChange: (_: SelectTokenType) => void;
+interface SelectTokenProps {
+  onChange: (_: ISelectToken) => void;
 }
 
-const SelectToken = ({ onChange }: selectTokenProps) => {
+const SelectToken = ({ onChange }: SelectTokenProps) => {
   const [selectedToken, setSelectedToken] = useState<null | IToken>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
-  const id = useCustomID("selectToken");
+  const [searchValue, setSearchValue] = useState('');
+  const id = useCustomID('selectToken');
   const tokens = useAppSelector((store) => store.tokens);
 
   const handleTokenSelect = (token: IToken) => {
     setIsOpen(false);
-    setSearchValue("");
+    setSearchValue('');
     setSelectedToken(token);
 
     onChange({
@@ -47,7 +48,7 @@ const SelectToken = ({ onChange }: selectTokenProps) => {
   };
 
   const filteredTokens = tokens.filter((token) =>
-    token.symbol.toLowerCase().startsWith(searchValue.toLowerCase())
+    token.symbol.toLowerCase().startsWith(searchValue.toLowerCase()),
   );
 
   return (
@@ -62,27 +63,25 @@ const SelectToken = ({ onChange }: selectTokenProps) => {
         {selectedToken ? (
           <div className="flex items-center justify-start">
             <Image
-              src={require(tokenToLogo(selectedToken)).default}
+              src={
+                require(`../../../public/images/assets/${tokenToLogo(selectedToken)}.svg`).default
+              }
               width={35}
               height={35}
-              alt=""
+              alt="Token"
             />
 
             <p className="ml-4 text-midnightBlue">{selectedToken.symbol}</p>
           </div>
         ) : (
-          "Select token"
+          'Select token'
         )}
         <Image src={arrowLogo} alt="arrow" />
       </button>
 
       <CModal title="Select token" isOpen={isOpen} setIsOpen={setIsOpen}>
-        <CInput
-          placeholder="Search name of token"
-          icon={searchLogo}
-          onChange={handleInputChange}
-          disabled={!isConnectWallet}
-        />
+        <CInput placeholder="Search name of token" icon={searchLogo} onChange={handleInputChange} />
+
         <div className="mt-[23px]">
           {filteredTokens.map((token) => (
             <div
@@ -93,27 +92,25 @@ const SelectToken = ({ onChange }: selectTokenProps) => {
               <div className="flex w-full items-center">
                 <div className="w-[70px]">
                   <Image
-                    src={require(tokenToLogo(token)).default}
+                    src={require(`../../../public/images/assets/${tokenToLogo(token)}.svg`).default}
                     width={45}
                     height={45}
                     alt="a"
                   />
                 </div>
                 <div className="text-left w-full">
-                  <p className="text-black text-base w-full font-bold">
-                    {token.symbol}
-                  </p>
+                  <p className="text-black text-base w-full font-bold">{token.symbol}</p>
                 </div>
               </div>
 
               <div className="flex items-center">
-                <span className="mr-5">{new BN(token.balance).toFixed(3)}</span>
+                <span className="mr-5">{fromDecimals(token.balance)}</span>
                 <div className="h-[35px] w-[35px] rounded-[100px] bg-lavenderBlush hover:bg-[#f0efff95] flex justify-center items-center">
                   <Image src={plusLogo} width={0} height={0} alt="plusLogo" />
                 </div>
               </div>
             </div>
-          )}
+          ))}
         </div>
       </CModal>
     </div>

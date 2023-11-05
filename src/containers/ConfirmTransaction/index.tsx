@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import BN from 'src/utils/BN';
 
+import BN from 'src/utils/BN';
 import CreateStreamConfirmModal from 'src/containers/Modals/CreateStreamConfirmModal';
 import TransactionSuccessModal from 'src/containers/Modals/TransactionSuccessModal';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
@@ -9,7 +9,7 @@ import sendTransaction from 'src/features/soroban/sendTransaction';
 import ApproveFormModal from 'src/containers/Modals/ApproveFormModal';
 import CProcessModal from 'src/components/CProcessModal';
 import toast from 'src/components/CToast';
-import signedXdr from 'src/utils/soroban/signTransaction';
+import signTransaction from 'src/utils/soroban/signTransaction';
 import timeout from 'src/utils/timeout';
 import getERC20Allowance from 'src/features/soroban/getERC20Allowance';
 import { useAppSelector } from 'src/hooks/useRedux';
@@ -17,6 +17,8 @@ import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 import { FormValues } from '../CreateStreamMainCard';
 import { FLUXITY_CONTRACT } from 'src/constants/contracts';
 import toDecimals from 'src/utils/createStream/toDecimals';
+import approve from 'src/features/soroban/approve';
+import createStream from 'src/features/soroban/createStream';
 
 interface ConfirmTransactions {
   isConfirm: boolean;
@@ -25,109 +27,118 @@ interface ConfirmTransactions {
 }
 
 const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactions) => {
-  const [isOpenApproveModal, setIsOpenApproveModal] = useState(false);
-  const [isTokenAccessModal, setIsTokenAccessModal] = useState(false);
-  const [isWaitTransactionModal, setIsWaitTransactionModal] = useState(false);
-  const [isCreateStreamConfirmModal, setIsCreateStreamConfirmModal] = useState(false);
-  const [isWaitTransactionConfirmModal, setIsWaitTransactionConfirmModal] = useState(false);
-  const [isCompleteTransactionModal, setIsCompleteTransactionModal] = useState(false);
-  const [isOpenTransactionSuccessModal, setIsOpenTransactionSuccessModal] = useState(false);
-  const [txStatus, setTxStatus] = useState(false);
-  const [hashApprove, setHashApprove] = useState('');
-  const [hashStream, setHashStream] = useState('');
-
   const address = useAppSelector((state) => state.user.address);
   const values: FormValues = form.getValues();
 
+  const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
+  const [isWalletLoadingApproveModalOpen, setIsWalletLoadingApproveModalOpen] = useState(false);
+  const [isSendingApproveTxModalOpen, setIsSendingApproveTxModalOpen] = useState(false);
+  const [isCreateStreamConfirmModalOpen, setIsCreateStreamConfirmModalOpen] = useState(false);
+  const [isWalletLoadingConfirmModalOpen, setIsWalletLoadingConfirmModalOpen] = useState(false);
+  const [isSendingCreateStreamTxModalOpen, setIsSendingCreateStreamTxModalOpen] = useState(false);
+  const [isCreateStreamResultModalOpen, setIsCreateStreamResultModalOpen] = useState(false);
+
+  const [txStatus, setTxStatus] = useState(false);
+  const [hashStream, setHashStream] = useState('');
+
   useEffect(() => {
     if (isConfirm) {
-      setIsOpenApproveModal(true);
-    } else {
-      return;
+      setIsApproveModalOpen(true);
     }
   }, [isConfirm]);
 
   useEffect(() => {
     setIsConfirm(false);
-  }, [isOpenApproveModal]);
+  }, [isApproveModalOpen]);
 
-  const handleApproveModalClick = async () => {
-    setIsOpenApproveModal(false);
-    setIsTokenAccessModal(true);
+  const handleCreateStreamOnClick = async () => {
+    setIsApproveModalOpen(false);
+    setIsWalletLoadingApproveModalOpen(true);
 
-    setIsTokenAccessModal(false);
+    setIsWalletLoadingApproveModalOpen(false);
     await timeout(100);
-    setIsWaitTransactionModal(true);
+    setIsSendingApproveTxModalOpen(true);
 
-    const checkAllowance = await getERC20Allowance(address, FLUXITY_CONTRACT);
+    const checkAllowance = await getERC20Allowance(
+      values.token.value.address,
+      address,
+      FLUXITY_CONTRACT,
+    );
 
     if (toDecimals(calculateTotalAmount(values)) <= BigInt(checkAllowance)) {
-      setIsWaitTransactionModal(false);
-      setIsCreateStreamConfirmModal(true);
+      setIsSendingApproveTxModalOpen(false);
+      setIsCreateStreamConfirmModalOpen(true);
+
       toast('success', 'Transaction has been approved successfully.');
+
       return;
     }
 
-    const approveXdr = await signedXdr(values, address, 'approve');
+    const approveXdr = await approve(calculateTotalAmount(values), address);
 
-    const tx = await sendTransaction(approveXdr);
+    const signedTx = await signTransaction(address, approveXdr);
+
+    const tx = await sendTransaction(signedTx);
+
     if (tx) {
       const finalize = await finalizeTransaction(tx.hash);
+
+      setIsSendingApproveTxModalOpen(false);
+
       if (!finalize) {
-        setIsWaitTransactionModal(false);
         toast('error', 'Approve failed');
         return;
       }
-
-      setHashApprove(tx.hash);
     } else {
-      setIsWaitTransactionModal(false);
+      setIsSendingApproveTxModalOpen(false);
       return;
     }
 
     toast('success', 'Transaction has been approved successfully.');
 
-    setIsWaitTransactionModal(false);
-    await timeout(100);
-    setIsCreateStreamConfirmModal(true);
+    setIsCreateStreamConfirmModalOpen(true);
   };
 
   const handleCreateStreamConfirmClick = async () => {
-    setIsCreateStreamConfirmModal(false);
-    setIsWaitTransactionConfirmModal(true);
+    setIsCreateStreamConfirmModalOpen(false);
+    setIsWalletLoadingConfirmModalOpen(true);
 
-    const createStreamXdr = await signedXdr(values, address, 'createStream');
+    const createStreamXdr = await createStream(values, address);
+    const signedXdr = await signTransaction(address, createStreamXdr);
 
-    setIsWaitTransactionConfirmModal(false);
+    setIsWalletLoadingConfirmModalOpen(false);
     await timeout(50);
-    setIsCompleteTransactionModal(true);
+    setIsSendingCreateStreamTxModalOpen(true);
 
-    const tx = await sendTransaction(createStreamXdr);
+    const tx = await sendTransaction(signedXdr);
     if (tx) {
       const finalize = await finalizeTransaction(tx.hash);
+
       setTxStatus(finalize);
 
       if (!finalize) {
-        setIsWaitTransactionModal(false);
+        setIsSendingApproveTxModalOpen(false);
         toast('error', 'Approve failed');
         return;
       }
+
       setHashStream(tx.hash);
     } else {
-      setIsCompleteTransactionModal(false);
+      setIsSendingCreateStreamTxModalOpen(false);
       return;
     }
 
-    setIsCompleteTransactionModal(false);
+    setIsSendingCreateStreamTxModalOpen(false);
     await timeout(100);
-    setIsOpenTransactionSuccessModal(true);
+    setIsCreateStreamResultModalOpen(true);
   };
 
   const handleCloseTransactionSuccessModal = () => {
-    setIsOpenTransactionSuccessModal(false);
+    setIsCreateStreamResultModalOpen(false);
   };
 
   let totalAmount = new BN(0).toString();
+
   try {
     totalAmount = calculateTotalAmount(values).toFixed(3).toString();
   } catch (e) {}
@@ -135,49 +146,49 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
   return (
     <div>
       <ApproveFormModal
-        isOpen={isOpenApproveModal}
-        setIsOpen={setIsOpenApproveModal}
-        onClick={handleApproveModalClick}
+        isOpen={isApproveModalOpen}
+        setIsOpen={setIsApproveModalOpen}
+        onClick={handleCreateStreamOnClick}
       />
 
       <CProcessModal
         title="Waiting for token access approval"
         message="You are granting Fluxity access to your tokens equal to your total order amount."
-        isOpen={isTokenAccessModal}
-        setIsOpen={setIsTokenAccessModal}
+        isOpen={isWalletLoadingApproveModalOpen}
+        setIsOpen={setIsWalletLoadingApproveModalOpen}
       />
 
       <CProcessModal
         title="Waiting for transaction approval"
-        isOpen={isWaitTransactionModal}
-        setIsOpen={setIsWaitTransactionModal}
+        isOpen={isSendingApproveTxModalOpen}
+        setIsOpen={setIsSendingApproveTxModalOpen}
       />
 
       <CreateStreamConfirmModal
         from={address}
         to={values.address}
         amount={totalAmount}
-        isOpen={isCreateStreamConfirmModal}
-        setIsOpen={setIsCreateStreamConfirmModal}
+        isOpen={isCreateStreamConfirmModalOpen}
+        setIsOpen={setIsCreateStreamConfirmModalOpen}
         onClick={handleCreateStreamConfirmClick}
       />
 
       <CProcessModal
         title="Waiting for transaction confirmation"
-        isOpen={isWaitTransactionConfirmModal}
-        setIsOpen={setIsWaitTransactionConfirmModal}
+        isOpen={isWalletLoadingConfirmModalOpen}
+        setIsOpen={setIsWalletLoadingConfirmModalOpen}
       />
 
       <CProcessModal
         title="Completing stream creation transaction"
-        isOpen={isCompleteTransactionModal}
-        setIsOpen={setIsCompleteTransactionModal}
+        isOpen={isSendingCreateStreamTxModalOpen}
+        setIsOpen={setIsSendingCreateStreamTxModalOpen}
       />
 
       <TransactionSuccessModal
-        title={txStatus ? 'Transaction Successful' : 'Transaction Pending'}
-        isOpen={isOpenTransactionSuccessModal}
-        setIsOpen={setIsOpenTransactionSuccessModal}
+        title="Transaction Successful"
+        isOpen={isCreateStreamResultModalOpen}
+        setIsOpen={setIsCreateStreamResultModalOpen}
         hash={hashStream}
         closeOnClick={handleCloseTransactionSuccessModal}
       />

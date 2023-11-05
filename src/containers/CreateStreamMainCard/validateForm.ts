@@ -34,7 +34,7 @@ const validateForm = (
 
   let totalAmount = calculateTotalAmount(values);
 
-  const [isSuccessful, errorMessage] = checkBalance(values.token.value, totalAmount);
+  const isSuccessful = checkBalance(values.token.value, totalAmount);
 
   if (!isSuccessful) {
     return {
