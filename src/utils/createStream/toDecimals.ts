@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js';
+
 import BN from 'src/utils/BN';
 
 const toDecimals = (amount: BigNumber): bigint => {

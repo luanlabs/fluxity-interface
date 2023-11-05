@@ -1,6 +1,7 @@
 import { GroupBase, StylesConfig, MultiValue, SingleValue, ActionMeta } from 'react-select';
 
 import { rates } from './constants/rates';
+import { IToken } from './reducers/tokens';
 
 export interface ISelectItem<T> {
   label: string;
@@ -12,7 +13,7 @@ export type ISelectItemString = ISelectItem<string>;
 export type Rates = keyof typeof rates;
 export type RateValue = ISelectItem<keyof typeof rates>;
 
-export interface SelectTokenType extends ISelectItemString {
+export interface ISelectToken extends ISelectItem<IToken> {
   icon: string;
 }
 

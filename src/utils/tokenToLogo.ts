@@ -1,9 +1,9 @@
-import { IToken } from "src/reducers/tokens";
+import { IToken } from 'src/reducers/tokens';
 
 const tokenToLogo = (token: IToken) => {
   const tokenName = token.symbol.toLowerCase();
 
-  return `../../../public/images/assets/${tokenName}.svg`;
+  return tokenName;
 };
 
 export default tokenToLogo;

@@ -18,7 +18,6 @@ class ToScVal {
   }
   public static u64(number: string) {
     return scvU64(xdr.Uint64.fromString(number));
-    ``;
   }
   public static symbol(symbol: string) {
     return scvSymbol(symbol);

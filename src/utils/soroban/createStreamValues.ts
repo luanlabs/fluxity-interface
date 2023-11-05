@@ -2,7 +2,6 @@ import { xdr } from 'soroban-client';
 
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 import { FormValues } from 'src/containers/CreateStreamMainCard';
-import { FUSDC } from 'src/constants/contracts';
 import dateToSeconds from 'src/utils/dateToSeconds';
 import toDecimals from 'src/utils/createStream/toDecimals';
 import ToScVal from 'src/utils/createStream/scVal';
@@ -46,7 +45,7 @@ const toXdrValue = (params: FormValues, address: string) => {
     }),
     new addToMap({
       key: ToScVal.symbol('token'),
-      val: ToScVal.address(FUSDC),
+      val: ToScVal.address(params.token.value.address),
     }),
   ]);
 };
