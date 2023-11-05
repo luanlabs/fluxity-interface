@@ -1,10 +1,10 @@
 import { xdr } from 'soroban-client';
 
-import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
-import { FormValues } from 'src/containers/CreateStreamMainCard';
+import ToScVal from 'src/utils/createStream/scVal';
 import dateToSeconds from 'src/utils/dateToSeconds';
 import toDecimals from 'src/utils/createStream/toDecimals';
-import ToScVal from 'src/utils/createStream/scVal';
+import { FormValues } from 'src/containers/CreateStreamMainCard';
+import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 
 const { scvMap } = xdr.ScVal;
 const { ScMapEntry: addToMap } = xdr;

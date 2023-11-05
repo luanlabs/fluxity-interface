@@ -15,6 +15,7 @@ import { useAppSelector } from 'src/hooks/useRedux';
 import { IToken } from 'src/reducers/tokens';
 import tokenToLogo from 'src/utils/tokenToLogo';
 import fromDecimals from 'src/utils/soroban/fromDecimals';
+import humanizeAmount from 'src/utils/humanizeAmount';
 
 interface SelectTokenProps {
   onChange: (_: ISelectToken) => void;
@@ -104,7 +105,7 @@ const SelectToken = ({ onChange }: SelectTokenProps) => {
               </div>
 
               <div className="flex items-center">
-                <span className="mr-5">{fromDecimals(token.balance)}</span>
+                <span className="mr-5">{humanizeAmount(fromDecimals(token.balance))}</span>
                 <div className="h-[35px] w-[35px] rounded-[100px] bg-lavenderBlush hover:bg-[#f0efff95] flex justify-center items-center">
                   <Image src={plusLogo} width={0} height={0} alt="plusLogo" />
                 </div>

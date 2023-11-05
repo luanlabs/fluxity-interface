@@ -65,6 +65,8 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
       FLUXITY_CONTRACT,
     );
 
+    console.log(checkAllowance);
+
     if (toDecimals(calculateTotalAmount(values)) <= BigInt(checkAllowance)) {
       setIsSendingApproveTxModalOpen(false);
       setIsCreateStreamConfirmModalOpen(true);
@@ -74,10 +76,15 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
       return;
     }
 
-    const approveXdr = await approve(calculateTotalAmount(values), address);
+    const approveXdr = await approve(
+      values.token.value.address,
+      calculateTotalAmount(values),
+      address,
+    );
+
+    console.log(calculateTotalAmount(values).toString());
 
     const signedTx = await signTransaction(address, approveXdr);
-
     const tx = await sendTransaction(signedTx);
 
     if (tx) {
@@ -95,7 +102,6 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
     }
 
     toast('success', 'Transaction has been approved successfully.');
-
     setIsCreateStreamConfirmModalOpen(true);
   };
 

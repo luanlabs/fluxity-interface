@@ -8,7 +8,7 @@ import getAccount from 'src/utils/createStream/getAccount';
 import toDecimals from 'src/utils/createStream/toDecimals';
 import createTransaction from 'src/utils/soroban/baseTransaction';
 
-const approve = async (amount: BigNumber, address: string) => {
+const approve = async (contractAddress: string, amount: BigNumber, address: string) => {
   const account = await getAccount(address);
 
   const server = getServer();
@@ -16,7 +16,7 @@ const approve = async (amount: BigNumber, address: string) => {
   const { sequence } = await server.getLatestLedger();
 
   const from = ToScVal.address(address);
-  const spender = ToScVal.address('CCMM75FF2CRL426O6X4ENCKPF7VQHQZLU2QC3IWRNZXQNKAFSXPVFDDM');
+  const spender = ToScVal.address(contractAddress);
   const amountScVal = ToScVal.i128(toDecimals(amount));
   const expirationLedger = ToScVal.u32(sequence + 1000);
 

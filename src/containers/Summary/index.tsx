@@ -12,6 +12,7 @@ import { checkBalance } from 'src/utils/checkBalance';
 import { mapFormValues } from './mapFormValues';
 
 import summaryLogo from 'public/images/summary.svg';
+import humanizeAmount from 'src/utils/humanizeAmount';
 
 interface SummaryProps {
   form: UseFormReturn<any, undefined>;
@@ -89,7 +90,9 @@ const Summary = ({ form }: SummaryProps) => {
               '0'
             ) : (
               <div className="flex justify-end">
-                <p className="text-right overflow-hidden">{totalAmount.toFixed(3).toString()}</p>
+                <p className="text-right overflow-hidden">
+                  {humanizeAmount(totalAmount.toFixed(3))}
+                </p>
               </div>
             )}
           </p>

@@ -1,9 +1,10 @@
 import Image from 'next/image';
 
+import CCard from 'src/components/CCard';
 import CModal from 'src/components/CModal';
 import CButton from 'src/components/CButton';
-import CCard from 'src/components/CCard';
 import CPageCard from 'src/components/CPageCard';
+import humanizeAmount from 'src/utils/humanizeAmount';
 import { shortenAddress } from 'src/utils/shortenAddress';
 
 import successLogo from 'public/images/successBlack.svg';
@@ -60,7 +61,9 @@ const CreateStreamConfirmModal = ({
             }
           >
             <p className="w-full">Total Amount</p>
-            <p className="font-medium w-[80%] text-clip overflow-hidden text-right">{amount}</p>
+            <p className="font-medium w-[80%] text-clip overflow-hidden text-right">
+              {humanizeAmount(amount)}
+            </p>
           </CCard>
           <CButton
             type="submit"
