@@ -44,7 +44,10 @@ const validateForm = (
   }
 
   if (address === values.address) {
-    return false;
+    return {
+      values,
+      errors,
+    };
   }
 
   setIsFormValidated(true);
