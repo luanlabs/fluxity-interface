@@ -7,7 +7,6 @@ import BN from 'src/utils/BN';
 import CCard from 'src/components/CCard';
 import CPageCard from 'src/components/CPageCard';
 import { FormValues } from '../CreateStreamMainCard';
-import { rateInNumber } from 'src/utils/rateInNumber';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 import { checkBalance } from 'src/utils/checkBalance';
 import { mapFormValues } from './mapFormValues';
@@ -19,7 +18,7 @@ interface SummaryProps {
   isFormValidated: boolean;
 }
 
-const Summary = ({ form, isFormValidated }: SummaryProps) => {
+const Summary = ({ form }: SummaryProps) => {
   const values: FormValues = form.getValues();
   const getFormValues = mapFormValues(values);
 
@@ -30,13 +29,8 @@ const Summary = ({ form, isFormValidated }: SummaryProps) => {
     values.startDate = new Date();
   }
 
-  if (values.endDate && values?.rate?.amount && values?.rate?.rateTime?.value && values.token) {
-    totalAmount = calculateTotalAmount(
-      values.startDate,
-      values.endDate,
-      new BN(values?.rate.amount),
-      rateInNumber(values?.rate.rateTime.value),
-    );
+  if (values.endDate && values?.rate?.amount && values?.rate?.rate?.value && values.token) {
+    totalAmount = calculateTotalAmount(values);
 
     const [isSuccessful, errorMsg] = checkBalance(values.token.value, totalAmount);
     errorMessage = errorMsg.toString();

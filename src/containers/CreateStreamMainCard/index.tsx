@@ -11,10 +11,10 @@ import SummaryContainer from 'src/containers/Summary';
 import SelectTokenContainer from 'src/containers/SelectToken';
 import WalletAddressContainer from 'src/containers/WalletAddressContainer';
 import CStreamingModelContainer from '../CStreamingModelContainer';
-import CancellableStream, { ToggleStatus } from '../CancellableStream';
-import ConfirmTransaction from '../ConfirmTransaction';
 import { useAppSelector } from 'src/hooks/useRedux';
 import { Model } from 'src/components/CStreamingModel';
+import CancellableStream, { ToggleStatus } from 'src/containers/CancellableStream';
+import ConfirmTransaction from 'src/containers/ConfirmTransaction';
 
 export interface FormValues {
   address: string;
@@ -36,7 +36,7 @@ const CreateStream = () => {
 
   const form = useForm<FormValues>({
     mode: 'onChange',
-    resolver: (formValues) => validateForm(formValues, setIsFormValidated),
+    resolver: (formValues) => validateForm(formValues, setIsFormValidated, address),
     defaultValues: {
       streamingModel: 'linear',
       isCancellable: 'OFF',

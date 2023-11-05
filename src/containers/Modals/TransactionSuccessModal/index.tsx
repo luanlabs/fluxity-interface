@@ -12,6 +12,7 @@ import exploreLogo from 'public/images/explore.svg';
 interface TransactionSuccessModal {
   hash: string;
   isOpen: boolean;
+  title?: string;
   setIsOpen: (_: boolean) => void;
   closeOnClick: () => void;
 }
@@ -19,6 +20,7 @@ interface TransactionSuccessModal {
 const TransactionSuccessModal = ({
   hash,
   isOpen,
+  title,
   setIsOpen,
   closeOnClick,
 }: TransactionSuccessModal) => {
@@ -28,10 +30,14 @@ const TransactionSuccessModal = ({
         <div className="w-full flex flex-col items-center justify-center">
           <Image src={successLogo} width={0} height={0} alt="ok" className="mt-8" />
           <h1 className="text-[24px] font-med text-midnightBlue antialiased  mt-[24px] tracking-[0.5px] text-center">
-            Transaction successful
+            {title && title}
           </h1>
           <p className="text-[18px] text-center mt-[32px]">{hash && shortenAddress(hash, 5)}</p>
-          <Link href={`${ExternalPages.EXPLORER}/${hash}`} target="_blank" className="w-full">
+          <Link
+            href={`${ExternalPages.EXPLORER_TRANSACTION}/${hash}`}
+            target="_blank"
+            className="w-full"
+          >
             <CButton
               content="See in explorer"
               variant="simple"
