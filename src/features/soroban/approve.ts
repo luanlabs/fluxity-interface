@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import ToScVal from 'src/utils/createStream/scVal';
-import { FUSDC } from 'src/constants/contracts';
+import { FLUXITY_CONTRACT } from 'src/constants/contracts';
 import getContract from 'src/utils/createStream/getContract';
 import getServer from 'src/utils/createStream/getServer';
 import getAccount from 'src/utils/createStream/getAccount';
@@ -12,11 +12,11 @@ const approve = async (contractAddress: string, amount: BigNumber, address: stri
   const account = await getAccount(address);
 
   const server = getServer();
-  const contract = getContract(FUSDC);
+  const contract = getContract(contractAddress);
   const { sequence } = await server.getLatestLedger();
 
   const from = ToScVal.address(address);
-  const spender = ToScVal.address(contractAddress);
+  const spender = ToScVal.address(FLUXITY_CONTRACT);
   const amountScVal = ToScVal.i128(toDecimals(amount));
   const expirationLedger = ToScVal.u32(sequence + 1000);
 

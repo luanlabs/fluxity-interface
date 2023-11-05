@@ -65,8 +65,6 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
       FLUXITY_CONTRACT,
     );
 
-    console.log(checkAllowance);
-
     if (toDecimals(calculateTotalAmount(values)) <= BigInt(checkAllowance)) {
       setIsSendingApproveTxModalOpen(false);
       setIsCreateStreamConfirmModalOpen(true);
@@ -82,15 +80,32 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
       address,
     );
 
-    console.log(calculateTotalAmount(values).toString());
+    let signedTx;
 
-    const signedTx = await signTransaction(address, approveXdr);
-    const tx = await sendTransaction(signedTx);
+    try {
+      signedTx = await signTransaction(address, approveXdr);
+    } catch {
+      setIsSendingApproveTxModalOpen(false);
+      toast('error', 'Failed to sign the transaction');
+
+      return;
+    }
+
+    let tx;
+
+    try {
+      tx = await sendTransaction(signedTx);
+    } catch {
+      setIsSendingApproveTxModalOpen(false);
+      toast('error', 'Failed to submit the transaction');
+
+      return;
+    }
 
     if (tx) {
       const finalize = await finalizeTransaction(tx.hash);
 
-      setIsSendingApproveTxModalOpen(false);
+      setIsWalletLoadingApproveModalOpen(false);
 
       if (!finalize) {
         toast('error', 'Approve failed');
@@ -110,13 +125,33 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
     setIsWalletLoadingConfirmModalOpen(true);
 
     const createStreamXdr = await createStream(values, address);
-    const signedXdr = await signTransaction(address, createStreamXdr);
+
+    let signedXdr;
+
+    try {
+      signedXdr = await signTransaction(address, createStreamXdr);
+    } catch (e) {
+      setIsWalletLoadingConfirmModalOpen(false);
+      toast('error', 'Failed to sign the transaction');
+
+      return;
+    }
 
     setIsWalletLoadingConfirmModalOpen(false);
     await timeout(50);
     setIsSendingCreateStreamTxModalOpen(true);
 
-    const tx = await sendTransaction(signedXdr);
+    let tx;
+
+    try {
+      tx = await sendTransaction(signedXdr);
+    } catch {
+      setIsSendingApproveTxModalOpen(false);
+      toast('error', 'Failed to submit the transaction');
+
+      return;
+    }
+
     if (tx) {
       const finalize = await finalizeTransaction(tx.hash);
 
