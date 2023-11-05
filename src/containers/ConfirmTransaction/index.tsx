@@ -4,14 +4,14 @@ import BN from 'src/utils/BN';
 
 import CreateStreamConfirmModal from 'src/containers/Modals/CreateStreamConfirmModal';
 import TransactionSuccessModal from 'src/containers/Modals/TransactionSuccessModal';
-import finalizeTransaction from 'src/futures/CreateStream/finalizeTransaction';
-import sendTransaction from 'src/futures/CreateStream/sendTransaction';
+import finalizeTransaction from 'src/features/CreateStream/finalizeTransaction';
+import sendTransaction from 'src/features/CreateStream/sendTransaction';
 import ApproveFormModal from 'src/containers/Modals/ApproveFormModal';
 import CProcessModal from 'src/components/CProcessModal';
 import toast from 'src/components/CToast';
 import signedXdr from 'src/utils/freighterApi';
 import timeout from 'src/utils/timeout';
-import allowance from 'src/futures/CreateStream/allowance';
+import allowance from 'src/features/CreateStream/allowance';
 import { useAppSelector } from 'src/hooks/useRedux';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 import { FormValues } from '../CreateStreamMainCard';
@@ -31,7 +31,7 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
   const [isWaitTransactionConfirmModal, setIsWaitTransactionConfirmModal] = useState(false);
   const [isCompleteTransactionModal, setIsCompleteTransactionModal] = useState(false);
   const [isOpenTransactionSuccessModal, setIsOpenTransactionSuccessModal] = useState(false);
-  const [TransactionStatus, setTransactionStatus] = useState(false);
+  const [txStatus, setTxStatus] = useState(false);
   const [hashApprove, setHashApprove] = useState('');
   const [hashStream, setHashStream] = useState('');
 
@@ -58,20 +58,21 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
     await timeout(100);
     setIsWaitTransactionModal(true);
 
+    const checkAllowance = await allowance(address, FLUXITY_CONTRACT);
+
+    if (calculateTotalAmount(values) <= new BN(checkAllowance)) {
+      setIsWaitTransactionModal(false);
+      setIsCreateStreamConfirmModal(true);
+      toast('success', 'Transaction has been approved successfully.');
+      return;
+    }
+
     const approveXdr = await signedXdr(values, address, 'approve');
 
     const tx = await sendTransaction(approveXdr);
     if (tx) {
       const finalize = await finalizeTransaction(tx.hash);
       if (!finalize) {
-        setIsWaitTransactionModal(false);
-        toast('error', 'Approve failed');
-        return;
-      }
-
-      const checkAllowance = await allowance(address, FLUXITY_CONTRACT);
-
-      if (calculateTotalAmount(values) > new BN(checkAllowance)) {
         setIsWaitTransactionModal(false);
         toast('error', 'Approve failed');
         return;
@@ -103,7 +104,7 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
     const tx = await sendTransaction(createStreamXdr);
     if (tx) {
       const finalize = await finalizeTransaction(tx.hash);
-      setTransactionStatus(finalize);
+      setTxStatus(finalize);
 
       if (!finalize) {
         setIsWaitTransactionModal(false);
@@ -125,6 +126,11 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
     setIsOpenTransactionSuccessModal(false);
   };
 
+  let totalAmount = new BN(0).toString();
+  try {
+    totalAmount = calculateTotalAmount(values).toFixed(3).toString();
+  } catch (e) {}
+
   return (
     <div>
       <ApproveFormModal
@@ -145,17 +151,15 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
         isOpen={isWaitTransactionModal}
         setIsOpen={setIsWaitTransactionModal}
       />
-      {hashApprove && (
-        <CreateStreamConfirmModal
-          hash={hashApprove.toUpperCase()}
-          from={address}
-          to={values.address}
-          amount={calculateTotalAmount(values).toFixed(3).toString()}
-          isOpen={isCreateStreamConfirmModal}
-          setIsOpen={setIsCreateStreamConfirmModal}
-          onClick={handleCreateStreamConfirmClick}
-        />
-      )}
+
+      <CreateStreamConfirmModal
+        from={address}
+        to={values.address}
+        amount={totalAmount}
+        isOpen={isCreateStreamConfirmModal}
+        setIsOpen={setIsCreateStreamConfirmModal}
+        onClick={handleCreateStreamConfirmClick}
+      />
 
       <CProcessModal
         title="Waiting for transaction confirmation"
@@ -170,7 +174,7 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
       />
 
       <TransactionSuccessModal
-        title={TransactionStatus ? 'Transaction Successful' : 'Transaction Pending'}
+        title={txStatus ? 'Transaction Successful' : 'Transaction Pending'}
         isOpen={isOpenTransactionSuccessModal}
         setIsOpen={setIsOpenTransactionSuccessModal}
         hash={hashStream}
