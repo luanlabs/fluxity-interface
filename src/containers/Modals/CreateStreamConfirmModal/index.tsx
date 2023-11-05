@@ -7,10 +7,8 @@ import CPageCard from 'src/components/CPageCard';
 import { shortenAddress } from 'src/utils/shortenAddress';
 
 import successLogo from 'public/images/successBlack.svg';
-import hashLogo from 'public/images/Stellar.svg';
 
 interface CreateStreamConfirmModal {
-  hash: string;
   from: string;
   to: string;
   amount: string;
@@ -20,7 +18,6 @@ interface CreateStreamConfirmModal {
 }
 
 const CreateStreamConfirmModal = ({
-  hash,
   from,
   to,
   amount,
@@ -39,15 +36,6 @@ const CreateStreamConfirmModal = ({
 
           <CPageCard className="px-3 py-4 w-[80%] mt-6 ">
             <ul className="grid gap-2 text-midnightBlue">
-              <li className="flex justify-between w-full whitespace-nowrap overflow-hidden text-clip items-center bg-alabaster h-10 px-4 text-sm rounded-[10px]">
-                <span>Approval TX</span>
-                <div className="flex">
-                  <Image src={hashLogo} alt="logo" width={20} height={20} className="mr-2" />
-
-                  <span className="w-full text-right">{hash && shortenAddress(hash, 5)}</span>
-                </div>
-              </li>
-
               <li className="flex justify-between w-full whitespace-nowrap overflow-hidden text-clip items-center bg-alabaster h-10 px-4 text-sm rounded-[10px]">
                 <span>From</span>
                 <div className="flex">

@@ -1,8 +1,8 @@
 import { xdr, Address } from 'soroban-client';
 import { FormValues } from 'src/containers/CreateStreamMainCard';
 
-import numberToScVal from 'src/utils/createStream/numberToScVal';
-import toXdrValue from 'src/utils/createStream/toXdrValue';
+import numberToScVal from 'src/utils/soroban/numberToScVal';
+import toXdrValue from 'src/utils/soroban/createStreamValues';
 
 const { scvU32, scvU64, scvSymbol } = xdr.ScVal;
 
@@ -18,6 +18,7 @@ class ToScVal {
   }
   public static u64(number: string) {
     return scvU64(xdr.Uint64.fromString(number));
+    ``;
   }
   public static symbol(symbol: string) {
     return scvSymbol(symbol);

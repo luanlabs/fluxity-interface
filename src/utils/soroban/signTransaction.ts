@@ -1,11 +1,11 @@
 import freighterApi from '@stellar/freighter-api';
 import { Networks, Transaction } from 'soroban-client';
-import toast from 'src/components/CToast';
 
-import approve from 'src/futures/CreateStream/approve';
-import { calculateTotalAmount } from './calculateTotalAmount';
+import toast from 'src/components/CToast';
+import approve from 'src/features/soroban/approve';
+import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 import { FormValues } from 'src/containers/CreateStreamMainCard';
-import createStream from 'src/futures/CreateStream/createStream';
+import createStream from 'src/features/soroban/createStream';
 
 const signedXdr = async (values: FormValues, address: string, func: 'approve' | 'createStream') => {
   let xdrVal;

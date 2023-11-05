@@ -4,9 +4,9 @@ import getServer from 'src/utils/createStream/getServer';
 import getAccount from 'src/utils/createStream/getAccount';
 import ToScVal from 'src/utils/createStream/scVal';
 import getContract from 'src/utils/createStream/getContract';
-import createTransaction from '../../utils/soroban/baseTransaction';
+import createTransaction from 'src/utils/soroban/baseTransaction';
 
-const allowance = async (address: string, spenderAddress: string) => {
+const getERC20Allowance = async (address: string, spenderAddress: string) => {
   const server = getServer();
   const account = await getAccount(address);
 
@@ -23,4 +23,4 @@ const allowance = async (address: string, spenderAddress: string) => {
   return retval;
 };
 
-export default allowance;
+export default getERC20Allowance;

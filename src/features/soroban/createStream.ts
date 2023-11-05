@@ -4,7 +4,7 @@ import ToScVal from 'src/utils/createStream/scVal';
 import getServer from 'src/utils/createStream/getServer';
 import getAccount from 'src/utils/createStream/getAccount';
 import getContract from 'src/utils/createStream/getContract';
-import createTransaction from '../../utils/soroban/baseTransaction';
+import createTransaction from 'src/utils/soroban/baseTransaction';
 
 const createStream = async (params: FormValues, address: string) => {
   const account = await getAccount(address);

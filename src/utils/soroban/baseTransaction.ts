@@ -2,7 +2,7 @@ import { TransactionBuilder, Networks, Account, xdr, Operation } from 'soroban-c
 
 import getFee from 'src/utils/createStream/getFee';
 
-const createTransaction = (account: Account, call: xdr.Operation<Operation.InvokeHostFunction>) => {
+const baseTransaction = (account: Account, call: xdr.Operation<Operation.InvokeHostFunction>) => {
   const fee = getFee();
 
   let transaction = new TransactionBuilder(account, {
@@ -16,4 +16,4 @@ const createTransaction = (account: Account, call: xdr.Operation<Operation.Invok
   return transaction.build();
 };
 
-export default createTransaction;
+export default baseTransaction;

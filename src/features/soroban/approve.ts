@@ -1,12 +1,12 @@
-import ToScVal from '../../utils/createStream/scVal';
 import BigNumber from 'bignumber.js';
 
+import ToScVal from 'src/utils/createStream/scVal';
 import { FUSDC } from 'src/constants/contracts';
 import getContract from 'src/utils/createStream/getContract';
 import getServer from 'src/utils/createStream/getServer';
 import getAccount from 'src/utils/createStream/getAccount';
 import toDecimals from 'src/utils/createStream/toDecimals';
-import createTransaction from '../../utils/soroban/baseTransaction';
+import createTransaction from 'src/utils/soroban/baseTransaction';
 
 const approve = async (amount: BigNumber, address: string) => {
   const account = await getAccount(address);
