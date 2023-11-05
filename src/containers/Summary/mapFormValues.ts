@@ -35,7 +35,7 @@ export const mapFormValues = (values: FormValues) => {
       if (label === 'rate') {
         return {
           label: 'Flow Rate',
-          value: `${value.amount} / ${value.rateTime.label}`,
+          value: `${value.amount} / ${value.rate.label}`,
         };
       }
 
