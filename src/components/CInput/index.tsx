@@ -23,7 +23,7 @@ interface CInputProps {
   handlePaste?: (event: React.MouseEventHandler<HTMLDivElement>) => void;
   border?: boolean;
   value?: string | number | any;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 const CInput = ({
@@ -102,9 +102,7 @@ const CInput = ({
         />
 
         <div className="h-[20px] absolute mt-[6px] ml-1">
-          {error && errorMsg && (
-            <span className="text-error text-sm">{errorMsg}</span>
-          )}
+          {error && errorMsg && <span className="text-error text-sm">{errorMsg}</span>}
         </div>
       </div>
     </div>

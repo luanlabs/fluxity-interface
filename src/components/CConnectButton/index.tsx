@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Image from "next/image";
-import freighterApi from "@stellar/freighter-api";
+import React, { useState } from 'react';
+import Image from 'next/image';
+import freighterApi from '@stellar/freighter-api';
 
-import copyText from "src/utils/copyText";
-import getAccount from "src/utils/getAccount";
-import { shortenAddress } from "src/utils/shortenAddress";
-import { useAppDispatch, useAppSelector } from "src/hooks/useRedux";
-import { setAddress, loadAccount, hasTestnetTokens } from "src/reducers/user";
+import copyText from 'src/utils/copyText';
+import getAccount from 'src/utils/getAccount';
+import { shortenAddress } from 'src/utils/shortenAddress';
+import { useAppDispatch, useAppSelector } from 'src/hooks/useRedux';
+import { setAddress, loadAccount, hasTestnetTokens } from 'src/reducers/user';
 
-import wallet from "public/images/wallet.svg";
-import blackWallet from "public/images/blackWallet.svg";
+import wallet from 'public/images/wallet.svg';
+import blackWallet from 'public/images/blackWallet.svg';
 
-import Modal from "./modal";
-import toast from "../CToast";
-import CProcessModal from "../CProcessModal";
-import { getAlreadyMinted } from "src/features/getAlreadyMinted";
-import getTokenBalances from "src/features/getTokenBalances";
-import { loadTokens } from "src/reducers/tokens";
+import Modal from './modal';
+import toast from '../CToast';
+import CProcessModal from '../CProcessModal';
+import { getAlreadyMinted } from 'src/features/getAlreadyMinted';
+import getTokenBalances from 'src/features/getTokenBalances';
+import { loadTokens } from 'src/reducers/tokens';
 
 type CConnectButtonProps = {
   isMinimized: boolean;
@@ -29,10 +29,8 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
   const [openModal, setOpenModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const [address, tokens] = useAppSelector((state) => [
-    state.user.address,
-    state.tokens,
-  ]);
+  const address = useAppSelector((store) => store.user.address);
+  const tokens = useAppSelector((store) => store.tokens);
 
   const handleConnect = async () => {
     if (address) {
@@ -42,7 +40,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
 
     freighterApi.isConnected().then((isConnected) => {
       if (!isConnected) {
-        toast("error", "Freighter wallet is not installed.");
+        toast('error', 'Freighter wallet is not installed.');
         setIsOpen(false);
       }
     });
@@ -65,9 +63,9 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
         dispatch(loadTokens(updatedToken));
       });
 
-      toast("success", "Wallet has been successfully connected.");
+      toast('success', 'Wallet has been successfully connected.');
     } catch (e) {
-      toast("error", "User has declined to be connected.");
+      toast('error', 'User has declined to be connected.');
     } finally {
       setIsOpen(false);
     }
@@ -82,9 +80,9 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
       className={`relative flex items-center rounded-xl ${
         address
           ? openModal
-            ? "bg-midnightBlue text-white"
-            : "bg-white text-midnightBlue border-midnightBlue hover:bg-lavenderBlush"
-          : "bg-royalBlue text-white border-royalBlue hover:bg-buttonHover"
+            ? 'bg-midnightBlue text-white'
+            : 'bg-white text-midnightBlue border-midnightBlue hover:bg-lavenderBlush'
+          : 'bg-royalBlue text-white border-royalBlue hover:bg-buttonHover'
       } transition-colors duration-500 border cursor-pointer select-none`}
       onClick={handleConnect}
     >

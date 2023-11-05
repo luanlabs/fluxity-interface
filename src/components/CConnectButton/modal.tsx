@@ -24,6 +24,7 @@ const Modal = ({ open, address, closeModal, isMinimized }: ModalProps) => {
 
   const handleDisconnect = () => {
     dispatch(disconnect());
+    dispatch(clearTokenBalances());
   };
 
   const handleCopy = () => {
@@ -32,10 +33,7 @@ const Modal = ({ open, address, closeModal, isMinimized }: ModalProps) => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         closeModal();
       }
     };
@@ -56,9 +54,7 @@ const Modal = ({ open, address, closeModal, isMinimized }: ModalProps) => {
       ref={modalRef}
       className={`bg-midnightBlue p-[6px] rounded-[10px] ${
         open
-          ? `fixed bottom-11 ${
-              isMinimized ? 'left-[100px]' : 'left-[17.5%]'
-            } w-[203px] z-50`
+          ? `fixed bottom-11 ${isMinimized ? 'left-[100px]' : 'left-[17.5%]'} w-[203px] z-50`
           : 'hidden'
       }`}
     >
@@ -77,10 +73,7 @@ const Modal = ({ open, address, closeModal, isMinimized }: ModalProps) => {
             <Image src={arrowRight} alt="arrow" />
           </Link>
         </div>
-        <div
-          className="py-2 flex justify-between items-center w-full"
-          onClick={handleDisconnect}
-        >
+        <div className="py-2 flex justify-between items-center w-full" onClick={handleDisconnect}>
           <span>Disconnect Wallet</span>
           <Image src={power} alt="power" />
         </div>
@@ -90,3 +83,6 @@ const Modal = ({ open, address, closeModal, isMinimized }: ModalProps) => {
 };
 
 export default Modal;
+function clearTokenBalances(): any {
+  throw new Error('Function not implemented.');
+}
