@@ -3,10 +3,10 @@ import BigNumber from 'bignumber.js';
 
 import { FUSDC } from 'src/constants/contracts';
 import getContract from 'src/utils/createStream/getContract';
-import getServer from 'src/utils/createStream/getSever';
+import getServer from 'src/utils/createStream/getServer';
 import getAccount from 'src/utils/createStream/getAccount';
 import toDecimals from 'src/utils/createStream/toDecimals';
-import createTransaction from './baseTransaction';
+import createTransaction from '../../utils/soroban/baseTransaction';
 
 const approve = async (amount: BigNumber, address: string) => {
   const account = await getAccount(address);

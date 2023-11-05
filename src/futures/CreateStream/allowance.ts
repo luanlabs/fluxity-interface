@@ -1,10 +1,10 @@
 import { scValToNative } from 'soroban-client';
 
-import getServer from 'src/utils/createStream/getSever';
+import getServer from 'src/utils/createStream/getServer';
 import getAccount from 'src/utils/createStream/getAccount';
 import ToScVal from 'src/utils/createStream/scVal';
 import getContract from 'src/utils/createStream/getContract';
-import createTransaction from './baseTransaction';
+import createTransaction from '../../utils/soroban/baseTransaction';
 
 const allowance = async (address: string, spenderAddress: string) => {
   const server = getServer();

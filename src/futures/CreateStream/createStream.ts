@@ -1,10 +1,10 @@
 import { FormValues } from 'src/containers/CreateStreamMainCard';
 import { FLUXITY_CONTRACT } from 'src/constants/contracts';
 import ToScVal from 'src/utils/createStream/scVal';
-import getServer from 'src/utils/createStream/getSever';
+import getServer from 'src/utils/createStream/getServer';
 import getAccount from 'src/utils/createStream/getAccount';
 import getContract from 'src/utils/createStream/getContract';
-import createTransaction from './baseTransaction';
+import createTransaction from '../../utils/soroban/baseTransaction';
 
 const createStream = async (params: FormValues, address: string) => {
   const account = await getAccount(address);

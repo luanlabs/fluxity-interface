@@ -1,5 +1,5 @@
 import timeout from 'src/utils/timeout';
-import getServer from 'src/utils/createStream/getSever';
+import getServer from 'src/utils/createStream/getServer';
 
 const finalizeTransaction = async (hash: string) => {
   const server = getServer();
