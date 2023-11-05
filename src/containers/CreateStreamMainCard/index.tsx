@@ -13,8 +13,9 @@ import WalletAddressContainer from 'src/containers/WalletAddressContainer';
 import CStreamingModelContainer from '../CStreamingModelContainer';
 import { useAppSelector } from 'src/hooks/useRedux';
 import { Model } from 'src/components/CStreamingModel';
-import CancellableStream, { ToggleStatus } from 'src/containers/CancellableStream';
-import ConfirmTransaction from 'src/containers/ConfirmTransaction';
+import { useAppSelector } from 'src/hooks/useRedux';
+
+import ClaimTokens from '../ClaimTokens';
 
 export interface FormValues {
   address: string;
@@ -33,6 +34,10 @@ const CreateStream = () => {
   const [isConfirm, setIsConfirm] = useState(false);
 
   const address = useAppSelector((state) => state.user.address);
+
+  const { address, loading, hasReceivedTokens } = useAppSelector(
+    (state) => state.user
+  );
 
   const form = useForm<FormValues>({
     mode: 'onChange',
@@ -56,7 +61,7 @@ const CreateStream = () => {
   watch(['startDate', 'endDate', 'rate', 'token', 'address']);
 
   const onSubmit = (data: FormValues) => {
-    console.log(data);
+    // console.log(data);
   };
 
   const handleOpenModals = () => {
@@ -77,7 +82,7 @@ const CreateStream = () => {
         <CPageCard
           title={CreateStreamTitle}
           divider
-          className="w-[580px] pl-[30px] pr-[18px] py-[15px] max-h-full"
+          className="w-[580px] pl-[30px] pr-[18px] py-[15px]"
         >
           <div className="w-full">
             <div>
@@ -206,8 +211,7 @@ const CreateStream = () => {
             </div>
           </div>
         </CPageCard>
-
-        <div className="ml-6">
+        <div className="relative ml-6">
           <SummaryContainer form={form} isFormValidated={isFormValidated} />
 
           <CButton
@@ -224,6 +228,12 @@ const CreateStream = () => {
             onClick={handleOpenModals}
           />
         </div>
+          
+                    {address && !loading && !hasReceivedTokens && (
+            <div className="absolute bottom-0">
+              <ClaimTokens />
+            </div>
+          )}
       </div>
 
       <ConfirmTransaction form={form} isConfirm={isConfirm} setIsConfirm={setIsConfirm} />

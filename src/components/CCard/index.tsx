@@ -6,7 +6,7 @@ interface CardProps {
   bgColor?: string;
   borderColor?: string;
   children: JSX.Element | React.ReactNode;
-  className: string;
+  className?: string;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 

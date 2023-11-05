@@ -1,74 +1,77 @@
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { Horizon } from 'stellar-sdk';
+import Image from "next/image";
+import React, { useState } from "react";
 
-import CModal from 'src/components/CModal';
-import CInput from 'src/components/CInput';
-import CLabel from 'src/components/CLabel';
-import useCustomID from 'src/hooks/useCustomId';
-import { SelectTokenType } from 'src/models';
-import { userData } from 'src/containers/Summary/userData';
-import { useAppSelector } from 'src/hooks/useRedux';
+import BN from "src/utils/BN";
+import CModal from "src/components/CModal";
+import CInput from "src/components/CInput";
+import CLabel from "src/components/CLabel";
+import { SelectTokenType } from "src/models";
+import useCustomID from "src/hooks/useCustomId";
 
-import TokenList from './TokenList';
-
-import arrowLogo from 'public/images/arrow.svg';
-import searchLogo from 'public/images/search.svg';
-import tokenLogo from 'public/images/explore.svg';
+import plusLogo from "public/images/Plus.svg";
+import arrowLogo from "public/images/arrow.svg";
+import searchLogo from "public/images/search.svg";
+import { useAppSelector } from "src/hooks/useRedux";
+import { IToken } from "src/reducers/tokens";
+import tokenToLogo from "src/utils/tokenToLogo";
 
 interface selectTokenProps {
   onChange: (_: SelectTokenType) => void;
 }
 
 const SelectToken = ({ onChange }: selectTokenProps) => {
-  const [selectedToken, setSelectedToken] = useState<null | Horizon.BalanceLine>(null);
+  const [selectedToken, setSelectedToken] = useState<null | IToken>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
-  const id = useCustomID('selectToken');
+  const [searchValue, setSearchValue] = useState("");
+  const id = useCustomID("selectToken");
+  const tokens = useAppSelector((store) => store.tokens);
 
-  const isConnectWallet = useAppSelector((state) => state.user.address);
-
-  const handleTokenSelect = (token: Horizon.BalanceLine) => {
-    setSelectedToken(token);
+  const handleTokenSelect = (token: IToken) => {
     setIsOpen(false);
-    setSearchValue('');
+    setSearchValue("");
+    setSelectedToken(token);
 
     onChange({
       value: token,
-      label: token.asset_code || 'XLM',
-      icon: 'dai.svg',
+      label: token.symbol,
+      icon: `${token.symbol.toLowerCase()}.svg`,
     });
   };
-
-  const handleOpenModal = () => {
-    setIsOpen(true);
-  };
-
-  const filteredOptions = userData.filter(
-    (option) =>
-      option.asset_type === 'native' ||
-      option.asset_code?.toLowerCase().startsWith(searchValue.toLowerCase()),
-  );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
 
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const filteredTokens = tokens.filter((token) =>
+    token.symbol.toLowerCase().startsWith(searchValue.toLowerCase())
+  );
+
   return (
     <div>
       <CLabel label="Token" htmlFor={id} />
+
       <button
         className="flex justify-between w-[218px] items-center h-14 px-4 text-lg text-mutedBlue rounded-xl bg-[#f5f5f5]"
-        onClick={handleOpenModal}
+        onClick={openModal}
         id={id}
       >
         {selectedToken ? (
           <div className="flex items-center justify-start">
-            <Image src={tokenLogo} width={0} height={0} alt="a" />
-            <p className="ml-4 text-midnightBlue">{selectedToken.asset_code || 'XLM'}</p>
+            <Image
+              src={require(tokenToLogo(selectedToken)).default}
+              width={35}
+              height={35}
+              alt=""
+            />
+
+            <p className="ml-4 text-midnightBlue">{selectedToken.symbol}</p>
           </div>
         ) : (
-          'Select token'
+          "Select token"
         )}
         <Image src={arrowLogo} alt="arrow" />
       </button>
@@ -81,11 +84,34 @@ const SelectToken = ({ onChange }: selectTokenProps) => {
           disabled={!isConnectWallet}
         />
         <div className="mt-[23px]">
-          {isConnectWallet ? (
-            <TokenList filteredOptions={filteredOptions} handleTokenSelect={handleTokenSelect} />
-          ) : (
-            <div className=" w-full text-center text-2xl font-med h-[200px] flex justify-center items-center text-[#8f8f8f]">
-              You need to connect you wallet first.
+          {filteredTokens.map((token) => (
+            <div
+              className="flex items-center w-full cursor-pointer h-[72px] border-b last:border-none"
+              key={token.symbol}
+              onClick={() => handleTokenSelect(token)}
+            >
+              <div className="flex w-full items-center">
+                <div className="w-[70px]">
+                  <Image
+                    src={require(tokenToLogo(token)).default}
+                    width={45}
+                    height={45}
+                    alt="a"
+                  />
+                </div>
+                <div className="text-left w-full">
+                  <p className="text-black text-base w-full font-bold">
+                    {token.symbol}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center">
+                <span className="mr-5">{new BN(token.balance).toFixed(3)}</span>
+                <div className="h-[35px] w-[35px] rounded-[100px] bg-lavenderBlush hover:bg-[#f0efff95] flex justify-center items-center">
+                  <Image src={plusLogo} width={0} height={0} alt="plusLogo" />
+                </div>
+              </div>
             </div>
           )}
         </div>

@@ -14,3 +14,26 @@ export interface CNavLinkProps {
 export type SvgProps = {
   fill?: string;
 };
+
+export interface IFluxityAPIResponse<T> {
+  status: 'error' | 'success';
+  message: string;
+  result: T;
+}
+
+export interface IResponseAlreadyMintedResult {
+  minted: boolean;
+}
+
+export type IResponseAlreadyMinted =
+  IFluxityAPIResponse<IResponseAlreadyMintedResult>;
+
+export interface IResponseToken {
+  address: string;
+  decimals: string;
+  name: string;
+  symbol: string;
+  _id: string;
+}
+
+export type IResponseTokenResult = IFluxityAPIResponse<IResponseToken[]>;
