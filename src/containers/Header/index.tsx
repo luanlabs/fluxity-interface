@@ -5,7 +5,7 @@ import CLink from 'src/components/CLink';
 
 import FluxityLogo from 'src/assets/FluxityLogo';
 import FluxityTypography from 'src/assets/FluxityTypography';
-import Stellar from 'public/images/Stellar.svg';
+import Stellar from 'public/images/stellar.svg';
 import { useRouter } from 'next/navigation';
 import { ExternalPages } from 'src/constants/externalPages';
 

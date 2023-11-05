@@ -12,6 +12,7 @@ export type CButtonColorType =
   | 'white'
   | 'gray'
   | 'blue'
+  | 'outline'
   | 'blueWhite';
 
 interface ButtonProps {
@@ -22,6 +23,7 @@ interface ButtonProps {
   type?: 'button' | 'submit';
   className?: string;
   fill?: string;
+  logo?: string;
   onClick?: () => void;
   logo?: string;
 }

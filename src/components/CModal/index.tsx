@@ -32,10 +32,6 @@ const CModal = ({
     setIsOpen(false);
   };
 
-  const openModal = () => {
-    setIsOpen(true);
-  };
-
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -88,7 +84,7 @@ const CModal = ({
                   )}
                   <Dialog.Title
                     as="h3"
-                    className="text-[28px] text-midnightBlue font-medium leading-6 flex justify-between mb-[14px]"
+                    className="text-[28px] font-med text-midnightBlue leading-6 flex justify-between mb-[14px]"
                   >
                     {title}
                   </Dialog.Title>

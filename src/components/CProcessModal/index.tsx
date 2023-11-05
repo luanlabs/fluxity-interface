@@ -3,6 +3,7 @@ import CModal from '../CModal';
 import Image from 'next/image';
 
 import rolling from 'public/images/rolling.svg';
+
 type CProcessModalType = {
   isOpen: boolean;
   setIsOpen: (_: boolean) => void;

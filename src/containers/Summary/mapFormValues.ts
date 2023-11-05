@@ -17,12 +17,12 @@ export const mapFormValues = (values: FormValues) => {
         if (value[1].amount && value[1].amount != 0) {
           return true;
         }
-
         return false;
       }
 
       return true;
     })
+
     .map(([label, value]) => {
       if (label === 'token') {
         return {
@@ -35,7 +35,7 @@ export const mapFormValues = (values: FormValues) => {
       if (label === 'rate') {
         return {
           label: 'Flow Rate',
-          value: `${value.amount} / ${value.rateTime.label}`,
+          value: `${value.amount} / ${value.rate.label}`,
         };
       }
 
@@ -59,6 +59,10 @@ export const mapFormValues = (values: FormValues) => {
 
       if (label === 'streamingModel') {
         return { label: 'Streaming Model', value: capitalizeFirstLetter(value) };
+      }
+
+      if (label === 'isCancellable') {
+        return { label: 'Cancellable Stream', value };
       }
 
       return {

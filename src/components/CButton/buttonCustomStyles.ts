@@ -15,7 +15,10 @@ const buttonCustomStyles = (
   } else if (color === 'white') {
     colorStyles = 'bg-white border border-midnightBlue text-midnightBlue';
   } else if (color === 'blue') {
-    colorStyles = 'bg-blueIndigo text-white';
+    colorStyles = 'bg-blueIndigo text-white transition hover:bg-buttonHover';
+  } else if (color === 'outline') {
+    colorStyles =
+      'bg-white text-royalBlue border border-royalBlue !rounded-[10px] transition hover:bg-lavenderBlush';
   } else {
     colorStyles = 'bg-white text-royalBlue !rounded-[11px] h-9!px-3';
   }

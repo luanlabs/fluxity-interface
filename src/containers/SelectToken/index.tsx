@@ -81,6 +81,7 @@ const SelectToken = ({ onChange }: selectTokenProps) => {
           placeholder="Search name of token"
           icon={searchLogo}
           onChange={handleInputChange}
+          disabled={!isConnectWallet}
         />
         <div className="mt-[23px]">
           {filteredTokens.map((token) => (
@@ -112,7 +113,7 @@ const SelectToken = ({ onChange }: selectTokenProps) => {
                 </div>
               </div>
             </div>
-          ))}
+          )}
         </div>
       </CModal>
     </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { StrKey } from 'stellar-sdk';
 
@@ -17,14 +17,27 @@ interface WalletAddressContainer {
   clearInputClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const WalletAddressContainer = ({
-  onChange,
-  clearInputClick,
-}: WalletAddressContainer) => {
+const WalletAddressContainer = ({ onChange, clearInputClick }: WalletAddressContainer) => {
   const [recipientWalletAddress, setRecipientWalletAddress] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [randomColor, setRandomColor] = useState('');
+
+  const confirmButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    const handleEnterKeyPress = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && confirmButtonRef.current) {
+        confirmButtonRef.current.click();
+      }
+    };
+
+    window.addEventListener('keydown', handleEnterKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleEnterKeyPress);
+    };
+  }, []);
 
   useEffect(() => {
     setRandomColor(generateRandomHexColor());
@@ -65,9 +78,7 @@ const WalletAddressContainer = ({
     setIsOpen(false);
   };
 
-  const isValidateAddress = StrKey.isValidEd25519PublicKey(
-    recipientWalletAddress.toUpperCase(),
-  );
+  const isValidateAddress = StrKey.isValidEd25519PublicKey(recipientWalletAddress.toUpperCase());
 
   const handlePaste = () => {
     return navigator.clipboard.readText().then((clipText) => {
@@ -79,7 +90,10 @@ const WalletAddressContainer = ({
 
   return (
     <div>
-      <CLabel label="Receiver wallet address" />
+      <CLabel
+        label="Receiver wallet address"
+        details="Identify the address you want to stream tokens to."
+      />
 
       <div className="relative">
         <button
@@ -131,9 +145,7 @@ const WalletAddressContainer = ({
                     className="w-8 h-8 rounded-[100px] ml-1"
                     style={{ backgroundColor: randomColor }}
                   />
-                  <span className="ml-3 text-lg">
-                    {isValidateAddress && shortAddress}
-                  </span>
+                  <span className="ml-3 text-lg">{isValidateAddress && shortAddress}</span>
                 </div>
                 <div className="flex items-center">
                   <Image src={tickLogo} alt="tickLogo" width={0} height={0} />
@@ -155,6 +167,7 @@ const WalletAddressContainer = ({
             }  px-[24px] py-[14px] text-base rounded-[10px] text-midnightBlue`}
             disabled={!isValidateAddress}
             onClick={handleButtonModal}
+            ref={confirmButtonRef}
           >
             Confirm
           </button>

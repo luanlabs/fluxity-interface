@@ -1,7 +1,6 @@
 import BN from 'src/utils/BN';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 import { checkBalance } from 'src/utils/checkBalance';
-import { rateInNumber } from 'src/utils/rateInNumber';
 import { CustomError } from 'src/models';
 import { FormValues } from './index';
 
@@ -9,10 +8,13 @@ type Validation = {
   address: CustomError;
   rate: CustomError;
   total: CustomError;
-  a: CustomError;
 };
 
-const validateForm = (values: FormValues, setIsFormValidated: (_: boolean) => void) => {
+const validateForm = (
+  values: FormValues,
+  setIsFormValidated: (_: boolean) => void,
+  address: string,
+) => {
   const errors = {} as Validation;
 
   setIsFormValidated(false);
@@ -30,16 +32,18 @@ const validateForm = (values: FormValues, setIsFormValidated: (_: boolean) => vo
     };
   }
 
-  let totalAmount = calculateTotalAmount(
-    values.startDate,
-    values.endDate,
-    new BN(values.rate.amount),
-    rateInNumber(values.rate.rateTime.value),
-  );
+  let totalAmount = calculateTotalAmount(values);
 
   const [isSuccessful, errorMessage] = checkBalance(values.token.value, totalAmount);
 
   if (!isSuccessful) {
+    return {
+      values,
+      errors,
+    };
+  }
+
+  if (address === values.address) {
     return {
       values,
       errors,
