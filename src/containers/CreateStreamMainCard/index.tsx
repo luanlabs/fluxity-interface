@@ -212,28 +212,30 @@ const CreateStream = () => {
           </div>
         </CPageCard>
         <div className="relative ml-6">
-          <SummaryContainer form={form} isFormValidated={isFormValidated} />
+          <div>
+            <SummaryContainer form={form} isFormValidated={isFormValidated} />
 
-          <CButton
-            type="submit"
-            variant="form"
-            content="Create Stream"
-            fill={isFormCompleteValidition ? '#050142' : '#fff'}
-            className={
-              isFormCompleteValidition
-                ? '!bg-[#E6E6EC] !text-[#050142]'
-                : '!bg-darkBlue !text-white'
-            }
-            disabled={isFormCompleteValidition}
-            onClick={handleOpenModals}
-          />
-        </div>
-
-        {address && !loading && !hasReceivedTokens && (
-          <div className="absolute bottom-0 right-0">
-            <ClaimTokens />
+            <CButton
+              type="submit"
+              variant="form"
+              content="Create Stream"
+              fill={isFormCompleteValidition ? '#050142' : '#fff'}
+              className={
+                isFormCompleteValidition
+                  ? '!bg-[#E6E6EC] !text-[#050142]'
+                  : '!bg-darkBlue !text-white'
+              }
+              disabled={isFormCompleteValidition}
+              onClick={handleOpenModals}
+            />
           </div>
-        )}
+
+          {address && !loading && !hasReceivedTokens && (
+            <div className="absolute bottom-0">
+              <ClaimTokens />
+            </div>
+          )}
+        </div>
       </div>
 
       <ConfirmTransaction form={form} isConfirm={isConfirm} setIsConfirm={setIsConfirm} />

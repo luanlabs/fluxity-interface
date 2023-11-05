@@ -85,7 +85,7 @@ const SelectToken = ({ onChange }: SelectTokenProps) => {
         <div className="mt-[23px]">
           {filteredTokens.map((token) => (
             <div
-              className="flex items-center w-full cursor-pointer h-[72px] border-b last:border-none"
+              className="flex items-center px-2 w-full cursor-pointer h-[72px] border-b last:border-none"
               key={token.symbol}
               onClick={() => handleTokenSelect(token)}
             >
