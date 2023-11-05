@@ -7,7 +7,7 @@ import CPageCard from 'src/components/CPageCard';
 import { shortenAddress } from 'src/utils/shortenAddress';
 
 import successLogo from 'public/images/successBlack.svg';
-import hashLogo from 'public/images/explore.svg';
+import hashLogo from 'public/images/Stellar.svg';
 
 interface CreateStreamConfirmModal {
   hash: string;
