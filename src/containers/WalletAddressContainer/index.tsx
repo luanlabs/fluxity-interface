@@ -91,8 +91,9 @@ const WalletAddressContainer = ({ onChange, clearInputClick }: WalletAddressCont
   return (
     <div>
       <CLabel
-        label="Receiver wallet address"
+        label="Recipient wallet address"
         details="Identify the address you want to stream tokens to."
+        toolTipTitle="Recipient wallet address"
       />
 
       <div className="relative">
@@ -101,7 +102,7 @@ const WalletAddressContainer = ({ onChange, clearInputClick }: WalletAddressCont
           onClick={handleOpenModal}
         >
           {inputValue === '' ? (
-            'Enter wallet address'
+            'Recipient wallet address'
           ) : (
             <p className="text-midnightBlue">{shortAddress}</p>
           )}
@@ -136,7 +137,7 @@ const WalletAddressContainer = ({ onChange, clearInputClick }: WalletAddressCont
           border
         />
 
-        <div className=" h-10 mt-3">
+        <div className="h-10 mt-3">
           {isValidateAddress && (
             <div>
               <div className="flex justify-between items-center rounded-xl bg-[#F9F9F9] px-2 py-[10px]">
@@ -162,7 +163,7 @@ const WalletAddressContainer = ({ onChange, clearInputClick }: WalletAddressCont
           <button
             className={` ${
               !isValidateAddress
-                ? 'bg-lavenderGray text-darkBlue '
+                ? 'bg-lavenderGray text-softGray'
                 : 'bg-royalBlue text-white hover:bg-buttonHover'
             }  px-[24px] py-[14px] text-base rounded-[10px] text-midnightBlue`}
             disabled={!isValidateAddress}

@@ -24,6 +24,7 @@ interface CInputProps {
   border?: boolean;
   value?: string | number | any;
   disabled?: boolean;
+  toolTipTitle: string;
 }
 
 const CInput = ({
@@ -42,13 +43,14 @@ const CInput = ({
   handlePaste,
   value,
   disabled,
+  toolTipTitle,
   ...props
 }: CInputProps) => {
   const id = useCustomID('Cinput');
 
   return (
     <div className={className}>
-      <CLabel label={label} details={details} htmlFor={id} />
+      <CLabel label={label} details={details} toolTipTitle={toolTipTitle} htmlFor={id} />
 
       <div className="relative w-full">
         {icon && (

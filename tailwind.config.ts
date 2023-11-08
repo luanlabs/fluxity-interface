@@ -41,6 +41,7 @@ const config: Config = {
         lavenderGray: '#E6E6EC',
         buttonHover: '#1C0894',
         togglePurple: '#3A21D4',
+        softGray: '#9C9EA5',
       },
       screens: {
         sm: { max: '767px' },

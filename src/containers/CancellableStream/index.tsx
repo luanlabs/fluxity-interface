@@ -16,7 +16,10 @@ const CancellableStream = ({ onChange }: CancellableStreamProps) => {
     <div className="w-full flex items-center justify-between">
       <div className="flex items-center">
         <span className="text-[18px] text-darkBlue">Cancellable stream</span>
-        <CLabel details="Turn on this feature if you want to create a cancellable stream" />
+        <CLabel
+          details="Turn on this feature if you want to create a cancellable stream"
+          toolTipTitle="Cancellable stream"
+        />
       </div>
       <div className="flex items-center">
         <CToggle onChange={handleToggleChecker} />

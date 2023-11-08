@@ -133,6 +133,7 @@ const CreateStream = () => {
                     <CInputRate
                       placeholder="0.0"
                       label="Flow rate"
+                      toolTipTitle="Flow rate"
                       details="You can specify the rate of token transfer per various intervals."
                       className="basis-4/5"
                       errorMsg={errors.rate && errors.rate.message}
@@ -186,6 +187,7 @@ const CreateStream = () => {
                     {...field}
                     className="w-[236px]"
                     label="Start date"
+                    toolTipTitle="Start date"
                     details="Cliff time specifies the date until which the stream should be withheld. When this date arrives, the accumulated amount from the stream start date until cliff date will be sent at once and the rest of the stream continues normally. "
                     minDate={new Date()}
                     maxDate={getValues('endDate') && getValues('endDate')}
@@ -201,6 +203,7 @@ const CreateStream = () => {
                     {...field}
                     className="w-[236px]"
                     label="End date"
+                    toolTipTitle="End date"
                     details="By specifying the end date of your stream, the total amount to be streamed will be calculated."
                     minDate={getValues('startDate') ? new Date(getValues('startDate')) : new Date()}
                     maxDate={INFINITY_DATE}

@@ -22,6 +22,7 @@ interface CInputRateProps {
   errorMsg?: string;
   error?: boolean;
   onChange: (values: CInputRateValue) => void;
+  toolTipTitle: string;
 }
 
 const DropdownIndicator = () => {
@@ -40,6 +41,7 @@ const CInputRate = ({
   onChange,
   errorMsg,
   error,
+  toolTipTitle,
   ...props
 }: CInputRateProps) => {
   const [inputValue, setInputValue] = useState('');
@@ -81,6 +83,7 @@ const CInputRate = ({
         placeholder={placeholder}
         label={label}
         details={details}
+        toolTipTitle={toolTipTitle}
         onKeyPress={forceInputNumber}
         {...props}
         value={inputValue}

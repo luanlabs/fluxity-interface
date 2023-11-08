@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import cn from 'classnames';
 import { UseFormReturn } from 'react-hook-form';
@@ -13,6 +13,7 @@ import { mapFormValues } from './mapFormValues';
 
 import summaryLogo from 'public/images/summary.svg';
 import humanizeAmount from 'src/utils/humanizeAmount';
+import CToolTip from 'src/components/CToolTip';
 
 interface SummaryProps {
   form: UseFormReturn<any, undefined>;
@@ -20,6 +21,7 @@ interface SummaryProps {
 }
 
 const Summary = ({ form }: SummaryProps) => {
+  const [visible, setVisible] = useState(false);
   const values: FormValues = form.getValues();
   const getFormValues = mapFormValues(values);
 
@@ -43,7 +45,15 @@ const Summary = ({ form }: SummaryProps) => {
   const summaryTitle = (
     <div className="w-full flex justify-between items-center pb-4">
       <h1 className="text-lg text-midnightBlue">Summary</h1>
-      <Image src={summaryLogo} alt="summary" width={0} height={0} />
+      <CToolTip
+        visible={visible}
+        setVisible={setVisible}
+        text="This section shows an overview of your stream order"
+        title="Summary"
+        placement="bottom"
+      >
+        <Image src={summaryLogo} alt="summary" width={0} height={0} />
+      </CToolTip>
     </div>
   );
 

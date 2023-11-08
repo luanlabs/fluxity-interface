@@ -17,6 +17,7 @@ interface CDatePickerProps {
   minDate: Date;
   maxDate: Date;
   readonly?: boolean;
+  toolTipTitle: string;
 }
 
 const CDatePicker = ({
@@ -27,6 +28,7 @@ const CDatePicker = ({
   minDate,
   maxDate,
   readonly,
+  toolTipTitle,
 }: CDatePickerProps) => {
   const id = useCustomID('CDatePicker');
   const [selectedDate, setSelectedDate] = useState(minDate || new Date());
@@ -91,6 +93,7 @@ const CDatePicker = ({
         <CLabel
           label={label}
           details={details}
+          toolTipTitle={toolTipTitle}
           htmlFor={id}
           className={`mr-[10px] ${enabled || readonly ? '' : '!text-[#817fa0]'}`}
           disabled={!enabled && !readonly ? true : false}
