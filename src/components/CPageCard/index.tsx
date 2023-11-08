@@ -30,7 +30,7 @@ const CPageCard = ({ divider, title, children, className, ...props }: CPageCard)
     >
       {title && <div className="w-full">{title}</div>}
       {divider && <div className={dividerStyle} />}
-      <div className={padding}>{children}</div>
+      <div className={`${padding} overflow-y-auto`}>{children}</div>
     </CCard>
   );
 };

@@ -25,7 +25,6 @@ interface ButtonProps {
   fill?: string;
   logo?: string;
   onClick?: () => void;
-  logo?: string;
 }
 
 const CButton = ({
@@ -53,9 +52,7 @@ const CButton = ({
           <FluxityLogoButton fill={fill} />
         </div>
       )}
-      {logo && (
-        <Image src={logo} width={25} height={25} alt="logo" className="mr-2" />
-      )}
+      {logo && <Image src={logo} width={25} height={25} alt="logo" className="mr-2" />}
       {content}
     </button>
   );

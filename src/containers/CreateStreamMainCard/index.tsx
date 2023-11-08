@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
 import CButton from 'src/components/CButton';
@@ -13,7 +13,9 @@ import WalletAddressContainer from 'src/containers/WalletAddressContainer';
 import CStreamingModelContainer from '../CStreamingModelContainer';
 import { Model } from 'src/components/CStreamingModel';
 import { ISelectToken } from 'src/models';
-import { useAppSelector } from 'src/hooks/useRedux';
+import { useAppSelector, useAppDispatch } from 'src/hooks/useRedux';
+import { loadTokens } from 'src/reducers/tokens';
+import { getTokenList } from 'src/features/getTokenList';
 
 import ClaimTokens from '../ClaimTokens';
 import ConfirmTransaction from '../ConfirmTransaction';
@@ -35,9 +37,21 @@ const CreateStream = () => {
   const [isFormValidated, setIsFormValidated] = useState(false);
   const [isConfirm, setIsConfirm] = useState(false);
 
-  const address = useAppSelector((state) => state.user.address);
-  const loading = useAppSelector((state) => state.user.loading);
-  const hasReceivedTokens = useAppSelector((state) => state.user.hasReceivedTokens);
+  const dispatch = useAppDispatch();
+  const tokens = useAppSelector((state) => state.tokens);
+  const { address, loading, hasReceivedTokens } = useAppSelector((state) => state.user);
+
+  useEffect(() => {
+    if (!tokens.length) {
+      getTokenList().then((data) => {
+        const mappedTokens = data.data.result.map((token) => {
+          return { ...token, balance: '0' };
+        });
+
+        dispatch(loadTokens(mappedTokens));
+      });
+    }
+  }, [dispatch]);
 
   const form = useForm<FormValues>({
     mode: 'onChange',

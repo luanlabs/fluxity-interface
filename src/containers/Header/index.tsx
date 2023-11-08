@@ -1,13 +1,13 @@
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 import CButton from 'src/components/CButton';
 import CLink from 'src/components/CLink';
+import { ExternalPages } from 'src/constants/externalPages';
 
+import Stellar from 'public/images/stellar.svg';
 import FluxityLogo from 'src/assets/FluxityLogo';
 import FluxityTypography from 'src/assets/FluxityTypography';
-import Stellar from 'public/images/stellar.svg';
-import { useRouter } from 'next/navigation';
-import { ExternalPages } from 'src/constants/externalPages';
 
 const Header = () => {
   const router = useRouter();
@@ -25,8 +25,8 @@ const Header = () => {
       </div>
       <div className="inline-flex gap-[12px] items-center sm:hidden">
         <span className="mr-1">
-          <CLink title="Documentation" url="/" />
-          <CLink title="Community" url="/" />
+          {/* <CLink title="Documentation" url={ExternalPages.DOCUMENTATION} /> */}
+          <CLink title="Community" url={ExternalPages.COMMUNITY} />
         </span>
         <CButton
           variant="simple"
