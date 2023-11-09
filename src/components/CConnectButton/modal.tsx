@@ -65,7 +65,7 @@ const Modal = ({ open, address, closeModal, isMinimized }: ModalProps) => {
       <div className="flex flex-col divide-y divide-slate-700 mt-2 px-2 text-white">
         <div className="py-2 flex justify-between items-center w-full">
           <Link
-            href={`${ExternalPages.EXPLORER}/${address}`}
+            href={`${ExternalPages.EXPLORER}/accounts/${address}`}
             className="flex justify-between w-full"
             target="_blank"
           >

@@ -1,10 +1,9 @@
 export enum ExternalPages {
   LANDING = 'https://fluxity.finance',
-  WHITEPAPER = '/white-paper',
   DOCUMENTATION = '/documentation',
   COMMUNITY = 'https://discord.gg/JnT7KPEuQs',
   FLUXITY_API = 'https://api.fluxity.finance',
-  EXPLORER = 'https://futurenet.stellarchain.io/accounts',
+  EXPLORER = 'https://futurenet.stellarchain.io',
   FRIENDBOT = 'https://friendbot-futurenet.stellar.org/?addr=',
-  EXPLORER_TRANSACTION = 'https://futurenet.stellarchain.io/transactions',
+  WHITEPAPER = 'https://docs.google.com/document/d/1Yh4wI4RR2WK4CN48HRHJMX78OHcVOYST7MN_U2KSm_4/edit?usp=sharing',
 }

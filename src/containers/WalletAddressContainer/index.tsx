@@ -83,11 +83,11 @@ const WalletAddressContainer = ({ onChange, clearInputClick }: WalletAddressCont
 
   const handlePaste = () => {
     try {
-      return navigator.clipboard.readText().then((clipText) => {
+      navigator.clipboard.readText().then((clipText) => {
         setRecipientWalletAddress(clipText);
       });
     } catch (e) {
-      toast('error', 'The Clipboard API is not available for this browser.');
+      // toast('error', 'The Clipboard API is not available for this browser.');
     }
   };
 
