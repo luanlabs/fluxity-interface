@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 import { Toaster } from 'react-hot-toast';
 import { usePathname } from 'next/navigation';
+import localFont from 'next/font/local';
 
 import { store } from 'src/store';
 import Aside from 'src/containers/Aside';
@@ -16,6 +17,14 @@ import '../styles/globals.css';
 import theme from '../styles/theme';
 import StyledComponentsRegistry from '../styles/registry';
 
+const myFont = localFont({
+  src: [
+    { style: 'normal', weight: '400', path: '../../public/font/Aeonik-Regular.ttf' },
+    { style: 'normal', weight: '500', path: '../../public/font/Aeonik-Medium.ttf' },
+    { style: 'normal', weight: '700', path: '../../public/font/Aeonik-Bold.ttf' },
+  ],
+});
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [isMinimized, setIsMinimized] = useState(false);
 
@@ -23,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const knownRoutes = Object.values(Pages).includes(pathname as Pages);
 
   return (
-    <html lang="en">
+    <html lang="en" className={myFont.className}>
       <body>
         <Provider store={store}>
           <StyledComponentsRegistry>
