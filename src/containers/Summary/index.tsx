@@ -10,10 +10,10 @@ import { FormValues } from '../CreateStreamMainCard';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 import { checkBalance } from 'src/utils/checkBalance';
 import { mapFormValues } from './mapFormValues';
-
-import summaryLogo from 'public/images/summary.svg';
+import DetailLogo from 'src/assets/detail';
 import humanizeAmount from 'src/utils/humanizeAmount';
-import CToolTip from 'src/components/CToolTip';
+import CTooltip from 'src/components/CTooltip';
+import tooltipDetails from 'src/constants/tooltipDetails';
 
 interface SummaryProps {
   form: UseFormReturn<any, undefined>;
@@ -21,7 +21,6 @@ interface SummaryProps {
 }
 
 const Summary = ({ form }: SummaryProps) => {
-  const [visible, setVisible] = useState(false);
   const values: FormValues = form.getValues();
   const getFormValues = mapFormValues(values);
 
@@ -45,15 +44,13 @@ const Summary = ({ form }: SummaryProps) => {
   const summaryTitle = (
     <div className="w-full flex justify-between items-center pb-4">
       <h1 className="text-lg text-midnightBlue">Summary</h1>
-      <CToolTip
-        visible={visible}
-        setVisible={setVisible}
-        text="This section shows an overview of your stream order"
-        title="Summary"
+      <CTooltip
+        text={tooltipDetails.createStream.summary}
+        TooltipTitle="Summary"
         placement="bottom"
       >
-        <Image src={summaryLogo} alt="summary" width={0} height={0} />
-      </CToolTip>
+        <DetailLogo fill="#050142" />
+      </CTooltip>
     </div>
   );
 

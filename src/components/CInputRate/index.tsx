@@ -16,13 +16,13 @@ export type CInputRateValue = { amount: string; rate: RateValue };
 
 interface CInputRateProps {
   placeholder: string;
-  details?: string;
+  tooltipDetails?: string;
   label: string;
   className?: string;
   errorMsg?: string;
   error?: boolean;
   onChange: (values: CInputRateValue) => void;
-  toolTipTitle: string;
+  tooltipTitle: string;
 }
 
 const DropdownIndicator = () => {
@@ -35,13 +35,13 @@ const DropdownIndicator = () => {
 
 const CInputRate = ({
   placeholder,
-  details,
+  tooltipDetails,
   label,
   className,
   onChange,
   errorMsg,
   error,
-  toolTipTitle,
+  tooltipTitle,
   ...props
 }: CInputRateProps) => {
   const [inputValue, setInputValue] = useState('');
@@ -82,8 +82,8 @@ const CInputRate = ({
         type="text"
         placeholder={placeholder}
         label={label}
-        details={details}
-        toolTipTitle={toolTipTitle}
+        tooltipDetails={tooltipDetails}
+        tooltipTitle={tooltipTitle}
         onKeyPress={forceInputNumber}
         {...props}
         value={inputValue}

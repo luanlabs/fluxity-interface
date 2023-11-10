@@ -6,20 +6,30 @@ import toast from 'src/components/CToast';
 
 interface CStreamingModelContainer {
   label?: string;
-  details?: string;
+  tooltipDetails: string;
+  tooltipTitle: string;
 }
 
-const CStreamingModelContainer = ({ label, details }: CStreamingModelContainer) => {
+const CStreamingModelContainer = ({
+  label,
+  tooltipDetails,
+  tooltipTitle,
+}: CStreamingModelContainer) => {
+  const handleExponentialClick = () => {
+    toast('error', 'Exponential streams are saved for a later version.');
+  };
+
   return (
     <div className="w-[532px] flex flex-col">
-      <CLabel label={label} details={details} toolTipTitle="Straming model" className="mb-1" />
+      <CLabel
+        label={label}
+        tooltipDetails={tooltipDetails}
+        tooltipTitle={tooltipTitle}
+        className="mb-1"
+      />
       <div className="flex gap-2">
         <CStreamingModel isSelected={true} model="linear" />
-        <CStreamingModel
-          model="exponential"
-          disabled
-          onClick={() => toast('error', 'Exponential streams are saved for a later version.')}
-        />
+        <CStreamingModel model="exponential" disabled onClick={handleExponentialClick} />
       </div>
     </div>
   );

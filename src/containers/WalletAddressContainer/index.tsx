@@ -15,9 +15,16 @@ import tickLogo from 'public/images/tick.svg';
 interface WalletAddressContainer {
   onChange: (value: string) => void;
   clearInputClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  tooltipDetails: string;
+  tooltipTitle: string;
 }
 
-const WalletAddressContainer = ({ onChange, clearInputClick }: WalletAddressContainer) => {
+const WalletAddressContainer = ({
+  onChange,
+  clearInputClick,
+  tooltipDetails,
+  tooltipTitle,
+}: WalletAddressContainer) => {
   const [recipientWalletAddress, setRecipientWalletAddress] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
@@ -92,8 +99,8 @@ const WalletAddressContainer = ({ onChange, clearInputClick }: WalletAddressCont
     <div>
       <CLabel
         label="Recipient wallet address"
-        details="Identify the address you want to stream tokens to."
-        toolTipTitle="Recipient wallet address"
+        tooltipDetails={tooltipDetails}
+        tooltipTitle={tooltipTitle}
       />
 
       <div className="relative">
