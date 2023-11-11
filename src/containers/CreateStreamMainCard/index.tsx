@@ -18,6 +18,7 @@ import { useAppSelector } from 'src/hooks/useRedux';
 import ClaimTokens from '../ClaimTokens';
 import ConfirmTransaction from '../ConfirmTransaction';
 import CancellableStream, { ToggleStatus } from '../CancellableStream';
+import tooltipDetails from 'src/constants/tooltipDetails';
 
 export interface FormValues {
   address: string;
@@ -93,7 +94,8 @@ const CreateStream = () => {
                   <div>
                     <CStreamingModelContainer
                       label="Streaming model"
-                      details="Choose your streaming model. Linear offers a steady flow, while Exponential adapts dynamically. "
+                      tooltipTitle="Streaming model"
+                      tooltipDetails={tooltipDetails.createStream.streamingModel}
                       {...field}
                     />
                   </div>
@@ -111,6 +113,8 @@ const CreateStream = () => {
                   <div>
                     <WalletAddressContainer
                       clearInputClick={() => resetField('address')}
+                      tooltipTitle="Recipient wallet address"
+                      tooltipDetails={tooltipDetails.createStream.walletAddress}
                       {...field}
                     />
                   </div>
@@ -133,7 +137,8 @@ const CreateStream = () => {
                     <CInputRate
                       placeholder="0.0"
                       label="Flow rate"
-                      details="You can specify the rate of token transfer per various intervals."
+                      tooltipTitle="Flow rate"
+                      tooltipDetails={tooltipDetails.createStream.flowRate}
                       className="basis-4/5"
                       errorMsg={errors.rate && errors.rate.message}
                       error={errors.rate?.message ? true : false}
@@ -150,7 +155,13 @@ const CreateStream = () => {
               <Controller
                 name="isCancellable"
                 control={control}
-                render={({ field }) => <CancellableStream {...field} />}
+                render={({ field }) => (
+                  <CancellableStream
+                    tooltipDetails={tooltipDetails.createStream.cancellableStream}
+                    tooltipTitle="Cancellable Stream"
+                    {...field}
+                  />
+                )}
               />
             </div>
 
@@ -186,7 +197,8 @@ const CreateStream = () => {
                     {...field}
                     className="w-[236px]"
                     label="Start date"
-                    details="Cliff time specifies the date until which the stream should be withheld. When this date arrives, the accumulated amount from the stream start date until cliff date will be sent at once and the rest of the stream continues normally. "
+                    tooltipTitle="Start date"
+                    tooltipDetails={tooltipDetails.createStream.startDate}
                     minDate={new Date()}
                     maxDate={getValues('endDate') && getValues('endDate')}
                   />
@@ -201,7 +213,8 @@ const CreateStream = () => {
                     {...field}
                     className="w-[236px]"
                     label="End date"
-                    details="By specifying the end date of your stream, the total amount to be streamed will be calculated."
+                    tooltipTitle="End date"
+                    tooltipDetails={tooltipDetails.createStream.endDate}
                     minDate={getValues('startDate') ? new Date(getValues('startDate')) : new Date()}
                     maxDate={INFINITY_DATE}
                     readonly

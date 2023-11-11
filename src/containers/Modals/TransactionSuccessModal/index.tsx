@@ -26,7 +26,7 @@ const TransactionSuccessModal = ({
 }: TransactionSuccessModal) => {
   return (
     <div>
-      <CModal title="" isOpen={isOpen} setIsOpen={setIsOpen} width="396px">
+      <CModal isOpen={isOpen} setIsOpen={setIsOpen} width="396px">
         <div className="w-full flex flex-col items-center justify-center">
           <Image src={successLogo} width={0} height={0} alt="ok" className="mt-8" />
           <h1 className="text-[24px] font-med text-midnightBlue antialiased  mt-[24px] tracking-[0.5px] text-center">
@@ -36,14 +36,14 @@ const TransactionSuccessModal = ({
           <Link
             href={`${ExternalPages.EXPLORER_TRANSACTION}/${hash}`}
             target="_blank"
-            className="w-full"
+            className="w-full mt-[32px]"
           >
             <CButton
               content="See in explorer"
               variant="simple"
               color="outline"
               logo={exploreLogo}
-              className="h-[56px] mt-[32px] text-base"
+              className="h-[56px] w-full  text-base"
             />
           </Link>
 

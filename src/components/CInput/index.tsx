@@ -13,7 +13,7 @@ interface CInputProps {
   placeholder?: string;
   className?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  details?: string;
+  tooltipDetails?: string;
   error?: boolean;
   errorMsg?: string;
   clearInput?: boolean;
@@ -24,6 +24,7 @@ interface CInputProps {
   border?: boolean;
   value?: string | number | any;
   disabled?: boolean;
+  tooltipTitle: string;
 }
 
 const CInput = ({
@@ -31,7 +32,7 @@ const CInput = ({
   placeholder,
   className,
   label,
-  details,
+  tooltipDetails,
   error,
   errorMsg,
   clearInput,
@@ -42,13 +43,19 @@ const CInput = ({
   handlePaste,
   value,
   disabled,
+  tooltipTitle,
   ...props
 }: CInputProps) => {
   const id = useCustomID('Cinput');
 
   return (
     <div className={className}>
-      <CLabel label={label} details={details} htmlFor={id} />
+      <CLabel
+        label={label}
+        tooltipDetails={tooltipDetails}
+        tooltipTitle={tooltipTitle}
+        htmlFor={id}
+      />
 
       <div className="relative w-full">
         {icon && (
