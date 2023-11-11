@@ -44,11 +44,7 @@ const Summary = ({ form }: SummaryProps) => {
   const summaryTitle = (
     <div className="w-full flex justify-between items-center pb-4">
       <h1 className="text-lg text-midnightBlue">Summary</h1>
-      <CTooltip
-        text={tooltipDetails.createStream.summary}
-        TooltipTitle="Summary"
-        placement="bottom"
-      >
+      <CTooltip text={tooltipDetails.createStream.summary} title="Summary" placement="bottom">
         <DetailLogo fill="#050142" />
       </CTooltip>
     </div>

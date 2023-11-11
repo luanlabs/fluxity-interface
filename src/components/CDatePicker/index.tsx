@@ -11,23 +11,23 @@ import { Wrapper } from './datePickerStyles';
 
 interface CDatePickerProps {
   label?: string;
-  tooltipDetails?: string;
   onChange: (value: Date) => void;
   className?: string;
   minDate: Date;
   maxDate: Date;
   readonly?: boolean;
   tooltipTitle: string;
+  tooltipDetails?: string;
 }
 
 const CDatePicker = ({
   label,
-  tooltipDetails,
   onChange,
   className,
   minDate,
   maxDate,
   readonly,
+  tooltipDetails,
   tooltipTitle,
 }: CDatePickerProps) => {
   const id = useCustomID('CDatePicker');
