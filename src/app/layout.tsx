@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { Provider } from 'react-redux';
-import { ThemeProvider } from 'styled-components';
-import { Toaster } from 'react-hot-toast';
-import { usePathname } from 'next/navigation';
 import localFont from 'next/font/local';
+import { Toaster } from 'react-hot-toast';
+import { ThemeProvider } from 'styled-components';
+import { usePathname } from 'next/navigation';
 
 import { store } from 'src/store';
 import Aside from 'src/containers/Aside';
@@ -16,6 +16,7 @@ import { Pages } from 'src/constants/pages';
 import '../styles/globals.css';
 import theme from '../styles/theme';
 import StyledComponentsRegistry from '../styles/registry';
+import AppDataFetch from 'src/containers/AppDataFetch';
 
 const myFont = localFont({
   src: [
@@ -33,10 +34,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="en" className={myFont.className}>
+      <head>
+        <link rel="icon" href="/images/favicon.ico" />
+      </head>
       <body>
         <Provider store={store}>
           <StyledComponentsRegistry>
             <ThemeProvider theme={theme}>
+              <AppDataFetch />
               <main className="bg-alabaster h-screen px-8 pt-[9px] pb-7">
                 <CCard className="mb-[10px]" bgColor="white">
                   <Header />

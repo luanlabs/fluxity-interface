@@ -4,7 +4,7 @@ import { IResponseAlreadyMinted } from 'src/constants/types';
 
 export const getAlreadyMinted = async (address: string) => {
   const { data } = await fetch<IResponseAlreadyMinted>(
-    `${ExternalPages.FLUXITY_API}/test/token/already-minted/${address}`,
+    `${ExternalPages.FLUXITY_API}/token/already-minted/${address}`,
   );
   return data.result.minted;
 };

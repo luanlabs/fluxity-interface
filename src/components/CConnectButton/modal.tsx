@@ -11,6 +11,7 @@ import { shortenAddress } from 'src/utils/shortenAddress';
 import { ExternalPages } from 'src/constants/externalPages';
 import { disconnect } from 'src/reducers/user';
 import { useAppDispatch } from 'src/hooks/useRedux';
+import { clearTokenBalances } from 'src/reducers/tokens';
 
 type ModalProps = {
   open: boolean;
@@ -83,6 +84,3 @@ const Modal = ({ open, address, closeModal, isMinimized }: ModalProps) => {
 };
 
 export default Modal;
-function clearTokenBalances(): any {
-  throw new Error('Function not implemented.');
-}

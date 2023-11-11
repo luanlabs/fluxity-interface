@@ -12,7 +12,7 @@ import { shortenAddress } from 'src/utils/shortenAddress';
 import { ExternalPages } from 'src/constants/externalPages';
 
 import fetch from 'src/utils/request';
-import { loadTokens } from 'src/reducers/tokens';
+import { loadClaimedTokens } from 'src/reducers/tokens';
 import { hasTestnetTokens } from 'src/reducers/user';
 import { IResponseTokenResult } from 'src/constants/types';
 import { useAppSelector, useAppDispatch } from 'src/hooks/useRedux';
@@ -48,7 +48,7 @@ const ClaimTokens = () => {
     }
     try {
       const { data } = await fetch<IResponseTokenResult>(
-        ExternalPages.FLUXITY_API + 'test/token/mint',
+        ExternalPages.FLUXITY_API + '/token/mint',
         {
           method: 'POST',
           body: JSON.stringify({ user: address }),
@@ -57,12 +57,13 @@ const ClaimTokens = () => {
           },
         },
       );
+      console.log(data.result);
 
       const mappedTokens = data.result.map((token) => {
         return { ...token, balance: '10000000000' };
       });
 
-      dispatch(loadTokens(mappedTokens));
+      dispatch(loadClaimedTokens(mappedTokens));
       dispatch(hasTestnetTokens());
 
       toast('success', 'Test tokens have been transferred to your wallet successfully.');
