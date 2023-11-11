@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 
 import CPageCard from 'src/components/CPageCard';
-import DocumentationCard from 'src/containers/DocumentationCard';
+import FaqCard from 'src/containers/FaqCard';
 import WelcomeToFluxityCard from 'src/containers/WelcomeToFluxityCard';
-import CreateStreamCardPurpleCard from 'src/containers/CreateStreamCardPurpleCard';
+import ClaimTokenCard from 'src/containers/ClaimTokenCard';
 
 export const metadata: Metadata = {
   title: 'Fluxity - Home',
@@ -12,12 +12,12 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <CPageCard className="w-full py-[23px] px-[27px] ">
+    <CPageCard className="w-full py-[23px] px-[27px]">
       <WelcomeToFluxityCard />
-      <p className="text-2xl font-normal my-[18px] ml-1">More with Fluxity</p>
-      <div className="flex gap-6">
-        <CreateStreamCardPurpleCard />
-        <DocumentationCard />
+      <p className="text-2xl font-medium my-[18px] ml-1">More with Fluxity</p>
+      <div className="flex basis-1/2 w-full gap-4">
+        <FaqCard />
+        <ClaimTokenCard />
       </div>
     </CPageCard>
   );

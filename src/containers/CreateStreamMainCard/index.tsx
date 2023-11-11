@@ -16,7 +16,6 @@ import CInputRate, { CInputRateValue } from 'src/components/CInputRate';
 import WalletAddressContainer from 'src/containers/WalletAddressContainer';
 
 import validateForm from './validateForm';
-import ClaimTokens from '../ClaimTokens';
 import ConfirmTransaction from '../ConfirmTransaction';
 import CancellableStream, { ToggleStatus } from '../CancellableStream';
 
@@ -36,7 +35,7 @@ const CreateStream = () => {
   const [isFormValidated, setIsFormValidated] = useState(false);
   const [isConfirm, setIsConfirm] = useState(false);
 
-  const { address, loading, hasReceivedTokens } = useAppSelector((state) => state.user);
+  const { address } = useAppSelector((state) => state.user);
 
   const form = useForm<FormValues>({
     mode: 'onChange',
@@ -228,12 +227,6 @@ const CreateStream = () => {
               onClick={handleOpenModals}
             />
           </div>
-
-          {address && !loading && !hasReceivedTokens && (
-            <div className="absolute bottom-0">
-              <ClaimTokens />
-            </div>
-          )}
         </div>
       </div>
 
