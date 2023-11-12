@@ -55,9 +55,7 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
     setIsApproveModalOpen(false);
     setIsWalletLoadingApproveModalOpen(true);
 
-    setIsWalletLoadingApproveModalOpen(false);
     await timeout(100);
-    setIsSendingApproveTxModalOpen(true);
 
     const checkAllowance = await getERC20Allowance(
       values.token.value.address,
@@ -69,7 +67,7 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
       setIsSendingApproveTxModalOpen(false);
       setIsCreateStreamConfirmModalOpen(true);
 
-      toast('success', 'Transaction has been approved successfully.');
+      toast('success', 'Transaction has been approved successfully');
 
       return;
     }
@@ -85,7 +83,7 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
     try {
       signedTx = await signTransaction(address, approveXdr);
     } catch {
-      setIsSendingApproveTxModalOpen(false);
+      setIsWalletLoadingApproveModalOpen(false);
       toast('error', 'Failed to sign the transaction');
 
       return;
@@ -96,13 +94,15 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
     try {
       tx = await sendTransaction(signedTx);
     } catch {
-      setIsSendingApproveTxModalOpen(false);
       toast('error', 'Failed to submit the transaction');
 
       return;
     }
 
     if (tx) {
+      setIsWalletLoadingApproveModalOpen(false);
+      await timeout(100);
+      setIsSendingApproveTxModalOpen(true);
       const finalize = await finalizeTransaction(tx.hash);
 
       setIsWalletLoadingApproveModalOpen(false);
@@ -116,7 +116,7 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
       return;
     }
 
-    toast('success', 'Transaction has been approved successfully.');
+    toast('success', 'Transaction has been approved successfully');
     setIsCreateStreamConfirmModalOpen(true);
   };
 
@@ -158,7 +158,7 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
       setTxStatus(finalize);
 
       if (!finalize) {
-        setIsSendingApproveTxModalOpen(false);
+        setIsSendingCreateStreamTxModalOpen(false);
         toast('error', 'Approve failed');
         return;
       }
@@ -194,7 +194,7 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
 
       <CProcessModal
         title="Waiting for token access approval"
-        message="You are granting Fluxity access to your tokens equal to your total order amount."
+        message="You are granting Fluxity access to your tokens equal to your total order amount"
         isOpen={isWalletLoadingApproveModalOpen}
         setIsOpen={setIsWalletLoadingApproveModalOpen}
       />
