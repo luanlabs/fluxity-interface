@@ -48,7 +48,7 @@ const ClaimTokens = () => {
     }
     try {
       const { data } = await fetch<IResponseTokenResult>(
-        ExternalPages.FLUXITY_API + '/token/mint',
+        ExternalPages.FLUXITY_API + '/testnet/token/mint',
         {
           method: 'POST',
           body: JSON.stringify({ user: address }),

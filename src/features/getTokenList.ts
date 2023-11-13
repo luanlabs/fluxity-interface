@@ -4,7 +4,7 @@ import { IResponseTokenResult } from 'src/constants/types';
 
 export const getTokenList = async () => {
   const { data, response } = await fetch<IResponseTokenResult>(
-    `${ExternalPages.FLUXITY_API}/token`,
+    `${ExternalPages.FLUXITY_API}/testnet/token`,
   );
   return { data, response };
 };

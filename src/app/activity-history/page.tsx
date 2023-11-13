@@ -5,7 +5,10 @@ import ActivityHistoryContainer from 'src/containers/ActivityHistoryContainer';
 
 export const metadata: Metadata = {
   title: 'Fluxity - Activity History',
-  description: 'Your command center to create, monitor, and manage your token streams.',
+  description:
+    'Track your past, present, and future token streaming activities on the Stellar network with Fluxity’s comprehensive activity history feature.',
+  keywords:
+    'token streaming history, transaction tracking, Stellar network, digital finance, stream monitoring',
 };
 
 const ActivityHistory = () => {

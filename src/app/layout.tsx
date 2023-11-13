@@ -35,7 +35,38 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={myFont.className}>
       <head>
+        <meta charSet="UTF-8" />
         <link rel="icon" href="/images/favicon.ico" />
+        <meta
+          name="keywords"
+          content="Fluxity, Stellar, token streaming, cryptocurrency, blockchain, finance, digital payments, smart contracts"
+        />
+        <meta
+          name="description"
+          content="Fluxity offers a comprehensive token streaming solution built on the Stellar network, designed to facilitate real-time, secure, and automated digital payments. With Fluxity, users can create, manage, and monitor token streams effortlessly."
+        />
+        <meta name="copyright" content="Fluxity Finance" />
+        <meta name="revised" content="Saturday, November 11th, 2023, 4:11 pm" />
+        <meta name="abstract" content="New Payment Horizons with Token Streaming with Fluxity" />
+        <meta name="topic" content="Token Streaming Solutions" />
+        <meta
+          name="summary"
+          content="Fluxity is a token streaming platform unlocking new digital payment possibilities on the Stellar network."
+        />
+        <meta name="Classification" content="Business" />
+        <meta name="author" content="Fluxity Team, fluxity.finance@gmail.com" />
+        <meta name="designer" content="Fluxity Design Team" />
+        <meta name="reply-to" content="fluxity.finance@gmail.com" />
+        <meta name="owner" content="Fluxity Finance" />
+        <meta name="url" content="http://fluxity.finance" />
+        <meta name="identifier-URL" content="http://fluxity.finance" />
+        <meta name="directory" content="submission" />
+        <meta name="category" content="Finance, Cryptocurrency, Blockchain" />
+        <meta name="coverage" content="Worldwide" />
+        <meta name="distribution" content="Global" />
+        <meta name="rating" content="General" />
+        <meta name="revisit-after" content="7 days" />
+        <meta name="subtitle" content="Unlock New Payment Possibilities" />
       </head>
       <body>
         <Provider store={store}>
