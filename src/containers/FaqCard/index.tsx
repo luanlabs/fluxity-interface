@@ -8,7 +8,7 @@ import CCard from 'src/components/CCard';
 import CButton from 'src/components/CButton';
 import { Pages } from 'src/constants/pages';
 
-import LifeBuoy from 'public/images/lifeBuoy.svg';
+import lifeBuoy from 'public/images/lifeBuoy.svg';
 import blueDivider from 'public/images/blueDivider.svg';
 
 const FaqCard = () => {
@@ -31,7 +31,7 @@ const FaqCard = () => {
           onClick={handleClick}
           content="FAQ"
           variant="simple"
-          logo={LifeBuoy}
+          logo={lifeBuoy}
           className="w-[89px] font-medium border-royalBlue border hover:bg-lavenderBlush transition-all duration-700"
         />
       </div>
