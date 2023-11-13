@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import React, { useState } from 'react';
 
@@ -29,12 +31,21 @@ const ClaimTokens = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openSecondModal, setOpenSecondModal] = useState(false);
 
-  const address = useAppSelector((state) => state.user.address);
+  const { address, hasReceivedTokens } = useAppSelector((state) => state.user);
   const info = useAppSelector((state) => state.user.info);
   const dispatch = useAppDispatch();
 
   const handleClick = () => {
-    setIsOpen(true);
+    if (!address) {
+      toast('error', 'You need to connect your wallet first.');
+      return;
+    }
+
+    if (hasReceivedTokens) {
+      toast('error', 'You have already received testnet tokens.');
+    } else {
+      setIsOpen(true);
+    }
   };
 
   const handleClaim = async () => {
@@ -57,7 +68,6 @@ const ClaimTokens = () => {
           },
         },
       );
-      console.log(data.result);
 
       const mappedTokens = data.result.map((token) => {
         return { ...token, balance: '10000000000' };
