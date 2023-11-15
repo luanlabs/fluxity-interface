@@ -8,6 +8,7 @@ import { ThemeProvider } from 'styled-components';
 import { usePathname } from 'next/navigation';
 
 import { store } from 'src/store';
+import myFont from 'src/utils/localFont';
 import Aside from 'src/containers/Aside';
 import CCard from 'src/components/CCard';
 import Header from 'src/containers/Header';
@@ -17,14 +18,6 @@ import 'src/styles/globals.css';
 import theme from '../styles/theme';
 import StyledComponentsRegistry from '../styles/registry';
 import AppDataFetch from 'src/containers/AppDataFetch';
-
-const myFont = localFont({
-  src: [
-    { style: 'normal', weight: '400', path: '../../public/font/Aeonik-Regular.ttf' },
-    { style: 'normal', weight: '500', path: '../../public/font/Aeonik-Medium.ttf' },
-    { style: 'normal', weight: '700', path: '../../public/font/Aeonik-Bold.ttf' },
-  ],
-});
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [isMinimized, setIsMinimized] = useState(false);
