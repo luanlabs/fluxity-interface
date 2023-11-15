@@ -13,7 +13,7 @@ import CCard from 'src/components/CCard';
 import Header from 'src/containers/Header';
 import { Pages } from 'src/constants/pages';
 
-import '../styles/globals.css';
+import 'src/styles/globals.css';
 import theme from '../styles/theme';
 import StyledComponentsRegistry from '../styles/registry';
 import AppDataFetch from 'src/containers/AppDataFetch';
@@ -68,12 +68,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="revisit-after" content="7 days" />
         <meta name="subtitle" content="Unlock New Payment Possibilities" />
       </head>
-      <body>
+      <body className="bg-alabaster">
         <Provider store={store}>
           <StyledComponentsRegistry>
             <ThemeProvider theme={theme}>
               <AppDataFetch />
-              <main className="bg-alabaster h-screen px-8 pt-[9px] pb-7">
+              <main
+                className="px-8 pt-[9px] pb-7 w-full xxl:w-[100%] 2xl:!w-[60%] 3xl:!w-[35%] h-screen
+                2xl:h-[80vh] 3xl:h-[50vh] 4xl:h-[30vh] 4xl:!w-[30%] m-auto"
+              >
                 <CCard className="mb-[10px]" bgColor="white">
                   <Header />
                 </CCard>
@@ -82,7 +85,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     className={`relative overflow-hidden ${!knownRoutes && 'hidden'} ${
                       isMinimized
                         ? 'basis-[80px] transition-all duration-500'
-                        : 'basis-[20%] transition-all duration-500'
+                        : 'basis-[30%] lg:basis-[20%] transition-all duration-500'
                     } px-[15px] py-[19px]`}
                     bgColor="white"
                   >

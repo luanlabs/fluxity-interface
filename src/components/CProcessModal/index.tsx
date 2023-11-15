@@ -19,7 +19,7 @@ const CProcessModal = ({ isOpen, setIsOpen, title, message }: CProcessModalType)
           <Image src={rolling} alt="rolling" />
         </div>
 
-        <div className="font-medium text-2xl mb-3 mt-8 text-center w-4/5">{title}</div>
+        <div className="font-medium text-2xl mb-3 mt-8 text-center w-11/12">{title}</div>
 
         {message && <div className="text-[18px] w-11/12 text-center">{message}</div>}
       </div>
