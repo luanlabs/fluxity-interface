@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import cn from 'classnames';
 import { UseFormReturn } from 'react-hook-form';
@@ -10,9 +10,10 @@ import { FormValues } from '../CreateStreamMainCard';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 import { checkBalance } from 'src/utils/checkBalance';
 import { mapFormValues } from './mapFormValues';
-
-import summaryLogo from 'public/images/summary.svg';
+import DetailLogo from 'src/assets/detail';
 import humanizeAmount from 'src/utils/humanizeAmount';
+import CTooltip from 'src/components/CTooltip';
+import tooltipDetails from 'src/constants/tooltipDetails';
 
 interface SummaryProps {
   form: UseFormReturn<any, undefined>;
@@ -43,7 +44,9 @@ const Summary = ({ form }: SummaryProps) => {
   const summaryTitle = (
     <div className="w-full flex justify-between items-center pb-4">
       <h1 className="text-lg text-midnightBlue">Summary</h1>
-      <Image src={summaryLogo} alt="summary" width={0} height={0} />
+      <CTooltip text={tooltipDetails.createStream.summary} title="Summary" placement="bottom">
+        <DetailLogo fill="#050142" />
+      </CTooltip>
     </div>
   );
 

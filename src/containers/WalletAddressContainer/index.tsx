@@ -16,9 +16,16 @@ import tickLogo from 'public/images/tick.svg';
 interface WalletAddressContainer {
   onChange: (value: string) => void;
   clearInputClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  tooltipDetails: string;
+  tooltipTitle: string;
 }
 
-const WalletAddressContainer = ({ onChange, clearInputClick }: WalletAddressContainer) => {
+const WalletAddressContainer = ({
+  onChange,
+  clearInputClick,
+  tooltipDetails,
+  tooltipTitle,
+}: WalletAddressContainer) => {
   const [recipientWalletAddress, setRecipientWalletAddress] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
@@ -96,8 +103,9 @@ const WalletAddressContainer = ({ onChange, clearInputClick }: WalletAddressCont
   return (
     <div>
       <CLabel
-        label="Receiver wallet address"
-        details="Identify the address you want to stream tokens to."
+        label="Recipient wallet address"
+        tooltipDetails={tooltipDetails}
+        tooltipTitle={tooltipTitle}
       />
 
       <div className="relative">
@@ -106,7 +114,7 @@ const WalletAddressContainer = ({ onChange, clearInputClick }: WalletAddressCont
           onClick={handleOpenModal}
         >
           {inputValue === '' ? (
-            'Enter wallet address'
+            'Recipient wallet address'
           ) : (
             <p className="text-midnightBlue">{shortAddress}</p>
           )}
@@ -141,7 +149,7 @@ const WalletAddressContainer = ({ onChange, clearInputClick }: WalletAddressCont
           border
         />
 
-        <div className=" h-10 mt-3">
+        <div className="h-10 mt-3">
           {isValidateAddress && (
             <div>
               <div className="flex justify-between items-center rounded-xl bg-[#F9F9F9] px-2 py-[10px]">
@@ -167,7 +175,7 @@ const WalletAddressContainer = ({ onChange, clearInputClick }: WalletAddressCont
           <button
             className={` ${
               !isValidateAddress
-                ? 'bg-lavenderGray text-darkBlue '
+                ? 'bg-lavenderGray text-softGray'
                 : 'bg-royalBlue text-white hover:bg-buttonHover'
             }  px-[24px] py-[14px] text-base rounded-[10px] text-midnightBlue`}
             disabled={!isValidateAddress}

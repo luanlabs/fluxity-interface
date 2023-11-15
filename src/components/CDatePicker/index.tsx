@@ -11,22 +11,24 @@ import { Wrapper } from './datePickerStyles';
 
 interface CDatePickerProps {
   label?: string;
-  details?: string;
   onChange: (value: Date) => void;
   className?: string;
   minDate: Date;
   maxDate: Date;
   readonly?: boolean;
+  tooltipTitle: string;
+  tooltipDetails?: string;
 }
 
 const CDatePicker = ({
   label,
-  details,
   onChange,
   className,
   minDate,
   maxDate,
   readonly,
+  tooltipDetails,
+  tooltipTitle,
 }: CDatePickerProps) => {
   const id = useCustomID('CDatePicker');
   const [selectedDate, setSelectedDate] = useState(minDate || new Date());
@@ -90,12 +92,13 @@ const CDatePicker = ({
       <div className="flex items-center">
         <CLabel
           label={label}
-          details={details}
+          tooltipDetails={tooltipDetails}
+          tooltipTitle={tooltipTitle}
           htmlFor={id}
           className={`mr-[10px] ${enabled || readonly ? '' : '!text-[#817fa0]'}`}
           disabled={!enabled && !readonly ? true : false}
         />
-        <div>
+        <div className="mb-1.5">
           <CToggle onChange={handleToggleStatus} readonly={readonly} />
         </div>
       </div>

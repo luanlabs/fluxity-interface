@@ -61,10 +61,8 @@ const CModal = ({
               >
                 <Dialog.Panel
                   className={cn(
-                    `
-                     transform overflow-hidden rounded-[20px] ${
-                       headerImage ? 'p-0' : 'p-4'
-                     }  bg-white text-left align-middle shadow-xl transition-all`,
+                    `transform overflow-hidden rounded-[20px] ${headerImage ? 'p-0' : 'p-6'}
+                  bg-white text-left align-middle shadow-xl transition-all`,
                     className,
                   )}
                   style={{
