@@ -26,7 +26,7 @@ const FaqCard = () => {
 
       <p>Find quick answers to common queries.</p>
 
-      <div className="absolute bottom-[22px] right-[24.47px]">
+      <div className="absolute bottom-[22px] left-[24.47px]">
         <CButton
           onClick={handleClick}
           content="FAQ"
