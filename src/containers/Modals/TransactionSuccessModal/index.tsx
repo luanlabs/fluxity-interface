@@ -34,7 +34,7 @@ const TransactionSuccessModal = ({
           </h1>
           <p className="text-[18px] text-center mt-[32px]">{hash && shortenAddress(hash, 5)}</p>
           <Link
-            href={`${ExternalPages.EXPLORER_TRANSACTION}/${hash}`}
+            href={`${ExternalPages.EXPLORER}/transactions/${hash}`}
             target="_blank"
             className="w-full mt-[32px]"
           >

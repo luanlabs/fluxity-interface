@@ -8,6 +8,7 @@ const CustomLink = ({ title, url }: Type) => {
     <Link
       href={url}
       className="text-darkNavyBlue text-lg mx-2 hover:text-transparentMidnightBlue transition-all duration-700"
+      target="blank"
     >
       {title}
     </Link>
