@@ -22,7 +22,7 @@ const FaqCard = () => {
     <CCard borderColor="#0000001A" className="relative bg-white p-[19.6px] h-[238px] w-1/2">
       <h1 className="font-medium text-2xl">Frequently Asked Questions</h1>
 
-      <Image src={blueDivider} alt="Divider" className="py-4" />
+      <Image src={blueDivider} alt="Divider" className="py-4 select-none" />
 
       <p>Find quick answers to common queries.</p>
 
