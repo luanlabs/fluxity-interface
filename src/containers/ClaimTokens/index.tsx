@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import React, { useState } from 'react';
 
@@ -12,7 +14,7 @@ import { shortenAddress } from 'src/utils/shortenAddress';
 import { ExternalPages } from 'src/constants/externalPages';
 
 import fetch from 'src/utils/request';
-import { loadTokens } from 'src/reducers/tokens';
+import { loadClaimedTokens } from 'src/reducers/tokens';
 import { hasTestnetTokens } from 'src/reducers/user';
 import { IResponseTokenResult } from 'src/constants/types';
 import { useAppSelector, useAppDispatch } from 'src/hooks/useRedux';
@@ -30,10 +32,20 @@ const ClaimTokens = () => {
   const [openSecondModal, setOpenSecondModal] = useState(false);
 
   const address = useAppSelector((state) => state.user.address);
+  const hasReceivedTokens = useAppSelector((state) => state.user.hasReceivedTokens);
   const info = useAppSelector((state) => state.user.info);
   const dispatch = useAppDispatch();
 
   const handleClick = () => {
+    if (!address) {
+      toast('error', 'You need to connect your wallet first.');
+      return;
+    }
+
+    if (hasReceivedTokens) {
+      toast('error', 'You have already received testnet tokens.');
+      return;
+    }
     setIsOpen(true);
   };
 
@@ -48,7 +60,7 @@ const ClaimTokens = () => {
     }
     try {
       const { data } = await fetch<IResponseTokenResult>(
-        ExternalPages.FLUXITY_API + '/token/mint',
+        ExternalPages.FLUXITY_API + '/testnet/token/mint',
         {
           method: 'POST',
           body: JSON.stringify({ user: address }),
@@ -62,7 +74,7 @@ const ClaimTokens = () => {
         return { ...token, balance: '10000000000' };
       });
 
-      dispatch(loadTokens(mappedTokens));
+      dispatch(loadClaimedTokens(mappedTokens));
       dispatch(hasTestnetTokens());
 
       toast('success', 'Test tokens have been transferred to your wallet successfully.');
@@ -74,14 +86,14 @@ const ClaimTokens = () => {
   };
 
   return (
-    <CCard borderColor="#0000001A" className="relative bg-white p-[19.6px] h-[261px]">
-      <h1 className="font-medium text-2xl">Claim Testnet Tokens for Free!</h1>
+    <CCard borderColor="#0000001A" className="relative bg-white p-[19.6px] h-[238px] w-1/2">
+      <h1 className="font-medium text-2xl">Claim Testnet Tokens!</h1>
 
-      <Image src={blueDivider} alt="Divider" className="py-4" />
+      <Image src={blueDivider} alt="Divider" className="py-4 select-none" />
 
       <p>Try how token streaming works with some test tokens at no cost.</p>
 
-      <div className="absolute bottom-[22px] right-[24.47px]">
+      <div className="absolute bottom-[22px] left-[24.47px]">
         <CButton
           onClick={handleClick}
           content="Claim Tokens"
@@ -100,15 +112,15 @@ const ClaimTokens = () => {
         <>
           <div className="flex gap-2 absolute top-14 left-6">
             <span className="flex bg-white rounded-full gap-1 p-[10px] items-center">
-              <Image src={usdc} alt="usdc" />
+              <Image src={usdc} alt="usdc" draggable={false} />
               <p>fUSDC</p>
             </span>
             <span className="flex bg-white rounded-full gap-1 p-[10px] pr-4 items-center">
-              <Image src={dai} alt="dai" />
+              <Image src={dai} alt="dai" draggable={false} />
               <p>fDAI</p>
             </span>
             <span className="flex bg-white rounded-full gap-1 p-[10px] pr-4 items-center">
-              <Image src={yxlm} alt="xlm" width={32} height={32} />
+              <Image src={yxlm} alt="xlm" width={32} height={32} draggable={false} />
               <p>XLM</p>
             </span>
           </div>

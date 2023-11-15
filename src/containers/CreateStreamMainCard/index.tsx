@@ -1,21 +1,21 @@
 'use client';
+
 import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
+import { ISelectToken } from 'src/models';
 import CButton from 'src/components/CButton';
 import CPageCard from 'src/components/CPageCard';
-import CDatePicker from 'src/components/CDatePicker';
-import CInputRate, { CInputRateValue } from 'src/components/CInputRate';
-import validateForm from './validateForm';
-import SummaryContainer from 'src/containers/Summary';
-import SelectTokenContainer from 'src/containers/SelectToken';
-import WalletAddressContainer from 'src/containers/WalletAddressContainer';
-import CStreamingModelContainer from '../CStreamingModelContainer';
-import { Model } from 'src/components/CStreamingModel';
-import { ISelectToken } from 'src/models';
 import { useAppSelector } from 'src/hooks/useRedux';
+import CDatePicker from 'src/components/CDatePicker';
+import SummaryContainer from 'src/containers/Summary';
+import { Model } from 'src/components/CStreamingModel';
+import SelectTokenContainer from 'src/containers/SelectToken';
+import CStreamingModelContainer from '../CStreamingModelContainer';
+import CInputRate, { CInputRateValue } from 'src/components/CInputRate';
+import WalletAddressContainer from 'src/containers/WalletAddressContainer';
 
-import ClaimTokens from '../ClaimTokens';
+import validateForm from './validateForm';
 import ConfirmTransaction from '../ConfirmTransaction';
 import CancellableStream, { ToggleStatus } from '../CancellableStream';
 import tooltipDetails from 'src/constants/tooltipDetails';
@@ -36,9 +36,7 @@ const CreateStream = () => {
   const [isFormValidated, setIsFormValidated] = useState(false);
   const [isConfirm, setIsConfirm] = useState(false);
 
-  const address = useAppSelector((state) => state.user.address);
-  const loading = useAppSelector((state) => state.user.loading);
-  const hasReceivedTokens = useAppSelector((state) => state.user.hasReceivedTokens);
+  const { address } = useAppSelector((state) => state.user);
 
   const form = useForm<FormValues>({
     mode: 'onChange',
@@ -69,7 +67,7 @@ const CreateStream = () => {
     setIsConfirm(true);
   };
 
-  const isFormCompleteValidition = !isValid || isValidating || !isFormValidated || !address;
+  const isFormCompleteValidation = !isValid || isValidating || !isFormValidated || !address;
 
   const CreateStreamTitle = (
     <div className="w-full flex justify-between items-center pb-2">
@@ -175,7 +173,7 @@ const CreateStream = () => {
                   <CDatePicker
                     className="w-[236px]"
                     label="Cliff date"
-                    details="Cliffdate"
+                    details="CliffDate"
                     minDate={
                       getValues('startDate')
                         ? new Date(getValues('startDate'))
@@ -232,22 +230,16 @@ const CreateStream = () => {
               type="submit"
               variant="form"
               content="Create Stream"
-              fill={isFormCompleteValidition ? '#050142' : '#fff'}
+              fill={isFormCompleteValidation ? '#050142' : '#fff'}
               className={
-                isFormCompleteValidition
+                isFormCompleteValidation
                   ? '!bg-[#E6E6EC] !text-[#050142]'
                   : '!bg-darkBlue !text-white'
               }
-              disabled={isFormCompleteValidition}
+              disabled={isFormCompleteValidation}
               onClick={handleOpenModals}
             />
           </div>
-
-          {address && !loading && !hasReceivedTokens && (
-            <div className="absolute bottom-0">
-              <ClaimTokens />
-            </div>
-          )}
         </div>
       </div>
 

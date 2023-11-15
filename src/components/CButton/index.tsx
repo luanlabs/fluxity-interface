@@ -25,7 +25,6 @@ interface ButtonProps {
   fill?: string;
   logo?: string;
   onClick?: () => void;
-  logo?: string;
 }
 
 const CButton = ({
@@ -54,7 +53,7 @@ const CButton = ({
         </div>
       )}
       {logo && (
-        <Image src={logo} width={25} height={25} alt="logo" className="mr-2" />
+        <Image src={logo} width={25} height={25} alt="logo" className="mr-2" draggable={false} />
       )}
       {content}
     </button>

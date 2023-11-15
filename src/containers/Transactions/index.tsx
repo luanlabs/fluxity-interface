@@ -96,7 +96,7 @@ const Transactions = () => {
               </div>
             </div>
           </CCard>
-        ))}{' '}
+        ))}
       </Styled.Scroll>
     </>
   );
