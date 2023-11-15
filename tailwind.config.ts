@@ -49,6 +49,9 @@ const config: Config = {
         lg: { min: '1024px', max: '1279px' },
         xl: { min: '1280px', max: '1535px' },
         xxl: { min: '1536px' },
+        '2xl': { min: '2500px', max: '3200px' },
+        '3xl': { min: '3200px', max: '7800px' },
+        '4xl': { min: '7500px', max: '10000px' },
       },
       backgroundImage: {
         calendar: "url('/images/calendar.svg')",

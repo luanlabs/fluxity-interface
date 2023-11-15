@@ -83,7 +83,7 @@ const CreateStream = () => {
         <CPageCard
           title={CreateStreamTitle}
           divider
-          className="w-[580px] pl-[30px] pr-[18px] py-[15px]"
+          className="w-full pl-[30px] pr-[18px] py-[15px]"
         >
           <div className="w-full">
             <div>
