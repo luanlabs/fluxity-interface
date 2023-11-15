@@ -13,14 +13,21 @@ const WelcomeToFluxityCard = () => {
         bgColor="#EBFDFF"
         borderColor="#9af3ff"
       >
-        <div className="p-[53px] text-midnightBlue z-50">
+        <div className="p-[53px] text-midnightBlue z-20">
           <h1 className="text-[30px] w-[32%] font-medium">Welcome to Fluxity!</h1>
           <p className="ext-[15px] w-[80%] mt-[23px]">
             Your command center to create, monitor, and manage your token streams.
           </p>
         </div>
         <div className="z-10">
-          <Image src={welcomeLogo} fill alt="logo" objectFit="contain" objectPosition="right" />
+          <Image
+            src={welcomeLogo}
+            fill
+            alt="logo"
+            objectFit="contain"
+            objectPosition="right"
+            draggable={false}
+          />
         </div>
       </CCard>
     </div>

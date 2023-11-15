@@ -16,7 +16,7 @@ const ApproveFormModal = ({ isOpen, setIsOpen, onClick }: ApproveFormModalProps)
     <div className="w-full">
       <CModal isOpen={isOpen} setIsOpen={setIsOpen} width="396px">
         <div className="w-full flex flex-col items-center justify-center">
-          <Image src={successLogo} width={0} height={0} alt="ok" />
+          <Image src={successLogo} width={0} height={0} alt="ok" draggable={false} />
           <h1 className="text-[24px] font-medium mt-[24px] tracking-wide text-center">
             Approve token Access
           </h1>

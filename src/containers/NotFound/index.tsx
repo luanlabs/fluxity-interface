@@ -16,7 +16,7 @@ export default function NotFoundContainer() {
 
   return (
     <div className="h-full w-full flex justify-center items-center flex-col">
-      <Image src={logo} alt="404 image" />
+      <Image src={logo} alt="404 image" className="select-none" draggable={false} />
       <p className="mt-5 text-2xl font-medium">Page not found</p>
       <p className="mt-4 text-base font-medium">Sorry, but we cannot locate your requested page.</p>
       <CButton

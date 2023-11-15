@@ -31,7 +31,8 @@ const ClaimTokens = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openSecondModal, setOpenSecondModal] = useState(false);
 
-  const { address, hasReceivedTokens } = useAppSelector((state) => state.user);
+  const address = useAppSelector((state) => state.user.address);
+  const hasReceivedTokens = useAppSelector((state) => state.user.hasReceivedTokens);
   const info = useAppSelector((state) => state.user.info);
   const dispatch = useAppDispatch();
 
@@ -43,9 +44,9 @@ const ClaimTokens = () => {
 
     if (hasReceivedTokens) {
       toast('error', 'You have already received testnet tokens.');
-    } else {
-      setIsOpen(true);
+      return;
     }
+    setIsOpen(true);
   };
 
   const handleClaim = async () => {
@@ -111,15 +112,15 @@ const ClaimTokens = () => {
         <>
           <div className="flex gap-2 absolute top-14 left-6">
             <span className="flex bg-white rounded-full gap-1 p-[10px] items-center">
-              <Image src={usdc} alt="usdc" />
+              <Image src={usdc} alt="usdc" draggable={false} />
               <p>fUSDC</p>
             </span>
             <span className="flex bg-white rounded-full gap-1 p-[10px] pr-4 items-center">
-              <Image src={dai} alt="dai" />
+              <Image src={dai} alt="dai" draggable={false} />
               <p>fDAI</p>
             </span>
             <span className="flex bg-white rounded-full gap-1 p-[10px] pr-4 items-center">
-              <Image src={yxlm} alt="xlm" width={32} height={32} />
+              <Image src={yxlm} alt="xlm" width={32} height={32} draggable={false} />
               <p>XLM</p>
             </span>
           </div>
