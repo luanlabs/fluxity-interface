@@ -65,6 +65,10 @@ export const mapFormValues = (values: FormValues) => {
         return { label: 'Cancellable Stream', value };
       }
 
+      if (label === 'cliffDate') {
+        return { label: 'Cliff Date', value: value.toLocaleDateString('en-US', options) };
+      }
+
       return {
         label,
         value,
