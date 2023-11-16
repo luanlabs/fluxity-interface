@@ -26,6 +26,7 @@ export interface FormValues {
   token: ISelectToken;
   startDate: Date;
   endDate: Date;
+  cliffDate: Date;
   streamingModel: Model;
   isCancellable: ToggleStatus;
 }
@@ -57,10 +58,10 @@ const CreateStream = () => {
     formState: { errors, isValid, isValidating },
   } = form;
 
-  watch(['startDate', 'endDate', 'rate', 'token', 'address']);
+  watch(['startDate', 'endDate', 'cliffDate', 'rate', 'token', 'address']);
 
   const onSubmit = (data: FormValues) => {
-    // console.log(data);
+    console.log(data);
   };
 
   const handleOpenModals = () => {
@@ -165,7 +166,7 @@ const CreateStream = () => {
 
             <hr className="my-6" />
 
-            {/* <div className="mb-6">
+            <div className="mb-6">
               <Controller
                 name="cliffDate"
                 control={control}
@@ -173,18 +174,15 @@ const CreateStream = () => {
                   <CDatePicker
                     className="w-[236px]"
                     label="Cliff date"
-                    details="CliffDate"
-                    minDate={
-                      getValues('startDate')
-                        ? new Date(getValues('startDate'))
-                        : new Date()
-                    }
+                    tooltipTitle="Cliff date"
+                    tooltipDetails={tooltipDetails.createStream.cliffDate}
+                    minDate={getValues('startDate')}
                     maxDate={getValues('endDate')}
                     {...field}
                   />
                 )}
               />
-            </div> */}
+            </div>
 
             <div className="flex gap-2">
               <Controller

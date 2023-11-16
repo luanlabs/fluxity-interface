@@ -12,6 +12,7 @@ const { ScMapEntry: addToMap } = xdr;
 const toXdrValue = (params: FormValues, address: string) => {
   const startDate = dateToSeconds(params.startDate).toString();
   const endDate = dateToSeconds(params.endDate).toString();
+  const cliffDate = dateToSeconds(params.cliffDate).toString();
   const amount = toDecimals(calculateTotalAmount(params));
 
   return scvMap([
@@ -25,7 +26,7 @@ const toXdrValue = (params: FormValues, address: string) => {
     }),
     new addToMap({
       key: ToScVal.symbol('cliff_date'),
-      val: ToScVal.u64(startDate),
+      val: ToScVal.u64(cliffDate),
     }),
     new addToMap({
       key: ToScVal.symbol('end_date'),
