@@ -174,7 +174,7 @@ const CreateStream = () => {
                   <CDatePicker
                     className="w-[236px]"
                     label="Cliff date"
-                    tooltipTitle="Cliff date"
+                    tooltipTitle="Cliff Date"
                     tooltipDetails={tooltipDetails.createStream.cliffDate}
                     minDate={getValues('startDate')}
                     maxDate={getValues('endDate')}
