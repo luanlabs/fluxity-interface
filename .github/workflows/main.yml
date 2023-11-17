@@ -24,9 +24,8 @@ jobs:
         env:
           EXECUTION_PATH: ${{ secrets.EXECUTION_PATH }}
         run: |
-          cd $EXECUTION_PATH/fluxity-interface
-          docker-compose down
-          docker-compose up -d
+          docker stop $(docker ps -q --filter ancestor=fluxity-interface )
+          docker run -d -p 3001:3001 fluxity-interface
 
   Cleanup:
     name: Cleanup
