@@ -1,21 +1,29 @@
 import BN from 'bignumber.js';
 
-export const calculateTotalAmount = (
-  startDate: Date,
-  endDate: Date,
-  amount: BN,
-  rate: number,
-) => {
-  const amountAsNumber = new BN(amount);
+import { FormValues as CreateStreamFormValues } from 'src/containers/CreateStreamMainCard';
 
-  let timeStampStartDate = new BN(new Date().getTime());
-  let timeStampEndDate = new BN(endDate.getTime());
+import rateToNumber from './rateToNumber';
+import dateToSeconds from './dateToSeconds';
 
-  if (startDate) {
-    timeStampStartDate = new BN(startDate.getTime());
+export const calculateTotalAmount = (params: CreateStreamFormValues) => {
+  let {
+    startDate,
+    endDate,
+    rate: { amount },
+  } = params;
+
+  if (!startDate) {
+    startDate = new Date();
   }
 
-  const calculateTime = timeStampEndDate.minus(timeStampStartDate);
+  const endDateTimestamp = dateToSeconds(endDate);
+  const startDateTimestamp = dateToSeconds(startDate);
 
-  return amountAsNumber.times(calculateTime).div(new BN(rate));
+  const streamDuration = endDateTimestamp - startDateTimestamp;
+
+  const totalAmount = new BN(amount)
+    .times(streamDuration)
+    .div(rateToNumber(params.rate.rate.value));
+
+  return totalAmount;
 };

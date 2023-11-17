@@ -1,26 +1,41 @@
 import { Fragment } from 'react';
+import Image from 'next/image';
+import cn from 'classnames';
 import { Dialog, Transition } from '@headlessui/react';
 
+import close from 'public/images/close.svg';
+import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 interface ModalProps {
   children: JSX.Element | React.ReactNode;
-  title: string;
+  title?: string;
   isOpen: boolean;
   setIsOpen: (_: boolean) => void;
+  hasCloseButton?: boolean;
+  className?: string;
+  headerImage?: string | StaticImport;
+  imageClassName?: string;
+  width?: string;
 }
 
-const CModal = ({ children, title, isOpen, setIsOpen }: ModalProps) => {
+const CModal = ({
+  children,
+  title,
+  isOpen,
+  width,
+  setIsOpen,
+  className,
+  hasCloseButton,
+  headerImage,
+  imageClassName,
+}: ModalProps) => {
   const closeModal = () => {
     setIsOpen(false);
-  };
-
-  const openModal = () => {
-    setIsOpen(true);
   };
 
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog as="div" className="relative z-[9999]" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -44,14 +59,36 @@ const CModal = ({ children, title, isOpen, setIsOpen }: ModalProps) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-[574px] transform overflow-hidden rounded-[20px] bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel
+                  className={cn(
+                    `transform overflow-hidden rounded-[20px] ${headerImage ? 'p-0' : 'p-6'}
+                  bg-white text-left align-middle shadow-xl transition-all`,
+                    className,
+                  )}
+                  style={{
+                    width: width ? width : '574px',
+                  }}
+                >
+                  {hasCloseButton && (
+                    <Image
+                      src={close}
+                      alt="close"
+                      onClick={() => closeModal()}
+                      className="absolute top-[22px] right-[17px] cursor-pointer"
+                    />
+                  )}
+                  {headerImage && (
+                    <div className={imageClassName}>
+                      <Image src={headerImage} alt="header" />
+                    </div>
+                  )}
                   <Dialog.Title
                     as="h3"
-                    className="text-[28px] text-midnightBlue font-medium leading-6 flex justify-between mb-[14px]"
+                    className="text-[28px] font-med text-midnightBlue leading-6 flex justify-between mb-[14px]"
                   >
                     {title}
                   </Dialog.Title>
-                  <div className="mt-2 ">{children}</div>
+                  <div className="mt-2">{children}</div>
                 </Dialog.Panel>
               </Transition.Child>
             </div>

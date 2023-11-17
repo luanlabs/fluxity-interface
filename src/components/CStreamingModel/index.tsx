@@ -40,7 +40,7 @@ const CStreamingModel = ({
       {...props}
     >
       <div className="h-full flex items-center">
-        <Image src={logo} alt={title} width={67} height={67} />
+        <Image src={logo} alt={title} width={67} height={67} draggable={false} />
       </div>
       <div className="text-midnightBlue w-full ml-[9px] flex flex-col justify-center items-start">
         <span className="text-base">{title}</span>

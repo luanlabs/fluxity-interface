@@ -14,7 +14,7 @@ import Funnel from 'src/assets/Funnel';
 import divider from 'public/images/divider.svg';
 import noStreams from 'public/images/noStreams.svg';
 
-import usdt from 'public/images/usdt.svg';
+import usdc from 'public/images/usdc.svg';
 import MagnifyingGlass from 'src/assets/MagnifyingGlass';
 
 import * as Styled from './styles';
@@ -23,9 +23,7 @@ import getStatusStyles from './getStatusStyle';
 import { useAppSelector } from 'src/hooks/useRedux';
 
 const Transactions = () => {
-  const [selectedStatus, setSelectedStatus] = useState<StreamStatus>(
-    StreamStatus.ONGOING
-  );
+  const [selectedStatus, setSelectedStatus] = useState<StreamStatus>(StreamStatus.ONGOING);
 
   const address = useAppSelector((state) => state.user.address);
 
@@ -56,10 +54,7 @@ const Transactions = () => {
             key={stream.id}
           >
             <div className="inline-flex items-center">
-              <CStreamType
-                type={stream.streamType}
-                streamStatus={stream.streamStatus}
-              />
+              <CStreamType type={stream.streamType} streamStatus={stream.streamStatus} />
               <div className="flex gap-2 ml-5 w-[140px]">
                 <span
                   className={`text-transparentMidnightBlue ${
@@ -75,21 +70,14 @@ const Transactions = () => {
                   src={divider}
                   alt="divider"
                   className={`mx-5 ${
-                    stream.streamStatus === StreamStatus.PENDING
-                      ? 'hidden'
-                      : 'block'
+                    stream.streamStatus === StreamStatus.PENDING ? 'hidden' : 'block'
                   }`}
                 />
                 <span
                   className={`text-sm ${
-                    stream.streamStatus === StreamStatus.PENDING
-                      ? 'hidden'
-                      : 'block'
+                    stream.streamStatus === StreamStatus.PENDING ? 'hidden' : 'block'
                   }
-                  ${
-                    stream.streamStatus === StreamStatus.EXPIRED &&
-                    'flex items-center '
-                  }`}
+                  ${stream.streamStatus === StreamStatus.EXPIRED && 'flex items-center '}`}
                 >
                   {stream.streamStatus === StreamStatus.EXPIRED ? (
                     <span className="text-base font-medium">Completed</span>
@@ -122,7 +110,7 @@ const Transactions = () => {
                 <span> {formatNumber(stream.amount)}</span>
                 <span> {stream.token}</span>
                 <span>
-                  <Image src={stream.token === 'USDT' ? usdt : ''} alt="icon" />
+                  <Image src={stream.token === 'usdc' ? usdc : ''} alt="icon" />
                 </span>
               </div>
             </div>
@@ -132,9 +120,7 @@ const Transactions = () => {
         {!filteredStreams.length && (
           <div className="flex flex-col justify-center items-center w-full select-none">
             <Image src={noStreams} alt="icon" />
-            <p className="font-medium text-2xl text-[#8F8F8F]">
-              No {selectedStatus} Streams
-            </p>
+            <p className="font-medium text-2xl text-[#8F8F8F]">No {selectedStatus} Streams</p>
             <p className="mt-2 font-medium text-base text-[#8F8F8F] leading-4">
               There are no active streams at the moment.
             </p>

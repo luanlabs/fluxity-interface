@@ -13,7 +13,7 @@ interface CInputProps {
   placeholder?: string;
   className?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  details?: string;
+  tooltipDetails?: string;
   error?: boolean;
   errorMsg?: string;
   clearInput?: boolean;
@@ -23,6 +23,8 @@ interface CInputProps {
   handlePaste?: (event: React.MouseEventHandler<HTMLDivElement>) => void;
   border?: boolean;
   value?: string | number | any;
+  disabled?: boolean;
+  tooltipTitle?: string;
 }
 
 const CInput = ({
@@ -30,7 +32,7 @@ const CInput = ({
   placeholder,
   className,
   label,
-  details,
+  tooltipDetails,
   error,
   errorMsg,
   clearInput,
@@ -40,13 +42,20 @@ const CInput = ({
   border,
   handlePaste,
   value,
+  disabled,
+  tooltipTitle,
   ...props
 }: CInputProps) => {
   const id = useCustomID('Cinput');
 
   return (
     <div className={className}>
-      <CLabel label={label} details={details} htmlFor={id} />
+      <CLabel
+        label={label}
+        tooltipDetails={tooltipDetails}
+        tooltipTitle={tooltipTitle}
+        htmlFor={id}
+      />
 
       <div className="relative w-full">
         {icon && (
@@ -92,8 +101,10 @@ const CInput = ({
            self-stretch rounded-xl placeholder-mutedBlue text-midnightBlue text-base w-full h-14 p-4 bg-neutral-100 justify-start items-center inline-flex outline-none border
            ${border ? 'focus:border-darkBlue' : 'border-transparent'}  
            ${error && 'border !border-error'}
+           ${disabled && 'cursor-not-allowed !select-none text-mutedBlue'}
           `}
           value={value}
+          disabled={disabled}
           {...props}
         />
 

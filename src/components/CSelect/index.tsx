@@ -14,7 +14,7 @@ import arrowLogo from 'public/images/arrow.svg';
 interface CSelectProps {
   placeholder?: string;
   label?: string;
-  details?: string;
+  tooltipDetails?: string;
   className?: string;
   onChange?: ReactSelectOnChangeType;
 }
@@ -53,7 +53,7 @@ const CSelect = ({
   label,
   placeholder,
   className,
-  details,
+  tooltipDetails,
   onChange,
   ...props
 }: CSelectProps) => {
@@ -66,7 +66,7 @@ const CSelect = ({
   return (
     <div className={cn('w-full', className)}>
       <div className="w-full">
-        <CLabel label={label} details={details} htmlFor={id} />
+        <CLabel label={label} tooltipDetails={tooltipDetails} htmlFor={id} />
         <Select
           options={options}
           components={{ Option, DropdownIndicator, Control }}

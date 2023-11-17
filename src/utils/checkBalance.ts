@@ -1,20 +1,14 @@
-import BN from 'src/utils/BN';
-import { userData } from 'src/containers/Summary/userData';
+import BigNumber from 'bignumber.js';
 
-export const checkBalance = (token, totalAmount: BN) => {
-  const foundToken = userData.find(
-    (balance) =>
-      balance.asset_code === token.asset_code &&
-      balance.asset_issuer === token.asset_issuer,
-  );
+import { IToken } from 'src/reducers/tokens';
 
-  if (!foundToken) {
-    return [false, 'Token was not found'];
+import BN from './BN';
+import toDecimals from './createStream/toDecimals';
+
+export const checkBalance = (token: IToken, totalAmount: BigNumber) => {
+  if (new BN(toDecimals(totalAmount).toString()).isGreaterThan(token.balance)) {
+    return false;
   }
 
-  if (totalAmount.isGreaterThan(new BN(foundToken.balance))) {
-    return [false, 'The account balance is insufficient'];
-  }
-
-  return [true, ''];
+  return true;
 };

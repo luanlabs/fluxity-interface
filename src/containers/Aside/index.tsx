@@ -3,7 +3,7 @@
 import { Pages } from 'src/constants/pages';
 import CNavLink from 'src/components/CNavLink';
 import { navLinks } from 'src/constants/navbarLinks';
-        
+
 import CConnectButton from 'src/components/CConnectButton';
 
 import LifeBuoy from 'src/assets/LifeBuoy';
@@ -18,9 +18,7 @@ const Aside = ({ isMinimized, onMinimized }: AsideProps) => {
   return (
     <aside className="overflow-hidden">
       <div
-        className={`cursor-pointer select-none ${
-          isMinimized ? 'w-full ml-[10px]' : 'ml-[10px]'
-        } `}
+        className={`cursor-pointer select-none ${isMinimized ? 'w-full ml-[10px]' : 'ml-[10px]'} `}
         onClick={onMinimized}
       >
         <SquareHalf />
@@ -31,14 +29,14 @@ const Aside = ({ isMinimized, onMinimized }: AsideProps) => {
           <CNavLink {...item} isMinimized={isMinimized} />
         </div>
       ))}
-      <hr className="my-3" />
+      {/* <hr className="my-3" />
       <CNavLink
         title="FAQ"
         icon={<LifeBuoy fill="#EBFDFF" />}
         activeIcon={<LifeBuoy />}
         url={Pages.FAQ}
         isMinimized={isMinimized}
-      />
+      /> */}
       <div className="absolute bottom-5 left-[15px] right-[15px]">
         <CConnectButton isMinimized={isMinimized} />
       </div>

@@ -1,26 +1,28 @@
-import { useState } from 'react';
-import Image from 'next/image';
-import Select from 'react-select';
 import cn from 'classnames';
+import Image from 'next/image';
+import { useState } from 'react';
+import Select from 'react-select';
 
-import CInput from '../CInput';
-import selectStyles from './selectStyles';
-import flowRateOptions from 'src/constants/flowRates';
-import { SelectItemType } from 'src/models';
+import { RateValue } from 'src/models';
+import flowRateOptions from 'src/constants/rates';
 import { forceInputNumber } from 'src/utils/forceInputNumber';
 
 import arrowLogo from 'public/images/arrow.svg';
 
-export type CInputRateValue = { amount: string; rateTime: SelectItemType };
+import CInput from '../CInput';
+import selectStyles from './selectStyles';
 
-interface CInputRate {
+export type CInputRateValue = { amount: string; rate: RateValue };
+
+interface CInputRateProps {
   placeholder: string;
-  details?: string;
+  tooltipDetails?: string;
   label: string;
   className?: string;
-  onChange: (values: CInputRateValue) => void;
   errorMsg?: string;
   error?: boolean;
+  onChange: (values: CInputRateValue) => void;
+  tooltipTitle: string;
 }
 
 const DropdownIndicator = () => {
@@ -33,30 +35,31 @@ const DropdownIndicator = () => {
 
 const CInputRate = ({
   placeholder,
-  details,
+  tooltipDetails,
   label,
   className,
   onChange,
   errorMsg,
   error,
+  tooltipTitle,
   ...props
-}: CInputRate) => {
+}: CInputRateProps) => {
   const [inputValue, setInputValue] = useState('');
-  const [selectValue, setSelectValue] = useState<SelectItemType>(flowRateOptions[2]);
+  const [selectValue, setSelectValue] = useState<RateValue>(flowRateOptions[2]);
 
   const handleInputChange = (e: any) => {
     onChange({
       amount: e.target.value,
-      rateTime: selectValue,
+      rate: selectValue,
     });
 
     setInputValue(e.target.value);
   };
 
-  const handleSelectChange = (e: SelectItemType) => {
+  const handleSelectChange = (e: RateValue) => {
     onChange({
       amount: inputValue,
-      rateTime: e,
+      rate: e,
     });
 
     setSelectValue(e);
@@ -79,7 +82,8 @@ const CInputRate = ({
         type="text"
         placeholder={placeholder}
         label={label}
-        details={details}
+        tooltipDetails={tooltipDetails}
+        tooltipTitle={tooltipTitle}
         onKeyPress={forceInputNumber}
         {...props}
         value={inputValue}
@@ -87,6 +91,7 @@ const CInputRate = ({
         errorMsg={errorMsg}
         error={error}
         onPaste={handleOnPaste}
+        maxLength="15"
       />
 
       <Select

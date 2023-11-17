@@ -1,29 +1,36 @@
-import {
-  GroupBase,
-  StylesConfig,
-  MultiValue,
-  SingleValue,
-  ActionMeta,
-} from 'react-select';
+import { GroupBase, StylesConfig, MultiValue, SingleValue, ActionMeta } from 'react-select';
 
-export interface SelectItemType {
+import { rates } from './constants/rates';
+import { IToken } from './reducers/tokens';
+
+export interface ISelectItem<T> {
   label: string;
-  value: string;
+  value: T;
 }
 
-export interface SelectTokenType extends SelectItemType {
+export type ISelectItemString = ISelectItem<string>;
+
+export type Rates = keyof typeof rates;
+export type RateValue = ISelectItem<keyof typeof rates>;
+
+export interface ISelectToken extends ISelectItem<IToken> {
   icon: string;
 }
 
 export type ReactSelectType = StylesConfig<
-  SelectItemType,
+  ISelectItemString,
   boolean,
-  GroupBase<SelectItemType>
+  GroupBase<ISelectItemString>
 >;
 
 export type ReactSelectOnChangeType = (
-  newValue: MultiValue<SelectItemType> | SingleValue<SelectItemType>,
-  actionMeta: ActionMeta<SelectItemType>,
+  newValue: MultiValue<ISelectItemString> | SingleValue<ISelectItemString>,
+  actionMeta: ActionMeta<ISelectItemString>,
+) => void;
+
+export type RateSelectOnChangeType = (
+  newValue: MultiValue<Rates> | SingleValue<Rates>,
+  actionMeta: ActionMeta<Rates>,
 ) => void;
 
 export type SvgProps = {
