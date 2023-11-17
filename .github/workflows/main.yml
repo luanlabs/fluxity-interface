@@ -1,0 +1,39 @@
+name: FluxityInterface
+on:
+  push:
+    branches:
+      - 'master'
+jobs:
+  Build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build
+        run: |
+          docker build -t fluxity-interface .
+
+  Execute:
+    name: Execute
+    runs-on: ubuntu-latest
+    needs: ['Build']
+    steps:
+      - name: Execution
+        env:
+          EXECUTION_PATH: ${{ secrets.EXECUTION_PATH }}
+        run: |
+          cd $EXECUTION_PATH/fluxity-interface
+          docker-compose down
+          docker-compose up -d
+
+  Cleanup:
+    name: Cleanup
+    runs-on: ubuntu-latest
+    needs: ['Build', 'Execute']
+    steps:
+      - name: CleanImages
+        run: |
+          docker container prune -f
+          docker image prune -f --filter "dangling-true"
