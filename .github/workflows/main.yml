@@ -6,7 +6,7 @@ on:
 jobs:
   Build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -17,7 +17,7 @@ jobs:
 
   Execute:
     name: Execute
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: ['Build']
     steps:
       - name: Execution
@@ -30,7 +30,7 @@ jobs:
 
   Cleanup:
     name: Cleanup
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: ['Build', 'Execute']
     steps:
       - name: CleanImages
