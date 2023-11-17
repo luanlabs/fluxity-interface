@@ -193,7 +193,7 @@ const CreateStream = () => {
                     {...field}
                     className="w-[236px]"
                     label="Start date"
-                    tooltipTitle="Start date"
+                    tooltipTitle="Start Date"
                     tooltipDetails={tooltipDetails.createStream.startDate}
                     minDate={new Date()}
                     maxDate={getValues('endDate') && getValues('endDate')}
@@ -209,7 +209,7 @@ const CreateStream = () => {
                     {...field}
                     className="w-[236px]"
                     label="End date"
-                    tooltipTitle="End date"
+                    tooltipTitle="End Date"
                     tooltipDetails={tooltipDetails.createStream.endDate}
                     minDate={getValues('startDate') ? new Date(getValues('startDate')) : new Date()}
                     maxDate={INFINITY_DATE}
