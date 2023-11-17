@@ -1,0 +1,8 @@
+version: '3'
+services:
+  rabet-mobile:
+    image: fluxity-interface:latest
+    pull_policy: never
+    restart: on-failure
+    ports:
+      - '3001:3001'
