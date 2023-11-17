@@ -33,4 +33,4 @@ jobs:
       - name: CleanImages
         run: |
           docker container prune -f
-          docker image prune -f --filter "dangling-true"
+          docker image prune -af
