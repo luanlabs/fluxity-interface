@@ -8,9 +8,17 @@ interface CPageCard {
   title?: JSX.Element | React.ReactNode;
   children: JSX.Element | React.ReactNode;
   className?: string;
+  childrenClassName?: string;
 }
 
-const CPageCard = ({ divider, title, children, className, ...props }: CPageCard) => {
+const CPageCard = ({
+  divider,
+  title,
+  children,
+  className,
+  childrenClassName,
+  ...props
+}: CPageCard) => {
   let dividerStyle = '';
   let padding = '';
 
@@ -30,7 +38,7 @@ const CPageCard = ({ divider, title, children, className, ...props }: CPageCard)
     >
       {title && <div className="w-full">{title}</div>}
       {divider && <div className={dividerStyle} />}
-      <div className={`${padding} overflow-y-auto`}>{children}</div>
+      <div className={cn(padding, childrenClassName, 'overflow-y-auto')}>{children}</div>
     </CCard>
   );
 };
