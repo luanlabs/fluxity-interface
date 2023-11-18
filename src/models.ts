@@ -41,3 +41,28 @@ export type CustomError = {
   type: 'error';
   message: string;
 };
+
+export interface IFluxityAPIResponse<T> {
+  status: 'error' | 'success';
+  message: string;
+  result: T;
+}
+
+export interface IResponseStream {
+  _id: string;
+  amount: string;
+  cancellable_date: number;
+  cliff_date: number;
+  end_date: number;
+  is_cancelled: boolean;
+  is_vesting: boolean;
+  rate: number;
+  receiver: string;
+  sender: string;
+  start_date: number;
+  token: string;
+  withdrawn: string;
+  status: string;
+}
+
+export type IResponseStreamResult = IFluxityAPIResponse<IResponseStream>;

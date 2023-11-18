@@ -42,6 +42,10 @@ const config: Config = {
         buttonHover: '#1C0894',
         togglePurple: '#3A21D4',
         softGray: '#9C9EA5',
+        brightYellow: '#FFF59A',
+        burntOrange: '#947000',
+        darkGrayishTeal: '#6A6C74',
+        lightGrayishBlue: '#E1E1E9',
       },
       screens: {
         sm: { max: '767px' },
