@@ -1,29 +1,18 @@
 'use client';
 
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+
 import CCard from 'src/components/CCard';
 import CPageCard from 'src/components/CPageCard';
 import CButton from 'src/components/CButton';
+import CStreamDetailsStatus from 'src/components/CStreamDetailsStatus';
 
 import receiveLogo from '/public/images/receive.svg';
 import copyLogo from '/public/images/whiteCopy.svg';
 import shareLogo from '/public/images/share.svg';
 import withdrawLogo from '/public/images/withdrawSolid.svg';
-import { ExternalPages } from 'src/constants/externalPages';
-import fetch from 'src/utils/request';
-import { IResponseStreamResult } from 'src/models';
-import { useAppSelector } from 'src/hooks/useRedux';
-import CStreamDetailsStatus from 'src/components/CStreamDetailsStatus';
-
-interface StreamDetails {
-  status: string;
-}
 
 const StreamDetails = () => {
-  const address = useAppSelector((state) => state.user.address);
-  const pathname = usePathname();
-  console.log(pathname);
   const StreamDetailsTitle = (
     <div className="w-full flex justify-between items-center pb-2">
       <h1 className="text-[24px] text-midnightBlue pl-2 mt-2">Stream #100065</h1>
@@ -49,19 +38,6 @@ const StreamDetails = () => {
       />
     </div>
   );
-
-  const handleGetStream = async () => {
-    const id = '1';
-    const { data } = await fetch<IResponseStreamResult>(
-      ExternalPages.FLUXITY_API + '/testnet/stream/' + id,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-  };
 
   return (
     <div className="w-full flex gap-4">
@@ -90,6 +66,7 @@ const StreamDetails = () => {
                 <div className="flex justify-center items-center h-12 w-[53px] bg-[#442cd6] text-white text-base px-2 py-2.5 rounded-[9px]">
                   60%
                 </div>
+
                 <div className="border border-white w-[85%] rounded-xl bg-[#442cd6] pl-[-5px]">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
