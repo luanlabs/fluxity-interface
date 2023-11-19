@@ -41,9 +41,3 @@ export type CustomError = {
   type: 'error';
   message: string;
 };
-
-export interface IFluxityAPIResponse<T> {
-  status: 'error' | 'success';
-  message: string;
-  result: T;
-}
