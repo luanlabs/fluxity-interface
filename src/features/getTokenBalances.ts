@@ -1,6 +1,6 @@
-import { Contract } from "soroban-client";
-import { IToken } from "src/reducers/tokens";
-import getERC20Balance from "./soroban/getERC20Balance";
+import { Contract } from 'soroban-client';
+import { IToken } from 'src/reducers/tokens';
+import getERC20Balance from './soroban/getERC20Balance';
 
 const getTokenBalances = async (user: string, tokens: IToken[]) => {
   const newTokens = [];

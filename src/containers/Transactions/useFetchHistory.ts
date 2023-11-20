@@ -1,164 +1,83 @@
 import { useEffect, useState } from 'react';
+import qs from 'qs';
 
-import { StreamStatus } from 'src/components/CStreamStatus';
+import BN from 'src/utils/BN';
+import fetch from 'src/utils/request';
+import { ExternalPages } from 'src/constants/externalPages';
+import { IResponseStreamsResult, IStreamHistory } from 'src/constants/types';
 
-interface IStreamHistory {
-  id: number | string;
-  streamType: 'receive' | 'send';
-  address: string;
-  completionPercentage: number | string;
-  streamStatus: StreamStatus;
-  token: string;
-  amount: number;
-}
+const fetchStreams = async (address: string) => {
+  if (!address) {
+    return [];
+  }
+  const qsAddress = qs.stringify({ address });
+  try {
+    const streams = await fetch<IResponseStreamsResult>(
+      `${ExternalPages.FLUXITY_API}/testnet/stream?${qsAddress}`,
+      {
+        method: 'GET',
+        headers: { accept: 'application/json' },
+      },
+    );
 
-interface IStream {
-  model: 'linear' | 'exponential';
-  amountPerSecond: number;
-  token: string;
-  from: string;
-  to: string;
-  streamId: number;
-  startDate: Date;
-  endDate: Date;
-  cliffDate: Date;
-  isCancellable: boolean;
-}
-
-const mockStreams: IStream[] = [
-  {
-    model: 'linear',
-    amountPerSecond: 10,
-    token: 'USDT',
-    from: '0x123456789',
-    to: '0x987654321',
-    streamId: 1,
-    startDate: new Date('2023-10-01T00:00:00Z'), // EXPIRED
-    endDate: new Date('2023-10-10T00:00:00Z'),
-    cliffDate: new Date('2023-10-05T00:00:00Z'),
-    isCancellable: true,
-  },
-  {
-    model: 'exponential',
-    amountPerSecond: 5,
-    token: 'ETH',
-    from: '0xabcdef123',
-    to: '0x456789abc',
-    streamId: 2,
-    startDate: new Date('2023-10-05T00:00:00Z'), // ONGOING
-    endDate: new Date('2023-10-15T00:00:00Z'),
-    cliffDate: new Date('2023-10-08T00:00:00Z'),
-    isCancellable: false,
-  },
-  {
-    model: 'linear',
-    amountPerSecond: 8,
-    token: 'BTC',
-    from: '0x567890abc',
-    to: '0xdef123456',
-    streamId: 3,
-    startDate: new Date('2023-10-10T00:00:00Z'), // ONGOING
-    endDate: new Date('2023-10-20T00:00:00Z'),
-    cliffDate: new Date('2023-10-12T00:00:00Z'),
-    isCancellable: true,
-  },
-  {
-    model: 'exponential',
-    amountPerSecond: 12,
-    token: 'XRP',
-    from: '0x7890cdef1',
-    to: '0x234567890',
-    streamId: 4,
-    startDate: new Date('2023-10-15T00:00:00Z'), // ONGOING
-    endDate: new Date('2023-10-25T00:00:00Z'),
-    cliffDate: new Date('2023-10-18T00:00:00Z'),
-    isCancellable: false,
-  },
-  {
-    model: 'linear',
-    amountPerSecond: 15,
-    token: 'ADA',
-    from: '0x111111111',
-    to: '0x222222222',
-    streamId: 5,
-    startDate: new Date('2023-10-30T00:00:00Z'), // PENDING
-    endDate: new Date('2023-11-10T00:00:00Z'),
-    cliffDate: new Date('2023-11-03T00:00:00Z'),
-    isCancellable: true,
-  },
-  {
-    model: 'exponential',
-    amountPerSecond: 6,
-    token: 'LTC',
-    from: '0x333333333',
-    to: '0x444444444',
-    streamId: 6,
-    startDate: new Date('2023-11-01T00:00:00Z'), // ONGOING
-    endDate: new Date('2023-11-11T00:00:00Z'),
-    cliffDate: new Date('2023-11-05T00:00:00Z'),
-    isCancellable: false,
-  },
-];
-
-const fetchStreams = async (address: string): Promise<IStream[]> => {
-  return mockStreams;
+    return streams.data.result;
+  } catch (e) {}
+  return [];
 };
-const currentDate = new Date();
 
-function calculateCompletionPercentage(stream: IStream) {
-  const { startDate, endDate } = stream;
-  const currentDate = new Date().getTime();
+const calculateCompletionPercentage = (start_date: number, end_date: number) => {
+  const currentDate = Date.now();
+  const endDate = new Date(end_date).getTime() * 1000;
+  const startDate = new Date(start_date).getTime() * 1000;
 
-  if (currentDate < startDate.getTime()) {
+  if (currentDate < startDate) {
     return 0;
   }
 
-  if (currentDate >= endDate.getTime()) {
+  if (currentDate >= endDate) {
     return 100;
   }
 
-  const elapsedMilliseconds = currentDate - startDate.getTime();
+  const elapsedTime = new BN(currentDate).minus(startDate);
 
-  const totalMilliseconds = endDate.getTime() - startDate.getTime();
+  const totalTime = new BN(endDate).minus(startDate);
 
-  const completionPercentage = (elapsedMilliseconds / totalMilliseconds) * 100;
+  const completionPercentage = new BN(elapsedTime).div(totalTime).times(100);
 
-  return completionPercentage.toFixed();
-}
+  return completionPercentage.toFixed(0);
+};
 
-function streamStatusHandler(stream: IStream) {
-  if (currentDate < stream.startDate) {
-    return StreamStatus.PENDING;
-  } else if (currentDate < stream.endDate) {
-    return StreamStatus.ONGOING;
-  }
-  return StreamStatus.EXPIRED;
-}
-
+const calculateAmount = (amount: string) => {
+  const number = new BN(amount).div(10 ** 7).toFixed(5);
+  return number;
+};
 const useFetchHistory = (address: string): IStreamHistory[] => {
   const [streamList, setStreamList] = useState<IStreamHistory[]>([]);
 
   useEffect(() => {
-    fetchStreams(address).then((streams) => {
-      const streamHistories: IStreamHistory[] = streams.map((stream) => {
-        const completionPercentage = calculateCompletionPercentage(stream);
-        const streamStatus = streamStatusHandler(stream);
+    const fetchStreamsFunction = () => {
+      fetchStreams(address).then((streams) => {
+        const streamHistories: IStreamHistory[] = streams.map((stream) => {
+          const completionPercentage = calculateCompletionPercentage(
+            stream.start_date,
+            stream.end_date,
+          );
+          const streamAmount = calculateAmount(stream.amount);
+          return {
+            ...stream,
+            streamAmount,
+            completionPercentage,
+            type: address === stream.receiver ? 'receive' : 'send',
+          };
+        });
 
-        return {
-          id: stream.streamId,
-          streamType: address === stream.from ? 'send' : 'receive',
-          address: address === stream.from ? stream.to : stream.from,
-          completionPercentage,
-          streamStatus,
-          token: stream.token,
-          amount:
-            (stream.endDate.getTime() - stream.startDate.getTime()) *
-            stream.amountPerSecond,
-        };
+        setStreamList(streamHistories);
       });
+    };
+    fetchStreamsFunction();
+    const intervalId = setInterval(fetchStreams, 5000);
 
-      setStreamList(streamHistories);
-    });
+    return () => clearInterval(intervalId);
   }, [address]);
 
   return streamList;

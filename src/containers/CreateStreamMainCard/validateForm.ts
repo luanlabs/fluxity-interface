@@ -22,8 +22,8 @@ const validateForm = (
   if (
     !values.address ||
     !values.token ||
-    !values.rate.amount ||
-    new BN(values.rate.amount).isZero() ||
+    !values.rate?.amount ||
+    new BN(values.rate?.amount).isZero() ||
     !values.endDate
   ) {
     return {
