@@ -60,9 +60,9 @@ export interface IStream {
 }
 
 export interface IStreamHistory extends IStream {
-  completionPercentage: number | string;
-  streamAmount: number | string;
-  type: 'receive' | 'send';
+  completionPercentage: string;
+  streamAmount: string;
+  isSender: boolean;
 }
 
 export type IResponseStreamsResult = IFluxityAPIResponse<IStream[]>;

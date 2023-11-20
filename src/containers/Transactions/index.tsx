@@ -23,7 +23,6 @@ import searchLogo from 'public/images/search.svg';
 import * as Styled from './styles';
 import useFetchHistory from './useFetchHistory';
 import getStatusStyles from './getStatusStyle';
-import { ExternalPages } from 'src/constants/externalPages';
 import { useRouter } from 'next/navigation';
 
 const Transactions = () => {
@@ -48,9 +47,7 @@ const Transactions = () => {
     router.push(`/stream/${streamId}`);
   };
 
-  const filteredStreamsByStatus = selectedStatus
-    ? streams.filter((stream) => stream.status === selectedStatus)
-    : streams;
+  const filteredStreamsByStatus = streams.filter((stream) => stream.status === selectedStatus);
 
   const filteredStreams = filteredStreamsByStatus.filter(
     (stream) =>
@@ -68,7 +65,9 @@ const Transactions = () => {
               placeholder="Search wallet address"
               onChange={onChange}
               autoFocus
-              className={`${openSearch ? 'block' : 'hidden'} h-9 focus:outline-none bg-[#F5F5F5]`}
+              className={`${
+                openSearch ? 'block' : 'hidden'
+              } h-9 w-[200px] focus:outline-none bg-[#F5F5F5]`}
             />
             <Image
               src={searchLogo}
@@ -84,70 +83,75 @@ const Transactions = () => {
         </span>
       </div>
       <div>
-        {filteredStreams.map((stream) => (
-          <CCard
-            className="my-1 rounded-[14px] h-[74px] inline-flex items-center 
+        {address &&
+          filteredStreams.map((stream) => (
+            <CCard
+              className="my-1 rounded-[14px] h-[74px] inline-flex items-center 
             w-full px-[15px] py-[14px] justify-between cursor-pointer hover:bg-[#f5f5f5] transition-all duration-700"
-            borderColor="#0000001A"
-            key={stream._id}
-            onClick={() => handleClick(stream._id)}
-          >
-            <div className="inline-flex items-center">
-              <CStreamType type={stream.type} streamStatus={stream.status} />
-              <div className={`flex gap-2 ${stream.type === 'send' ? 'ml-8' : 'ml-4'} w-[160px]`}>
-                <span
-                  className={`text-transparentMidnightBlue ${
-                    stream.type === 'send' && 'pr-5'
-                  } w-[100px]`}
-                >
-                  {stream.type === 'send' ? 'To' : 'From'}
-                </span>
-                {shortenAddress(stream.sender === address ? stream.receiver : stream.sender, 4)}
-              </div>
-              <div className="flex flex-row gap-5">
-                <Image
-                  src={divider}
-                  alt="divider"
-                  className={`mx-5 ${stream.status === StreamStatus.PENDING ? 'hidden' : 'block'}`}
-                />
-                <span
-                  className={`text-sm ${stream.status === StreamStatus.PENDING ? 'hidden' : 'block'}
+              borderColor="#0000001A"
+              key={stream._id}
+              onClick={() => handleClick(stream._id)}
+            >
+              <div className="inline-flex items-center">
+                <CStreamType isSender={stream.isSender} streamStatus={stream.status} />
+                <div className={`flex gap-2 ${stream.isSender ? 'ml-8' : 'ml-4'} w-[160px]`}>
+                  <span
+                    className={`text-transparentMidnightBlue ${
+                      stream.isSender && 'pr-5'
+                    } w-[100px]`}
+                  >
+                    {stream.isSender ? 'To' : 'From'}
+                  </span>
+                  {shortenAddress(stream.sender === address ? stream.receiver : stream.sender, 4)}
+                </div>
+                <div className="flex flex-row gap-5">
+                  <Image
+                    src={divider}
+                    alt="divider"
+                    className={`mx-5 ${
+                      stream.status === StreamStatus.PENDING ? 'hidden' : 'block'
+                    }`}
+                  />
+                  <span
+                    className={`text-sm ${
+                      stream.status === StreamStatus.PENDING ? 'hidden' : 'block'
+                    }
                   ${stream.status === StreamStatus.EXPIRED && 'flex items-center '}`}
-                >
-                  {stream.status === StreamStatus.EXPIRED ? (
-                    <span className="text-base font-medium">Completed</span>
-                  ) : (
-                    <>
-                      {stream.completionPercentage}% Completed
-                      <div className="w-[190px] bg-[#EBEBEB] rounded-full h-1 mt-1">
-                        <div
-                          className="bg-royalBlue rounded-full h-1"
-                          style={{
-                            width: stream.completionPercentage + '%',
-                          }}
-                        />
-                      </div>
-                    </>
-                  )}
-                </span>
+                  >
+                    {stream.status === StreamStatus.EXPIRED ? (
+                      <span className="text-base font-medium">Completed</span>
+                    ) : (
+                      <>
+                        {stream.completionPercentage}% Completed
+                        <div className="w-[190px] bg-[#EBEBEB] rounded-full h-1 mt-1">
+                          <div
+                            className="bg-royalBlue rounded-full h-1"
+                            style={{
+                              width: stream.completionPercentage + '%',
+                            }}
+                          />
+                        </div>
+                      </>
+                    )}
+                  </span>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center gap-[47px]">
-              <div
-                className={`select-none rounded-full px-4 py-0.5
+              <div className="flex items-center gap-[47px]">
+                <div
+                  className={`select-none rounded-full px-4 py-0.5
             ${getStatusStyles(stream.status)}`}
-              >
-                {stream.status === StreamStatus.ONGOING ? 'Active' : capitalize(stream.status)}
+                >
+                  {stream.status === StreamStatus.ONGOING ? 'Active' : capitalize(stream.status)}
+                </div>
+                <div className="flex items-center justify-end font-bold gap-2 w-[160px]">
+                  <span> {humanizeAmount(stream.streamAmount)}</span>
+                  <span> {findTokenByAddress(stream.token, tokens)}</span>
+                  <Image src={usdc} alt="icon" />
+                </div>
               </div>
-              <div className="flex items-center justify-end font-bold gap-2 w-[160px]">
-                <span> {humanizeAmount(stream.streamAmount)}</span>
-                <span> {findTokenByAddress(stream.token, tokens)}</span>
-                <Image src={usdc} alt="icon" />
-              </div>
-            </div>
-          </CCard>
-        ))}
-        {!filteredStreams.length && (
+            </CCard>
+          ))}
+        {(!address || !filteredStreams.length) && (
           <div className="flex flex-col justify-center items-center w-full select-none">
             <Image src={noStreams} alt="icon" />
             <p className="font-medium text-2xl text-[#8F8F8F]">No {selectedStatus} Streams</p>

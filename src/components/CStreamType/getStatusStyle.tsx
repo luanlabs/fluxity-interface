@@ -1,31 +1,24 @@
 import { StreamStatus } from 'src/components/CStreamStatus';
 
-const getStatusStyles = (
-  streamStatus: StreamStatus,
-  type: 'receive' | 'send'
-) => {
+const getStatusStyles = (streamStatus: StreamStatus, isSender: boolean) => {
   switch (streamStatus) {
     case StreamStatus.ONGOING:
-      switch (type) {
-        case 'receive':
-          return 'bg-paleMint text-forestGreen';
-        case 'send':
-          return 'bg-paleCyan text-royalBlue';
+      if (isSender) {
+        return 'bg-paleCyan text-royalBlue';
       }
+      return 'bg-paleMint text-forestGreen';
+
     case StreamStatus.PENDING:
-      switch (type) {
-        case 'receive':
-          return 'bg-lemonChiffon text-bronzeYellow';
-        case 'send':
-          return 'bg-lemonChiffon text-bronzeYellow';
+      if (isSender) {
+        return 'bg-lemonChiffon text-bronzeYellow';
       }
+      return 'bg-lemonChiffon text-bronzeYellow';
+
     case StreamStatus.EXPIRED:
-      switch (type) {
-        case 'receive':
-          return 'bg-platinum text-grayish';
-        case 'send':
-          return 'bg-platinum text-grayish';
+      if (isSender) {
+        return 'bg-platinum text-grayish';
       }
+      return 'bg-platinum text-grayish';
   }
 };
 
