@@ -16,13 +16,9 @@ import receiveLogo from '/public/images/receive.svg';
 
 const StreamDetails = () => {
   const address = useAppSelector((state) => state.user.address);
-  const [isSender, setIsSender] = useState(false);
 
-  useEffect(() => {
-    if (address === streamData.sender) {
-      setIsSender(true);
-    }
-  }, [address]);
+  const isSender = address === streamData.sender;
+  const isReceiver = address === streamData.receiver;
 
   const mainTitle = (
     <div className="w-full flex justify-between items-center pb-2">
@@ -55,7 +51,8 @@ const StreamDetails = () => {
 
       <div>
         <SummaryFields />
-        {isSender ? <SenderStatusCard /> : <ReceiverStatusCard /> && !address && <div></div>}
+        {isSender && <SenderStatusCard />}
+        {isReceiver && <ReceiverStatusCard />}
       </div>
     </div>
   );
