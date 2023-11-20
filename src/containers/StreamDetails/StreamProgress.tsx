@@ -1,13 +1,13 @@
 interface StreamProgressProps {
-  progress: string;
+  completionPercentage: string;
 }
 
-const StreamProgress = ({ progress }: StreamProgressProps) => {
+const StreamProgress = ({ completionPercentage }: StreamProgressProps) => {
   return (
     <div className="border border-white w-full rounded-xl bg-[#442cd6] ">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width={progress}
+        width={completionPercentage}
         height="45"
         viewBox="0 0 202 48"
         fill="none"
