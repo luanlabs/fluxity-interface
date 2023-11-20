@@ -1,21 +1,33 @@
 'use client';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 import CPageCard from 'src/components/CPageCard';
-import CStreamDetailsStatus from 'src/components/CStreamDetailsStatus';
+import CStreamStatusButton from 'src/components/CStreamStatusButton';
+import { useAppSelector } from 'src/hooks/useRedux';
 
 import { streamData } from './mockData';
-import StatusCard from './StatusCard';
 import SummaryFields from './SummaryFields';
 import BlueCard from './BlueCard';
+import SenderStatusCard from './SenderStatusCard';
+import ReceiverStatusCard from './ReceiverStatusCard';
 
 import receiveLogo from '/public/images/receive.svg';
 
 const StreamDetails = () => {
+  const address = useAppSelector((state) => state.user.address);
+  const [isSender, setIsSender] = useState(false);
+
+  useEffect(() => {
+    if (address === streamData.sender) {
+      setIsSender(true);
+    }
+  }, [address]);
+
   const mainTitle = (
     <div className="w-full flex justify-between items-center pb-2">
       <h1 className="text-[24px] text-midnightBlue pl-2 mt-2">Stream #100065</h1>
-      <CStreamDetailsStatus type={streamData.status} label={streamData.status} />
+      <CStreamStatusButton type={streamData.status} />
     </div>
   );
 
@@ -43,7 +55,7 @@ const StreamDetails = () => {
 
       <div>
         <SummaryFields />
-        <StatusCard />
+        {isSender ? <SenderStatusCard /> : <ReceiverStatusCard /> && !address && <div></div>}
       </div>
     </div>
   );

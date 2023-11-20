@@ -37,7 +37,7 @@ const BlueCard = ({ sender, flowRate, onClick }: BlueCardProps) => {
           </div>
 
           <div className="w-[85%]">
-            <StreamProgress progress="200" />
+            <StreamProgress completionPercentage="200" />
           </div>
         </div>
 
