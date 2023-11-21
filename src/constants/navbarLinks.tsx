@@ -24,12 +24,12 @@ export const navLinks: Type[] = [
     activeIcon: <StreamLinesIcon />,
     url: Pages.CREATE_STREAM,
   },
-  // {
-  //   title: 'Activity History',
-  //   icon: <ActivityIcon fill="#EBFDFF" />,
-  //   activeIcon: <ActivityIcon />,
-  //   url: Pages.ACTIVITY_HISTORY,
-  // },
+  {
+    title: 'Activity History',
+    icon: <ActivityIcon fill="#EBFDFF" />,
+    activeIcon: <ActivityIcon />,
+    url: Pages.ACTIVITY_HISTORY,
+  },
   // {
   //   title: 'NFTs',
   //   icon: <CopyIcon fill="#EBFDFF" />,

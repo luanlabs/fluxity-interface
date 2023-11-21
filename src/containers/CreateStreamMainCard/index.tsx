@@ -71,9 +71,7 @@ const CreateStream = () => {
   const isFormCompleteValidation = !isValid || isValidating || !isFormValidated || !address;
 
   const CreateStreamTitle = (
-    <div className="w-full flex justify-between items-center pb-2">
-      <h1 className="text-[24px] text-midnightBlue pl-2 mt-2">Create Stream</h1>
-    </div>
+    <h1 className="text-[24px] text-midnightBlue pl-2 mt-1 mb-1">Create Stream</h1>
   );
 
   return (
@@ -83,6 +81,7 @@ const CreateStream = () => {
           title={CreateStreamTitle}
           divider
           className="w-full pl-[30px] pr-[18px] py-[15px]"
+          scroll
         >
           <div className="w-full">
             <div>

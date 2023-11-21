@@ -24,7 +24,7 @@ interface CInputProps {
   border?: boolean;
   value?: string | number | any;
   disabled?: boolean;
-  tooltipTitle: string;
+  tooltipTitle?: string;
 }
 
 const CInput = ({

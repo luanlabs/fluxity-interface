@@ -8,6 +8,7 @@ interface CPageCard {
   title?: JSX.Element | React.ReactNode;
   children: JSX.Element | React.ReactNode;
   className?: string;
+  scroll?: boolean;
   childrenClassName?: string;
 }
 
@@ -16,6 +17,7 @@ const CPageCard = ({
   title,
   children,
   className,
+  scroll = false,
   childrenClassName,
   ...props
 }: CPageCard) => {
@@ -36,9 +38,9 @@ const CPageCard = ({
       borderColor="rgba(5, 1, 66, 0.10)"
       {...props}
     >
-      {title && <div className="w-full">{title}</div>}
+      {title && <div className="w-full font-medium">{title}</div>}
       {divider && <div className={dividerStyle} />}
-      <div className={cn(padding, childrenClassName, 'overflow-y-auto')}>{children}</div>
+      <div className={`${padding, childrenClassName} ${scroll && 'overflow-y-scroll h-full'}`}>{children}</div>
     </CCard>
   );
 };

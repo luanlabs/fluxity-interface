@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 
 import CPageCard from 'src/components/CPageCard';
@@ -9,14 +7,13 @@ import AllStreamCard from 'src/containers/AllStreamCard';
 const ActivityHistoryContainer = () => {
   return (
     <CPageCard
-      title={<h1 className="text-2xl text-midnightBlue mb-[10px] pl-2 ">Activity History</h1>}
+      title={<h1 className="text-2xl text-midnightBlue mb-[10px] mt-1 pl-2">Activity History</h1>}
+      className="py-[15px] px-5"
       divider
-      className="py-[15px] px-5 overflow-auto"
+      scroll
     >
       <AllStreamCard />
-      <div className="mt-5">
-        <Transactions />
-      </div>
+      <Transactions />
     </CPageCard>
   );
 };
