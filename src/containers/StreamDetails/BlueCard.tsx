@@ -5,6 +5,7 @@ import CCard from 'src/components/CCard';
 import toast from 'src/components/CToast';
 import copyText from 'src/utils/copyText';
 import { shortenAddress } from 'src/utils/shortenAddress';
+import { calculateCompletionPercentage } from 'src/utils/calculateCompletionPercentage';
 
 import StreamProgress from './StreamProgress';
 
@@ -14,30 +15,34 @@ import shareLogo from '/public/images/share.svg';
 interface BlueCardProps {
   sender: string;
   flowRate: string;
+  startDate: number;
+  endDate: number;
   onClick?: () => void;
   onCopyClick?: () => void;
 }
 
-const BlueCard = ({ sender, flowRate, onClick }: BlueCardProps) => {
+const BlueCard = ({ sender, flowRate, startDate, endDate, onClick }: BlueCardProps) => {
   const handleCopy = () => {
     copyText(sender);
     toast('success', 'Sender address copied to clipboard');
   };
 
+  const completionPercentage = calculateCompletionPercentage(startDate, endDate);
+
   return (
     <div className="w-[420px] mt-[32px]">
       <CCard
-        className="flex flex-col justify-center items-center w-full h-full px-3 py-4"
+        className="flex flex-col rounded-[20px] justify-center items-center w-full h-full px-3 py-4"
         bgColor="royalBlue"
         borderColor="rgba(0, 0, 0, 0.10)"
       >
         <div className="flex justify-between items-center w-full">
           <div className="flex justify-center items-center h-12 w-[53px] bg-[#442cd6] text-white text-base px-2 py-2.5 rounded-[9px]">
-            60%
+            {completionPercentage}%
           </div>
 
           <div className="w-[85%]">
-            <StreamProgress completionPercentage="200" />
+            <StreamProgress progressValue={Number(completionPercentage)} />
           </div>
         </div>
 
@@ -57,7 +62,7 @@ const BlueCard = ({ sender, flowRate, onClick }: BlueCardProps) => {
           </div>
         </div>
 
-        <p className="text-white text-base mt-[29px]">{flowRate}</p>
+        <p className="text-white text-base mt-[29px]">{flowRate} / Daily</p>
         <CButton
           variant="simple"
           color="blue"
