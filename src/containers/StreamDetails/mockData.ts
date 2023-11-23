@@ -15,7 +15,7 @@ interface IResponseStream {
   status: string;
 }
 
-export const streamData: IResponseStream = {
+export const streamDataa: IResponseStream = {
   _id: '24',
   amount: '119000000',
   cancellable_date: 1699956257,
