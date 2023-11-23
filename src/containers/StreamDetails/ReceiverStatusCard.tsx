@@ -3,14 +3,17 @@ import CButton from 'src/components/CButton';
 import CPageCard from 'src/components/CPageCard';
 import CSummaryField from 'src/components/CSummaryField';
 
-import { streamData } from './mockData';
-
 import withdrawLogo from '/public/images/withdrawSolid.svg';
 
-const ReceiverStatusCard = () => {
-  const amount = BN(streamData.amount);
-  const widthraw = BN(streamData.withdrawn);
-  const available = amount.minus(widthraw);
+interface ReceiverStatusCardProps {
+  amount: string;
+  withdrawn: string;
+}
+
+const ReceiverStatusCard = ({ amount, withdrawn }: ReceiverStatusCardProps) => {
+  const amountStream = BN(amount);
+  const widthraw = BN(withdrawn);
+  const available = amountStream.minus(widthraw);
 
   const ReceiverStatusCardTitle = (
     <div className="w-full flex justify-between items-center pb-4 pl-4">

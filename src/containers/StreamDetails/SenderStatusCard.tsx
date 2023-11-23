@@ -1,13 +1,12 @@
-import BN from 'src/utils/BN';
 import CButton from 'src/components/CButton';
 import CPageCard from 'src/components/CPageCard';
 import CSummaryField from 'src/components/CSummaryField';
 
-import { streamData } from './mockData';
+interface SenderStatusCardProps {
+  amount: string;
+}
 
-const SenderStatusCard = () => {
-  const amount = BN(streamData.amount);
-
+const SenderStatusCard = ({ amount }: SenderStatusCardProps) => {
   const SenderStatusCardTitle = (
     <div className="w-full flex justify-between items-center pb-4 pl-4">
       <h1 className="text-2xl text-midnightBlue">Status</h1>
@@ -24,7 +23,7 @@ const SenderStatusCard = () => {
     <div className="w-[580px]">
       <CPageCard title={SenderStatusCardTitle} className="px-3 py-4 mb-4 w-full">
         <div className="grid gap-2 text-midnightBlue">
-          <CSummaryField label="To stream" value={amount.toString()} />
+          <CSummaryField label="To stream" value={amount} />
         </div>
       </CPageCard>
     </div>
