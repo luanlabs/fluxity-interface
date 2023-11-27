@@ -37,7 +37,7 @@ const BlueCard = ({ sender, flowRate, startDate, endDate, onClick }: BlueCardPro
         borderColor="rgba(0, 0, 0, 0.10)"
       >
         <div className="flex justify-between items-center w-full">
-          <div className="flex justify-center items-center h-12 w-[53px] bg-[#442cd6] text-white text-base px-2 py-2.5 rounded-[9px]">
+          <div className="flex justify-center items-center h-12 w-[53px] bg-darkOrchid text-white text-base px-2 py-2.5 rounded-[9px]">
             {completionPercentage}%
           </div>
 
