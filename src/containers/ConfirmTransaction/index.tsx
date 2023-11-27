@@ -19,6 +19,8 @@ import { FLUXITY_CONTRACT } from 'src/constants/contracts';
 import toDecimals from 'src/utils/createStream/toDecimals';
 import approve from 'src/features/soroban/approve';
 import createStream from 'src/features/soroban/createStream';
+import { scValToNative } from 'soroban-client';
+import { sendStreamId } from 'src/utils/sendStreamId';
 
 interface ConfirmTransactions {
   isConfirm: boolean;
@@ -38,8 +40,10 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
   const [isSendingCreateStreamTxModalOpen, setIsSendingCreateStreamTxModalOpen] = useState(false);
   const [isCreateStreamResultModalOpen, setIsCreateStreamResultModalOpen] = useState(false);
 
-  const [txStatus, setTxStatus] = useState(false);
-  const [hashStream, setHashStream] = useState('');
+  const [streamDetails, setStreamDetails] = useState({
+    hash: '',
+    id: 0,
+  });
 
   useEffect(() => {
     if (isConfirm) {
@@ -154,16 +158,19 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
 
     if (tx) {
       const finalize = await finalizeTransaction(tx.hash);
-
-      setTxStatus(finalize);
-
       if (!finalize) {
         setIsSendingCreateStreamTxModalOpen(false);
         toast('error', 'Approve failed');
+
         return;
       }
 
-      setHashStream(tx.hash);
+      sendStreamId(finalize?.returnValue);
+
+      setStreamDetails({
+        hash: tx.hash,
+        id: scValToNative(finalize.returnValue).toString(),
+      });
     } else {
       setIsSendingCreateStreamTxModalOpen(false);
       return;
@@ -230,7 +237,7 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
         title="Transaction Successful"
         isOpen={isCreateStreamResultModalOpen}
         setIsOpen={setIsCreateStreamResultModalOpen}
-        hash={hashStream}
+        stream={streamDetails}
         closeOnClick={handleCloseTransactionSuccessModal}
       />
     </div>
