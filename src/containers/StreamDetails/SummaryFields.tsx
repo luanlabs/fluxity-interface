@@ -4,7 +4,6 @@ import CPageCard from 'src/components/CPageCard';
 import CSummaryField from 'src/components/CSummaryField';
 import { shortenAddress } from 'src/utils/shortenAddress';
 
-import usdcLogo from 'public/images/usdc.svg';
 import { IResponseStream } from 'src/models';
 import decimalToNumber from 'src/utils/decimalToNumber';
 
@@ -17,10 +16,11 @@ const options = {
 
 const SummaryFields = (streamData: IResponseStream) => {
   const [isCancelable, setIsCancelable] = useState(false);
+
   const startDate = new Date(streamData.start_date * 1000);
   const endDate = new Date(streamData.end_date * 1000);
   const cliffDate = new Date(streamData.cliff_date * 1000);
-  const amount = decimalToNumber(streamData.amount, 7);
+  const amount = decimalToNumber(streamData.amount, streamData.token.decimals);
 
   let showCliff = true;
   if (streamData.cliff_date === streamData.start_date) {
@@ -36,6 +36,7 @@ const SummaryFields = (streamData: IResponseStream) => {
       <h1 className="text-2xl text-midnightBlue">Summary</h1>
     </div>
   );
+
   return (
     <div className="w-[580px]">
       <CPageCard title={summaryTitle} className="px-3 py-4 mb-4 w-full">
@@ -55,7 +56,11 @@ const SummaryFields = (streamData: IResponseStream) => {
           )}
 
           <CSummaryField label="End date" value={endDate.toLocaleDateString('en-US', options)} />
-          {/* <CSummaryField label="Token" value={streamData.token.symbol} logo={usdcLogo} /> */}
+          <CSummaryField
+            label="Token"
+            value={streamData.token.symbol.toUpperCase()}
+            logo={streamData.token.logo}
+          />
           <CSummaryField
             label="Stream type"
             value={isCancelable ? 'Cancelable' : 'Not Cancelable'}

@@ -35,8 +35,8 @@ const StreamDetails = () => {
     return;
   }
 
-  const amount = decimalToNumber(streamData.amount, 7);
-  const withdraw = decimalToNumber(streamData.withdrawn, 7);
+  const amount = decimalToNumber(streamData.amount, streamData.token.decimals);
+  const withdraw = decimalToNumber(streamData.withdrawn, streamData.token.decimals);
 
   const isSender = address === streamData.sender;
   const isReceiver = address === streamData.receiver;
@@ -49,11 +49,11 @@ const StreamDetails = () => {
   );
 
   return (
-    <div className="w-full flex gap-4">
+    <div className="w-full flex gap-4 h-[86vh] 2xl:h-[69vh] 3xl:h-[43vh] 4xl:h-[26vh]">
       <CPageCard
         divider
         title={mainTitle}
-        className="w-full px-6 py-[15px] !h-[86vh]"
+        className="w-full px-6 py-[15px] h-full"
         childrenClassName="!pl-0"
       >
         <section className="flex flex-col items-center justify-center">
