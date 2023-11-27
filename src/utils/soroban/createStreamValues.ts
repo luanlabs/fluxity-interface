@@ -5,6 +5,7 @@ import dateToSeconds from 'src/utils/dateToSeconds';
 import toDecimals from 'src/utils/createStream/toDecimals';
 import { FormValues } from 'src/containers/CreateStreamMainCard';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
+import rateToNumber from '../rateToNumber';
 
 const { scvMap } = xdr.ScVal;
 const { ScMapEntry: addToMap } = xdr;
@@ -35,6 +36,10 @@ const toXdrValue = (params: FormValues, address: string) => {
     new addToMap({
       key: ToScVal.symbol('end_date'),
       val: ToScVal.u64(endDate),
+    }),
+    new addToMap({
+      key: ToScVal.symbol('rate'),
+      val: ToScVal.u32(rateToNumber(params.rate.rate.value)),
     }),
     new addToMap({
       key: ToScVal.symbol('receiver'),
