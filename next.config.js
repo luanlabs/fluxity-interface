@@ -9,6 +9,9 @@ const nextConfig = {
   devIndicators: {
     buildActivity: false,
   },
+  images: {
+    domains: ['s3.coinmarketcap.com'],
+  },
 };
 
 module.exports = nextConfig;
