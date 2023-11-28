@@ -2,7 +2,6 @@ import React from 'react';
 import { Metadata } from 'next';
 
 import StreamDetails from 'src/containers/StreamDetails';
-import { useRouter } from 'next/router';
 
 export const metadata: Metadata = {
   title: 'Fluxity - StreamDetails',

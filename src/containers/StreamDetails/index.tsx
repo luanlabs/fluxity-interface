@@ -3,11 +3,12 @@
 /* eslint-disable @next/next/no-async-client-component */
 'use client';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 import CStreamStatusButton from 'src/components/CStreamStatusButton';
 import CPageCard from 'src/components/CPageCard';
 import { useAppSelector } from 'src/hooks/useRedux';
-import useFetchData from 'src/utils/getStreamData';
+import useGetStreamById from 'src/utils/getStreamById';
 import decimalToNumber from 'src/utils/decimalToNumber';
 
 import SummaryFields from './SummaryFields';
@@ -18,30 +19,37 @@ import Amount from './Amount';
 
 import receiveLogo from 'public/images/receive.svg';
 import sendLogo from 'public/images/send.svg';
+import Loading from './Loading';
 
 interface StreamDetailsProps {
   id: string;
 }
 
 const StreamDetails = ({ id }: StreamDetailsProps) => {
+  const router = useRouter();
+
   const address = useAppSelector((state) => state.user.address);
 
-  const streamData = useFetchData(id);
+  const { loading, data, error } = useGetStreamById(id);
 
-  if (!streamData) {
-    return;
+  if (loading) {
+    return <Loading />;
   }
 
-  const amount = decimalToNumber(streamData.amount, streamData.token.decimals);
-  const withdraw = decimalToNumber(streamData.withdrawn, streamData.token.decimals);
+  if (error || !data) {
+    return <p>error</p>;
+  }
 
-  const isSender = address === streamData.sender;
-  const isReceiver = address === streamData.receiver;
+  const amount = decimalToNumber(data.amount, data.token.decimals);
+  const withdraw = decimalToNumber(data.withdrawn, data.token.decimals);
+
+  const isSender = address === data.sender;
+  const isReceiver = address === data.receiver;
 
   const mainTitle = (
     <div className="w-full flex justify-between items-center pb-2">
-      <h1 className="text-[24px] text-midnightBlue pl-2 mt-2">Stream #{streamData._id}</h1>
-      <CStreamStatusButton type={streamData.status} />
+      <h1 className="text-[24px] text-midnightBlue pl-2 mt-2">Stream #{data._id}</h1>
+      <CStreamStatusButton type={data.status} />
     </div>
   );
 
@@ -55,7 +63,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
       >
         <section className="flex flex-col items-center justify-center">
           <div className="flex justify-center mb-6 mt-8">
-            {isSender && isReceiver && (
+            {(isSender || isReceiver) && (
               <Image
                 src={isSender ? sendLogo : receiveLogo}
                 alt="receiveLogo"
@@ -65,19 +73,19 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             )}
           </div>
 
-          <Amount {...streamData} />
+          <Amount {...data} />
 
           <BlueCard
-            sender={streamData.sender}
-            flowRate={streamData.rate.toString()}
-            startDate={streamData.start_date}
-            endDate={streamData.end_date}
+            sender={data.sender}
+            flowRate={data.rate.toString()}
+            startDate={data.start_date}
+            endDate={data.end_date}
           />
         </section>
       </CPageCard>
 
       <div>
-        {streamData && <SummaryFields {...streamData} />}
+        {data && <SummaryFields {...data} />}
         {isSender && <SenderStatusCard amount={amount} />}
         {isReceiver && <ReceiverStatusCard amount={amount} withdrawn={withdraw} />}
       </div>

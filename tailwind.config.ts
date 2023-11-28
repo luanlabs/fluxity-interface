@@ -52,6 +52,7 @@ const config: Config = {
         lightGrayishBlue: '#E1E1E9',
         darkOrchid: '#442cd6',
         softGreen: '#a5f3c0',
+        normalGray: '#8F8F8F',
       },
       screens: {
         sm: { max: '767px' },
