@@ -2,6 +2,7 @@ import React from 'react';
 import { Metadata } from 'next';
 
 import StreamDetails from 'src/containers/StreamDetails';
+import { useRouter } from 'next/router';
 
 export const metadata: Metadata = {
   title: 'Fluxity - StreamDetails',
@@ -11,8 +12,8 @@ export const metadata: Metadata = {
     'create token stream, cryptocurrency, Stellar, time-based payment, automated transactions',
 };
 
-const StreamDetailsPage = () => {
-  return <StreamDetails />;
+const StreamDetailsPage = ({ params }: { params: { id: string } }) => {
+  return <StreamDetails id={params.id} />;
 };
 
 export default StreamDetailsPage;

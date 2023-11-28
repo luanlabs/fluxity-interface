@@ -2,7 +2,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @next/next/no-async-client-component */
 'use client';
-import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 
 import CStreamStatusButton from 'src/components/CStreamStatusButton';
@@ -20,16 +19,14 @@ import Amount from './Amount';
 import receiveLogo from 'public/images/receive.svg';
 import sendLogo from 'public/images/send.svg';
 
-const handleGetStream = (id: string) => {
-  return useFetchData(id);
-};
+interface StreamDetailsProps {
+  id: string;
+}
 
-const StreamDetails = () => {
+const StreamDetails = ({ id }: StreamDetailsProps) => {
   const address = useAppSelector((state) => state.user.address);
-  const pathname = usePathname();
 
-  const id = pathname.split('/')[2];
-  const streamData = handleGetStream(id);
+  const streamData = useFetchData(id);
 
   if (!streamData) {
     return;
