@@ -2,35 +2,53 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @next/next/no-async-client-component */
 'use client';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 
 import CStreamStatusButton from 'src/components/CStreamStatusButton';
 import CPageCard from 'src/components/CPageCard';
-import { useAppSelector } from 'src/hooks/useRedux';
 import useGetStreamById from 'src/utils/getStreamById';
-import decimalToNumber from 'src/utils/decimalToNumber';
+import { useAppSelector } from 'src/hooks/useRedux';
+import { formatUnits } from 'src/utils/formatUnits';
+import { calculateStreamAmounts } from 'src/utils/calculateStreamAmount';
 
 import SummaryFields from './SummaryFields';
 import BlueCard from './BlueCard';
 import SenderStatusCard from './SenderStatusCard';
 import ReceiverStatusCard from './ReceiverStatusCard';
-import Amount from './Amount';
+import DynamicStreamedAmount from './DynamicStreamedAmount';
+import Loading from './Loading';
 
 import receiveLogo from 'public/images/receive.svg';
 import sendLogo from 'public/images/send.svg';
-import Loading from './Loading';
 
 interface StreamDetailsProps {
   id: string;
 }
 
 const StreamDetails = ({ id }: StreamDetailsProps) => {
-  const router = useRouter();
-
   const address = useAppSelector((state) => state.user.address);
-
   const { loading, data, error } = useGetStreamById(id);
+  const [sendStreamAmount, setSendStreamAmount] = useState(
+    calculateStreamAmounts(0, 0, 0, '0').receiverAmount,
+  );
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (data) {
+        setSendStreamAmount(
+          calculateStreamAmounts(
+            data.start_date,
+            data.end_date,
+            data.cliff_date,
+            formatUnits(data.amount, data.token.decimals),
+          ).receiverAmount,
+        );
+      }
+    }, 100);
+
+    return () => clearInterval(intervalId);
+  }, [data]);
 
   if (loading) {
     return <Loading />;
@@ -40,8 +58,8 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
     return <p>error</p>;
   }
 
-  const amount = decimalToNumber(data.amount, data.token.decimals);
-  const withdraw = decimalToNumber(data.withdrawn, data.token.decimals);
+  const amount = formatUnits(data.amount, data.token.decimals);
+  const withdraw = formatUnits(data.withdrawn, data.token.decimals);
 
   const isSender = address === data.sender;
   const isReceiver = address === data.receiver;
@@ -73,11 +91,14 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             )}
           </div>
 
-          <Amount {...data} />
+          <DynamicStreamedAmount
+            token={data.token.symbol}
+            streamAmount={sendStreamAmount.toFixed(3)}
+          />
 
           <BlueCard
             sender={data.sender}
-            flowRate={data.rate.toString()}
+            flowRate={data.rate}
             startDate={data.start_date}
             endDate={data.end_date}
           />
@@ -86,8 +107,26 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
 
       <div>
         {data && <SummaryFields {...data} />}
-        {isSender && <SenderStatusCard amount={amount} />}
-        {isReceiver && <ReceiverStatusCard amount={amount} withdrawn={withdraw} />}
+
+        {isSender && (
+          <SenderStatusCard
+            amount={amount}
+            startDate={data.start_date}
+            endDate={data.end_date}
+            cliffDate={data.cliff_date}
+            isCancellable={data.is_cancelled}
+          />
+        )}
+
+        {isReceiver && (
+          <ReceiverStatusCard
+            startDate={data.start_date}
+            endDate={data.end_date}
+            cliffDate={data.cliff_date}
+            amount={amount}
+            withdrawn={withdraw}
+          />
+        )}
       </div>
     </div>
   );

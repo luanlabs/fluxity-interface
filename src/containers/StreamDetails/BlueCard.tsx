@@ -11,10 +11,12 @@ import StreamProgress from './StreamProgress';
 
 import copyLogo from '/public/images/whiteCopy.svg';
 import shareLogo from '/public/images/share.svg';
+import { calculateStreamAmounts } from 'src/utils/calculateStreamAmount';
+import { numberToRate } from 'src/utils/rates';
 
 interface BlueCardProps {
   sender: string;
-  flowRate: string;
+  flowRate: number;
   startDate: number;
   endDate: number;
   onClick?: () => void;
@@ -42,7 +44,7 @@ const BlueCard = ({ sender, flowRate, startDate, endDate, onClick }: BlueCardPro
           </div>
 
           <div className="w-[85%]">
-            <StreamProgress progressValue={Number(completionPercentage)} />
+            <StreamProgress precent={completionPercentage} />
           </div>
         </div>
 
@@ -62,7 +64,7 @@ const BlueCard = ({ sender, flowRate, startDate, endDate, onClick }: BlueCardPro
           </div>
         </div>
 
-        <p className="text-white text-base mt-[29px]">{flowRate} / Daily</p>
+        <p className="text-white text-base mt-[29px]">{numberToRate(flowRate)}</p>
         <CButton
           variant="simple"
           color="blue"
