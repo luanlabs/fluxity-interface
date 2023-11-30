@@ -5,7 +5,7 @@ import dateToSeconds from 'src/utils/dateToSeconds';
 import toDecimals from 'src/utils/createStream/toDecimals';
 import { FormValues } from 'src/containers/CreateStreamMainCard';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
-import rateToNumber from '../rateToNumber';
+import rateToNumber from '../rates';
 
 const { scvMap } = xdr.ScVal;
 const { ScMapEntry: addToMap } = xdr;
