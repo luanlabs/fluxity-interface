@@ -20,7 +20,7 @@ import toDecimals from 'src/utils/createStream/toDecimals';
 import approve from 'src/features/soroban/approve';
 import createStream from 'src/features/soroban/createStream';
 import { scValToNative } from 'soroban-client';
-import { sendStreamId } from 'src/utils/sendStreamId';
+import { sendStreamId } from 'src/features/sendStreamId';
 
 interface ConfirmTransactions {
   isConfirm: boolean;
@@ -165,7 +165,7 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
         return;
       }
 
-      sendStreamId(finalize?.returnValue);
+      await sendStreamId(finalize?.returnValue);
 
       setStreamDetails({
         hash: tx.hash,
