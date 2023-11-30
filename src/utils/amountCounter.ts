@@ -1,6 +1,7 @@
+import BN from './BN';
+
 import { IResponseStream } from 'src/models';
 import decimalToNumber from './decimalToNumber';
-import BN from './BN';
 
 const amountCounter = (streamData: IResponseStream) => {
   const amount = decimalToNumber(streamData.amount, 7);
@@ -9,13 +10,13 @@ const amountCounter = (streamData: IResponseStream) => {
     return Number(amount);
   }
 
-  const time = streamData.end_date - streamData.start_date; //100%
+  const time = streamData.end_date - streamData.start_date;
   const nowTime = new Date().getTime() / 1000;
   const diffTime = nowTime - streamData.start_date;
 
-  const newAmount = BN((diffTime * Number(amount)) / time).toFixed(3);
+  const newAmount = BN((diffTime * Number(amount)) / time);
 
-  return Number(newAmount);
+  return new BN(newAmount).toFixed(3);
 };
 
 export default amountCounter;

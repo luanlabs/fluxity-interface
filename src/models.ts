@@ -54,7 +54,6 @@ interface ITokenStream {
   logo: string;
   name: string;
   symbol: string;
-  __v: number;
   _id: string;
 }
 
