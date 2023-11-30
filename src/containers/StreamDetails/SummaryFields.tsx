@@ -1,11 +1,8 @@
-import { useState } from 'react';
-
 import CPageCard from 'src/components/CPageCard';
 import CSummaryField from 'src/components/CSummaryField';
 import { shortenAddress } from 'src/utils/shortenAddress';
-
 import { IResponseStream } from 'src/models';
-import decimalToNumber from 'src/utils/decimalToNumber';
+import { formatUnits } from 'src/utils/formatUnits';
 
 const options = {
   year: 'numeric',
@@ -15,21 +12,13 @@ const options = {
 };
 
 const SummaryFields = (streamData: IResponseStream) => {
-  const [isCancelable, setIsCancelable] = useState(false);
-
   const startDate = new Date(streamData.start_date * 1000);
   const endDate = new Date(streamData.end_date * 1000);
   const cliffDate = new Date(streamData.cliff_date * 1000);
-  const amount = decimalToNumber(streamData.amount, streamData.token.decimals);
+  const amount = formatUnits(streamData.amount, streamData.token.decimals);
 
-  let showCliff = true;
-  if (streamData.cliff_date === streamData.start_date) {
-    showCliff = false;
-  }
-
-  if (streamData.cancellable_date !== streamData.start_date) {
-    setIsCancelable(true);
-  }
+  const isCliffed = streamData.cliff_date === streamData.start_date;
+  const isCancellable = streamData.cancellable_date !== streamData.start_date;
 
   const summaryTitle = (
     <div className="w-full flex justify-between items-center pb-4 pl-4">
@@ -48,7 +37,7 @@ const SummaryFields = (streamData: IResponseStream) => {
             label="Start date"
             value={startDate.toLocaleDateString('en-US', options)}
           />
-          {showCliff && (
+          {isCliffed && (
             <CSummaryField
               label="Cliff date"
               value={cliffDate.toLocaleDateString('en-US', options)}
@@ -58,12 +47,12 @@ const SummaryFields = (streamData: IResponseStream) => {
           <CSummaryField label="End date" value={endDate.toLocaleDateString('en-US', options)} />
           <CSummaryField
             label="Token"
-            value={streamData.token.symbol.toUpperCase()}
+            value={streamData.token.symbol}
             logo={streamData.token.logo}
           />
           <CSummaryField
             label="Stream type"
-            value={isCancelable ? 'Cancelable' : 'Not Cancelable'}
+            value={isCancellable ? 'Cancellable' : 'Not Cancellable'}
           />
         </div>
       </CPageCard>
