@@ -1,10 +1,10 @@
+import BN from 'src/utils/BN';
 import CButton from 'src/components/CButton';
 import CPageCard from 'src/components/CPageCard';
 import CSummaryField from 'src/components/CSummaryField';
+import { calculateStreamAmounts } from 'src/utils/calculateStreamAmount';
 
 import withdrawLogo from '/public/images/withdrawSolid.svg';
-import { calculateStreamAmounts } from 'src/utils/calculateStreamAmount';
-import BN from 'src/utils/BN';
 
 interface ReceiverStatusCardProps {
   withdrawn: string;

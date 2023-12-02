@@ -9,7 +9,7 @@ import CStreamStatusButton from 'src/components/CStreamStatusButton';
 import CPageCard from 'src/components/CPageCard';
 import useGetStreamById from 'src/utils/getStreamById';
 import { useAppSelector } from 'src/hooks/useRedux';
-import { formatUnits } from 'src/utils/formatUnits';
+import formatUnits from 'src/utils/formatUnits';
 import { calculateStreamAmounts } from 'src/utils/calculateStreamAmount';
 
 import SummaryFields from './SummaryFields';
@@ -101,6 +101,8 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             flowRate={data.rate}
             startDate={data.start_date}
             endDate={data.end_date}
+            amount={formatUnits(data.amount, data.token.decimals)}
+            token={data.token.symbol}
           />
         </section>
       </CPageCard>
