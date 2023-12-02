@@ -2,7 +2,7 @@ import CPageCard from 'src/components/CPageCard';
 import CSummaryField from 'src/components/CSummaryField';
 import { shortenAddress } from 'src/utils/shortenAddress';
 import { IResponseStream } from 'src/models';
-import { formatUnits } from 'src/utils/formatUnits';
+import formatUnits from 'src/utils/formatUnits';
 
 const options = {
   year: 'numeric',

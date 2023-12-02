@@ -1,9 +1,11 @@
 import Image from 'next/image';
 
+import BN from 'src/utils/BN';
 import CButton from 'src/components/CButton';
 import CCard from 'src/components/CCard';
 import toast from 'src/components/CToast';
 import copyText from 'src/utils/copyText';
+import { numberToRate } from 'src/utils/rates';
 import { shortenAddress } from 'src/utils/shortenAddress';
 import { calculateCompletionPercentage } from 'src/utils/calculateCompletionPercentage';
 
@@ -11,23 +13,36 @@ import StreamProgress from './StreamProgress';
 
 import copyLogo from '/public/images/whiteCopy.svg';
 import shareLogo from '/public/images/share.svg';
-import { calculateStreamAmounts } from 'src/utils/calculateStreamAmount';
-import { numberToRate } from 'src/utils/rates';
 
 interface BlueCardProps {
   sender: string;
   flowRate: number;
   startDate: number;
   endDate: number;
+  amount: string;
+  token: string;
   onClick?: () => void;
   onCopyClick?: () => void;
 }
 
-const BlueCard = ({ sender, flowRate, startDate, endDate, onClick }: BlueCardProps) => {
+const BlueCard = ({
+  sender,
+  flowRate,
+  startDate,
+  endDate,
+  amount,
+  token,
+  onClick,
+}: BlueCardProps) => {
   const handleCopy = () => {
     copyText(sender);
     toast('success', 'Sender address copied to clipboard');
   };
+
+  const streamDuration = new BN(endDate).minus(startDate);
+  const rate = new BN(flowRate);
+  const calulateFlowRate = new BN(amount).times(rate).div(streamDuration);
+  const flowRateToNumber = Math.round(Number(calulateFlowRate.toString()));
 
   const completionPercentage = calculateCompletionPercentage(startDate, endDate);
 
@@ -64,7 +79,9 @@ const BlueCard = ({ sender, flowRate, startDate, endDate, onClick }: BlueCardPro
           </div>
         </div>
 
-        <p className="text-white text-base mt-[29px]">{numberToRate(flowRate)}</p>
+        <p className="text-white text-base mt-[29px]">
+          {flowRateToNumber} {token} / {numberToRate(flowRate)}
+        </p>
         <CButton
           variant="simple"
           color="blue"
