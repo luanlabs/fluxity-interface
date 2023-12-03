@@ -1,22 +1,16 @@
 'use Client';
 
-import { useRouter } from 'next/navigation';
-
 import CareRight from 'src/assets/CareRight';
 import { CNavLinkProps as Type } from 'src/constants/types';
 import useIsActive from './useIsActive';
+import Link from 'next/link';
 
 const CNavLink = ({ title, icon, activeIcon, url, isMinimized }: Type) => {
-  const router = useRouter();
   const isActive = useIsActive(url);
 
-  const handleClick = () => {
-    router.push(url);
-  };
-
   return (
-    <div
-      onClick={handleClick}
+    <Link
+      href={url}
       className={`select-none w-full ${
         isMinimized ? 'flex justify-start' : 'inline-flex justify-between'
       } items-center rounded-xl ${
@@ -32,7 +26,7 @@ const CNavLink = ({ title, icon, activeIcon, url, isMinimized }: Type) => {
           <CareRight />
         </span>
       </div>
-    </div>
+    </Link>
   );
 };
 

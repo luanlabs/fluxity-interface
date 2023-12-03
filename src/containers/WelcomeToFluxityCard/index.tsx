@@ -24,8 +24,7 @@ const WelcomeToFluxityCard = () => {
             src={welcomeLogo}
             fill
             alt="logo"
-            objectFit="contain"
-            objectPosition="right"
+            className="object-contain object-right"
             draggable={false}
           />
         </div>

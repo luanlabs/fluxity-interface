@@ -37,6 +37,10 @@ const toXdrValue = (params: FormValues, address: string) => {
       val: ToScVal.u64(endDate),
     }),
     new addToMap({
+      key: ToScVal.symbol('rate'),
+      val: ToScVal.u32(86400),
+    }),
+    new addToMap({
       key: ToScVal.symbol('receiver'),
       val: ToScVal.address(params.address),
     }),
