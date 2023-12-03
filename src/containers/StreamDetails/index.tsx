@@ -10,7 +10,7 @@ import CPageCard from 'src/components/CPageCard';
 import useGetStreamById from 'src/utils/getStreamById';
 import { useAppSelector } from 'src/hooks/useRedux';
 import formatUnits from 'src/utils/formatUnits';
-import { calculateStreamAmounts } from 'src/utils/calculateStreamAmount';
+import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 
 import SummaryFields from './SummaryFields';
 import BlueCard from './BlueCard';

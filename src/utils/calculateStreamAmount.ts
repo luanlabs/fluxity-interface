@@ -1,6 +1,6 @@
 import BN from './BN';
 
-export const calculateStreamAmounts = (
+const calculateStreamAmounts = (
   startDate: number,
   endDate: number,
   cliffDate: number,
@@ -40,3 +40,5 @@ export const calculateStreamAmounts = (
     receiverAmount,
   };
 };
+
+export default calculateStreamAmounts;

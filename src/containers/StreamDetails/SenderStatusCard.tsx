@@ -1,7 +1,7 @@
 import CButton from 'src/components/CButton';
 import CPageCard from 'src/components/CPageCard';
 import CSummaryField from 'src/components/CSummaryField';
-import { calculateStreamAmounts } from 'src/utils/calculateStreamAmount';
+import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 
 interface SenderStatusCardProps {
   amount: string;
