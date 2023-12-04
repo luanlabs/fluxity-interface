@@ -2,15 +2,31 @@ import BN from 'src/utils/BN';
 import CButton from 'src/components/CButton';
 import CPageCard from 'src/components/CPageCard';
 import CSummaryField from 'src/components/CSummaryField';
-
-import { streamData } from './mockData';
+import { calculateStreamAmounts } from 'src/utils/calculateStreamAmount';
 
 import withdrawLogo from '/public/images/withdrawSolid.svg';
 
-const ReceiverStatusCard = () => {
-  const amount = BN(streamData.amount);
-  const widthraw = BN(streamData.withdrawn);
-  const available = amount.minus(widthraw);
+interface ReceiverStatusCardProps {
+  withdrawn: string;
+  amount: string;
+  startDate: number;
+  endDate: number;
+  cliffDate: number;
+}
+
+const ReceiverStatusCard = ({
+  amount,
+  withdrawn,
+  startDate,
+  endDate,
+  cliffDate,
+}: ReceiverStatusCardProps) => {
+  const available = calculateStreamAmounts(
+    startDate,
+    endDate,
+    cliffDate,
+    amount,
+  ).receiverAmount.minus(withdrawn);
 
   const ReceiverStatusCardTitle = (
     <div className="w-full flex justify-between items-center pb-4 pl-4">
@@ -29,8 +45,8 @@ const ReceiverStatusCard = () => {
     <div className="w-[580px]">
       <CPageCard title={ReceiverStatusCardTitle} className="px-3 py-4 mb-4 w-full">
         <div className="grid gap-2 text-midnightBlue">
-          <CSummaryField label="Available" value={available.toString()} />
-          <CSummaryField label="Withdraw" value={widthraw.toString()} />
+          <CSummaryField label="Available" value={available.toFixed(3)} />
+          <CSummaryField label="Withdraw" value={new BN(withdrawn).toFixed(3)} />
         </div>
       </CPageCard>
     </div>

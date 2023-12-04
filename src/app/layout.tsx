@@ -22,8 +22,18 @@ import AppDataFetch from 'src/containers/AppDataFetch';
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [isMinimized, setIsMinimized] = useState(false);
 
-  const pathname = usePathname();
-  const knownRoutes = Object.values(Pages).includes(pathname as Pages);
+  const currentPath = usePathname();
+  const knownRoutes = Object.values(Pages).find((path) => {
+    if (currentPath === path) {
+      return true;
+    }
+
+    if (currentPath.startsWith(Pages.STREAM_DETAILS)) {
+      return true;
+    }
+
+    return false;
+  });
 
   return (
     <html lang="en" className={myFont.className}>

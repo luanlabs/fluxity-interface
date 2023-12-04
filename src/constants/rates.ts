@@ -5,7 +5,7 @@ export const rates = {
   weekly: 604800,
   monthly: 2592000,
   quarterly: 10368000,
-  annually: 365, // TODO
+  annually: 31536000,
 };
 
 export const flowRateOptions: RateValue[] = [

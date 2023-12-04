@@ -1,10 +1,13 @@
 import Image from 'next/image';
 
+import BN from 'src/utils/BN';
 import CButton from 'src/components/CButton';
 import CCard from 'src/components/CCard';
 import toast from 'src/components/CToast';
 import copyText from 'src/utils/copyText';
+import { numberToRate } from 'src/utils/rates';
 import { shortenAddress } from 'src/utils/shortenAddress';
+import { calculateCompletionPercentage } from 'src/utils/calculateCompletionPercentage';
 
 import StreamProgress from './StreamProgress';
 
@@ -13,31 +16,50 @@ import shareLogo from '/public/images/share.svg';
 
 interface BlueCardProps {
   sender: string;
-  flowRate: string;
+  flowRate: number;
+  startDate: number;
+  endDate: number;
+  amount: string;
+  token: string;
   onClick?: () => void;
   onCopyClick?: () => void;
 }
 
-const BlueCard = ({ sender, flowRate, onClick }: BlueCardProps) => {
+const BlueCard = ({
+  sender,
+  flowRate,
+  startDate,
+  endDate,
+  amount,
+  token,
+  onClick,
+}: BlueCardProps) => {
   const handleCopy = () => {
     copyText(sender);
     toast('success', 'Sender address copied to clipboard');
   };
 
+  const streamDuration = new BN(endDate).minus(startDate);
+  const rate = new BN(flowRate);
+  const calulateFlowRate = new BN(amount).times(rate).div(streamDuration);
+  const flowRateToNumber = Math.round(Number(calulateFlowRate.toString()));
+
+  const completionPercentage = calculateCompletionPercentage(startDate, endDate);
+
   return (
     <div className="w-[420px] mt-[32px]">
       <CCard
-        className="flex flex-col justify-center items-center w-full h-full px-3 py-4"
+        className="flex flex-col rounded-[20px] justify-center items-center w-full h-full px-3 py-4"
         bgColor="royalBlue"
         borderColor="rgba(0, 0, 0, 0.10)"
       >
         <div className="flex justify-between items-center w-full">
-          <div className="flex justify-center items-center h-12 w-[53px] bg-[#442cd6] text-white text-base px-2 py-2.5 rounded-[9px]">
-            60%
+          <div className="flex justify-center items-center h-12 w-[53px] bg-darkOrchid text-white text-base px-2 py-2.5 rounded-[9px]">
+            {completionPercentage}%
           </div>
 
           <div className="w-[85%]">
-            <StreamProgress completionPercentage="200" />
+            <StreamProgress precent={completionPercentage} />
           </div>
         </div>
 
@@ -57,7 +79,9 @@ const BlueCard = ({ sender, flowRate, onClick }: BlueCardProps) => {
           </div>
         </div>
 
-        <p className="text-white text-base mt-[29px]">{flowRate}</p>
+        <p className="text-white text-base mt-[29px]">
+          {flowRateToNumber} {token} / {numberToRate(flowRate)}
+        </p>
         <CButton
           variant="simple"
           color="blue"

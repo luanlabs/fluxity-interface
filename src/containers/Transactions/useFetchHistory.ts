@@ -5,7 +5,7 @@ import fetch from 'src/utils/request';
 import { ExternalPages } from 'src/constants/externalPages';
 import { IResponseStreamsResult, IStreamHistory } from 'src/constants/types';
 import { calculateCompletionPercentage } from 'src/utils/calculateCompletionPercentage';
-import { formatUnits } from 'src/utils/formatUnits';
+import formatUnits from 'src/utils/formatUnits';
 
 const fetchStreams = async (address: string) => {
   if (!address) {
