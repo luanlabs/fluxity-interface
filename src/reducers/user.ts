@@ -1,6 +1,7 @@
 'use client';
 
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { IStreamHistory } from 'src/constants/types';
 import { AccountResponse } from 'stellar-sdk';
 
 interface IUser {
@@ -8,6 +9,8 @@ interface IUser {
   info: AccountResponse | null;
   loading: boolean;
   hasReceivedTokens: boolean;
+  history: IStreamHistory[];
+  loadingHistory: boolean;
 }
 
 const initialState: IUser = {
@@ -15,6 +18,8 @@ const initialState: IUser = {
   info: null,
   loading: true,
   hasReceivedTokens: false,
+  history: [],
+  loadingHistory: true,
 };
 
 export const user = createSlice({
@@ -24,6 +29,7 @@ export const user = createSlice({
     setAddress: (state, action: PayloadAction<string>) => {
       state.address = action.payload;
       state.loading = true;
+      state.loadingHistory = true;
     },
     loadAccount: (state, action: PayloadAction<AccountResponse | null>) => {
       state.info = action.payload;
@@ -33,15 +39,21 @@ export const user = createSlice({
       state.info = null;
       state.address = '';
       state.loading = true;
+      state.history = [];
       state.hasReceivedTokens = false;
     },
     hasTestnetTokens: (state) => {
       state.hasReceivedTokens = true;
       state.loading = false;
     },
+    loadStreamHistory: (state, action: PayloadAction<IStreamHistory[]>) => {
+      state.history = action.payload;
+      state.loadingHistory = false;
+    },
   },
 });
 
-export const { setAddress, disconnect, loadAccount, hasTestnetTokens } = user.actions;
+export const { setAddress, disconnect, loadAccount, hasTestnetTokens, loadStreamHistory } =
+  user.actions;
 
 export default user.reducer;

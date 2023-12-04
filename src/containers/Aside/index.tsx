@@ -6,7 +6,7 @@ import { navLinks } from 'src/constants/navbarLinks';
 
 import CConnectButton from 'src/components/CConnectButton';
 
-import LifeBuoy from 'src/assets/LifeBuoy';
+// import LifeBuoy from 'src/assets/LifeBuoy';
 import SquareHalf from 'src/assets/SquareHalf';
 
 type AsideProps = {
