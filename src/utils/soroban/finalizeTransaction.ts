@@ -8,13 +8,13 @@ const finalizeTransaction = async (hash: string) => {
     const tx = await server.getTransaction(hash);
 
     if (tx.status === 'SUCCESS') {
-      return true;
+      return tx;
     }
 
     await timeout(1000);
   }
 
-  return false;
+  return null;
 };
 
 export default finalizeTransaction;

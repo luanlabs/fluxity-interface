@@ -2,9 +2,9 @@ import cn from 'classnames';
 
 import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
 
-export type status = 'ongoing' | 'expired' | 'pending';
+export type StatusType = 'ongoing' | 'expired' | 'pending';
 interface CStreamStatusButtonProps {
-  type: status;
+  type: StatusType;
 }
 
 const CStreamStatusButton = ({ type }: CStreamStatusButtonProps) => {

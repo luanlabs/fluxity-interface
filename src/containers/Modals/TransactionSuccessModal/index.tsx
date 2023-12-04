@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import CModal from 'src/components/CModal';
 import CButton from 'src/components/CButton';
@@ -10,7 +11,7 @@ import successLogo from 'public/images/success-normal-size.svg';
 import exploreLogo from 'public/images/explore.svg';
 
 interface TransactionSuccessModal {
-  hash: string;
+  stream: { hash: string; id: string };
   isOpen: boolean;
   title?: string;
   setIsOpen: (_: boolean) => void;
@@ -18,12 +19,18 @@ interface TransactionSuccessModal {
 }
 
 const TransactionSuccessModal = ({
-  hash,
+  stream,
   isOpen,
   title,
   setIsOpen,
   closeOnClick,
 }: TransactionSuccessModal) => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/stream/${stream.id}`);
+  };
+
   return (
     <div>
       <CModal isOpen={isOpen} setIsOpen={setIsOpen} width="396px">
@@ -32,9 +39,9 @@ const TransactionSuccessModal = ({
           <h1 className="text-[24px] font-med text-midnightBlue antialiased  mt-[24px] tracking-[0.5px] text-center">
             {title && title}
           </h1>
-          <p className="text-[18px] text-center mt-[32px]">{hash && shortenAddress(hash, 5)}</p>
+          <p className="text-[18px] text-center mt-[32px]">{shortenAddress(stream.hash, 5)}</p>
           <Link
-            href={`${ExternalPages.EXPLORER}/transactions/${hash}`}
+            href={`${ExternalPages.EXPLORER}/transactions/${stream.hash}`}
             target="_blank"
             className="w-full mt-[32px]"
           >
@@ -60,6 +67,7 @@ const TransactionSuccessModal = ({
               variant="simple"
               color="blue"
               className="!rounded-[10px] h-[56px] !w-[200px] font-med"
+              onClick={handleClick}
             />
           </div>
         </div>
