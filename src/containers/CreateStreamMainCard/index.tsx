@@ -60,9 +60,7 @@ const CreateStream = () => {
 
   watch(['startDate', 'endDate', 'cliffDate', 'rate', 'token', 'address']);
 
-  const onSubmit = (data: FormValues) => {
-    console.log(data);
-  };
+  const onSubmit = (data: FormValues) => {};
 
   const handleOpenModals = () => {
     setIsConfirm(true);

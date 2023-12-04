@@ -4,7 +4,7 @@ import fetch from 'src/utils/request';
 import { ExternalPages } from 'src/constants/externalPages';
 import { IResponseStream, IResponseStreamResult } from 'src/models';
 
-export type streamDataType = {
+export type StreamDataType = {
   loading: boolean;
   data: null | IResponseStream;
   error: null | any;
@@ -19,7 +19,7 @@ export const getStreamById = async (id: string) => {
 };
 
 const useGetStreamById = (id: string) => {
-  const [streamData, setStreamData] = useState<streamDataType>({
+  const [streamData, setStreamData] = useState<StreamDataType>({
     loading: true,
     data: null,
     error: false,

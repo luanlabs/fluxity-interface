@@ -41,7 +41,7 @@ export type IResponseTokenResult = IFluxityAPIResponse<IResponseToken[]>;
 
 export interface IStream {
   model: 'linear' | 'exponential';
-  _id: string;
+  id: string;
   amount: string;
   cancellable_date: number;
   cliff_date: number;

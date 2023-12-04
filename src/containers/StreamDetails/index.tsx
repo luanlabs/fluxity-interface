@@ -66,7 +66,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
 
   const mainTitle = (
     <div className="w-full flex justify-between items-center pb-2">
-      <h1 className="text-[24px] text-midnightBlue pl-2 mt-2">Stream #{data._id}</h1>
+      <h1 className="text-[24px] text-midnightBlue pl-2 mt-2">Stream #{data.id}</h1>
       <CStreamStatusButton type={data.status} />
     </div>
   );

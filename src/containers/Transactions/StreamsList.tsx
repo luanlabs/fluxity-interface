@@ -58,8 +58,8 @@ const StreamsList = ({ searchValue, selectedStatus }: StreamListProps) => {
           className="my-1 rounded-[14px] h-[74px] inline-flex items-center 
             w-full px-[15px] py-[14px] justify-between cursor-pointer hover:bg-[#f5f5f5] transition-all duration-700"
           borderColor="#0000001A"
-          key={stream._id}
-          onClick={() => handleClick(stream._id)}
+          key={`stream-${stream.id}`}
+          onClick={() => handleClick(stream.id)}
         >
           <div className="inline-flex items-center">
             <CStreamType isSender={stream.isSender} streamStatus={stream.status} />

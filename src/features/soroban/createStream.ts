@@ -12,8 +12,6 @@ const createStream = async (params: FormValues, address: string) => {
   const server = getServer();
   const contract = getContract(FLUXITY_CONTRACT);
 
-  console.log(params);
-
   const paramsScVal = ToScVal.toXdr(params, address);
 
   const call = contract.call('create_stream', paramsScVal);

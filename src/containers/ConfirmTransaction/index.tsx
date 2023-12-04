@@ -158,6 +158,7 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
 
     if (tx) {
       const finalize = await finalizeTransaction(tx.hash);
+
       if (!finalize) {
         setIsSendingCreateStreamTxModalOpen(false);
         toast('error', 'Approve failed');
@@ -165,7 +166,7 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
         return;
       }
 
-      await sendStreamId(finalize?.returnValue);
+      await sendStreamId(scValToNative(finalize?.returnValue).toString());
 
       setStreamDetails({
         hash: tx.hash,

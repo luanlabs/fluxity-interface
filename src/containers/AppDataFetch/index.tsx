@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react';
 
+import formatUnits from 'src/utils/formatUnits';
 import { loadTokens } from 'src/reducers/tokens';
-import { getTokenList } from 'src/features/getTokenList';
-import { useAppDispatch, useAppSelector } from 'src/hooks/useRedux';
-import { loadStreamHistory } from 'src/reducers/user';
-import getTokenBalances from 'src/features/getTokenBalances';
-import getStreamList from 'src/features/getStreamList';
 import { IStreamHistory } from 'src/constants/types';
+import { loadStreamHistory } from 'src/reducers/user';
+import getStreamList from 'src/features/getStreamList';
+import { getTokenList } from 'src/features/getTokenList';
+import getTokenBalances from 'src/features/getTokenBalances';
+import { useAppDispatch, useAppSelector } from 'src/hooks/useRedux';
 import { calculateCompletionPercentage } from 'src/utils/calculateCompletionPercentage';
-import { formatUnits } from 'src/utils/formatUnits';
 
 const AppDataFetch = () => {
   const dispatch = useAppDispatch();
-  const address = useAppSelector((state) => state.user.address);
   const tokens = useAppSelector((state) => state.tokens);
+  const address = useAppSelector((state) => state.user.address);
 
   useEffect(() => {
     if (!tokens.length) {

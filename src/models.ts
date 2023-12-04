@@ -58,7 +58,7 @@ interface ITokenStream {
 }
 
 export interface IResponseStream {
-  _id: string;
+  id: string;
   amount: string;
   cancellable_date: number;
   cliff_date: number;
