@@ -21,23 +21,24 @@ const SenderStatusCard = ({
   const SenderStatusCardTitle = (
     <div className="w-full flex justify-between items-center pb-4 pl-4">
       <h1 className="text-2xl text-midnightBlue">Status</h1>
-      {isCancellable && (
-        <CButton
-          variant="simple"
-          color="outline"
-          content="Cancel Stream"
-          className="w-[146px] !py-2 h-[40px] text-[14px]"
-        />
-      )}
+      <CButton
+        variant="simple"
+        color="outline"
+        content="Cancel Stream"
+        disabled={!isCancellable}
+        className={`w-[146px] !py-2 h-[40px] text-[14px] ${
+          !isCancellable && '!text-softGray !border-softGray hover:!bg-transparent'
+        }`}
+      />
     </div>
   );
 
   return (
-    <div className="w-[580px]">
+    <div className="w-full">
       <CPageCard title={SenderStatusCardTitle} className="px-3 py-4 mb-4 w-full">
         <div className="grid gap-2 text-midnightBlue">
           <CSummaryField
-            label="To stream"
+            label="Remaining amount"
             value={calculateStreamAmounts(
               startDate,
               endDate,
