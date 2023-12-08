@@ -3,24 +3,22 @@
 /* eslint-disable @next/next/no-async-client-component */
 'use client';
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 
-import CStreamStatusButton from 'src/components/CStreamStatusButton';
-import CPageCard from 'src/components/CPageCard';
-import useGetStreamById from 'src/utils/getStreamById';
-import { useAppSelector } from 'src/hooks/useRedux';
 import formatUnits from 'src/utils/formatUnits';
+import CPageCard from 'src/components/CPageCard';
+import isCancellable from 'src/utils/isCancellable';
+import { useAppSelector } from 'src/hooks/useRedux';
+import useGetStreamById from 'src/utils/getStreamById';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
+import CStreamStatusButton from 'src/components/CStreamStatusButton';
 
-import SummaryFields from './SummaryFields';
+import Loading from './Loading';
 import BlueCard from './BlueCard';
+import StreamIcon from './StreamIcon';
+import SummaryFields from './SummaryFields';
 import SenderStatusCard from './SenderStatusCard';
 import ReceiverStatusCard from './ReceiverStatusCard';
 import DynamicStreamedAmount from './DynamicStreamedAmount';
-import Loading from './Loading';
-
-import receiveLogo from 'public/images/receive.svg';
-import sendLogo from 'public/images/send.svg';
 
 interface StreamDetailsProps {
   id: string;
@@ -58,6 +56,8 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
     return <p>error</p>;
   }
 
+  const cancellable = isCancellable(data.end_date, data.cancellable_date, data.is_cancelled);
+
   const amount = formatUnits(data.amount, data.token.decimals);
   const withdraw = formatUnits(data.withdrawn, data.token.decimals);
 
@@ -72,7 +72,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
   );
 
   return (
-    <div className="w-full flex gap-4 h-[86vh] 2xl:h-[69vh] 3xl:h-[43vh] 4xl:h-[26vh]">
+    <div className="w-full flex gap-4 h-[87vh] 2xl:h-[69vh] 3xl:h-[43vh] 4xl:h-[26vh]">
       <CPageCard
         divider
         title={mainTitle}
@@ -81,14 +81,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
       >
         <section className="flex flex-col items-center justify-center">
           <div className="flex justify-center mb-6 mt-8">
-            {(isSender || isReceiver) && (
-              <Image
-                src={isSender ? sendLogo : receiveLogo}
-                alt="receiveLogo"
-                height={0}
-                width={0}
-              />
-            )}
+            <StreamIcon sender={isSender} receiver={isReceiver} streamStatus={data.status} />
           </div>
 
           <DynamicStreamedAmount
@@ -107,8 +100,8 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
         </section>
       </CPageCard>
 
-      <div>
-        {data && <SummaryFields {...data} />}
+      <div className="w-full">
+        {data && <SummaryFields isCancellable={cancellable} data={data} />}
 
         {isSender && (
           <SenderStatusCard
@@ -116,7 +109,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             startDate={data.start_date}
             endDate={data.end_date}
             cliffDate={data.cliff_date}
-            isCancellable={data.is_cancelled}
+            isCancellable={cancellable}
           />
         )}
 
@@ -127,6 +120,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             cliffDate={data.cliff_date}
             amount={amount}
             withdrawn={withdraw}
+            isCanellable={cancellable}
           />
         )}
       </div>
