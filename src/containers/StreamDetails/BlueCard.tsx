@@ -50,7 +50,7 @@ const BlueCard = ({
     <div className="w-[420px] mt-[32px]">
       <CCard
         className="flex flex-col rounded-[20px] justify-center items-center w-full h-full px-3 py-4"
-        bgColor="royalBlue"
+        bgColor="#3A21D4"
         borderColor="rgba(0, 0, 0, 0.10)"
       >
         <div className="flex justify-between items-center w-full">
@@ -63,7 +63,7 @@ const BlueCard = ({
           </div>
         </div>
 
-        <div className="flex justify-between w-full mt-2 text-white overflow-hidden whitespace-nowrap items-center bg-[#442cd6] h-10 px-4 text-base rounded-[10px]">
+        <div className="flex justify-between w-full mt-2 text-white overflow-hidden whitespace-nowrap items-center bg-darkOrchid h-[56px] px-4 text-base rounded-[10px]">
           <span>Sender</span>
 
           <div className="flex">
@@ -88,7 +88,7 @@ const BlueCard = ({
           content="Share"
           logo={shareLogo}
           onClick={onClick}
-          className="mt-3"
+          className="mt-3 !rounded-[10px]"
         />
       </CCard>
     </div>
