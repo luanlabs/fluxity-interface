@@ -7,27 +7,27 @@ interface StreamIconProps {
   streamStatus: string;
 }
 
+const statusColors = {
+  pending: {
+    fill: '#FFF59A',
+    arrowFill: '#947000',
+    lineFill: '#947000',
+  },
+
+  ongoing: {
+    fill: '#E4FFED',
+    arrowFill: '#1C9B47',
+    lineFill: '#1C9B47',
+  },
+
+  expired: {
+    fill: '#E1E1E9',
+    arrowFill: '#6A6C74',
+    lineFill: '#6A6C74',
+  },
+};
+
 const StreamIcon = ({ sender, receiver, streamStatus }: StreamIconProps) => {
-  const statusColors = {
-    pending: {
-      fill: '#FFF59A',
-      arrowFill: '#947000',
-      lineFill: '#947000',
-    },
-
-    ongoing: {
-      fill: '#E4FFED',
-      arrowFill: '#1C9B47',
-      lineFill: '#1C9B47',
-    },
-
-    expired: {
-      fill: '#E1E1E9',
-      arrowFill: '#6A6C74',
-      lineFill: '#6A6C74',
-    },
-  };
-
   let senderStyle = {
     bg: '#EBFDFF',
     fill: '#3A21D4',

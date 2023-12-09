@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 import formatUnits from 'src/utils/formatUnits';
 import CPageCard from 'src/components/CPageCard';
-import isCancellable from 'src/utils/isCancellable';
+import isCancellable from 'src/features/isStreamCancellable';
 import { useAppSelector } from 'src/hooks/useRedux';
 import useGetStreamById from 'src/utils/getStreamById';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
