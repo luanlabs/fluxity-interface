@@ -6,6 +6,8 @@ import CSummaryField from 'src/components/CSummaryField';
 import { IResponseStream } from 'src/models';
 import formatUnits from 'src/utils/formatUnits';
 
+import tokenLogo from 'public/images/token.svg';
+
 const options = {
   year: 'numeric',
   month: 'short',
@@ -37,7 +39,7 @@ const SummaryFields = ({ data, isCancellable }: SummaryFieldsProps) => {
       <p>{new BN(streamAmount).toFixed(3)}</p>
       <p>{data.token.symbol}</p>
       <Image
-        src={data.token.logo}
+        src={data.token.logo ? data.token.logo : tokenLogo}
         alt="logo"
         width={18}
         height={18}
