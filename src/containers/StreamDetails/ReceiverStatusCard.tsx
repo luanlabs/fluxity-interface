@@ -3,7 +3,7 @@ import CButton from 'src/components/CButton';
 import CPageCard from 'src/components/CPageCard';
 import CSummaryField from 'src/components/CSummaryField';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
-import isWithdraw from 'src/utils/isWithdraw';
+import isStreamWithdrawable from 'src/features/isStreamWithdrawable';
 
 import withdrawLogo from '/public/images/withdrawSolid.svg';
 
@@ -31,8 +31,9 @@ const ReceiverStatusCard = ({
     amount,
   ).receiverAmount.minus(withdrawn);
 
-  const withdraw = isWithdraw(
+  const withdrawable = isStreamWithdrawable(
     startDate,
+    endDate,
     cliffDate,
     Number(amount),
     Number(withdrawn),
@@ -46,10 +47,10 @@ const ReceiverStatusCard = ({
         variant="simple"
         color="outline"
         content="Withdraw"
-        disabled={withdraw}
+        disabled={withdrawable}
         logo={withdrawLogo}
         className={`!px-3 !py-2 h-[40px] ${
-          withdraw && '!text-softGray !border-softGray hover:!bg-transparent'
+          withdrawable && '!text-softGray !border-softGray hover:!bg-transparent'
         }`}
       />
     </div>
