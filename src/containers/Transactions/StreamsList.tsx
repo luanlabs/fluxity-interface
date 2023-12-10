@@ -40,6 +40,7 @@ const StreamsList = ({ searchValue, selectedStatus }: StreamListProps) => {
       stream.receiver.startsWith(searchValue.toUpperCase()) ||
       stream.sender.startsWith(searchValue.toUpperCase()),
   );
+
   if (isLoading && address) {
     return (
       <div className="flex flex-col justify-center items-center w-full text-[#8F8F8F] font-medium">
