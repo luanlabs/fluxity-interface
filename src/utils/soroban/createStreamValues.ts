@@ -5,20 +5,32 @@ import dateToSeconds from 'src/utils/dateToSeconds';
 import toDecimals from 'src/utils/createStream/toDecimals';
 import { FormValues } from 'src/containers/CreateStreamMainCard';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
-import rateToNumber from '../rates';
+
+import { rateToNumber } from '../rates';
+import BN from '../BN';
 
 const { scvMap } = xdr.ScVal;
 const { ScMapEntry: addToMap } = xdr;
 
 const toXdrValue = (params: FormValues, address: string) => {
-  const startDate = dateToSeconds(params.startDate).toString();
+  let startDate = dateToSeconds(params.startDate).toString();
+
   const endDate = dateToSeconds(params.endDate).toString();
-  const amount = toDecimals(calculateTotalAmount(params));
-  let cliffDate = startDate;
+  const currentDate = dateToSeconds(new Date()).toString();
+
+  let cliffDate = currentDate;
 
   if (params.cliffDate) {
     cliffDate = dateToSeconds(params.cliffDate).toString();
   }
+
+  if (new BN(startDate).isLessThan(currentDate)) {
+    startDate = currentDate;
+  }
+
+  const cancellableDate = params.isCancellable === 'ON' ? startDate : endDate;
+
+  const amount = toDecimals(calculateTotalAmount(params));
 
   return scvMap([
     new addToMap({
@@ -27,7 +39,7 @@ const toXdrValue = (params: FormValues, address: string) => {
     }),
     new addToMap({
       key: ToScVal.symbol('cancellable_date'),
-      val: ToScVal.u64(startDate),
+      val: ToScVal.u64(cancellableDate),
     }),
     new addToMap({
       key: ToScVal.symbol('cliff_date'),
@@ -39,8 +51,7 @@ const toXdrValue = (params: FormValues, address: string) => {
     }),
     new addToMap({
       key: ToScVal.symbol('rate'),
-      // val: ToScVal.u32(rateToNumber(params.rate.rate.value)),
-      val: ToScVal.u32(86400),
+      val: ToScVal.u32(rateToNumber(params.rate.rate.value)),
     }),
     new addToMap({
       key: ToScVal.symbol('receiver'),
