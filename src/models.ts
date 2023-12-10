@@ -75,3 +75,9 @@ export interface IResponseStream {
 }
 
 export type IResponseStreamResult = IFluxityAPIResponse<IResponseStream>;
+
+export interface StreamDetailsIconProps {
+  fill: string;
+  arrowFill: string;
+  lineFill: string;
+}

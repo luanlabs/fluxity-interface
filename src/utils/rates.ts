@@ -18,7 +18,6 @@ export const numberToRate = (number: number): string => {
   if (number === rates.annually) {
     return 'Year';
   }
+
   return 'Month';
 };
-
-export default rateToNumber;

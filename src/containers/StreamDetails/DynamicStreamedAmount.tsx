@@ -12,7 +12,7 @@ const DynamicStreamedAmount = ({ token, streamAmount }: DynamicStreamedAmountPro
         <div className="text-center">
           <h2 className="text-[40px]">+{streamAmount}</h2>
         </div>
-        <div className="w-[31%]">
+        <div>
           <p>{token}</p>
         </div>
       </div>
