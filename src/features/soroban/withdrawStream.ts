@@ -11,7 +11,7 @@ const withdrawStream = async (id: string, amount: bigint, address: string) => {
   const server = getServer();
   const contract = getContract(FLUXITY_CONTRACT);
 
-  const call = contract.call('cancel_stream', ToScVal.u64(id), ToScVal.i128(amount));
+  const call = contract.call('withdraw_stream', ToScVal.u64(id), ToScVal.i128(amount));
   const xdr = createTransaction(account, call);
 
   return await server.prepareTransaction(xdr);
