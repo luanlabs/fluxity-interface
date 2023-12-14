@@ -6,9 +6,9 @@ import { useEffect, useState } from 'react';
 
 import formatUnits from 'src/utils/formatUnits';
 import CPageCard from 'src/components/CPageCard';
-import isCancellable from 'src/features/isStreamCancellable';
 import { useAppSelector } from 'src/hooks/useRedux';
 import useGetStreamById from 'src/utils/getStreamById';
+import isCancellable from 'src/features/isStreamCancellable';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import CStreamStatusButton from 'src/components/CStreamStatusButton';
 
@@ -26,7 +26,9 @@ interface StreamDetailsProps {
 
 const StreamDetails = ({ id }: StreamDetailsProps) => {
   const address = useAppSelector((state) => state.user.address);
+
   const { loading, data, error } = useGetStreamById(id);
+
   const [sendStreamAmount, setSendStreamAmount] = useState(
     calculateStreamAmounts(0, 0, 0, '0').receiverAmount,
   );
@@ -110,6 +112,9 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             endDate={data.end_date}
             cliffDate={data.cliff_date}
             isCancellable={cancellable}
+            id={data.id}
+            receiver={data.receiver}
+            token={data.token.symbol}
           />
         )}
 
@@ -121,6 +126,9 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             amount={amount}
             withdrawn={withdraw}
             isCanellable={cancellable}
+            id={data.id}
+            token={data.token.symbol}
+            sender={data.sender}
           />
         )}
       </div>
