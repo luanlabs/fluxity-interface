@@ -52,20 +52,30 @@ const SummaryFields = ({ data, isCancellable }: SummaryFieldsProps) => {
     <div className="w-full">
       <CPageCard title={summaryTitle} className="px-3 py-4 mb-4 w-full">
         <div className="grid gap-2 text-midnightBlue ">
-          <CSummaryField label="Total amount" value={totalAmountField} />
+          <CSummaryField label="Total amount" value={totalAmountField} fieldSize="large" />
           <CSummaryField
             label="Start date"
             value={startDate.toLocaleDateString('en-US', options)}
+            fieldSize="large"
           />
           {isCliffed && (
             <CSummaryField
               label="Cliff date"
               value={cliffDate.toLocaleDateString('en-US', options)}
+              fieldSize="large"
             />
           )}
 
-          <CSummaryField label="End date" value={endDate.toLocaleDateString('en-US', options)} />
-          <CSummaryField label="Cancellable" value={isCancellable ? 'Yes' : 'No'} />
+          <CSummaryField
+            label="End date"
+            value={endDate.toLocaleDateString('en-US', options)}
+            fieldSize="large"
+          />
+          <CSummaryField
+            label="Cancellable"
+            value={isCancellable ? 'Yes' : 'No'}
+            fieldSize="large"
+          />
         </div>
       </CPageCard>
     </div>
