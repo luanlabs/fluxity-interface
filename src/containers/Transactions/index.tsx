@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 
+import { IFilterTokens } from 'src/constants/types';
 import CStreamStatus, { StreamStatus } from 'src/components/CStreamStatus';
 
 import Funnel from 'src/assets/Funnel';
@@ -13,10 +14,16 @@ import StreamsList from './StreamsList';
 import FilterModal from './FilterModal';
 
 const Transactions = () => {
-  const [selectedStatus, setSelectedStatus] = useState<StreamStatus>(StreamStatus.ONGOING);
-  const [openSearch, setOpenSearch] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [openSearch, setOpenSearch] = useState(false);
+  const [submittedForm, setSubmittedForm] = useState(false);
+  const [filteredValues, setFilteredValues] = useState<IFilterTokens>({
+    tokens: [],
+    showReceivedStreams: true,
+    showSentStreams: true,
+  });
+  const [selectedStatus, setSelectedStatus] = useState<StreamStatus>(StreamStatus.ONGOING);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -34,7 +41,11 @@ const Transactions = () => {
     setOpenModal(false);
   };
 
-  const handleSubmitFilter = () => {};
+  const handleSubmitFilter = (filters: IFilterTokens) => {
+    setFilteredValues(filters);
+    setSubmittedForm(true);
+    closeModal();
+  };
 
   return (
     <>
@@ -60,11 +71,11 @@ const Transactions = () => {
           </Styled.Circle>
           <Styled.Circle
             className={`${
-              openModal && '!border-royalBlue bg-lavenderBlush'
+              submittedForm && '!border-royalBlue bg-lavenderBlush'
             } hover:bg-lavenderBlush transition-all duration-700`}
           >
             <div onClick={handleOpenModal}>
-              <Funnel fill={openModal ? '#3a21d4' : '#050142'} />
+              <Funnel fill={submittedForm ? '#3a21d4' : '#050142'} />
             </div>
           </Styled.Circle>
         </div>
@@ -76,7 +87,11 @@ const Transactions = () => {
           />
         )}
       </div>
-      <StreamsList selectedStatus={selectedStatus} searchValue={searchValue} />
+      <StreamsList
+        selectedStatus={selectedStatus}
+        filteredValues={filteredValues}
+        searchValue={searchValue}
+      />
     </>
   );
 };

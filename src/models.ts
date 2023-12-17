@@ -48,13 +48,13 @@ export interface IFluxityAPIResponse<T> {
   result: T;
 }
 
-interface ITokenStream {
+export interface ITokenStream {
+  _id: string;
   address: string;
   decimals: number;
   logo: string;
   name: string;
   symbol: string;
-  _id: string;
 }
 
 export interface IResponseStream {

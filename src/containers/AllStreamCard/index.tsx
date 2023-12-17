@@ -27,9 +27,9 @@ const AllStreamCard = () => {
   return (
     <div className="w-full">
       <CCard
-        className={`relative h-[201px] mb-5 ${
+        className={`relative h-[201px] mb-5 justify-between w-full ${
           isClosed ? 'hidden' : 'flex'
-        } justify-between w-full h-full transition-all duration-700 mb-5`}
+        } transition-all duration-700 mb-5`}
         bgColor="#EBFDFF"
         borderColor="#3A21D433"
       >

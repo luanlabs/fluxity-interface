@@ -17,12 +17,14 @@ import rolling from 'public/images/rolling.svg';
 import usdc from 'public/images/assets/fusdc.svg';
 
 import capitalize from 'src/utils/capitalizeFirstLetter';
+import { IFilterTokens } from 'src/constants/types';
 
 type StreamListProps = {
   searchValue: string;
   selectedStatus: StreamStatus;
+  filteredValues: IFilterTokens;
 };
-const StreamsList = ({ searchValue, selectedStatus }: StreamListProps) => {
+const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamListProps) => {
   const router = useRouter();
   const address = useAppSelector((state) => state.user.address);
   const tokens = useAppSelector((state) => state.tokens);
@@ -35,11 +37,21 @@ const StreamsList = ({ searchValue, selectedStatus }: StreamListProps) => {
 
   const filteredStreamsByStatus = history.filter((stream) => stream.status === selectedStatus);
 
-  const filteredStreams = filteredStreamsByStatus.filter(
-    (stream) =>
+  const filteredStreams = filteredStreamsByStatus.filter((stream) => {
+    const matchesSearch =
       stream.receiver.startsWith(searchValue.toUpperCase()) ||
-      stream.sender.startsWith(searchValue.toUpperCase()),
-  );
+      stream.sender.startsWith(searchValue.toUpperCase());
+
+    const matchesReceivedStreams = !filteredValues.showReceivedStreams || !stream.isSender;
+
+    const matchesSentStreams = !filteredValues.showSentStreams || stream.isSender;
+
+    const matchesTokens =
+      filteredValues.tokens.length === 0 ||
+      filteredValues.tokens.some((token) => token.address === stream.token.address);
+
+    return matchesSearch && matchesReceivedStreams && matchesSentStreams && matchesTokens;
+  });
 
   if (isLoading && address) {
     return (
@@ -109,8 +121,8 @@ const StreamsList = ({ searchValue, selectedStatus }: StreamListProps) => {
             </div>
             <div className="flex items-center justify-end font-bold gap-2 w-[160px]">
               <span> {humanizeAmount(stream.streamAmount)}</span>
-              <span> {findTokenByAddress(stream.token, tokens)}</span>
-              <Image src={usdc} alt="icon" />
+              <span> {findTokenByAddress(stream.token.address, tokens)}</span>
+              <Image src={stream.token.logo ? stream.token.logo : usdc} alt="icon" />
             </div>
           </div>
         </CCard>
