@@ -71,7 +71,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="revisit-after" content="7 days" />
         <meta name="subtitle" content="Unlock New Payment Possibilities" />
       </head>
-      <body className="bg-alabaster">
+      <body className="bg-alabaster overflow-hidden">
         <Provider store={store}>
           <StyledComponentsRegistry>
             <ThemeProvider theme={theme}>

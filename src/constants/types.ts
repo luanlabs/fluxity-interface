@@ -36,6 +36,7 @@ export interface IResponseToken {
   decimals: string;
   name: string;
   symbol: string;
+  logo: string;
   _id: string;
 }
 

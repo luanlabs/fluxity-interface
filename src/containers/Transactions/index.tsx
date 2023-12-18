@@ -42,8 +42,10 @@ const Transactions = () => {
   };
 
   const handleSubmitFilter = (filters: IFilterTokens) => {
+    const isDefaultFilters =
+      filters.tokens.length === 0 && filters.showReceivedStreams && filters.showSentStreams;
     setFilteredValues(filters);
-    setSubmittedForm(true);
+    setSubmittedForm(!isDefaultFilters);
     closeModal();
   };
 
@@ -52,14 +54,19 @@ const Transactions = () => {
       <div className="relative inline-flex justify-between w-full mb-[17px]">
         <CStreamStatus onChange={setSelectedStatus} />
         <div className="inline-flex gap-2">
-          <Styled.Circle isopen={openSearch} className={`${openSearch ? 'bg-[#F5F5F5]' : ''}`}>
+          <Styled.Circle
+            isopen={openSearch}
+            className={`${
+              openSearch ? 'bg-[#F5F5F5]' : ''
+            } hover:bg-[#f5f5f5] transition-colors duration-700`}
+          >
             <input
               placeholder="Search wallet address"
               onChange={onChange}
               autoFocus
               className={`${
                 openSearch ? 'block' : 'hidden'
-              } h-9 w-[200px] focus:outline-none bg-[#F5F5F5]`}
+              } h-9 w-[190px] focus:outline-none bg-[#F5F5F5]`}
             />
             <Image
               src={searchLogo}

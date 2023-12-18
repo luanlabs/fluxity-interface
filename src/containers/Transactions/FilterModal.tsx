@@ -2,103 +2,31 @@ import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
 import CButton from 'src/components/CButton';
-import { useAppSelector } from 'src/hooks/useRedux';
+import { useAppDispatch, useAppSelector } from 'src/hooks/useRedux';
 import { IToken } from 'src/reducers/tokens';
 
 import close from 'public/images/whiteClose.svg';
 import searchLogo from 'public/images/search.svg';
 import { IFilterTokens } from 'src/constants/types';
+import defaultToken from 'public/images/defaultToken.svg';
 
 type ModalProps = {
   open: boolean;
   closeModal: () => void;
   handleSubmitFilter: (filteredValuesObject: IFilterTokens) => void;
 };
-const ITokens: IToken[] = [
-  {
-    address: '0x123afdfdbc456def',
-    decimals: '18',
-    name: 'Token A',
-    symbol: 'hsjkdfkshdgfkhjg',
-    _id: 'tokenA123',
-    balance: '100.000000000000000000', // Assuming 18 decimals
-  },
-  {
-    address: '0x456asasdef123abc',
-    decimals: '8',
-    name: 'Token B',
-    symbol: 'TB',
-    _id: 'tokenB456',
-    balance: '5000000.00000000', // Assuming 8 decimals
-  },
-  {
-    address: '0x789ghidsadas123jkl',
-    decimals: '12',
-    name: 'Token C',
-    symbol: 'TC',
-    _id: 'tokenC789',
-    balance: '123456789.012', // Assuming 12 decimals
-  },
-  {
-    address: '0x123absdfsdfc456def',
-    decimals: '18',
-    name: 'Token A',
-    symbol: 'hsjkdfkshdgfkhjg',
-    _id: 'tokenA123',
-    balance: '100.000000000000000000', // Assuming 18 decimals
-  },
-  {
-    address: '0x456desdfsdff123abc',
-    decimals: '8',
-    name: 'Token B',
-    symbol: 'TB',
-    _id: 'tokenB456',
-    balance: '5000000.00000000', // Assuming 8 decimals
-  },
-  {
-    address: 'ssdfsdfsdf',
-    decimals: '12',
-    name: 'Token C',
-    symbol: 'TC',
-    _id: 'tokenC789',
-    balance: '123456789.012', // Assuming 12 decimals
-  },
-  {
-    address: '0x123absdfsdfc456def',
-    decimals: '18',
-    name: 'Token A',
-    symbol: 'hsjkdfkshdgfkhjg',
-    _id: 'tokenA123',
-    balance: '100.000000000000000000', // Assuming 18 decimals
-  },
-  {
-    address: '0x45fdfd6def123abc',
-    decimals: '8',
-    name: 'Token B',
-    symbol: 'TB',
-    _id: 'tokenB456',
-    balance: '5000000.00000000', // Assuming 8 decimals
-  },
-  {
-    address: '0x789ghfffi123jkl',
-    decimals: '12',
-    name: 'Token C',
-    symbol: 'TC',
-    _id: 'tokenC789',
-    balance: '123456789.012', // Assuming 12 decimals
-  },
-];
 
 const FilterModal = ({ open, closeModal, handleSubmitFilter }: ModalProps) => {
   const [inputValue, setInputValue] = useState('');
   const [suggestionValue, setSuggestionValue] = useState<IToken[]>([]);
   const [isListVisible, setIsListVisible] = useState(true);
 
+  const dispatch = useAppDispatch();
+  const tokens = useAppSelector((store) => store.tokens);
   const modalRef = useRef<HTMLDivElement | null>(null);
   const secondModalRef = useRef<HTMLUListElement | null>(null);
-  // const tokens = useAppSelector((store) => store.tokens);
 
-  const suggestions = ITokens.filter((token) =>
+  const suggestions = tokens.filter((token) =>
     token.symbol.toLowerCase().startsWith(inputValue.toLowerCase()),
   );
 
@@ -115,6 +43,7 @@ const FilterModal = ({ open, closeModal, handleSubmitFilter }: ModalProps) => {
       showReceivedStreams: e.target.received.checked,
     };
 
+    dispatch(setFilterValues(filteredValuesObject));
     handleSubmitFilter(filteredValuesObject);
   };
 
@@ -184,18 +113,24 @@ const FilterModal = ({ open, closeModal, handleSubmitFilter }: ModalProps) => {
       {isListVisible && (
         <ul
           ref={secondModalRef}
-          className={`absolute h-[105px] overflow-auto top-14 right-[12px] left-[12px] p-[15px] shadow shadow-[#00000033] rounded-lg mt-1 bg-white`}
+          className={`absolute max-h-[105px] overflow-auto top-14 right-[12px] left-[12px] p-[15px] shadow shadow-[#00000033] rounded-lg mt-1 bg-white`}
         >
           {suggestions.map((suggestion, index) => (
             <div key={index}>
-              <li className="flex gap-2 items-center">
+              <li className="flex gap-1 items-center">
                 <input
                   type="checkbox"
-                  className="w-4 h-4 accent-black border-black rounded-none border-1"
+                  className="w-4 h-4 accent-black border-black rounded-none border-1 mr-1"
                   name={suggestion.symbol}
                   onChange={(e) => {
                     handleTokenSelect(suggestion, e.target.checked);
                   }}
+                />
+                <Image
+                  src={suggestion.logo ? suggestion.logo : defaultToken}
+                  alt="icon"
+                  width={20}
+                  height={20}
                 />
                 <label> {suggestion.symbol}</label>
               </li>

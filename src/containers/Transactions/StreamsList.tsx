@@ -14,7 +14,7 @@ import getStatusStyles from './getStatusStyle';
 import divider from 'public/images/divider.svg';
 import noStreams from 'public/images/noStreams.svg';
 import rolling from 'public/images/rolling.svg';
-import usdc from 'public/images/assets/fusdc.svg';
+import defaultToken from 'public/images/defaultToken.svg';
 
 import capitalize from 'src/utils/capitalizeFirstLetter';
 import { IFilterTokens } from 'src/constants/types';
@@ -46,11 +46,20 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
 
     const matchesSentStreams = !filteredValues.showSentStreams || stream.isSender;
 
+    const matchesBothStreams =
+      !filteredValues.showSentStreams || !filteredValues.showReceivedStreams;
+
     const matchesTokens =
       filteredValues.tokens.length === 0 ||
       filteredValues.tokens.some((token) => token.address === stream.token.address);
 
-    return matchesSearch && matchesReceivedStreams && matchesSentStreams && matchesTokens;
+    return (
+      matchesSearch &&
+      matchesReceivedStreams &&
+      matchesSentStreams &&
+      matchesBothStreams &&
+      matchesTokens
+    );
   });
 
   if (isLoading && address) {
@@ -122,7 +131,7 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
             <div className="flex items-center justify-end font-bold gap-2 w-[160px]">
               <span> {humanizeAmount(stream.streamAmount)}</span>
               <span> {findTokenByAddress(stream.token.address, tokens)}</span>
-              <Image src={stream.token.logo ? stream.token.logo : usdc} alt="icon" />
+              <Image src={stream.token.logo ? stream.token.logo : defaultToken} alt="icon" />
             </div>
           </div>
         </CCard>

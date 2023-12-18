@@ -52,6 +52,7 @@ const AllStreamCard = () => {
               color="blueWhite"
               content="FAQ"
               logo={helpLogo}
+              className="hover:bg-[#F0EFFF] transition-colors duration-700"
             />
           </div>
         </div>
