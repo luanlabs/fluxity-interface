@@ -12,6 +12,7 @@ import searchLogo from 'public/images/search.svg';
 import * as Styled from './styles';
 import StreamsList from './StreamsList';
 import FilterModal from './FilterModal';
+import { IToken } from 'src/reducers/tokens';
 
 const Transactions = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -24,6 +25,9 @@ const Transactions = () => {
     showSentStreams: true,
   });
   const [selectedStatus, setSelectedStatus] = useState<StreamStatus>(StreamStatus.ONGOING);
+  const [selectedTokenValue, setSelectedTokenValue] = useState<IToken[]>([]);
+  const [initialReceivedChecked, setInitialReceivedChecked] = useState(true);
+  const [initialSentChecked, setInitialSentChecked] = useState(true);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -35,17 +39,21 @@ const Transactions = () => {
 
   const handleOpenModal = () => {
     setOpenModal(true);
+    setInitialReceivedChecked(filteredValues.showReceivedStreams);
+    setInitialSentChecked(filteredValues.showSentStreams);
   };
 
   const closeModal = () => {
     setOpenModal(false);
   };
 
-  const handleSubmitFilter = (filters: IFilterTokens) => {
+  const handleSubmitFilter = (filters: IFilterTokens, selectedTokens: IToken[]) => {
     const isDefaultFilters =
       filters.tokens.length === 0 && filters.showReceivedStreams && filters.showSentStreams;
     setFilteredValues(filters);
     setSubmittedForm(!isDefaultFilters);
+    setSelectedTokenValue(selectedTokens);
+
     closeModal();
   };
 
@@ -91,6 +99,10 @@ const Transactions = () => {
             open={openModal}
             closeModal={closeModal}
             handleSubmitFilter={handleSubmitFilter}
+            selectedTokenValue={selectedTokenValue}
+            setSelectedTokenValue={setSelectedTokenValue}
+            initialReceivedChecked={initialReceivedChecked}
+            initialSentChecked={initialSentChecked}
           />
         )}
       </div>

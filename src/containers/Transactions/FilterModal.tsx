@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
 import CButton from 'src/components/CButton';
-import { useAppDispatch, useAppSelector } from 'src/hooks/useRedux';
+import { useAppSelector } from 'src/hooks/useRedux';
 import { IToken } from 'src/reducers/tokens';
 
 import close from 'public/images/whiteClose.svg';
@@ -13,55 +13,31 @@ import defaultToken from 'public/images/defaultToken.svg';
 type ModalProps = {
   open: boolean;
   closeModal: () => void;
-  handleSubmitFilter: (filteredValuesObject: IFilterTokens) => void;
+  handleSubmitFilter: (filteredValuesObject: IFilterTokens, selectedTokens: IToken[]) => void;
+  selectedTokenValue: IToken[];
+  setSelectedTokenValue: React.Dispatch<React.SetStateAction<IToken[]>>;
+  initialReceivedChecked: boolean;
+  initialSentChecked: boolean;
 };
 
-const FilterModal = ({ open, closeModal, handleSubmitFilter }: ModalProps) => {
+const FilterModal = ({
+  open,
+  closeModal,
+  handleSubmitFilter,
+  selectedTokenValue,
+  setSelectedTokenValue,
+  initialReceivedChecked,
+  initialSentChecked,
+}: ModalProps) => {
   const [inputValue, setInputValue] = useState('');
-  const [suggestionValue, setSuggestionValue] = useState<IToken[]>([]);
-  const [isListVisible, setIsListVisible] = useState(true);
+  const [isListVisible, setIsListVisible] = useState(false);
+  const [receivedChecked, setReceivedChecked] = useState(true);
+  const [sentChecked, setSentChecked] = useState(true);
 
-  const dispatch = useAppDispatch();
   const tokens = useAppSelector((store) => store.tokens);
   const modalRef = useRef<HTMLDivElement | null>(null);
   const secondModalRef = useRef<HTMLUListElement | null>(null);
 
-  const suggestions = tokens.filter((token) =>
-    token.symbol.toLowerCase().startsWith(inputValue.toLowerCase()),
-  );
-
-  const handleInputChange = (e: any) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const filteredValuesObject: IFilterTokens = {
-      tokens: suggestionValue,
-      showSentStreams: e.target.sent.checked,
-      showReceivedStreams: e.target.received.checked,
-    };
-
-    dispatch(setFilterValues(filteredValuesObject));
-    handleSubmitFilter(filteredValuesObject);
-  };
-
-  const handleTokenSelect = (suggestion: IToken, isChecked: boolean) => {
-    if (isChecked) {
-      setSuggestionValue([...suggestionValue, suggestion]);
-    } else {
-      const filteredTokens = suggestionValue.filter(
-        (token) => token.address !== suggestion.address,
-      );
-      setSuggestionValue(filteredTokens);
-    }
-  };
-
-  const handleRemoveSuggestion = (suggestion: IToken) => {
-    const filteredTokens = suggestionValue.filter((token) => token.address !== suggestion.address);
-    setSuggestionValue(filteredTokens);
-  };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
@@ -77,11 +53,60 @@ const FilterModal = ({ open, closeModal, handleSubmitFilter }: ModalProps) => {
     } else {
       document.removeEventListener('mousedown', handleClickOutside);
     }
+    setReceivedChecked(initialReceivedChecked);
+
+    setSentChecked(initialSentChecked);
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [closeModal, open]);
+  }, [open, initialReceivedChecked, initialSentChecked, closeModal]);
+
+  const filteredTokensBySearch = tokens.filter((token) =>
+    token.symbol.toLowerCase().startsWith(inputValue.toLowerCase()),
+  );
+
+  const handleInputChange = (e: any) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleReceivedChange = () => {
+    setReceivedChecked(!receivedChecked);
+  };
+
+  const handleSentChange = () => {
+    setSentChecked(!sentChecked);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const filteredValuesObject: IFilterTokens = {
+      tokens: selectedTokenValue,
+      showSentStreams: sentChecked,
+      showReceivedStreams: receivedChecked,
+    };
+
+    handleSubmitFilter(filteredValuesObject, selectedTokenValue);
+  };
+
+  const handleTokenSelect = (suggestion: IToken, isChecked: boolean) => {
+    if (isChecked) {
+      setSelectedTokenValue([...selectedTokenValue, suggestion]);
+    } else {
+      const filteredTokens = selectedTokenValue.filter(
+        (token) => token.address !== suggestion.address,
+      );
+      setSelectedTokenValue(filteredTokens);
+    }
+  };
+
+  const handleRemoveSuggestion = (suggestion: IToken) => {
+    const filteredTokens = selectedTokenValue.filter(
+      (token) => token.address !== suggestion.address,
+    );
+    setSelectedTokenValue(filteredTokens);
+  };
 
   return (
     <div
@@ -106,6 +131,7 @@ const FilterModal = ({ open, closeModal, handleSubmitFilter }: ModalProps) => {
           autoComplete="off"
           value={inputValue}
           onChange={handleInputChange}
+          onClick={() => setIsListVisible(true)}
           className={`h-9 w-[180px] focus:outline-none bg-[#F5F5F5]`}
         />
       </div>
@@ -115,7 +141,7 @@ const FilterModal = ({ open, closeModal, handleSubmitFilter }: ModalProps) => {
           ref={secondModalRef}
           className={`absolute max-h-[105px] overflow-auto top-14 right-[12px] left-[12px] p-[15px] shadow shadow-[#00000033] rounded-lg mt-1 bg-white`}
         >
-          {suggestions.map((suggestion, index) => (
+          {filteredTokensBySearch.map((suggestion, index) => (
             <div key={index}>
               <li className="flex gap-1 items-center">
                 <input
@@ -125,6 +151,8 @@ const FilterModal = ({ open, closeModal, handleSubmitFilter }: ModalProps) => {
                   onChange={(e) => {
                     handleTokenSelect(suggestion, e.target.checked);
                   }}
+                  checked={selectedTokenValue.some((token) => token.symbol === suggestion.symbol)}
+                  value={suggestion.symbol}
                 />
                 <Image
                   src={suggestion.logo ? suggestion.logo : defaultToken}
@@ -134,14 +162,14 @@ const FilterModal = ({ open, closeModal, handleSubmitFilter }: ModalProps) => {
                 />
                 <label> {suggestion.symbol}</label>
               </li>
-              {suggestions.length !== index + 1 && <hr className="my-2" />}
+              {filteredTokensBySearch.length !== index + 1 && <hr className="my-2" />}
             </div>
           ))}
         </ul>
       )}
 
-      <div className={`${suggestionValue.length && 'mt-[19px]'} flex gap-1 flex-wrap`}>
-        {suggestionValue.map((suggestion, index) => (
+      <div className={`${selectedTokenValue.length && 'mt-[19px]'} flex gap-1 flex-wrap`}>
+        {selectedTokenValue.map((suggestion, index) => (
           <div
             key={index}
             className="flex my-1 text-xs select-none items-center w-fit h-6 gap-[6px] rounded-[39px] bg-royalBlue p-[5px] pl-[10px] text-white hover:bg-buttonHover transition-colors duration-700"
@@ -157,15 +185,17 @@ const FilterModal = ({ open, closeModal, handleSubmitFilter }: ModalProps) => {
           </div>
         ))}
       </div>
+
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col py-[19px] select-none space-y-1">
           <span className="flex items-center gap-2">
             <input
               type="checkbox"
-              className="w-4 h-4 accent-black border-black rounded-none border-1"
+              className="w-4 h-4 accent-black"
               name="received"
-              defaultChecked
               value="received"
+              checked={receivedChecked}
+              onChange={handleReceivedChange}
             />
             <label>Received Streams</label>
           </span>
@@ -174,8 +204,9 @@ const FilterModal = ({ open, closeModal, handleSubmitFilter }: ModalProps) => {
               type="checkbox"
               className="w-4 h-4 accent-black"
               name="sent"
-              defaultChecked
               value="sent"
+              checked={sentChecked}
+              onChange={handleSentChange}
             />
             <label>Sent Streams</label>
           </span>
