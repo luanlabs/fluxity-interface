@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Provider } from 'react-redux';
-import localFont from 'next/font/local';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from 'styled-components';
 import { usePathname } from 'next/navigation';
@@ -23,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const [isMinimized, setIsMinimized] = useState(false);
 
   const currentPath = usePathname();
+
   const knownRoutes = Object.values(Pages).find((path) => {
     if (currentPath === path) {
       return true;
@@ -85,7 +85,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </CCard>
                 <section className={`inline-flex basis-full gap-4 w-full h-[90%]`}>
                   <CCard
-                    className={`relative overflow-hidden ${!knownRoutes && 'hidden'} ${
+                    className={`relative overflow-hidden ${
+                      !knownRoutes || currentPath === Pages.FAQ ? 'hidden' : 'block'
+                    } ${
                       isMinimized
                         ? 'basis-[80px] transition-all duration-500'
                         : 'basis-[24%] lg:basis-[20%] transition-all duration-500'
