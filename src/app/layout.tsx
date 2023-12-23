@@ -45,6 +45,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           content="Fluxity, Stellar, token streaming, cryptocurrency, blockchain, finance, digital payments, smart contracts"
         />
         <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
+        />
+        <meta
           name="description"
           content="Fluxity offers a comprehensive token streaming solution built on the Stellar network, designed to facilitate real-time, secure, and automated digital payments. With Fluxity, users can create, manage, and monitor token streams effortlessly."
         />
