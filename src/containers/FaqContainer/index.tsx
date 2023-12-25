@@ -9,15 +9,15 @@ const FaqContainer = () => {
   const [isActive, setIsActive] = useState(0);
 
   return (
-    <div className="flex overflow-scroll">
-      <div className="flex justify-start items-center basis-1/5 ">
+    <div className="flex overflow-scroll gap-5">
+      <div className="flex justify-start items-center basis-1/5">
         <ul className="w-5/6">
           {FAQContent.map((item, index) => (
             <li
               key={item.title}
               className={`flex items-center justify-between whitespace-nowrap font-medium py-3 px-[10px] select-none ${
                 isActive === index && 'bg-white'
-              } rounded-xl my-1 cursor-pointer tall:text-base text-sm`}
+              } rounded-xl my-1 cursor-pointer tall:text-base text-sm min-w-fit w-[290px]`}
               onClick={() => {
                 setIsActive(index);
               }}
