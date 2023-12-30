@@ -23,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const [isMinimized, setIsMinimized] = useState(false);
 
   const currentPath = usePathname();
+
   const knownRoutes = Object.values(Pages).find((path) => {
     if (currentPath === path) {
       return true;
@@ -43,6 +44,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta
           name="keywords"
           content="Fluxity, Stellar, token streaming, cryptocurrency, blockchain, finance, digital payments, smart contracts"
+        />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
         />
         <meta
           name="description"
@@ -85,7 +90,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </CCard>
                 <section className={`inline-flex basis-full gap-4 w-full h-[90%]`}>
                   <CCard
-                    className={`relative overflow-hidden ${!knownRoutes && 'hidden'} ${
+                    className={`relative overflow-hidden ${
+                      !knownRoutes || currentPath === Pages.FAQ ? 'hidden' : 'block'
+                    } ${
                       isMinimized
                         ? 'basis-[80px] transition-all duration-500'
                         : 'basis-[24%] lg:basis-[20%] transition-all duration-500'
