@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 import { Provider } from 'react-redux';
-import localFont from 'next/font/local';
 import { Toaster } from 'react-hot-toast';
-import { ThemeProvider } from 'styled-components';
 import { usePathname } from 'next/navigation';
+import { ThemeProvider } from 'styled-components';
 
 import { store } from 'src/store';
 import myFont from 'src/utils/localFont';
@@ -14,10 +13,11 @@ import CCard from 'src/components/CCard';
 import Header from 'src/containers/Header';
 import { Pages } from 'src/constants/pages';
 
+import AppDataFetch from 'src/containers/AppDataFetch';
+import StyledComponentsRegistry from '../styles/registry';
+
 import 'src/styles/globals.css';
 import theme from '../styles/theme';
-import StyledComponentsRegistry from '../styles/registry';
-import AppDataFetch from 'src/containers/AppDataFetch';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [isMinimized, setIsMinimized] = useState(false);

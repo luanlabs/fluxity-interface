@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { scValToNative } from 'stellar-sdk';
 import { UseFormReturn } from 'react-hook-form';
 
 import BN from 'src/utils/BN';
@@ -19,7 +20,6 @@ import { FLUXITY_CONTRACT } from 'src/constants/contracts';
 import toDecimals from 'src/utils/createStream/toDecimals';
 import approve from 'src/features/soroban/approve';
 import createStream from 'src/features/soroban/createStream';
-import { scValToNative } from 'soroban-client';
 import { sendStreamId } from 'src/features/sendStreamId';
 
 interface ConfirmTransactions {
