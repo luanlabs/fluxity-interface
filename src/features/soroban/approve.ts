@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js';
+import { Contract } from 'stellar-sdk';
 
 import ToScVal from 'src/utils/createStream/scVal';
-import { FLUXITY_CONTRACT } from 'src/constants/contracts';
-import getContract from 'src/utils/createStream/getContract';
 import getServer from 'src/utils/createStream/getServer';
 import getAccount from 'src/utils/createStream/getAccount';
+import { FLUXITY_CONTRACT } from 'src/constants/contracts';
 import toDecimals from 'src/utils/createStream/toDecimals';
 import createTransaction from 'src/utils/soroban/baseTransaction';
 
@@ -12,7 +12,7 @@ const approve = async (contractAddress: string, amount: BigNumber, address: stri
   const account = await getAccount(address);
 
   const server = getServer();
-  const contract = getContract(contractAddress);
+  const contract = new Contract(contractAddress);
   const { sequence } = await server.getLatestLedger();
 
   const from = ToScVal.address(address);

@@ -1,9 +1,8 @@
-import { scValToNative } from 'soroban-client';
+import { Contract, scValToNative } from 'stellar-sdk';
 
+import ToScVal from 'src/utils/createStream/scVal';
 import getServer from 'src/utils/createStream/getServer';
 import getAccount from 'src/utils/createStream/getAccount';
-import ToScVal from 'src/utils/createStream/scVal';
-import getContract from 'src/utils/createStream/getContract';
 import createTransaction from 'src/utils/soroban/baseTransaction';
 
 const getERC20Allowance = async (
@@ -17,7 +16,7 @@ const getERC20Allowance = async (
   const from = ToScVal.address(owner);
   const spender = ToScVal.address(spenderAddress);
 
-  const contract = getContract(contractAddress);
+  const contract = new Contract(contractAddress);
   const call = contract.call('allowance', from, spender);
 
   const txXdr = createTransaction(account, call);
