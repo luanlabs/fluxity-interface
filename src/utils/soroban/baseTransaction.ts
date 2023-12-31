@@ -1,4 +1,4 @@
-import { TransactionBuilder, Networks, Account, xdr, Operation } from 'soroban-client';
+import { TransactionBuilder, Networks, Account, xdr, Operation } from 'stellar-sdk';
 
 import getFee from 'src/utils/createStream/getFee';
 

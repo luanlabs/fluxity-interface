@@ -1,8 +1,8 @@
-import { AccountResponse, Server } from 'stellar-sdk';
+import { Horizon } from 'stellar-sdk';
 
-const server = new Server('https://horizon-futurenet.stellar.org');
+const server = new Horizon.Server('https://horizon-futurenet.stellar.org');
 
-export type getAccountResult = Promise<AccountResponse | null>;
+export type getAccountResult = Promise<Horizon.AccountResponse | null>;
 
 const getAccount = async (publicKey: string) => {
   try {

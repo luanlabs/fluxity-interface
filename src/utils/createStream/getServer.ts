@@ -1,6 +1,6 @@
-import { Server } from 'soroban-client';
+import { SorobanRpc } from 'stellar-sdk';
 
 const getServer = () => {
-  return new Server('https://rpc-futurenet.stellar.org');
+  return new SorobanRpc.Server('https://rpc-futurenet.stellar.org');
 };
 export default getServer;

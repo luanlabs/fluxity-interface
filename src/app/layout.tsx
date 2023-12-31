@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 import { Provider } from 'react-redux';
-import localFont from 'next/font/local';
 import { Toaster } from 'react-hot-toast';
-import { ThemeProvider } from 'styled-components';
 import { usePathname } from 'next/navigation';
+import { ThemeProvider } from 'styled-components';
 
 import { store } from 'src/store';
 import myFont from 'src/utils/localFont';
@@ -14,15 +13,17 @@ import CCard from 'src/components/CCard';
 import Header from 'src/containers/Header';
 import { Pages } from 'src/constants/pages';
 
+import AppDataFetch from 'src/containers/AppDataFetch';
+import StyledComponentsRegistry from '../styles/registry';
+
 import 'src/styles/globals.css';
 import theme from '../styles/theme';
-import StyledComponentsRegistry from '../styles/registry';
-import AppDataFetch from 'src/containers/AppDataFetch';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [isMinimized, setIsMinimized] = useState(false);
 
   const currentPath = usePathname();
+
   const knownRoutes = Object.values(Pages).find((path) => {
     if (currentPath === path) {
       return true;
@@ -43,6 +44,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta
           name="keywords"
           content="Fluxity, Stellar, token streaming, cryptocurrency, blockchain, finance, digital payments, smart contracts"
+        />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
         />
         <meta
           name="description"
@@ -85,7 +90,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </CCard>
                 <section className={`inline-flex basis-full gap-4 w-full h-[90%]`}>
                   <CCard
-                    className={`relative overflow-hidden ${!knownRoutes && 'hidden'} ${
+                    className={`relative overflow-hidden ${
+                      !knownRoutes || currentPath === Pages.FAQ ? 'hidden' : 'block'
+                    } ${
                       isMinimized
                         ? 'basis-[80px] transition-all duration-500'
                         : 'basis-[24%] lg:basis-[20%] transition-all duration-500'

@@ -1,4 +1,4 @@
-import { Contract } from 'soroban-client';
+import { Contract } from 'stellar-sdk';
 import { IToken } from 'src/reducers/tokens';
 import getERC20Balance from './soroban/getERC20Balance';
 
