@@ -14,7 +14,7 @@
     "@headlessui/react": "^1.7.17",
     "@hookform/devtools": "^4.3.1",
     "@reduxjs/toolkit": "^1.9.7",
-    "@stellar/freighter-api": "^1.7.0",
+    "@stellar/freighter-api": "^1.7.1",
     "@tippyjs/react": "^4.2.6",
     "@types/node": "20.4.10",
     "@types/react": "18.2.20",
