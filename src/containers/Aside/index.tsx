@@ -16,28 +16,32 @@ type AsideProps = {
 
 const Aside = ({ isMinimized, onMinimized }: AsideProps) => {
   return (
-    <aside className="overflow-hidden">
+    <aside className="overflow-hidden flex flex-col md:flex-row md:justify-around">
       <div
-        className={`cursor-pointer select-none ${isMinimized ? 'w-full ml-[10px]' : 'ml-[10px]'} `}
+        className={`cursor-pointer select-none md:hidden ${
+          isMinimized ? 'w-full ml-[10px]' : 'ml-[10px]'
+        } `}
         onClick={onMinimized}
       >
         <SquareHalf />
       </div>
-      <hr className="mt-[18px] mb-3" />
+      <hr className="mt-[18px] mb-3 md:hidden" />
       {navLinks.map((item) => (
         <div key={item.title}>
           <CNavLink {...item} isMinimized={isMinimized} />
         </div>
       ))}
-      <hr className="my-3" />
-      <CNavLink
-        title="FAQ"
-        icon={<LifeBuoy fill="#EBFDFF" />}
-        activeIcon={<LifeBuoy />}
-        url={Pages.FAQ}
-        isMinimized={isMinimized}
-      />
-      <div className="absolute bottom-5 left-[15px] right-[15px]">
+      <div className="md:hidden">
+        <hr className="my-3" />
+        <CNavLink
+          title="FAQ"
+          icon={<LifeBuoy fill="#EBFDFF" />}
+          activeIcon={<LifeBuoy />}
+          url={Pages.FAQ}
+          isMinimized={isMinimized}
+        />
+      </div>
+      <div className="lg:absolute lg:bottom-5 lg:left-[15px] lg:right-[15px]">
         <CConnectButton isMinimized={isMinimized} />
       </div>
     </aside>

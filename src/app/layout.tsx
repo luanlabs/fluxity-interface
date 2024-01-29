@@ -82,27 +82,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <ThemeProvider theme={theme}>
               <AppDataFetch />
               <main
-                className="px-8 pt-[9px] pb-7 w-full xxl:w-[100%] 2xl:!w-[60%] 3xl:!w-[35%] h-screen
+                className="px-8 sm:p-0 md:p-0 pt-[9px] pb-7 w-full xxl:w-[100%] 2xl:!w-[60%] 3xl:!w-[35%] h-screen
                 2xl:h-[80vh] 3xl:h-[50vh] 4xl:h-[30vh] 4xl:!w-[30%] m-auto"
               >
-                <CCard className="mb-[10px]" bgColor="white">
+                <CCard className="mb-[10px] sm:rounded-none md:rounded-none" bgColor="white">
                   <Header />
                 </CCard>
-                <section className={`inline-flex basis-full gap-4 w-full h-[90%]`}>
+                <section className="inline-flex basis-full gap-4 w-full h-[90%]">
                   <CCard
-                    className={`relative overflow-hidden ${
+                    className={`md:fixed md:bottom-0 md:right-0 md:left-0 md:z-90 overflow-hidden md:rounded-none md:border-none${
                       !knownRoutes || currentPath === Pages.FAQ ? 'hidden' : 'block'
-                    } ${
+                    }  ${
                       isMinimized
                         ? 'basis-[80px] transition-all duration-500'
                         : 'basis-[24%] lg:basis-[20%] transition-all duration-500'
                     } px-[15px] py-[19px]`}
                     bgColor="white"
                   >
-                    <Aside
-                      isMinimized={isMinimized}
-                      onMinimized={() => setIsMinimized(!isMinimized)}
-                    />
+                    <div className={`lg:relative overflow-hidden`}>
+                      <Aside
+                        isMinimized={isMinimized}
+                        onMinimized={() => setIsMinimized(!isMinimized)}
+                      />
+                    </div>
                   </CCard>
                   <article className="basis-full">{children}</article>
                 </section>

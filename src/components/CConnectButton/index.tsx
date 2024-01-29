@@ -77,7 +77,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
 
   return (
     <div
-      className={`relative flex items-center rounded-xl ${
+      className={`relative flex items-center rounded-xl md:h-11 md:w-11 ${
         address
           ? openModal
             ? 'bg-midnightBlue text-white'
@@ -118,7 +118,9 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
       ) : (
         <div className="w-full">
           <span className="flex justify-between items-center px-[10px] h-12">
-            <p className="font-normal text-base whitespace-nowrap overflow-hidden">Connect</p>
+            <p className="font-normal text-base whitespace-nowrap overflow-hidden md:hidden">
+              Connect
+            </p>
             <Image src={wallet} alt="wallet" width={24} height={24} />
           </span>
         </div>
