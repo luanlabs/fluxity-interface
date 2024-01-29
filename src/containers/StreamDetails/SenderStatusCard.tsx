@@ -14,6 +14,8 @@ import signTransaction from 'src/utils/soroban/signTransaction';
 import sendTransaction from 'src/features/soroban/sendTransaction';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
+import { sendCancel } from 'src/features/sendCancel';
+import useGetStreamById from 'src/utils/getStreamById';
 
 interface SenderStatusCardProps {
   amount: string;
@@ -81,6 +83,8 @@ const SenderStatusCard = ({
     setIsReclamationModalOpen(false);
     await timeout(100);
     setIsCancelStreamConfirmOpen(true);
+
+    sendCancel(id);
   };
 
   const handleModalButton = () => {
