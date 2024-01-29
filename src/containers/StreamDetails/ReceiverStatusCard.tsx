@@ -9,6 +9,7 @@ import { useAppSelector } from 'src/hooks/useRedux';
 import CProcessModal from 'src/components/CProcessModal';
 import CSummaryField from 'src/components/CSummaryField';
 import CModalSuccess from 'src/components/CModalSuccess';
+import { sendWithdraw } from 'src/features/sendWithdraw';
 import signTransaction from 'src/utils/soroban/signTransaction';
 import withdrawStream from 'src/features/soroban/withdrawStream';
 import sendTransaction from 'src/features/soroban/sendTransaction';
@@ -38,10 +39,9 @@ const ReceiverStatusCard = ({
   cliffDate,
   isCanellable,
   id,
-  token,
-  sender,
 }: ReceiverStatusCardProps) => {
   const address = useAppSelector((state) => state.user.address);
+  const [withdraw, setWithdraw] = useState(withdrawn);
 
   const [approvalOpen, setIsApprovalOpen] = useState(false);
   const [withdrawSuccessOpen, setIsWithdrawSuccessOpen] = useState(false);
@@ -51,7 +51,7 @@ const ReceiverStatusCard = ({
     endDate,
     cliffDate,
     amount,
-  ).receiverAmount.minus(withdrawn);
+  ).receiverAmount.minus(withdraw);
 
   const withdrawable = isStreamWithdrawable(
     startDate,
@@ -65,7 +65,7 @@ const ReceiverStatusCard = ({
   const handleWithdrawClick = async () => {
     setIsApprovalOpen(true);
 
-    const withdrawStreamXdr = await withdrawStream(id, BigInt(amount), address);
+    const withdrawStreamXdr = await withdrawStream(id, address);
 
     let signedXdr;
     let tx;
@@ -97,6 +97,9 @@ const ReceiverStatusCard = ({
     setIsApprovalOpen(false);
     await timeout(100);
     setIsWithdrawSuccessOpen(true);
+
+    sendWithdraw(id);
+    setWithdraw(new BN(withdraw).plus(new BN(available)).toString());
   };
 
   const handleModalButton = () => {
@@ -125,7 +128,7 @@ const ReceiverStatusCard = ({
       <CPageCard title={ReceiverStatusCardTitle} className="px-3 py-4 mb-4 w-full">
         <div className="grid gap-2 text-midnightBlue">
           <CSummaryField label="Available" value={available.toFixed(3)} fieldSize="large" />
-          <CSummaryField label="Withdraw" value={new BN(withdrawn).toFixed(3)} fieldSize="large" />
+          <CSummaryField label="Withdraw" value={new BN(withdraw).toFixed(3)} fieldSize="large" />
         </div>
       </CPageCard>
 
@@ -138,9 +141,6 @@ const ReceiverStatusCard = ({
       <CModalSuccess
         successLogoColor="green"
         title="Token withdrawal successful"
-        streamId={id}
-        from={sender}
-        token={token}
         amountTitle="Amount"
         amount={new BN(amount).toFixed(3)}
         buttonVariant="simple"
