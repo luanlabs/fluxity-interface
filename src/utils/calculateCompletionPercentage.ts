@@ -1,12 +1,24 @@
+import { IResponseStream } from 'src/models';
 import BN from './BN';
+import { StreamDataType } from './getStreamById';
 
-export const calculateCompletionPercentage = (start_date: number, end_date: number) => {
+export const calculateCompletionPercentage = (
+  start_date: number,
+  end_date: number,
+  amount: string,
+  withdrawn: string,
+  isCancalled: boolean,
+) => {
   const currentDate = Date.now();
   const endDate = new Date(end_date).getTime() * 1000;
   const startDate = new Date(start_date).getTime() * 1000;
 
   if (currentDate < startDate) {
     return '0';
+  }
+
+  if (isCancalled) {
+    return new BN(withdrawn).times(100).div(amount).toFixed(0);
   }
 
   if (currentDate >= endDate) {
