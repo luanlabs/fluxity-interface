@@ -25,6 +25,7 @@ interface ReceiverStatusCardProps {
   startDate: number;
   endDate: number;
   cliffDate: number;
+  isCancelled: boolean;
   isCanellable: boolean;
   id: string;
   token: string;
@@ -42,6 +43,7 @@ const ReceiverStatusCard = ({
 }: ReceiverStatusCardProps) => {
   const address = useAppSelector((state) => state.user.address);
   const [withdraw, setWithdraw] = useState(withdrawn);
+  const [availableAmount, setAvailableAmount] = useState(0);
 
   const [approvalOpen, setIsApprovalOpen] = useState(false);
   const [withdrawSuccessOpen, setIsWithdrawSuccessOpen] = useState(false);
@@ -50,6 +52,8 @@ const ReceiverStatusCard = ({
     startDate,
     endDate,
     cliffDate,
+    isCanellable,
+    withdrawn,
     amount,
   ).receiverAmount.minus(withdraw);
 
@@ -98,6 +102,7 @@ const ReceiverStatusCard = ({
     await timeout(100);
     setIsWithdrawSuccessOpen(true);
 
+    setAvailableAmount(Number(withdraw));
     sendWithdraw(id);
     setWithdraw(new BN(withdraw).plus(new BN(available)).toString());
   };
@@ -142,7 +147,7 @@ const ReceiverStatusCard = ({
         successLogoColor="green"
         title="Token withdrawal successful"
         amountTitle="Amount"
-        amount={new BN(amount).toFixed(3)}
+        amount={new BN(withdraw).minus(availableAmount).toFixed(3)}
         buttonVariant="simple"
         buttonText="Close"
         isOpen={withdrawSuccessOpen}

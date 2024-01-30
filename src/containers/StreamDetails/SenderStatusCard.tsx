@@ -24,6 +24,8 @@ interface SenderStatusCardProps {
   cliffDate: number;
   receiver: string;
   token: string;
+  isCancelled: boolean;
+  withdrawn: string;
   isCancellable: boolean;
   id: string;
 }
@@ -35,6 +37,8 @@ const SenderStatusCard = ({
   cliffDate,
   receiver,
   token,
+  isCancelled,
+  withdrawn,
   isCancellable,
   id,
 }: SenderStatusCardProps) => {
@@ -95,15 +99,10 @@ const SenderStatusCard = ({
     startDate,
     endDate,
     cliffDate,
+    isCancelled,
+    withdrawn,
     amount,
   ).senderAmount.toFixed(3);
-
-  const receiveAmount = calculateStreamAmounts(
-    startDate,
-    endDate,
-    cliffDate,
-    amount,
-  ).receiverAmount.toFixed(3);
 
   const SenderStatusCardTitle = (
     <div className="w-full flex justify-between items-center pb-4 pl-4">

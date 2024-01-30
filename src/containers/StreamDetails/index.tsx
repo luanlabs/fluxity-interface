@@ -30,7 +30,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
   const { loading, data, error } = useGetStreamById(id);
 
   const [sendStreamAmount, setSendStreamAmount] = useState(
-    calculateStreamAmounts(0, 0, 0, '0').receiverAmount,
+    calculateStreamAmounts(0, 0, 0, false, '0', '0').receiverAmount,
   );
 
   useEffect(() => {
@@ -41,6 +41,8 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             data.start_date,
             data.end_date,
             data.cliff_date,
+            data.is_cancelled,
+            formatUnits(data.withdrawn, data.token.decimals),
             formatUnits(data.amount, data.token.decimals),
           ).receiverAmount,
         );
@@ -89,6 +91,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
           <DynamicStreamedAmount
             token={data.token.symbol}
             streamAmount={sendStreamAmount.toFixed(3)}
+            isCancelled={data.is_cancelled}
           />
 
           <BlueCard
@@ -96,6 +99,8 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             flowRate={data.rate}
             startDate={data.start_date}
             endDate={data.end_date}
+            withdrawn={formatUnits(data.withdrawn, data.token.decimals)}
+            isCancelled={data.is_cancelled}
             amount={formatUnits(data.amount, data.token.decimals)}
             token={data.token.symbol}
           />
@@ -111,6 +116,8 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             startDate={data.start_date}
             endDate={data.end_date}
             cliffDate={data.cliff_date}
+            isCancelled={data.is_cancelled}
+            withdrawn={withdraw}
             isCancellable={cancellable}
             id={data.id}
             receiver={data.receiver}
@@ -125,6 +132,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             cliffDate={data.cliff_date}
             amount={amount}
             withdrawn={withdraw}
+            isCancelled={data.is_cancelled}
             isCanellable={cancellable}
             id={data.id}
             token={data.token.symbol}
