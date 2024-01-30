@@ -90,16 +90,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </CCard>
                 <section className="inline-flex basis-full gap-4 w-full h-[90%]">
                   <CCard
-                    className={`md:fixed md:bottom-0 md:right-0 md:left-0 md:z-90 overflow-hidden md:rounded-none md:border-none${
+                    className={`md:fixed md:bottom-0 md:h-16 md:right-0 md:left-0 sm:fixed sm:bottom-0 sm:h-16 sm:right-0 sm:left-0 overflow-hidden md:rounded-none md:border-none${
                       !knownRoutes || currentPath === Pages.FAQ ? 'hidden' : 'block'
-                    }  ${
+                    } ${
                       isMinimized
                         ? 'basis-[80px] transition-all duration-500'
                         : 'basis-[24%] lg:basis-[20%] transition-all duration-500'
-                    } px-[15px] py-[19px]`}
+                    } lg:px-[15px] lg:py-[19px] md:items-center`}
                     bgColor="white"
                   >
-                    <div className={`lg:relative overflow-hidden`}>
+                    <div className="lg:relative overflow-hidden">
                       <Aside
                         isMinimized={isMinimized}
                         onMinimized={() => setIsMinimized(!isMinimized)}
