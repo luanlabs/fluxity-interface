@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import cn from 'classnames';
 
 import { ISelectToken } from 'src/models';
 import CButton from 'src/components/CButton';
@@ -69,25 +70,25 @@ const CreateStream = () => {
   const isFormCompleteValidation = !isValid || isValidating || !isFormValidated || !address;
 
   const CreateStreamTitle = (
-    <h1 className="text-[24px] text-midnightBlue pl-2 mt-1 mb-1">Create Stream</h1>
+    <h1 className="text-[24px] text-midnightBlue pl-4 mt-1 mb-1">Create Stream</h1>
   );
 
   return (
-    <form method="" onSubmit={handleSubmit(onSubmit)} className="h-full">
+    <form method="" onSubmit={handleSubmit(onSubmit)} className="h-full w-full">
       <div className="flex w-full h-full">
         <CPageCard
           title={CreateStreamTitle}
           divider
-          className="w-full pl-[30px] pr-[18px] py-[15px]"
+          className="w-full pl-[30px] pr-[18px] py-[15px] sm:pl-2 sm:items-center"
           scroll
         >
           <div className="w-full">
-            <div>
+            <div className="w-full">
               <Controller
                 name="streamingModel"
                 control={control}
                 render={({ field }) => (
-                  <div>
+                  <div className="w-full">
                     <CStreamingModelContainer
                       label="Streaming model"
                       tooltipTitle="Streaming model"
@@ -118,7 +119,7 @@ const CreateStream = () => {
               />
             </div>
 
-            <div className="flex gap-2 items-center justify-center">
+            <div className="flex gap-2 sm:flex-col sm:items-start items-center justify-center">
               <Controller
                 name="token"
                 control={control}
@@ -135,7 +136,7 @@ const CreateStream = () => {
                       label="Flow rate"
                       tooltipTitle="Flow rate"
                       tooltipDetails={tooltipDetails.createStream.flowRate}
-                      className="basis-4/5"
+                      className="basis-4/5 sm:!basis-0 sm:mt-4 sm:w-[340px]"
                       errorMsg={errors.rate && errors.rate.message}
                       error={errors.rate?.message ? true : false}
                       {...field}
@@ -161,15 +162,15 @@ const CreateStream = () => {
               />
             </div>
 
-            <hr className="my-6" />
+            <hr className="my-6 sm:hidden" />
 
-            <div className="mb-6">
+            <div className="mb-6 sm:mb-3">
               <Controller
                 name="cliffDate"
                 control={control}
                 render={({ field }) => (
                   <CDatePicker
-                    className="w-[236px]"
+                    className="w-[236px] sm:w-[340px]"
                     label="Cliff date"
                     tooltipTitle="Cliff Date"
                     tooltipDetails={tooltipDetails.createStream.cliffDate}
@@ -181,14 +182,14 @@ const CreateStream = () => {
               />
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex sm:flex-col sm:gap-4 gap-2">
               <Controller
                 name="startDate"
                 control={control}
                 render={({ field }) => (
                   <CDatePicker
                     {...field}
-                    className="w-[236px]"
+                    className="w-[236px] sm:w-[340px]"
                     label="Start date"
                     tooltipTitle="Start Date"
                     tooltipDetails={tooltipDetails.createStream.startDate}
@@ -204,7 +205,7 @@ const CreateStream = () => {
                 render={({ field }) => (
                   <CDatePicker
                     {...field}
-                    className="w-[236px]"
+                    className="w-[236px] sm:w-[340px]"
                     label="End date"
                     tooltipTitle="End Date"
                     tooltipDetails={tooltipDetails.createStream.endDate}
@@ -215,9 +216,24 @@ const CreateStream = () => {
                 )}
               />
             </div>
+
+            <CButton
+              type="submit"
+              variant="form"
+              content="Create Stream"
+              fill={isFormCompleteValidation ? '#050142' : '#fff'}
+              className={cn(
+                isFormCompleteValidation
+                  ? '!bg-[#E6E6EC] !text-[#050142]'
+                  : '!bg-darkBlue !text-white',
+                'xl:hidden lg:hidden md:hidden mt-12 w-[340px]',
+              )}
+              disabled={isFormCompleteValidation}
+              onClick={handleOpenModals}
+            />
           </div>
         </CPageCard>
-        <div className="relative ml-6">
+        <div className="relative ml-6 sm:hidden md:hidden">
           <div>
             <SummaryContainer form={form} isFormValidated={isFormValidated} />
 

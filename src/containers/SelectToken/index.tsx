@@ -57,7 +57,7 @@ const SelectToken = ({ onChange }: SelectTokenProps) => {
       <CLabel label="Token" htmlFor={id} />
 
       <button
-        className="flex justify-between w-[218px] items-center h-14 px-4 text-lg text-mutedBlue rounded-xl bg-[#f5f5f5]"
+        className="flex justify-between sm:w-[340px] w-[218px] items-center h-14 px-4 text-lg text-mutedBlue rounded-xl bg-[#f5f5f5]"
         onClick={openModal}
         id={id}
       >
