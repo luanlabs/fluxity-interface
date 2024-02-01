@@ -86,7 +86,10 @@ const ClaimTokens = () => {
   };
 
   return (
-    <CCard borderColor="#0000001A" className="relative bg-white p-[19.6px] h-[238px] w-1/2">
+    <CCard
+      borderColor="#0000001A"
+      className="relative bg-white p-[19.6px] h-[238px] w-1/2 mobile:w-full"
+    >
       <h1 className="font-medium text-2xl">Claim Testnet Tokens!</h1>
 
       <Image src={blueDivider} alt="Divider" className="py-4 select-none" />

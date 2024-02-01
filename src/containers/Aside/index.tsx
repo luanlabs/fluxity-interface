@@ -16,22 +16,22 @@ type AsideProps = {
 
 const Aside = ({ isMinimized, onMinimized }: AsideProps) => {
   return (
-    <aside className="overflow-hidden flex flex-col md:flex-row md:justify-around sm:flex-row sm:justify-around md:items-center">
+    <aside className="overflow-hidden mobile:h-16 flex flex-col mobile:flex-row mobile:justify-around mobile:items-center">
       <div
-        className={`cursor-pointer select-none md:hidden sm:hidden ${
+        className={`cursor-pointer select-none mobile:hidden ${
           isMinimized ? 'w-full ml-[10px]' : 'ml-[10px]'
         } `}
         onClick={onMinimized}
       >
         <SquareHalf />
       </div>
-      <hr className="mt-[18px] mb-3 md:hidden sm:hidden" />
+      <hr className="mt-[18px] mb-3 mobile:hidden" />
       {navLinks.map((item) => (
         <div key={item.title}>
           <CNavLink {...item} isMinimized={isMinimized} />
         </div>
       ))}
-      <div className="md:hidden sm:hidden">
+      <div className="mobile:hidden">
         <hr className="my-3" />
         <CNavLink
           title="FAQ"

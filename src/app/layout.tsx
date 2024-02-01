@@ -45,10 +45,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           name="keywords"
           content="Fluxity, Stellar, token streaming, cryptocurrency, blockchain, finance, digital payments, smart contracts"
         />
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta
           name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
+          content="viewport-fit=cover, width=device-width, initial-scale=1.0, maximum-scale=1.0, initial-scale=1, minimum-scale=1, user-scalable=no"
         />
+        <meta name="theme-color" content="#ffffff" />
         <meta
           name="description"
           content="Fluxity offers a comprehensive token streaming solution built on the Stellar network, designed to facilitate real-time, secure, and automated digital payments. With Fluxity, users can create, manage, and monitor token streams effortlessly."
@@ -82,21 +85,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <ThemeProvider theme={theme}>
               <AppDataFetch />
               <main
-                className="px-8 sm:p-0 md:p-0 pt-[9px] pb-7 w-full xxl:w-[100%] 2xl:!w-[60%] 3xl:!w-[35%] h-screen
+                className="relative px-8 mobile:p-0 pt-[9px] pb-7 w-full xxl:w-[100%] 2xl:!w-[60%] 3xl:!w-[35%] h-screen
                 2xl:h-[80vh] 3xl:h-[50vh] 4xl:h-[30vh] 4xl:!w-[30%] m-auto"
               >
-                <CCard className="mb-[10px] sm:rounded-none md:rounded-none" bgColor="white">
+                <CCard
+                  className="mobile:sticky mobile:top-0 mobile:right-0 mobile:left-0 mb-[10px] mobile:rounded-none mobile:border-t-0 z-[999]"
+                  bgColor="white"
+                >
                   <Header />
                 </CCard>
                 <section className="inline-flex basis-full gap-4 w-full h-[90%]">
                   <CCard
-                    className={`md:fixed md:bottom-0 md:h-16 md:right-0 md:left-0 sm:fixed sm:bottom-0 sm:h-16 sm:right-0 sm:left-0 overflow-hidden md:rounded-none md:border-none${
+                    className={`mobile:fixed mobile:bottom-0 z-10
+                    mobile:h-16 mobile:right-0 mobile:left-0 overflow-hidden 
+                    mobile:rounded-none mobile:border-b-0 ${
                       !knownRoutes || currentPath === Pages.FAQ ? 'hidden' : 'block'
                     } ${
                       isMinimized
                         ? 'basis-[80px] transition-all duration-500'
                         : 'basis-[24%] lg:basis-[20%] transition-all duration-500'
-                    } lg:px-[15px] lg:py-[19px] md:items-center`}
+                    } px-[15px] py-[19px] mobile:p-0`}
                     bgColor="white"
                   >
                     <div className="lg:relative overflow-hidden">
