@@ -47,7 +47,7 @@ const CPageCard = ({
       <div
         className={`${cn(padding, childrenClassName)} ${
           scroll && 'overflow-y-scroll h-full'
-        } mobile:overflow-y-scroll mobile:overflow-x-hidden mobile:mb-12`}
+        } mobile:overflow-y-scroll mobile:overflow-x-hidden mobile:mb-14`}
       >
         {children}
       </div>

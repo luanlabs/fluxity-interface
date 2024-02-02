@@ -89,7 +89,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 2xl:h-[80vh] 3xl:h-[50vh] 4xl:h-[30vh] 4xl:!w-[30%] m-auto"
               >
                 <CCard
-                  className="mobile:sticky mobile:top-0 mobile:right-0 mobile:left-0 desktop:mb-[10px] mobile:rounded-none mobile:border-t-0 z-[999]"
+                  className={`mobile:sticky mobile:top-0 mobile:right-0 mobile:left-0 
+                  desktop:mb-[10px] mobile:rounded-none mobile:border-t-0 z-[999]
+                  ${currentPath === Pages.FAQ ? 'mobile:hidden desktop:block' : 'block'}`}
                   bgColor="white"
                 >
                   <Header />
