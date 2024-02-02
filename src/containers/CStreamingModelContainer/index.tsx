@@ -20,14 +20,14 @@ const CStreamingModelContainer = ({
   };
 
   return (
-    <div className="w-[532px] flex flex-col">
+    <div className="w-[532px] sm:w-[340px] flex flex-col">
       <CLabel
         label={label}
         tooltipDetails={tooltipDetails}
         tooltipTitle={tooltipTitle}
         className="mb-1"
       />
-      <div className="flex gap-2">
+      <div className="flex gap-2 sm:flex-col">
         <CStreamingModel isSelected={true} model="linear" />
         <CStreamingModel model="exponential" disabled onClick={handleExponentialClick} />
       </div>

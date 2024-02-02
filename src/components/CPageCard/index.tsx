@@ -25,12 +25,13 @@ const CPageCard = ({
   let padding = '';
 
   if (divider) {
-    dividerStyle = 'border-b border-[rgba(5, 1, 66, 0.10)] mb-4';
+    dividerStyle = 'border-b border-[rgba(5, 1, 66, 0.10)] mb-4 sm:w-[95%]';
     padding = 'pl-2';
   } else {
     dividerStyle = 'border-none mb-0';
     padding = 'p-0';
   }
+
   return (
     <CCard
       className={cn(

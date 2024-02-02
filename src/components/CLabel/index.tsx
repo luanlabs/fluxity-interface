@@ -23,7 +23,7 @@ const CLabel = ({
 }: CLabelProps) => {
   return (
     <div className={cn('flex items-start ml-1 text-midnightBlue', className)}>
-      <label htmlFor={htmlFor} className="text-lg font-normal mb-2 flex">
+      <label htmlFor={htmlFor} className="text-lg font-normal mb-2 flex sm:font-[500]">
         {label}
         {tooltipDetails && (
           <CTooltip text={tooltipDetails} title={tooltipTitle}>
