@@ -43,7 +43,11 @@ const CPageCard = ({
     >
       {title && <div className="w-full font-medium">{title}</div>}
       {divider && <div className={dividerStyle} />}
-      <div className={`${cn(padding, childrenClassName)} ${scroll && 'overflow-y-scroll h-full'}`}>
+      <div
+        className={`${cn(padding, childrenClassName)} ${
+          scroll && 'overflow-y-scroll h-full'
+        } mobile:overflow-y-scroll mobile:overflow-x-hidden mobile:mb-12`}
+      >
         {children}
       </div>
     </CCard>

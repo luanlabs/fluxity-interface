@@ -89,14 +89,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 2xl:h-[80vh] 3xl:h-[50vh] 4xl:h-[30vh] 4xl:!w-[30%] m-auto"
               >
                 <CCard
-                  className="mobile:sticky mobile:top-0 mobile:right-0 mobile:left-0 mb-[10px] mobile:rounded-none mobile:border-t-0 z-[999]"
+                  className="mobile:sticky mobile:top-0 mobile:right-0 mobile:left-0 desktop:mb-[10px] mobile:rounded-none mobile:border-t-0 z-[999]"
                   bgColor="white"
                 >
                   <Header />
                 </CCard>
-                <section className="inline-flex basis-full gap-4 w-full h-[90%]">
+                <section className="inline-flex basis-full gap-4 w-full desktop:h-[90%]">
                   <CCard
-                    className={`mobile:fixed mobile:bottom-0 z-10
+                    className={`desktop:relative mobile:fixed mobile:bottom-0 z-10
                     mobile:h-16 mobile:right-0 mobile:left-0 overflow-hidden 
                     mobile:rounded-none mobile:border-b-0 ${
                       !knownRoutes || currentPath === Pages.FAQ ? 'hidden' : 'block'
@@ -107,7 +107,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     } px-[15px] py-[19px] mobile:p-0`}
                     bgColor="white"
                   >
-                    <div className="lg:relative overflow-hidden">
+                    <div className="overflow-hidden">
                       <Aside
                         isMinimized={isMinimized}
                         onMinimized={() => setIsMinimized(!isMinimized)}

@@ -21,13 +21,13 @@ const FaqCard = () => {
   return (
     <CCard
       borderColor="#0000001A"
-      className="relative bg-white p-[19.6px] h-[238px] w-1/2 mobile:w-full"
+      className="relative bg-white p-[19.6px] h-[238px] mobile:h-[208px] w-1/2 mobile:w-full"
     >
-      <h1 className="font-medium text-2xl">Frequently Asked Questions</h1>
+      <h1 className="font-medium text-2xl mobile:text-lg">Frequently Asked Questions</h1>
 
       <Image src={blueDivider} alt="Divider" className="py-4 select-none" />
 
-      <p>Find quick answers to common queries.</p>
+      <p className="mobile:text-sm">Find quick answers to common queries.</p>
 
       <div className="absolute bottom-[22px] left-[24.47px]">
         <CButton
@@ -35,7 +35,7 @@ const FaqCard = () => {
           content="FAQ"
           variant="simple"
           logo={lifeBuoy}
-          className="w-[89px] font-medium border-royalBlue border hover:bg-lavenderBlush transition-all duration-700"
+          className="w-[89px] mobile:w-[85px] mobile:h-10 mobile:text-sm  font-medium border-royalBlue border hover:bg-lavenderBlush transition-all duration-700"
         />
       </div>
     </CCard>

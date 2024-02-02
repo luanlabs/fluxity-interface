@@ -41,7 +41,7 @@ const Aside = ({ isMinimized, onMinimized }: AsideProps) => {
           isMinimized={isMinimized}
         />
       </div>
-      <div className="lg:absolute lg:bottom-5 lg:left-[15px] lg:right-[15px]">
+      <div className="desktop:absolute desktop:bottom-5 desktop:left-[15px] desktop:right-[15px]">
         <CConnectButton isMinimized={isMinimized} />
       </div>
     </aside>

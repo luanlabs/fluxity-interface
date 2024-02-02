@@ -14,7 +14,7 @@ const CNavLink = ({ title, icon, activeIcon, url, isMinimized }: Type) => {
       className={`select-none w-full ${
         isMinimized ? 'flex justify-start' : 'inline-flex justify-between mobile:justify-center'
       } items-center rounded-xl ${
-        isActive && ' lg:bg-softSkyBlue transition-all duration-500'
+        isActive && ' desktop:bg-softSkyBlue transition-all duration-500'
       } w-full px-[10px] h-[48px] cursor-pointer overflow-hidden`}
     >
       <div className="flex justify-between items-center w-full overflow-hidden whitespace-nowrap">
@@ -27,7 +27,7 @@ const CNavLink = ({ title, icon, activeIcon, url, isMinimized }: Type) => {
         </span>
       </div>
       {isActive && (
-        <div className="bg-royalBlue h-[2px] rounded-full  mobile:w-[28px] mobile:absolute mobile:bottom-0" />
+        <div className="mobile:bg-royalBlue mobile:h-[2px] mobile:rounded-full  mobile:w-[32px] mobile:absolute mobile:bottom-0" />
       )}
     </Link>
   );

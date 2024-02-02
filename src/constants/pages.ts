@@ -6,5 +6,5 @@ export enum Pages {
   STREAM_DETAILS = '/stream',
   // NFTS = '/nfts',
   // ADDRESS_BOOK = '/address-book',
-  // VESTING = '/vesting',
+  VESTING = '/vesting',
 }
