@@ -5,6 +5,7 @@ import CPageCard from 'src/components/CPageCard';
 import CSummaryField from 'src/components/CSummaryField';
 import { IResponseStream } from 'src/models';
 import formatUnits from 'src/utils/formatUnits';
+import { shortenAddress } from 'src/utils/shortenAddress';
 
 import tokenLogo from 'public/images/token.svg';
 
@@ -76,6 +77,7 @@ const SummaryFields = ({ data, isCancellable }: SummaryFieldsProps) => {
             value={isCancellable ? 'Yes' : 'No'}
             fieldSize="large"
           />
+          <CSummaryField label="To" value={shortenAddress(data.receiver, 5)} fieldSize="large" />
         </div>
       </CPageCard>
     </div>
