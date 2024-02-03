@@ -20,9 +20,8 @@ interface BlueCardProps {
   startDate: number;
   endDate: number;
   amount: string;
-  isCancelled: boolean;
-  withdrawn: string;
   token: string;
+  dynamicAmount: string;
   onClick?: () => void;
   onCopyClick?: () => void;
 }
@@ -33,8 +32,7 @@ const BlueCard = ({
   startDate,
   endDate,
   amount,
-  withdrawn,
-  isCancelled,
+  dynamicAmount,
   token,
   onClick,
 }: BlueCardProps) => {
@@ -52,8 +50,7 @@ const BlueCard = ({
     startDate,
     endDate,
     amount,
-    withdrawn,
-    isCancelled,
+    dynamicAmount,
   );
 
   return (

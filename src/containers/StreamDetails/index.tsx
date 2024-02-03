@@ -95,12 +95,11 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
           />
 
           <BlueCard
+            dynamicAmount={sendStreamAmount.toFixed(3)}
             sender={data.sender}
             flowRate={data.rate}
             startDate={data.start_date}
             endDate={data.end_date}
-            withdrawn={formatUnits(data.withdrawn, data.token.decimals)}
-            isCancelled={data.is_cancelled}
             amount={formatUnits(data.amount, data.token.decimals)}
             token={data.token.symbol}
           />
