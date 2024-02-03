@@ -72,7 +72,7 @@ const FaqContainer = () => {
                 <Disclosure key={question}>
                   {({ open }) => (
                     <div className="p-[32px] mobile:p-4 rounded-[14px] border border-[#0501421A] mb-2">
-                      <Disclosure.Button className="w-full flex justify-between items-center tall:text-2xl mobile:text-lg text-xl font-medium text-start">
+                      <Disclosure.Button className="focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75 w-full flex justify-between items-center tall:text-2xl mobile:text-lg text-xl font-medium text-start">
                         {question}
                         <div className={`${open ? '!rotate-90' : '!rotate-[360deg]'} transform`}>
                           <CareRight />
