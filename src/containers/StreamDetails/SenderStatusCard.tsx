@@ -15,7 +15,6 @@ import sendTransaction from 'src/features/soroban/sendTransaction';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
 import { sendCancel } from 'src/features/sendCancel';
-import useGetStreamById from 'src/utils/getStreamById';
 
 interface SenderStatusCardProps {
   amount: string;
@@ -140,8 +139,10 @@ const SenderStatusCard = ({
         />
 
         <CModalSuccess
+          tooltipTitle="Cancel"
+          tooltipDetails="This is the amount refunded to your wallet after stream cancellation."
           successLogoColor="green"
-          title="Token withdrawal successful"
+          title="Stream cancellation successful"
           streamId={id}
           to={receiver}
           token={token}

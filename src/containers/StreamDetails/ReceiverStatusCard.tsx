@@ -18,6 +18,7 @@ import isStreamWithdrawable from 'src/features/isStreamWithdrawable';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
 
 import withdrawLogo from '/public/images/withdrawSolid.svg';
+import { ExternalPages } from 'src/constants/externalPages';
 
 interface ReceiverStatusCardProps {
   withdrawn: string;
@@ -44,6 +45,7 @@ const ReceiverStatusCard = ({
   const address = useAppSelector((state) => state.user.address);
   const [withdraw, setWithdraw] = useState(withdrawn);
   const [availableAmount, setAvailableAmount] = useState(0);
+  const [txHash, setTxHash] = useState('');
 
   const [approvalOpen, setIsApprovalOpen] = useState(false);
   const [withdrawSuccessOpen, setIsWithdrawSuccessOpen] = useState(false);
@@ -86,6 +88,7 @@ const ReceiverStatusCard = ({
 
     if (tx) {
       const finalize = await finalizeTransaction(tx.hash);
+      setTxHash(tx.hash);
 
       if (!finalize) {
         setIsApprovalOpen(false);
@@ -140,11 +143,14 @@ const ReceiverStatusCard = ({
       <CProcessModal
         isOpen={approvalOpen}
         setIsOpen={setIsApprovalOpen}
-        title="Waiting for token withdrawal transaction approval"
+        title="Waiting for stream withdrawal...."
       />
 
       <CModalSuccess
+        tooltipTitle="withdraw"
+        tooltipDetails="This is the amount withdrawn from the stream"
         successLogoColor="green"
+        explorerLink={ExternalPages.EXPLORER + '/transactions/' + txHash}
         title="Token withdrawal successful"
         amountTitle="Amount"
         amount={new BN(withdraw).minus(availableAmount).toFixed(3)}

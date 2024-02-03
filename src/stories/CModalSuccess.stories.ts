@@ -20,5 +20,15 @@ export const ModalSuccess: Story = {
   args: {
     isOpen: true,
     setIsOpen: true,
+    title: 'Title',
+    from: 'from',
+    to: 'To',
+    amount: '121212',
+    token: 'dd',
+    buttonText: 'aaa',
+    successLogoColor: 'black',
+    logoColor: 'green',
+    amountTitle: 'sss',
+    amountStreamed: 'ssd',
   },
 };
