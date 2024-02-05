@@ -57,6 +57,7 @@ const config: Config = {
       screens: {
         sm: { max: '767px' },
         md: { min: '768px', max: '1023px' },
+        md2: { min: '900px', max: '1023px' },
         mobile: { max: '1023px' },
         desktop: { min: '1024px' },
         lg: { min: '1024px', max: '1279px' },
