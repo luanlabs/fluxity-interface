@@ -26,7 +26,7 @@ const FaqContainer = () => {
         <Image src={blueDivider} alt="Divider" className="py-2 select-none desktop:hidden" />
 
         <div
-          className="absolute top-6 right-6 cursor-pointer w-10 h-10 
+          className="desktop:hidden absolute top-6 right-6 cursor-pointer w-10 h-10 
         flex justify-center items-center rounded-full border border-[##0000001A]"
         >
           <Image src={close} alt="close" onClick={handleClose} />
@@ -39,7 +39,7 @@ const FaqContainer = () => {
       </div>
 
       <div className="flex desktop:flex-row mobile:flex-col w-full">
-        <div className="flex justify-start items-center basis-1/5 w-[100vw] mobile:bg-white mobile:px-6">
+        <div className="flex justify-start items-center basis-1/5 mobile:w-[100vw] mobile:bg-white mobile:px-6">
           <ul className="desktop:w-5/6 mobile:gap-4 mobile:inline-flex mobile:overflow-auto mobile:tracking-tight">
             {FAQContent.map((item, index) => (
               <li
@@ -71,8 +71,8 @@ const FaqContainer = () => {
               {FAQContent[isActive].questions.map(({ question, answer }) => (
                 <Disclosure key={question}>
                   {({ open }) => (
-                    <div className="p-[32px] mobile:p-4 rounded-[14px] border border-[#0501421A] mb-2">
-                      <Disclosure.Button className="focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75 w-full flex justify-between items-center tall:text-2xl mobile:text-lg text-xl font-medium text-start">
+                    <div className="rounded-[14px] border border-[#0501421A] mb-2">
+                      <Disclosure.Button className="focus:outline-none mobile:p-4 p-[32px] focus-visible:ring focus-visible:ring-purple-500/75 w-full flex justify-between items-center tall:text-2xl mobile:text-lg text-xl font-medium text-start">
                         {question}
                         <div className={`${open ? '!rotate-90' : '!rotate-[360deg]'} transform`}>
                           <CareRight />
@@ -87,7 +87,10 @@ const FaqContainer = () => {
                         leaveFrom="opacity-100 transform translate-y-0"
                         leaveTo="opacity-0 transform translate-y-[-10px]"
                       >
-                        <Disclosure.Panel static className="mobile:text-base text-lg mt-4">
+                        <Disclosure.Panel
+                          static
+                          className="mobile:text-base mobile:p-4 px-[32px] mt-[-15px] pb-5 text-lg"
+                        >
                           {answer}
                         </Disclosure.Panel>
                       </Transition>

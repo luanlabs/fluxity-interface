@@ -109,12 +109,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     } px-[15px] py-[19px] mobile:p-0`}
                     bgColor="white"
                   >
-                    <div className="overflow-hidden">
-                      <Aside
-                        isMinimized={isMinimized}
-                        onMinimized={() => setIsMinimized(!isMinimized)}
-                      />
-                    </div>
+                    <Aside
+                      isMinimized={isMinimized}
+                      onMinimized={() => setIsMinimized(!isMinimized)}
+                    />
                   </CCard>
                   <article className="basis-full">{children}</article>
                 </section>
