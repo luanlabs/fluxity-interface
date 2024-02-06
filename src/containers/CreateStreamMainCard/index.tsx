@@ -79,7 +79,7 @@ const CreateStream = () => {
         <CPageCard
           title={CreateStreamTitle}
           divider
-          className="w-full pl-[30px] pr-[18px] py-[15px] mobile:pr-2 mobile:pl-2 md:pb-8 sm:pl-2"
+          className="w-full pl-[30px] pr-[18px] py-[15px] sm:pr-4 sm:pl-2 md:pb-8"
           scroll
         >
           <div className="w-full">
@@ -119,7 +119,7 @@ const CreateStream = () => {
               />
             </div>
 
-            <div className="flex gap-2 w-full md:items-start sm:flex-col md:flex-col sm:items-start items-center justify-center">
+            <div className="flex gap-2 md:gap-6 w-full md:items-start sm:flex-col md:flex-col sm:items-start items-center justify-center">
               <Controller
                 name="token"
                 control={control}
@@ -184,7 +184,7 @@ const CreateStream = () => {
               />
             </div>
 
-            <div className="flex w-full sm:flex-col sm:gap-4 gap-2">
+            <div className="flex w-full sm:flex-col lowTablet:flex-row sm:gap-4 gap-2">
               <div className="mobile:w-full">
                 <Controller
                   name="startDate"
@@ -233,7 +233,7 @@ const CreateStream = () => {
                 isFormCompleteValidation
                   ? '!bg-[#E6E6EC] !text-[#050142]'
                   : '!bg-darkBlue !text-white',
-                'xl:hidden xxl:hidden 2xl:hidden 3xl:hidden md2:hidden lg:hidden mt-12 w-[340px]',
+                'xl:hidden xxl:hidden 2xl:hidden 3xl:hidden md2:hidden lg:hidden mt-12 w-3/4 m-auto',
               )}
               disabled={isFormCompleteValidation}
               onClick={handleOpenModals}

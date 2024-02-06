@@ -56,6 +56,7 @@ const config: Config = {
       },
       screens: {
         sm: { max: '767px' },
+        lowTablet: { min: '500px', max: '767px' },
         md: { min: '768px', max: '1023px' },
         md2: { min: '900px', max: '1023px' },
         mobile: { max: '1023px' },
