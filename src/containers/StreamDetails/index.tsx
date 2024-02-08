@@ -8,7 +8,7 @@ import formatUnits from 'src/utils/formatUnits';
 import CPageCard from 'src/components/CPageCard';
 import { useAppSelector } from 'src/hooks/useRedux';
 import useGetStreamById from 'src/utils/getStreamById';
-import isCancellable from 'src/features/isStreamCancellable';
+import { isStreamCancellable, isStreamCancelled } from 'src/features/isStreamCancellable';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import CStreamStatusButton from 'src/components/CStreamStatusButton';
 
@@ -60,7 +60,8 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
     return <p>error</p>;
   }
 
-  const cancellable = isCancellable(data.end_date, data.cancellable_date, data.is_cancelled);
+  const cancellable = isStreamCancellable(data.end_date, data.cancellable_date);
+  const cancelled = isStreamCancelled(data.end_date, data.cancellable_date, data.is_cancelled);
 
   const amount = formatUnits(data.amount, data.token.decimals);
   const withdraw = formatUnits(data.withdrawn, data.token.decimals);
@@ -71,7 +72,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
   const mainTitle = (
     <div className="w-full flex justify-between items-center pb-2">
       <h1 className="text-[24px] text-midnightBlue pl-2 mt-2">Stream #{data.id}</h1>
-      <CStreamStatusButton type={data.status} />
+      <CStreamStatusButton type={data.status} isCancelled={data.is_cancelled} />
     </div>
   );
 
@@ -117,7 +118,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             cliffDate={data.cliff_date}
             isCancelled={data.is_cancelled}
             withdrawn={withdraw}
-            isCancellable={cancellable}
+            isCancellable={cancelled}
             id={data.id}
             receiver={data.receiver}
             token={data.token.symbol}

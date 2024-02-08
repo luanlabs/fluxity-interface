@@ -6,6 +6,7 @@ import toast from 'src/components/CToast';
 import CButton from 'src/components/CButton';
 import CPageCard from 'src/components/CPageCard';
 import { useAppSelector } from 'src/hooks/useRedux';
+import { sendCancel } from 'src/features/sendCancel';
 import CProcessModal from 'src/components/CProcessModal';
 import CSummaryField from 'src/components/CSummaryField';
 import CModalSuccess from 'src/components/CModalSuccess';
@@ -14,7 +15,6 @@ import signTransaction from 'src/utils/soroban/signTransaction';
 import sendTransaction from 'src/features/soroban/sendTransaction';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
-import { sendCancel } from 'src/features/sendCancel';
 
 interface SenderStatusCardProps {
   amount: string;
