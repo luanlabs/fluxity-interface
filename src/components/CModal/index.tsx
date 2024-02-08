@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import Image from 'next/image';
+
 import cn from 'classnames';
 import { Dialog, Transition } from '@headlessui/react';
 
