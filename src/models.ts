@@ -2,6 +2,7 @@ import { GroupBase, StylesConfig, MultiValue, SingleValue, ActionMeta } from 're
 
 import { rates } from './constants/rates';
 import { IToken } from './reducers/tokens';
+import { StatusType } from './components/CStreamStatusButton';
 
 export interface ISelectItem<T> {
   label: string;
@@ -48,7 +49,7 @@ export interface IFluxityAPIResponse<T> {
   result: T;
 }
 
-interface ITokenStream {
+export interface ITokenStream {
   address: string;
   decimals: number;
   logo: string;
@@ -71,7 +72,7 @@ export interface IResponseStream {
   start_date: number;
   token: ITokenStream;
   withdrawn: string;
-  status: string;
+  status: StatusType;
 }
 
 export type IResponseStreamResult = IFluxityAPIResponse<IResponseStream>;
@@ -81,3 +82,8 @@ export interface StreamDetailsIconProps {
   arrowFill: string;
   lineFill: string;
 }
+
+export type cancelAmountType = {
+  senderAmount: number;
+  receiverAmount: number;
+};
