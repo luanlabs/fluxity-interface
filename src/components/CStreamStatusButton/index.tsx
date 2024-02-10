@@ -7,18 +7,23 @@ export type StatusType = 'ongoing' | 'expired' | 'pending';
 interface CStreamStatusButtonProps {
   type: StatusType;
   isCancelled: boolean;
+  isStreamCancelled: boolean;
 }
 
-const CStreamStatusButton = ({ type, isCancelled }: CStreamStatusButtonProps) => {
+const CStreamStatusButton = ({
+  type,
+  isCancelled,
+  isStreamCancelled,
+}: CStreamStatusButtonProps) => {
   const [status, setStatus] = useState('');
 
   useEffect(() => {
-    if (isCancelled) {
+    if (isCancelled || isStreamCancelled) {
       setStatus('cancelled');
     } else {
       setStatus(type);
     }
-  }, []);
+  }, [isStreamCancelled, isCancelled]);
 
   let statusStyle = 'bg-brightYellow border-burntOrange text-burntOrange';
   if (status === 'ongoing') {
