@@ -3,6 +3,7 @@ import cn from 'classnames';
 
 import CCard from '../CCard';
 
+export type CPageCardResponsive = 'bordered' | 'borderless';
 interface CPageCard {
   divider?: boolean;
   title?: JSX.Element | React.ReactNode;
@@ -10,6 +11,7 @@ interface CPageCard {
   className?: string;
   scroll?: boolean;
   childrenClassName?: string;
+  borderStatus: CPageCardResponsive;
 }
 
 const CPageCard = ({
@@ -19,6 +21,7 @@ const CPageCard = ({
   className,
   scroll = false,
   childrenClassName,
+  borderStatus,
   ...props
 }: CPageCard) => {
   let dividerStyle = '';
@@ -35,7 +38,9 @@ const CPageCard = ({
   return (
     <CCard
       className={cn(
-        'flex flex-col w-full h-full mobile:!border-none mobile:!rounded-none',
+        `flex flex-col w-full h-full ${
+          borderStatus === 'borderless' ? 'mobile:!border-none mobile:!rounded-none' : 'mt-1'
+        }`,
         className,
       )}
       bgColor="#fff"

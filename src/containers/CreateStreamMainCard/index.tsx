@@ -79,8 +79,9 @@ const CreateStream = () => {
         <CPageCard
           title={CreateStreamTitle}
           divider
-          className="w-full pl-[30px] pr-[18px] py-[15px] sm:pr-4 sm:pl-2 md:pb-8"
+          className="w-full pl-[30px] pr-[18px] py-[15px] sm:pr-4 sm:pl-2 md:pb-8 sm:pb-8"
           scroll
+          borderStatus="borderless"
         >
           <div className="w-full">
             <div className="w-full">
@@ -124,7 +125,10 @@ const CreateStream = () => {
                 name="token"
                 control={control}
                 render={({ field }) => (
-                  <SelectTokenContainer className="desktop:w-full mobile:w-full" {...field} />
+                  <SelectTokenContainer
+                    className="desktop:w-full mobile:w-full fix-box:w-[90%]"
+                    {...field}
+                  />
                 )}
               />
 
@@ -184,7 +188,7 @@ const CreateStream = () => {
               />
             </div>
 
-            <div className="flex w-full sm:flex-col lowTablet:flex-row sm:gap-4 gap-2">
+            <div className="flex w-full sm:flex-col lowTablet:flex-row sm:gap-4 gap-2 fix-box:flex-col">
               <div className="mobile:w-full">
                 <Controller
                   name="startDate"
@@ -233,7 +237,7 @@ const CreateStream = () => {
                 isFormCompleteValidation
                   ? '!bg-[#E6E6EC] !text-[#050142]'
                   : '!bg-darkBlue !text-white',
-                'xl:hidden xxl:hidden 2xl:hidden 3xl:hidden md2:hidden lg:hidden mt-12 w-3/4 m-auto',
+                'xl:hidden xxl:hidden 2xl:hidden 3xl:hidden md2:hidden lg:hidden mt-12 sm:mt-4 md:mt-5 w-3/4 m-auto',
               )}
               disabled={isFormCompleteValidation}
               onClick={handleOpenModals}
