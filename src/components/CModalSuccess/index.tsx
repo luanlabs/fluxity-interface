@@ -31,7 +31,7 @@ interface CModalSuccess {
   buttonText: string;
   buttonVariant: CButtonVariantType;
   explorerLink?: string;
-  tooltipTitle?: string;
+  tooltipTitle: string;
   tooltipDetails?: string;
   onClick: () => void;
   isOpen: boolean;
@@ -125,7 +125,7 @@ const CModalSuccess = ({
                 <p className="w-full font-medium">{amountTitle}</p>
                 {tooltipDetails && (
                   <CTooltip text={tooltipDetails} title={tooltipTitle}>
-                    <div className="mb-4">
+                    <div className=" ml-2">
                       <DetailLogo fill={'#9245de'} />
                     </div>
                   </CTooltip>
