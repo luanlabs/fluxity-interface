@@ -19,6 +19,8 @@ import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
 
 import withdrawLogo from '/public/images/withdrawSolid.svg';
 import { ExternalPages } from 'src/constants/externalPages';
+import finalizeAmount from 'src/utils/soroban/finalizeAmount';
+import formatUnits from 'src/utils/formatUnits';
 
 interface ReceiverStatusCardProps {
   withdrawn: string;
@@ -31,6 +33,9 @@ interface ReceiverStatusCardProps {
   id: string;
   token: string;
   sender: string;
+  setWithdrawAmount: (_: number) => void;
+  withdrawAmount: number;
+  decimalToken: number;
 }
 
 const ReceiverStatusCard = ({
@@ -41,6 +46,9 @@ const ReceiverStatusCard = ({
   cliffDate,
   isCanellable,
   id,
+  setWithdrawAmount,
+  withdrawAmount,
+  decimalToken,
 }: ReceiverStatusCardProps) => {
   const address = useAppSelector((state) => state.user.address);
   const [withdraw, setWithdraw] = useState(withdrawn);
@@ -54,7 +62,7 @@ const ReceiverStatusCard = ({
     startDate,
     endDate,
     cliffDate,
-    isCanellable,
+    false,
     withdrawn,
     amount,
   ).receiverAmount.minus(withdraw);
@@ -86,18 +94,20 @@ const ReceiverStatusCard = ({
       return;
     }
 
-    if (tx) {
-      const finalize = await finalizeTransaction(tx.hash);
-      setTxHash(tx.hash);
-
-      if (!finalize) {
-        setIsApprovalOpen(false);
-        toast('error', 'Token withdrawal unsuccessful');
-
-        return;
-      }
-    } else {
+    if (!tx) {
       setIsApprovalOpen(false);
+      toast('error', 'Token withdrawal unsuccessful');
+
+      return;
+    }
+
+    const finalize = await finalizeTransaction(tx.hash);
+    setTxHash(tx.hash);
+
+    if (!finalize) {
+      setIsApprovalOpen(false);
+      toast('error', 'Token withdrawal unsuccessful');
+
       return;
     }
 
@@ -105,9 +115,14 @@ const ReceiverStatusCard = ({
     await timeout(100);
     setIsWithdrawSuccessOpen(true);
 
-    setAvailableAmount(Number(withdraw));
     sendWithdraw(id);
-    setWithdraw(new BN(withdraw).plus(new BN(available)).toString());
+    const withdrawFinalize = finalizeAmount(finalize, 'withdraw');
+    setWithdrawAmount(withdrawFinalize);
+
+    setAvailableAmount(0);
+    setWithdraw(
+      new BN(formatUnits(withdrawFinalize, decimalToken)).plus(new BN(withdraw)).toString(),
+    );
   };
 
   const handleModalButton = () => {
@@ -153,7 +168,7 @@ const ReceiverStatusCard = ({
         explorerLink={ExternalPages.EXPLORER + '/transactions/' + txHash}
         title="Token withdrawal successful"
         amountTitle="Amount"
-        amount={new BN(withdraw).minus(availableAmount).toFixed(3)}
+        amount={new BN(formatUnits(withdrawAmount.toString(), decimalToken)).toFixed(3)}
         buttonVariant="simple"
         buttonText="Close"
         isOpen={withdrawSuccessOpen}

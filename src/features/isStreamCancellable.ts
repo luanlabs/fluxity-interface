@@ -4,7 +4,7 @@ export const isStreamCancellable = (endDate: number, cancellableDate: number) =>
   return cancellableDate !== endDate;
 };
 
-export const isStreamCancelled = (
+export const isStreamCancelledStatus = (
   endDate: number,
   cancellableDate: number,
   isCancelled: boolean,

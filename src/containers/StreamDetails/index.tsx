@@ -8,9 +8,9 @@ import formatUnits from 'src/utils/formatUnits';
 import CPageCard from 'src/components/CPageCard';
 import { useAppSelector } from 'src/hooks/useRedux';
 import useGetStreamById from 'src/utils/getStreamById';
-import { isStreamCancellable, isStreamCancelled } from 'src/features/isStreamCancellable';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import CStreamStatusButton from 'src/components/CStreamStatusButton';
+import { isStreamCancellable, isStreamCancelledStatus } from 'src/features/isStreamCancellable';
 
 import Loading from './Loading';
 import BlueCard from './BlueCard';
@@ -29,28 +29,41 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
 
   const { loading, data, error } = useGetStreamById(id);
 
+  const [cancelAmounts, setCancelAmounts] = useState({
+    senderAmount: 0,
+    receiverAmount: 0,
+  });
+
+  const [withdrawAmount, setWithdrawAmount] = useState(0);
+
+  const isStreamCancelled = cancelAmounts.senderAmount !== 0 || cancelAmounts.receiverAmount !== 0;
+
   const [sendStreamAmount, setSendStreamAmount] = useState(
     calculateStreamAmounts(0, 0, 0, false, '0', '0').receiverAmount,
   );
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      if (data) {
-        setSendStreamAmount(
-          calculateStreamAmounts(
-            data.start_date,
-            data.end_date,
-            data.cliff_date,
-            data.is_cancelled,
-            formatUnits(data.withdrawn, data.token.decimals),
-            formatUnits(data.amount, data.token.decimals),
-          ).receiverAmount,
-        );
-      }
-    }, 100);
+    let intervalId: NodeJS.Timer;
+
+    if (!isStreamCancelled) {
+      intervalId = setInterval(() => {
+        if (data) {
+          setSendStreamAmount(
+            calculateStreamAmounts(
+              data.start_date,
+              data.end_date,
+              data.cliff_date,
+              data.is_cancelled,
+              formatUnits(data.withdrawn, data.token.decimals),
+              formatUnits(data.amount, data.token.decimals),
+            ).receiverAmount,
+          );
+        }
+      }, 100);
+    }
 
     return () => clearInterval(intervalId);
-  }, [data]);
+  }, [data, isStreamCancelled]);
 
   if (loading) {
     return <Loading />;
@@ -61,7 +74,11 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
   }
 
   const cancellable = isStreamCancellable(data.end_date, data.cancellable_date);
-  const cancelled = isStreamCancelled(data.end_date, data.cancellable_date, data.is_cancelled);
+  const cancelled = isStreamCancelledStatus(
+    data.end_date,
+    data.cancellable_date,
+    data.is_cancelled,
+  );
 
   const amount = formatUnits(data.amount, data.token.decimals);
   const withdraw = formatUnits(data.withdrawn, data.token.decimals);
@@ -69,10 +86,19 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
   const isSender = address === data.sender;
   const isReceiver = address === data.receiver;
 
+  const reveceiverAmount = formatUnits(
+    cancelAmounts.receiverAmount.toString(),
+    data.token.decimals,
+  );
+
   const mainTitle = (
     <div className="w-full flex justify-between items-center pb-2">
       <h1 className="text-[24px] text-midnightBlue pl-2 mt-2">Stream #{data.id}</h1>
-      <CStreamStatusButton type={data.status} isCancelled={data.is_cancelled} />
+      <CStreamStatusButton
+        type={data.status}
+        isCancelled={data.is_cancelled}
+        isStreamCancelled={isStreamCancelled}
+      />
     </div>
   );
 
@@ -91,17 +117,17 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
 
           <DynamicStreamedAmount
             token={data.token.symbol}
-            streamAmount={sendStreamAmount.toFixed(3)}
+            streamAmount={isStreamCancelled ? reveceiverAmount : sendStreamAmount.toFixed(3)}
             isCancelled={data.is_cancelled}
           />
 
           <BlueCard
-            dynamicAmount={sendStreamAmount.toFixed(3)}
+            dynamicAmount={sendStreamAmount.toString()}
             sender={data.sender}
             flowRate={data.rate}
             startDate={data.start_date}
             endDate={data.end_date}
-            amount={formatUnits(data.amount, data.token.decimals)}
+            amount={amount}
             token={data.token.symbol}
           />
         </section>
@@ -120,8 +146,10 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             withdrawn={withdraw}
             isCancellable={cancelled}
             id={data.id}
-            receiver={data.receiver}
-            token={data.token.symbol}
+            token={data.token}
+            setCancellAmount={setCancelAmounts}
+            cancelAmount={cancelAmounts}
+            isStreamCancelled={isStreamCancelled}
           />
         )}
 
@@ -137,6 +165,9 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             id={data.id}
             token={data.token.symbol}
             sender={data.sender}
+            withdrawAmount={withdrawAmount}
+            setWithdrawAmount={setWithdrawAmount}
+            decimalToken={data.token.decimals}
           />
         )}
       </div>

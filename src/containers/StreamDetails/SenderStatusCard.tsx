@@ -15,18 +15,24 @@ import signTransaction from 'src/utils/soroban/signTransaction';
 import sendTransaction from 'src/features/soroban/sendTransaction';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
+import finalizeAmount from 'src/utils/soroban/finalizeAmount';
+import formatUnits from 'src/utils/formatUnits';
+import { ITokenStream, cancelAmountType } from 'src/models';
+import { ExternalPages } from 'src/constants/externalPages';
 
 interface SenderStatusCardProps {
   amount: string;
   startDate: number;
   endDate: number;
   cliffDate: number;
-  receiver: string;
-  token: string;
+  token: ITokenStream;
   isCancelled: boolean;
   withdrawn: string;
   isCancellable: boolean;
   id: string;
+  setCancellAmount: (_: cancelAmountType) => void;
+  cancelAmount: cancelAmountType;
+  isStreamCancelled: boolean;
 }
 
 const SenderStatusCard = ({
@@ -34,18 +40,21 @@ const SenderStatusCard = ({
   startDate,
   endDate,
   cliffDate,
-  receiver,
   token,
   isCancelled,
   withdrawn,
   isCancellable,
   id,
+  setCancellAmount,
+  cancelAmount,
+  isStreamCancelled,
 }: SenderStatusCardProps) => {
   const address = useAppSelector((state) => state.user.address);
 
   const [isApprovalOpen, setIsApprovalOpen] = useState(false);
   const [isCancelStreamConfirmOpen, setIsCancelStreamConfirmOpen] = useState(false);
   const [isReclamationModalOpen, setIsReclamationModalOpen] = useState(false);
+  const [txHash, setTxHash] = useState('');
 
   const handleCancelClick = async () => {
     setIsApprovalOpen(true);
@@ -69,24 +78,28 @@ const SenderStatusCard = ({
     await timeout(100);
     setIsReclamationModalOpen(true);
 
-    if (tx) {
-      const finalize = await finalizeTransaction(tx.hash);
-
-      if (!finalize) {
-        setIsReclamationModalOpen(false);
-        toast('error', 'Token stream cancellation unsuccessful');
-
-        return;
-      }
-    } else {
+    if (!tx) {
       setIsReclamationModalOpen(false);
+      toast('error', 'Token stream cancellation unsuccessful');
+
+      return;
+    }
+
+    setTxHash(tx.hash);
+
+    const finalize = await finalizeTransaction(tx.hash);
+
+    if (!finalize) {
+      setIsReclamationModalOpen(false);
+      toast('error', 'Token stream cancellation unsuccessful');
+
       return;
     }
 
     setIsReclamationModalOpen(false);
     await timeout(100);
     setIsCancelStreamConfirmOpen(true);
-
+    setCancellAmount(finalizeAmount(finalize, 'cancel'));
     sendCancel(id);
   };
 
@@ -103,6 +116,10 @@ const SenderStatusCard = ({
     amount,
   ).senderAmount.toFixed(3);
 
+  const finalAmount = new BN(
+    formatUnits(cancelAmount.receiverAmount.toString(), Number(token.decimals)),
+  ).toFixed(3);
+
   const SenderStatusCardTitle = (
     <div className="w-full flex justify-between items-center pb-4 pl-4">
       <h1 className="text-2xl text-midnightBlue">Status</h1>
@@ -110,9 +127,10 @@ const SenderStatusCard = ({
         variant="simple"
         color="outline"
         content="Cancel Stream"
-        disabled={!isCancellable}
+        disabled={!isCancellable || isStreamCancelled}
         className={`w-[146px] !py-2 h-[40px] text-[14px] ${
-          !isCancellable && '!text-softGray !border-softGray hover:!bg-transparent'
+          (!isCancellable || isStreamCancelled) &&
+          '!text-softGray !border-softGray hover:!bg-transparent'
         }`}
         onClick={handleCancelClick}
       />
@@ -123,7 +141,11 @@ const SenderStatusCard = ({
     <div className="w-full">
       <CPageCard title={SenderStatusCardTitle} className="px-3 py-4 mb-4 w-full">
         <div className="grid gap-2 text-midnightBlue">
-          <CSummaryField label="Remaining amount" value={senderAmount} fieldSize="large" />
+          <CSummaryField
+            label="Remaining amount"
+            value={isStreamCancelled ? '0' : senderAmount}
+            fieldSize="large"
+          />
         </div>
 
         <CProcessModal
@@ -143,11 +165,10 @@ const SenderStatusCard = ({
           tooltipDetails="This is the amount refunded to your wallet after stream cancellation."
           successLogoColor="green"
           title="Stream cancellation successful"
-          streamId={id}
-          to={receiver}
-          token={token}
+          token={token.symbol}
           amountTitle="Amount"
-          amount={new BN(amount).toFixed(3)}
+          amount={finalAmount}
+          explorerLink={ExternalPages.EXPLORER + '/transactions/' + txHash}
           buttonVariant="simple"
           buttonText="Close"
           isOpen={isCancelStreamConfirmOpen}
