@@ -8,6 +8,7 @@ import formatUnits from 'src/utils/formatUnits';
 import { shortenAddress } from 'src/utils/shortenAddress';
 
 import tokenLogo from 'public/images/token.svg';
+import dateToSeconds from 'src/utils/dateToSeconds';
 
 const options = {
   year: 'numeric',
@@ -27,7 +28,7 @@ const SummaryFields = ({ data, isCancellable }: SummaryFieldsProps) => {
   const cliffDate = new Date(data.cliff_date * 1000);
   const streamAmount = formatUnits(data.amount, data.token.decimals);
 
-  const isCliffed = cliffDate === startDate;
+  const isCliffed = dateToSeconds(cliffDate) !== dateToSeconds(startDate);
 
   const summaryTitle = (
     <div className="w-full flex justify-between items-center pb-4 pl-4">
