@@ -11,7 +11,6 @@ const cancelStream = async (id: string, address: string) => {
 
   const server = getServer();
   const contract = new Contract(FLUXITY_CONTRACT);
-  console.log(ToScVal.u64(id));
 
   const call = contract.call('cancel_stream', ToScVal.u64(id));
   const xdr = createTransaction(account, call);
