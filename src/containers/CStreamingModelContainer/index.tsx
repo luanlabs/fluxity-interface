@@ -27,7 +27,7 @@ const CStreamingModelContainer = ({
         tooltipTitle={tooltipTitle}
         className="mb-1"
       />
-      <div className="flex gap-2 sm:flex-wrap w-full desktop:max-w-[580px]">
+      <div className="flex gap-2 sm:flex-wrap w-full desktop:max-w-[580px] fix-box:flex-wrap">
         <CStreamingModel isSelected={true} model="linear" />
         <CStreamingModel model="exponential" disabled onClick={handleExponentialClick} />
       </div>
