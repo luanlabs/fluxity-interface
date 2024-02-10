@@ -208,7 +208,11 @@ const CreateStream = () => {
                     label="End date"
                     tooltipTitle="End Date"
                     tooltipDetails={tooltipDetails.createStream.endDate}
-                    minDate={getValues('startDate') ? new Date(getValues('startDate')) : new Date()}
+                    minDate={
+                      getValues('cliffDate')
+                        ? new Date(getValues('cliffDate'))
+                        : new Date(getValues('startDate'))
+                    }
                     maxDate={INFINITY_DATE}
                     readonly
                   />
