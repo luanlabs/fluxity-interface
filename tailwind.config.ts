@@ -61,6 +61,7 @@ const config: Config = {
         md2: { min: '900px', max: '1023px' },
         mobile: { max: '1023px' },
         desktop: { min: '1024px' },
+        'fix-box': { min: '1023px', max: '1260px' },
         lg: { min: '1024px', max: '1279px' },
         xl: { min: '1280px', max: '1535px' },
         xxl: { min: '1536px' },
