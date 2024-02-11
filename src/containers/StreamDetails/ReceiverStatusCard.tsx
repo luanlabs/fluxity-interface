@@ -9,7 +9,7 @@ import { useAppSelector } from 'src/hooks/useRedux';
 import CProcessModal from 'src/components/CProcessModal';
 import CSummaryField from 'src/components/CSummaryField';
 import CModalSuccess from 'src/components/CModalSuccess';
-import { sendWithdraw } from 'src/features/sendWithdraw';
+import informWithdrawAPI from 'src/features/informWithdrawAPI';
 import signTransaction from 'src/utils/soroban/signTransaction';
 import withdrawStream from 'src/features/soroban/withdrawStream';
 import sendTransaction from 'src/features/soroban/sendTransaction';
@@ -115,7 +115,7 @@ const ReceiverStatusCard = ({
     await timeout(100);
     setIsWithdrawSuccessOpen(true);
 
-    sendWithdraw(id);
+    informWithdrawAPI(id);
     const withdrawFinalize = withdrawStreamReturnValue(finalize);
     setWithdrawAmount(withdrawFinalize);
 

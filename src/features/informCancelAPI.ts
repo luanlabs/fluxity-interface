@@ -1,7 +1,7 @@
 import fetch from 'src/utils/request';
 import { ExternalPages } from 'src/constants/externalPages';
 
-export const sendCancel = async (id: string) => {
+const informCancelAPI = async (id: string) => {
   await fetch(ExternalPages.FLUXITY_API + '/testnet/stream', {
     method: 'DELETE',
     headers: {
@@ -12,3 +12,5 @@ export const sendCancel = async (id: string) => {
     }),
   });
 };
+
+export default informCancelAPI;

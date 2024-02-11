@@ -6,7 +6,7 @@ import toast from 'src/components/CToast';
 import CButton from 'src/components/CButton';
 import CPageCard from 'src/components/CPageCard';
 import { useAppSelector } from 'src/hooks/useRedux';
-import { sendCancel } from 'src/features/sendCancel';
+import informCancelAPI from 'src/features/informCancelAPI';
 import CProcessModal from 'src/components/CProcessModal';
 import CSummaryField from 'src/components/CSummaryField';
 import CModalSuccess from 'src/components/CModalSuccess';
@@ -100,7 +100,7 @@ const SenderStatusCard = ({
     await timeout(100);
     setIsCancelStreamConfirmOpen(true);
     setCancellAmount(cancelStreamReturnValues(finalize));
-    sendCancel(id);
+    informCancelAPI(id);
   };
 
   const handleModalButton = () => {
