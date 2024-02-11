@@ -35,7 +35,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
     receiverAmount: 0,
   });
 
-  const [withdrawAmount, setWithdrawAmount] = useState(0);
+  const [withdrawnAmount, setWithdrawnAmount] = useState(0);
 
   const isStreamCancelled = cancelAmounts.senderAmount !== 0 || cancelAmounts.receiverAmount !== 0;
 
@@ -166,8 +166,8 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             id={data.id}
             token={data.token.symbol}
             sender={data.sender}
-            withdrawAmount={withdrawAmount}
-            setWithdrawAmount={setWithdrawAmount}
+            withdrawAmount={withdrawnAmount}
+            setWithdrawAmount={setWithdrawnAmount}
             decimalToken={data.token.decimals}
           />
         )}

@@ -33,8 +33,8 @@ interface ReceiverStatusCardProps {
   id: string;
   token: string;
   sender: string;
-  setWithdrawAmount: (_: number) => void;
-  withdrawAmount: number;
+  setWithdrawnAmount: (_: number) => void;
+  withdrawnAmount: number;
   decimalToken: number;
 }
 
@@ -46,8 +46,8 @@ const ReceiverStatusCard = ({
   cliffDate,
   isCanellable,
   id,
-  setWithdrawAmount,
-  withdrawAmount,
+  setWithdrawnAmount,
+  withdrawnAmount,
   decimalToken,
 }: ReceiverStatusCardProps) => {
   const address = useAppSelector((state) => state.user.address);
@@ -75,6 +75,8 @@ const ReceiverStatusCard = ({
     Number(withdrawn),
     isCanellable,
   );
+
+  const withdrawAmount = new BN(formatUnits(withdrawnAmount.toString(), decimalToken)).toFixed(3);
 
   const handleWithdrawClick = async () => {
     setIsApprovalOpen(true);
@@ -117,7 +119,7 @@ const ReceiverStatusCard = ({
 
     informWithdrawAPI(id);
     const withdrawFinalize = withdrawStreamReturnValue(finalize);
-    setWithdrawAmount(withdrawFinalize);
+    setWithdrawnAmount(withdrawFinalize);
 
     setAvailableAmount(0);
     setWithdraw(
@@ -168,7 +170,7 @@ const ReceiverStatusCard = ({
         explorerLink={ExternalPages.EXPLORER + '/transactions/' + txHash}
         title="Token withdrawal successful"
         amountTitle="Amount"
-        amount={new BN(formatUnits(withdrawAmount.toString(), decimalToken)).toFixed(3)}
+        amount={withdrawAmount}
         buttonVariant="simple"
         buttonText="Close"
         isOpen={withdrawSuccessOpen}

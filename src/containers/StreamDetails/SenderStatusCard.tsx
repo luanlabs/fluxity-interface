@@ -116,7 +116,7 @@ const SenderStatusCard = ({
     amount,
   ).senderAmount.toFixed(3);
 
-  const finalAmount = new BN(
+  const cancelledAmount = new BN(
     formatUnits(cancelAmount.receiverAmount.toString(), Number(token.decimals)),
   ).toFixed(3);
 
@@ -167,7 +167,7 @@ const SenderStatusCard = ({
           title="Stream cancellation successful"
           token={token.symbol}
           amountTitle="Amount"
-          amount={finalAmount}
+          amount={cancelledAmount}
           explorerLink={ExternalPages.EXPLORER + '/transactions/' + txHash}
           buttonVariant="simple"
           buttonText="Close"
