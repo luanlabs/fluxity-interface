@@ -15,7 +15,7 @@ import signTransaction from 'src/utils/soroban/signTransaction';
 import sendTransaction from 'src/features/soroban/sendTransaction';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
-import finalizeAmount from 'src/utils/soroban/finalizeAmount';
+import cancelStreamReturnValues from 'src/utils/soroban/cancelStreamReturnValues';
 import formatUnits from 'src/utils/formatUnits';
 import { ITokenStream, cancelAmountType } from 'src/models';
 import { ExternalPages } from 'src/constants/externalPages';
@@ -99,7 +99,7 @@ const SenderStatusCard = ({
     setIsReclamationModalOpen(false);
     await timeout(100);
     setIsCancelStreamConfirmOpen(true);
-    setCancellAmount(finalizeAmount(finalize, 'cancel'));
+    setCancellAmount(cancelStreamReturnValues(finalize));
     sendCancel(id);
   };
 

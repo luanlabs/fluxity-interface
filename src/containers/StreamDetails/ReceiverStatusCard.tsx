@@ -19,7 +19,7 @@ import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
 
 import withdrawLogo from '/public/images/withdrawSolid.svg';
 import { ExternalPages } from 'src/constants/externalPages';
-import finalizeAmount from 'src/utils/soroban/finalizeAmount';
+import withdrawStreamReturnValue from 'src/utils/soroban/withdrawStreamReturnValue';
 import formatUnits from 'src/utils/formatUnits';
 
 interface ReceiverStatusCardProps {
@@ -116,7 +116,7 @@ const ReceiverStatusCard = ({
     setIsWithdrawSuccessOpen(true);
 
     sendWithdraw(id);
-    const withdrawFinalize = finalizeAmount(finalize, 'withdraw');
+    const withdrawFinalize = withdrawStreamReturnValue(finalize);
     setWithdrawAmount(withdrawFinalize);
 
     setAvailableAmount(0);
