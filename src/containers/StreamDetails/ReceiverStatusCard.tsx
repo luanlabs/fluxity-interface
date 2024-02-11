@@ -76,8 +76,6 @@ const ReceiverStatusCard = ({
     isCanellable,
   );
 
-  const withdrawAmount = new BN(formatUnits(withdrawnAmount.toString(), decimalToken)).toFixed(3);
-
   const handleWithdrawClick = async () => {
     setIsApprovalOpen(true);
 
@@ -150,13 +148,15 @@ const ReceiverStatusCard = ({
     </div>
   );
 
+  const withdrawAmount = new BN(formatUnits(withdrawnAmount.toString(), decimalToken)).toFixed(3);
+
   return (
     <div className="w-full">
       <CPageCard title={ReceiverStatusCardTitle} className="px-3 py-4 mb-4 w-full">
         <div className="grid gap-2 text-midnightBlue">
           <CSummaryField label="Available" value={available.toFixed(3)} fieldSize="large" />
           <CSummaryField
-            label="Withdraw"
+            label="Withdrawn"
             value={new BN(totalWithdrawnAmount).toFixed(3)}
             fieldSize="large"
           />

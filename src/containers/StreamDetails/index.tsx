@@ -166,8 +166,8 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             id={data.id}
             token={data.token.symbol}
             sender={data.sender}
-            withdrawAmount={withdrawnAmount}
-            setWithdrawAmount={setWithdrawnAmount}
+            withdrawnAmount={withdrawnAmount}
+            setWithdrawnAmount={setWithdrawnAmount}
             decimalToken={data.token.decimals}
           />
         )}
