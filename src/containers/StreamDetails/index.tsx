@@ -4,6 +4,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 
+import { CancelAmounts } from 'src/models';
 import formatUnits from 'src/utils/formatUnits';
 import CPageCard from 'src/components/CPageCard';
 import { useAppSelector } from 'src/hooks/useRedux';
@@ -29,7 +30,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
 
   const { loading, data, error } = useGetStreamById(id);
 
-  const [cancelAmounts, setCancelAmounts] = useState({
+  const [cancelAmounts, setCancelAmounts] = useState<CancelAmounts>({
     senderAmount: 0,
     receiverAmount: 0,
   });
@@ -122,7 +123,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
           />
 
           <BlueCard
-            dynamicAmount={sendStreamAmount.toString()}
+            streamedAmount={sendStreamAmount.toString()}
             sender={data.sender}
             flowRate={data.rate}
             startDate={data.start_date}

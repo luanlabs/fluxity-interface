@@ -17,7 +17,7 @@ import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
 import cancelStreamReturnValues from 'src/utils/soroban/cancelStreamReturnValues';
 import formatUnits from 'src/utils/formatUnits';
-import { ITokenStream, cancelAmountType } from 'src/models';
+import { ITokenStream, CancelAmounts } from 'src/models';
 import { ExternalPages } from 'src/constants/externalPages';
 
 interface SenderStatusCardProps {
@@ -30,8 +30,8 @@ interface SenderStatusCardProps {
   withdrawn: string;
   isCancellable: boolean;
   id: string;
-  setCancellAmount: (_: cancelAmountType) => void;
-  cancelAmount: cancelAmountType;
+  setCancellAmount: (_: CancelAmounts) => void;
+  cancelAmount: CancelAmounts;
   isStreamCancelled: boolean;
 }
 

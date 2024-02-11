@@ -83,7 +83,7 @@ export interface StreamDetailsIconProps {
   lineFill: string;
 }
 
-export type cancelAmountType = {
+export type CancelAmounts = {
   senderAmount: number;
   receiverAmount: number;
 };
