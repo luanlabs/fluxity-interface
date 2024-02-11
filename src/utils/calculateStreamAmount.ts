@@ -26,7 +26,7 @@ const calculateStreamAmounts = (
 
   if (isCancalled) {
     return {
-      senderAmount: new BN(0),
+      senderAmount: new BN(amount).minus(withdrawn),
       receiverAmount: new BN(withdrawn),
     };
   }
