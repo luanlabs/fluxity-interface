@@ -4,21 +4,22 @@ import BN from 'src/utils/BN';
 import timeout from 'src/utils/timeout';
 import toast from 'src/components/CToast';
 import CButton from 'src/components/CButton';
+import formatUnits from 'src/utils/formatUnits';
 import CPageCard from 'src/components/CPageCard';
 import { useAppSelector } from 'src/hooks/useRedux';
-import informCancelAPI from 'src/features/informCancelAPI';
+import { ITokenStream, CancelAmounts } from 'src/models';
 import CProcessModal from 'src/components/CProcessModal';
 import CSummaryField from 'src/components/CSummaryField';
 import CModalSuccess from 'src/components/CModalSuccess';
+import informCancelAPI from 'src/features/informCancelAPI';
+import { ExternalPages } from 'src/constants/externalPages';
 import cancelStream from 'src/features/soroban/cancelStream';
+import SingleButtonModal from 'src/components/SingleButtonModal';
 import signTransaction from 'src/utils/soroban/signTransaction';
 import sendTransaction from 'src/features/soroban/sendTransaction';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
 import cancelStreamReturnValues from 'src/utils/soroban/cancelStreamReturnValues';
-import formatUnits from 'src/utils/formatUnits';
-import { ITokenStream, CancelAmounts } from 'src/models';
-import { ExternalPages } from 'src/constants/externalPages';
 
 interface SenderStatusCardProps {
   amount: string;
@@ -137,6 +138,15 @@ const SenderStatusCard = ({
     </div>
   );
 
+  const ModalButton = (
+    <SingleButtonModal
+      buttonText="Close"
+      buttonVariant="form"
+      logoColor="#fff"
+      onClick={handleModalButton}
+    />
+  );
+
   return (
     <div className="w-full">
       <CPageCard title={SenderStatusCardTitle} className="px-3 py-4 mb-4 w-full">
@@ -169,11 +179,9 @@ const SenderStatusCard = ({
           amountTitle="Amount"
           amount={cancelledAmount}
           explorerLink={ExternalPages.EXPLORER + '/transactions/' + txHash}
-          buttonVariant="simple"
-          buttonText="Close"
           isOpen={isCancelStreamConfirmOpen}
           setIsOpen={setIsCancelStreamConfirmOpen}
-          onClick={handleModalButton}
+          ButtonPart={ModalButton}
         />
       </CPageCard>
     </div>

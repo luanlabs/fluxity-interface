@@ -1,13 +1,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import CButton, { CButtonVariantType } from 'src/components/CButton';
+import CButton from 'src/components/CButton';
 import { shortenAddress } from 'src/utils/shortenAddress';
 import CPageCard from 'src/components/CPageCard';
 import CTooltip from 'src/components/CTooltip';
 import CModal from 'src/components/CModal';
 import DetailLogo from 'src/assets/detail';
 import CCard from 'src/components/CCard';
+import SingleCloseModalButton from 'src/components/SingleButtonModal';
 
 import CSummaryField from '../CSummaryField';
 
@@ -23,19 +24,16 @@ interface CModalSuccess {
   streamId?: string;
   from?: string;
   to?: string;
-  amount: string;
+  amount?: string;
   token?: string;
   amountStreamed?: string;
-  amountTitle: string;
-  logoColor?: string;
-  buttonText: string;
-  buttonVariant: CButtonVariantType;
+  amountTitle?: string;
   explorerLink?: string;
-  tooltipTitle: string;
+  tooltipTitle?: string;
   tooltipDetails?: string;
-  onClick: () => void;
   isOpen: boolean;
   setIsOpen: (_: boolean) => void;
+  ButtonPart: JSX.Element | React.ReactNode;
 }
 
 const CModalSuccess = ({
@@ -47,16 +45,13 @@ const CModalSuccess = ({
   token,
   amountStreamed,
   amountTitle,
-  logoColor,
-  buttonText,
-  buttonVariant,
   explorerLink,
   successLogoColor,
   tooltipTitle,
   tooltipDetails,
-  onClick,
   isOpen,
   setIsOpen,
+  ButtonPart,
 }: CModalSuccess) => {
   return (
     <div>
@@ -73,33 +68,26 @@ const CModalSuccess = ({
             {title}
           </h1>
 
-          {streamId ||
-            from ||
-            to ||
-            (amountStreamed && (
-              <CPageCard className="px-3 py-4 w-[80%] mt-6">
-                <ul className="grid gap-2 text-midnightBlue">
-                  {streamId && <CSummaryField label="Stream" value={streamId} fieldSize="normal" />}
-                  {from && (
-                    <CSummaryField
-                      label="From"
-                      value={shortenAddress(from, 5)}
-                      fieldSize="normal"
-                    />
-                  )}
-                  {to && (
-                    <CSummaryField label="To" value={shortenAddress(to, 5)} fieldSize="normal" />
-                  )}
-                  {amountStreamed && (
-                    <CSummaryField
-                      label="Amount Streamed"
-                      value={amountStreamed}
-                      fieldSize="normal"
-                    />
-                  )}
-                </ul>
-              </CPageCard>
-            ))}
+          {(streamId || from || to || amountStreamed) && (
+            <CPageCard className="px-3 py-4 w-[80%] mt-6">
+              <ul className="grid gap-2 text-midnightBlue">
+                {streamId && <CSummaryField label="Stream" value={streamId} fieldSize="normal" />}
+                {from && (
+                  <CSummaryField label="From" value={shortenAddress(from, 5)} fieldSize="normal" />
+                )}
+                {to && (
+                  <CSummaryField label="To" value={shortenAddress(to, 5)} fieldSize="normal" />
+                )}
+                {amountStreamed && (
+                  <CSummaryField
+                    label="Amount Streamed"
+                    value={amountStreamed}
+                    fieldSize="normal"
+                  />
+                )}
+              </ul>
+            </CPageCard>
+          )}
 
           {explorerLink && (
             <Link href={explorerLink} target="_blank" className="w-full mt-[32px] mb-4">
@@ -118,17 +106,19 @@ const CModalSuccess = ({
               bgColor="#F5EBFF"
               borderColor="#BE7CFF"
               className={
-                'flex justify-between items-center w-full text-richLavender h-14 px-[10px] text-lg'
+                'flex justify-between items-center w-full text-richLavender mt-3 h-14 px-[10px] text-lg'
               }
             >
-              <div className="flex items-center">
+              <div className="flex items-start w-full">
                 <p className="w-full font-medium">{amountTitle}</p>
-                {tooltipDetails && (
-                  <CTooltip text={tooltipDetails} title={tooltipTitle}>
-                    <div className=" ml-2">
-                      <DetailLogo fill={'#9245de'} />
-                    </div>
-                  </CTooltip>
+                {tooltipDetails && tooltipTitle && (
+                  <div className="w-full mr-8">
+                    <CTooltip text={tooltipDetails} title={tooltipTitle}>
+                      <div>
+                        <DetailLogo fill={'#9245de'} />
+                      </div>
+                    </CTooltip>
+                  </div>
                 )}
               </div>
 
@@ -139,14 +129,7 @@ const CModalSuccess = ({
             </CCard>
           )}
 
-          <CButton
-            type="submit"
-            variant={buttonVariant}
-            content={buttonText}
-            fill={logoColor}
-            className="!bg-darkBlue text-white text-center w-full mt-4"
-            onClick={onClick}
-          />
+          <div className="w-full">{ButtonPart}</div>
         </div>
       </CModal>
     </div>

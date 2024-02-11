@@ -21,6 +21,7 @@ import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
 import withdrawStreamReturnValue from 'src/utils/soroban/withdrawStreamReturnValue';
 
 import withdrawLogo from '/public/images/withdrawSolid.svg';
+import SingleButtonModal from 'src/components/SingleButtonModal';
 
 interface ReceiverStatusCardProps {
   withdrawn: string;
@@ -148,6 +149,15 @@ const ReceiverStatusCard = ({
     </div>
   );
 
+  const ModalButton = (
+    <SingleButtonModal
+      buttonText="Close"
+      buttonVariant="form"
+      logoColor="#fff"
+      onClick={handleModalButton}
+    />
+  );
+
   const withdrawAmount = new BN(formatUnits(withdrawnAmount.toString(), decimalToken)).toFixed(3);
 
   return (
@@ -177,11 +187,9 @@ const ReceiverStatusCard = ({
         title="Token withdrawal successful"
         amountTitle="Amount"
         amount={withdrawAmount}
-        buttonVariant="simple"
-        buttonText="Close"
         isOpen={withdrawSuccessOpen}
         setIsOpen={setIsWithdrawSuccessOpen}
-        onClick={handleModalButton}
+        ButtonPart={ModalButton}
       />
     </div>
   );

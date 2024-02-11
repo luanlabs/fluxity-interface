@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import CModalSuccess from '../components/CModalSuccess';
+import SingleCloseModalButton from 'src/components/SingleButtonModal';
 
 const meta = {
   title: 'Components/CModalSuccess',
