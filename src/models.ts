@@ -2,12 +2,13 @@ import { GroupBase, StylesConfig, MultiValue, SingleValue, ActionMeta } from 're
 
 import { rates } from './constants/rates';
 import { IToken } from './reducers/tokens';
-import { StatusType } from './components/CStreamStatusButton';
 
 export interface ISelectItem<T> {
   label: string;
   value: T;
 }
+
+export type Status = 'ongoing' | 'expired' | 'pending';
 
 export type ISelectItemString = ISelectItem<string>;
 
@@ -72,7 +73,7 @@ export interface IResponseStream {
   start_date: number;
   token: ITokenStream;
   withdrawn: string;
-  status: StatusType;
+  status: Status;
 }
 
 export type IResponseStreamResult = IFluxityAPIResponse<IResponseStream>;

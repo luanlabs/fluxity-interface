@@ -1,11 +1,11 @@
 import cn from 'classnames';
 import { useEffect, useState } from 'react';
 
+import { Status } from 'src/models';
 import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
 
-export type StatusType = 'ongoing' | 'expired' | 'pending';
 interface CStreamStatusButtonProps {
-  type: StatusType;
+  type: Status;
   isCancelled: boolean;
   isStreamCancelled: boolean;
 }
