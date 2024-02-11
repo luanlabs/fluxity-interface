@@ -4,7 +4,7 @@ export const calculateCompletionPercentage = (
   start_date: number,
   end_date: number,
   amount?: string,
-  dynamicAmount?: string,
+  streamedAmount?: string,
 ) => {
   const currentDate = Date.now();
   const endDate = new Date(end_date).getTime() * 1000;
@@ -14,8 +14,8 @@ export const calculateCompletionPercentage = (
     return '0';
   }
 
-  if (dynamicAmount && amount) {
-    return new BN(dynamicAmount).times(100).div(amount).toFixed(0);
+  if (streamedAmount && amount) {
+    return new BN(streamedAmount).times(100).div(amount).toFixed(0);
   }
 
   if (currentDate >= endDate) {
