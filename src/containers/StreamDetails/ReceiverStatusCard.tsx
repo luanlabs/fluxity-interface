@@ -4,11 +4,13 @@ import BN from 'src/utils/BN';
 import timeout from 'src/utils/timeout';
 import toast from 'src/components/CToast';
 import CButton from 'src/components/CButton';
+import formatUnits from 'src/utils/formatUnits';
 import CPageCard from 'src/components/CPageCard';
 import { useAppSelector } from 'src/hooks/useRedux';
 import CProcessModal from 'src/components/CProcessModal';
 import CSummaryField from 'src/components/CSummaryField';
 import CModalSuccess from 'src/components/CModalSuccess';
+import { ExternalPages } from 'src/constants/externalPages';
 import informWithdrawAPI from 'src/features/informWithdrawAPI';
 import signTransaction from 'src/utils/soroban/signTransaction';
 import withdrawStream from 'src/features/soroban/withdrawStream';
@@ -16,11 +18,9 @@ import sendTransaction from 'src/features/soroban/sendTransaction';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import isStreamWithdrawable from 'src/features/isStreamWithdrawable';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
+import withdrawStreamReturnValue from 'src/utils/soroban/withdrawStreamReturnValue';
 
 import withdrawLogo from '/public/images/withdrawSolid.svg';
-import { ExternalPages } from 'src/constants/externalPages';
-import withdrawStreamReturnValue from 'src/utils/soroban/withdrawStreamReturnValue';
-import formatUnits from 'src/utils/formatUnits';
 
 interface ReceiverStatusCardProps {
   withdrawn: string;
@@ -51,7 +51,7 @@ const ReceiverStatusCard = ({
   decimalToken,
 }: ReceiverStatusCardProps) => {
   const address = useAppSelector((state) => state.user.address);
-  const [withdraw, setWithdraw] = useState(withdrawn);
+  const [totalWithdrawnAmount, setTotalWithdrawnAmount] = useState(withdrawn);
   const [availableAmount, setAvailableAmount] = useState(0);
   const [txHash, setTxHash] = useState('');
 
@@ -65,7 +65,7 @@ const ReceiverStatusCard = ({
     false,
     withdrawn,
     amount,
-  ).receiverAmount.minus(withdraw);
+  ).receiverAmount.minus(totalWithdrawnAmount);
 
   const withdrawable = isStreamWithdrawable(
     startDate,
@@ -122,8 +122,10 @@ const ReceiverStatusCard = ({
     setWithdrawnAmount(withdrawFinalize);
 
     setAvailableAmount(0);
-    setWithdraw(
-      new BN(formatUnits(withdrawFinalize, decimalToken)).plus(new BN(withdraw)).toString(),
+    setTotalWithdrawnAmount(
+      new BN(formatUnits(withdrawFinalize, decimalToken))
+        .plus(new BN(totalWithdrawnAmount))
+        .toString(),
     );
   };
 
@@ -153,7 +155,11 @@ const ReceiverStatusCard = ({
       <CPageCard title={ReceiverStatusCardTitle} className="px-3 py-4 mb-4 w-full">
         <div className="grid gap-2 text-midnightBlue">
           <CSummaryField label="Available" value={available.toFixed(3)} fieldSize="large" />
-          <CSummaryField label="Withdraw" value={new BN(withdraw).toFixed(3)} fieldSize="large" />
+          <CSummaryField
+            label="Withdraw"
+            value={new BN(totalWithdrawnAmount).toFixed(3)}
+            fieldSize="large"
+          />
         </div>
       </CPageCard>
 
