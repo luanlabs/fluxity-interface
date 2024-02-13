@@ -20,6 +20,7 @@ import SummaryFields from './SummaryFields';
 import SenderStatusCard from './SenderStatusCard';
 import ReceiverStatusCard from './ReceiverStatusCard';
 import DynamicStreamedAmount from './DynamicStreamedAmount';
+import BN from 'src/utils/BN';
 
 interface StreamDetailsProps {
   id: string;
@@ -87,10 +88,9 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
   const isSender = address === data.sender;
   const isReceiver = address === data.receiver;
 
-  const reveceiverAmount = formatUnits(
-    cancelAmounts.receiverAmount.toString(),
-    data.token.decimals,
-  );
+  const receiverAmount = new BN(
+    formatUnits(cancelAmounts.receiverAmount.toString(), data.token.decimals),
+  ).toFixed(3);
 
   const mainTitle = (
     <div className="w-full flex justify-between items-center pb-2">
@@ -118,7 +118,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
 
           <DynamicStreamedAmount
             token={data.token.symbol}
-            streamAmount={isStreamCancelled ? reveceiverAmount : sendStreamAmount.toFixed(3)}
+            streamAmount={isStreamCancelled ? receiverAmount : sendStreamAmount.toFixed(3)}
             isCancelled={data.is_cancelled}
           />
 
