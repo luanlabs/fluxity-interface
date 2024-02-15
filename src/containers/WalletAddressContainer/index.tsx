@@ -110,7 +110,7 @@ const WalletAddressContainer = ({
 
       <div className="relative">
         <button
-          className="self-stretch w-full sm:w-[340px] overflow-hidden relative px-12 rounded-xl placeholder-[#7D7B9B] text-[#7D7B9B] text-base h-14 p-4 bg-neutral-100 justify-start items-center inline-flex outline-none"
+          className="self-stretch w-full overflow-hidden relative px-12 rounded-xl placeholder-[#7D7B9B] text-[#7D7B9B] text-base h-14 p-4 bg-neutral-100 justify-start items-center inline-flex outline-none"
           onClick={handleOpenModal}
         >
           {inputValue === '' ? (
