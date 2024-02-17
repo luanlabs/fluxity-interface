@@ -118,7 +118,7 @@ const SenderStatusCard = ({
   ).senderAmount.toFixed(3);
 
   const cancelledAmount = new BN(
-    formatUnits(cancelAmount.receiverAmount.toString(), Number(token.decimals)),
+    formatUnits(cancelAmount.senderAmount.toString(), Number(token.decimals)),
   ).toFixed(3);
 
   const SenderStatusCardTitle = (
