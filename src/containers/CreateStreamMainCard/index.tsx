@@ -14,11 +14,11 @@ import SelectTokenContainer from 'src/containers/SelectToken';
 import CStreamingModelContainer from '../CStreamingModelContainer';
 import CInputRate, { CInputRateValue } from 'src/components/CInputRate';
 import WalletAddressContainer from 'src/containers/WalletAddressContainer';
+import tooltipDetails from 'src/constants/tooltipDetails';
 
 import validateForm from './validateForm';
 import ConfirmTransaction from '../ConfirmTransaction';
 import CancellableStream, { ToggleStatus } from '../CancellableStream';
-import tooltipDetails from 'src/constants/tooltipDetails';
 
 export interface FormValues {
   address: string;
@@ -38,10 +38,15 @@ const CreateStream = () => {
   const [isConfirm, setIsConfirm] = useState(false);
 
   const { address } = useAppSelector((state) => state.user);
+  const usrInfo = useAppSelector((state) => state.user?.info?.balances[0]);
 
   const form = useForm<FormValues>({
     mode: 'onChange',
-    resolver: (formValues) => validateForm(formValues, setIsFormValidated, address),
+    resolver: (formValues) =>
+      validateForm(formValues, setIsFormValidated, address, {
+        asset_type: usrInfo?.asset_type,
+        balance: usrInfo?.balance,
+      }),
     defaultValues: {
       streamingModel: 'linear',
       isCancellable: 'OFF',
@@ -223,7 +228,15 @@ const CreateStream = () => {
         </CPageCard>
         <div className="relative ml-6">
           <div>
-            <SummaryContainer form={form} isFormValidated={isFormValidated} />
+            <SummaryContainer
+              form={form}
+              isFormValidated={isFormValidated}
+              userInfo={{
+                asset_type: usrInfo?.asset_type,
+                balance: usrInfo?.balance,
+              }}
+              address={address}
+            />
 
             <CButton
               type="submit"
