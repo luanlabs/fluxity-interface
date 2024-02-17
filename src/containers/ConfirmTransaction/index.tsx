@@ -20,7 +20,7 @@ import { FLUXITY_CONTRACT } from 'src/constants/contracts';
 import toDecimals from 'src/utils/createStream/toDecimals';
 import approve from 'src/features/soroban/approve';
 import createStream from 'src/features/soroban/createStream';
-import { sendStreamId } from 'src/features/sendStreamId';
+import informCreatestreamAPI from 'src/features/informCreatestreamAPI';
 import CModalSuccess from 'src/components/CModalSuccess';
 import DoubleButtonModal from 'src/components/DoubleButtonModal';
 import SingleButtonModal from 'src/components/SingleButtonModal';
@@ -171,7 +171,7 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
         return;
       }
 
-      await sendStreamId(scValToNative(finalize?.returnValue).toString());
+      await informCreatestreamAPI(scValToNative(finalize?.returnValue).toString());
 
       setStreamDetails({
         hash: tx.hash,

@@ -31,8 +31,6 @@ const Summary = ({ form, userInfo, address }: SummaryProps) => {
   const values: FormValues = form.getValues();
   const getFormValues = mapFormValues(values);
 
-  console.log(userInfo);
-
   let totalAmount = new BN(0);
   let errorMessage = '';
 
