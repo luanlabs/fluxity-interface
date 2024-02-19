@@ -15,7 +15,7 @@ interface IModalProps {
   hasCloseButton?: boolean;
   className?: string;
   headerImage?: string | StaticImport;
-  imageClassName?: string;
+  headerClassName?: string;
   width?: string;
   hidden?: boolean;
 }
@@ -30,7 +30,7 @@ const CDialog = ({
   className,
   hasCloseButton,
   headerImage,
-  imageClassName,
+  headerClassName,
 }: IModalProps) => {
   const closeModal = () => {
     setIsOpen(false);
@@ -82,7 +82,7 @@ const CDialog = ({
                     />
                   )}
                   {headerImage && (
-                    <div className={imageClassName}>
+                    <div className={headerClassName}>
                       <Image src={headerImage} alt="header" />
                     </div>
                   )}

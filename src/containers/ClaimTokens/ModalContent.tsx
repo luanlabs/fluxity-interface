@@ -20,7 +20,7 @@ type ModalContentProps = {
 const ModalContent = ({ handleClaim, address, handleClose }: ModalContentProps) => {
   return (
     <div>
-      <div className="flex gap-2 absolute mobile:top-10 top-14 left-6">
+      <div className="flex gap-2 absolute mobile:top-[-70px] top-14 left-6">
         <span className="flex bg-white rounded-full gap-1 p-[10px] items-center">
           <Image src={usdc} alt="usdc" draggable={false} />
           <p>fUSDC</p>

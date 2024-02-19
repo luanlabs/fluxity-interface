@@ -4,11 +4,10 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 
 import CCard from 'src/components/CCard';
-import CDialog from 'src/components/CDialog';
 import toast from 'src/components/CToast';
+import CModal from 'src/components/CModal';
 import CButton from 'src/components/CButton';
 import CProcessModal from 'src/components/CProcessModal';
-import CBottomSheet from 'src/components/CBottomSheet';
 
 import { ExternalPages } from 'src/constants/externalPages';
 
@@ -89,7 +88,7 @@ const ClaimTokens = () => {
   return (
     <CCard
       borderColor="#0000001A"
-      className="relative bg-white p-[19.6px] h-[238px] mobile:h-[208px] w-1/2 mobile:w-full"
+      className="relative bg-white p-[19.6px] short:h-[200px] h-[238px] mobile:h-[208px] w-1/2 mobile:w-full"
     >
       <h1 className="font-medium text-2xl mobile:text-lg">Claim Testnet Tokens!</h1>
 
@@ -108,26 +107,15 @@ const ClaimTokens = () => {
           className="w-[161px] mobile:w-[140px] mobile:h-10 mobile:text-sm font-medium border-royalBlue border hover:bg-lavenderBlush transition-all duration-700"
         />
       </div>
-      <CDialog
-        hidden
+      <CModal
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         hasCloseButton
         headerImage={modalImage}
-        imageClassName="bg-[#9CFFBE] select-none"
-        className="mobile:hidden"
+        headerClassName="bg-[#9CFFBE] select-none mobile:rounded-t-[20px] mobile:relative"
       >
-        <ModalContent address={address} handleClaim={handleClaim} />
-      </CDialog>
-      <CBottomSheet
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        className="desktop:!hidden"
-        headerClass="bg-[#9CFFBE] select-none h-0"
-      >
-        <Image src={modalImage} alt="header" className="bg-[#9CFFBE] rounded-t-[20px]" />
         <ModalContent address={address} handleClaim={handleClaim} handleClose={onCloseModalSheet} />
-      </CBottomSheet>
+      </CModal>
 
       <CProcessModal
         isOpen={openSecondModal}
