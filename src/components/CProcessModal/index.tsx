@@ -3,15 +3,9 @@ import CModal from '../CModal';
 import Image from 'next/image';
 
 import rolling from 'public/images/rolling.svg';
+import { CModalProps } from 'src/constants/types';
 
-type CProcessModalType = {
-  isOpen: boolean;
-  setIsOpen: (_: boolean) => void;
-  title: string;
-  message?: string;
-};
-
-const CProcessModal = ({ isOpen, setIsOpen, title, message }: CProcessModalType) => {
+const CProcessModal = ({ isOpen, setIsOpen, title, message }: CModalProps) => {
   return (
     <CModal isOpen={isOpen} setIsOpen={setIsOpen} width="396px">
       <div className="flex justify-center items-center flex-col py-9">

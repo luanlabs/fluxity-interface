@@ -4,11 +4,11 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 
 import CCard from 'src/components/CCard';
-import CModal from 'src/components/CModal';
+import CDialog from 'src/components/CDialog';
 import toast from 'src/components/CToast';
 import CButton from 'src/components/CButton';
 import CProcessModal from 'src/components/CProcessModal';
-import CModalSheet from 'src/components/CModalSheet';
+import CBottomSheet from 'src/components/CBottomSheet';
 
 import { ExternalPages } from 'src/constants/externalPages';
 
@@ -108,7 +108,8 @@ const ClaimTokens = () => {
           className="w-[161px] mobile:w-[140px] mobile:h-10 mobile:text-sm font-medium border-royalBlue border hover:bg-lavenderBlush transition-all duration-700"
         />
       </div>
-      <CModal
+      <CDialog
+        hidden
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         hasCloseButton
@@ -117,15 +118,16 @@ const ClaimTokens = () => {
         className="mobile:hidden"
       >
         <ModalContent address={address} handleClaim={handleClaim} />
-      </CModal>
-      <CModalSheet
-        open={isOpen}
-        onClose={onCloseModalSheet}
+      </CDialog>
+      <CBottomSheet
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        className="desktop:!hidden"
         headerClass="bg-[#9CFFBE] select-none h-0"
       >
         <Image src={modalImage} alt="header" className="bg-[#9CFFBE] rounded-t-[20px]" />
         <ModalContent address={address} handleClaim={handleClaim} handleClose={onCloseModalSheet} />
-      </CModalSheet>
+      </CBottomSheet>
 
       <CProcessModal
         isOpen={openSecondModal}

@@ -1,30 +1,28 @@
-import cn from 'classnames';
-import Sheet from 'react-modal-sheet';
+import { Ref } from 'react';
+import Sheet, { SheetRef } from 'react-modal-sheet';
 
 type CModalProps = {
-  open: boolean;
+  isOpen: boolean;
   className?: string;
   headerClass?: string;
   contentClass?: string;
-  onClose: () => void;
+  setIsOpen: (_: boolean) => void;
   children: React.ReactNode;
 };
 
-const CModalSheet = ({
-  open,
-  onClose,
+const CBottomSheet = ({
+  isOpen,
   children,
+  setIsOpen,
   className,
   headerClass,
   contentClass,
 }: CModalProps) => {
+  const closeModal = () => {
+    setIsOpen(false);
+  };
   return (
-    <Sheet
-      isOpen={open}
-      onClose={onClose}
-      detent="content-height"
-      className={cn('desktop:hidden', className)}
-    >
+    <Sheet isOpen={isOpen} onClose={closeModal} detent="content-height" className={className}>
       <Sheet.Container className="!rounded-t-[20px]">
         <Sheet.Header className={headerClass} />
         <Sheet.Content className={contentClass}>{children}</Sheet.Content>
@@ -34,4 +32,4 @@ const CModalSheet = ({
   );
 };
 
-export default CModalSheet;
+export default CBottomSheet;
