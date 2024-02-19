@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import CNavLink from '../components/CNavLink';
+import CNavLink from 'src/components/CNavLink/CNavLink';
 import Home from 'src/assets/Home';
 
 const meta = {

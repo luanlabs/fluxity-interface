@@ -28,7 +28,7 @@ const CStreamingModel = ({
   return (
     <CCard
       className={cn(
-        `flex justify-center items-center w-full h-16 px-[10px] py-2 cursor-pointer bg-white select-none ${
+        `flex justify-center items-center w-full px-[10px] py-2 cursor-pointer bg-white select-none ${
           isSelected ? '!bg-[#E4F6F9]' : 'bg-white'
         } 
       ease-in duration-100`,
@@ -43,8 +43,8 @@ const CStreamingModel = ({
         <Image src={logo} alt={title} width={67} height={67} draggable={false} />
       </div>
       <div className="text-midnightBlue w-full ml-[9px] flex flex-col justify-center items-start">
-        <span className="text-base">{title}</span>
-        <p className="text-[10px] leading-3 w-[90%]">{description}</p>
+        <span className="text-base mb-1">{title}</span>
+        <p className="text-[12px] leading-3 w-full">{description}</p>
       </div>
     </CCard>
   );

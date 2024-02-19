@@ -86,12 +86,17 @@ const ClaimTokens = () => {
   };
 
   return (
-    <CCard borderColor="#0000001A" className="relative bg-white p-[19.6px] h-[238px] w-1/2">
-      <h1 className="font-medium text-2xl">Claim Testnet Tokens!</h1>
+    <CCard
+      borderColor="#0000001A"
+      className="relative bg-white p-[19.6px] h-[238px] mobile:h-[208px] w-1/2 mobile:w-full"
+    >
+      <h1 className="font-medium text-2xl mobile:text-lg">Claim Testnet Tokens!</h1>
 
       <Image src={blueDivider} alt="Divider" className="py-4 select-none" />
 
-      <p>Try how token streaming works with some test tokens at no cost.</p>
+      <p className="mobile:text-sm">
+        Try how token streaming works with some test tokens at no cost.
+      </p>
 
       <div className="absolute bottom-[22px] left-[24.47px]">
         <CButton
@@ -99,7 +104,7 @@ const ClaimTokens = () => {
           content="Claim Tokens"
           variant="simple"
           logo={glass}
-          className="w-[161px] font-medium border-royalBlue border hover:bg-lavenderBlush transition-all duration-700"
+          className="w-[161px] mobile:w-[140px] mobile:h-10 mobile:text-sm font-medium border-royalBlue border hover:bg-lavenderBlush transition-all duration-700"
         />
       </div>
       <CModal
