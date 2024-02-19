@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import cn from 'classnames';
 
 import { ISelectToken } from 'src/models';
 import CButton from 'src/components/CButton';
@@ -74,25 +75,26 @@ const CreateStream = () => {
   const isFormCompleteValidation = !isValid || isValidating || !isFormValidated || !address;
 
   const CreateStreamTitle = (
-    <h1 className="text-[24px] text-midnightBlue pl-2 mt-1 mb-1">Create Stream</h1>
+    <h1 className="text-[24px] text-midnightBlue pl-4 mt-1 mb-1">Create Stream</h1>
   );
 
   return (
-    <form method="" onSubmit={handleSubmit(onSubmit)} className="h-full">
+    <form method="" onSubmit={handleSubmit(onSubmit)} className="h-full w-full">
       <div className="flex w-full h-full">
         <CPageCard
           title={CreateStreamTitle}
           divider
-          className="w-full pl-[30px] pr-[18px] py-[15px]"
+          className="w-full pl-[30px] pr-[18px] py-[15px] sm:pr-4 sm:pl-2 md:pb-8 sm:pb-8"
           scroll
+          borderStatus="borderless"
         >
           <div className="w-full">
-            <div>
+            <div className="w-full">
               <Controller
                 name="streamingModel"
                 control={control}
                 render={({ field }) => (
-                  <div>
+                  <div className="w-full">
                     <CStreamingModelContainer
                       label="Streaming model"
                       tooltipTitle="Streaming model"
@@ -123,11 +125,16 @@ const CreateStream = () => {
               />
             </div>
 
-            <div className="flex gap-2 items-center justify-center">
+            <div className="flex gap-2 md:gap-6 w-full md:items-start sm:flex-col md:flex-col sm:items-start items-center justify-center">
               <Controller
                 name="token"
                 control={control}
-                render={({ field }) => <SelectTokenContainer {...field} />}
+                render={({ field }) => (
+                  <SelectTokenContainer
+                    className="desktop:w-full mobile:w-full fix-box:w-[90%]"
+                    {...field}
+                  />
+                )}
               />
 
               <Controller
@@ -140,7 +147,7 @@ const CreateStream = () => {
                       label="Flow rate"
                       tooltipTitle="Flow rate"
                       tooltipDetails={tooltipDetails.createStream.flowRate}
-                      className="basis-4/5"
+                      className="basis-4/5 sm:!basis-0 md:basis-0 sm:mt-4 mobile:w-full "
                       errorMsg={errors.rate && errors.rate.message}
                       error={errors.rate?.message ? true : false}
                       {...field}
@@ -166,15 +173,15 @@ const CreateStream = () => {
               />
             </div>
 
-            <hr className="my-6" />
+            <hr className="my-6 sm:hidden" />
 
-            <div className="mb-6">
+            <div className="mb-6 sm:mb-3 w-full">
               <Controller
                 name="cliffDate"
                 control={control}
                 render={({ field }) => (
                   <CDatePicker
-                    className="w-[236px]"
+                    className="!w-[236px] sm:w-[340px] mobile:!w-full"
                     label="Cliff date"
                     tooltipTitle="Cliff Date"
                     tooltipDetails={tooltipDetails.createStream.cliffDate}
@@ -185,48 +192,65 @@ const CreateStream = () => {
                 )}
               />
             </div>
-
-            <div className="flex gap-2">
-              <Controller
-                name="startDate"
-                control={control}
-                render={({ field }) => (
-                  <CDatePicker
-                    {...field}
-                    className="w-[236px]"
-                    label="Start date"
-                    tooltipTitle="Start Date"
-                    tooltipDetails={tooltipDetails.createStream.startDate}
-                    minDate={new Date()}
-                    maxDate={getValues('endDate') && getValues('endDate')}
-                  />
-                )}
-              />
-
-              <Controller
-                name="endDate"
-                control={control}
-                render={({ field }) => (
-                  <CDatePicker
-                    {...field}
-                    className="w-[236px]"
-                    label="End date"
-                    tooltipTitle="End Date"
-                    tooltipDetails={tooltipDetails.createStream.endDate}
-                    minDate={
-                      getValues('cliffDate')
-                        ? new Date(getValues('cliffDate'))
-                        : new Date(getValues('startDate'))
-                    }
-                    maxDate={INFINITY_DATE}
-                    readonly
-                  />
-                )}
-              />
+            <div className="flex w-full sm:flex-col lowTablet:flex-row sm:gap-4 gap-2 fix-box:flex-col">
+              <div className="mobile:w-full">
+                <Controller
+                  name="startDate"
+                  control={control}
+                  render={({ field }) => (
+                    <CDatePicker
+                      {...field}
+                      className="desktop:!w-[236px] mobile:!w-full"
+                      label="Start date"
+                      tooltipTitle="Start Date"
+                      tooltipDetails={tooltipDetails.createStream.startDate}
+                      minDate={new Date()}
+                      maxDate={getValues('endDate') && getValues('endDate')}
+                    />
+                  )}
+                />
+              </div>
+              <div className="mobile:w-full">
+                <Controller
+                  name="endDate"
+                  control={control}
+                  render={({ field }) => (
+                    <CDatePicker
+                      {...field}
+                      className="desktop:!w-[236px] mobile:!w-full md:!w-full"
+                      label="End date"
+                      tooltipTitle="End Date"
+                      tooltipDetails={tooltipDetails.createStream.endDate}
+                      minDate={
+                        getValues('cliffDate')
+                          ? new Date(getValues('cliffDate'))
+                          : new Date(getValues('startDate'))
+                      }
+                      maxDate={INFINITY_DATE}
+                      readonly
+                    />
+                  )}
+                />
+              </div>
             </div>
+
+            <CButton
+              type="submit"
+              variant="form"
+              content="Create Stream"
+              fill={isFormCompleteValidation ? '#050142' : '#fff'}
+              className={cn(
+                isFormCompleteValidation
+                  ? '!bg-[#E6E6EC] !text-[#050142]'
+                  : '!bg-darkBlue !text-white',
+                'xl:hidden xxl:hidden 2xl:hidden 3xl:hidden md2:hidden lg:hidden mt-12 sm:mt-4 md:mt-5 w-3/4 m-auto',
+              )}
+              disabled={isFormCompleteValidation}
+              onClick={handleOpenModals}
+            />
           </div>
         </CPageCard>
-        <div className="relative ml-6">
+        <div className="relative ml-6 md2:ml-3 md2:mr-3 sm:hidden md:hidden md2:block">
           <div>
             <SummaryContainer
               form={form}

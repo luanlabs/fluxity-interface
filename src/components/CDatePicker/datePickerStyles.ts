@@ -11,6 +11,14 @@ export const Wrapper = styled.div`
     font-family: ${myFont.style.fontFamily};
   }
 
+  .react-datepicker-wrapper {
+    width: 100%;
+  }
+
+  .react-datepicker__input-container {
+    width: 100%;
+  }
+
   .react-datepicker__day--disabled {
     color: rgb(107 114 128/0.6);
   }
