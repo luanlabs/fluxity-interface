@@ -14,13 +14,20 @@ import DetailLogo from 'src/assets/detail';
 import humanizeAmount from 'src/utils/humanizeAmount';
 import CTooltip from 'src/components/CTooltip';
 import tooltipDetails from 'src/constants/tooltipDetails';
+import {
+  UserInfo,
+  checkUserActived,
+  checkUserBalance,
+} from '../CreateStreamMainCard/checkUserActived';
 
 interface SummaryProps {
   form: UseFormReturn<any, undefined>;
   isFormValidated: boolean;
+  userInfo: UserInfo;
+  address: string;
 }
 
-const Summary = ({ form }: SummaryProps) => {
+const Summary = ({ form, userInfo, address }: SummaryProps) => {
   const values: FormValues = form.getValues();
   const getFormValues = mapFormValues(values);
 
@@ -38,6 +45,20 @@ const Summary = ({ form }: SummaryProps) => {
 
     if (!isSuccessful) {
       errorMessage = 'Insufficient balance';
+    }
+
+    const isAccountActived = checkUserActived(userInfo);
+    if (!isAccountActived) {
+      errorMessage = 'Your account is inactive';
+    }
+
+    const isAccountNativeBalance = checkUserBalance(userInfo);
+    if (!isAccountNativeBalance) {
+      errorMessage = ' Insufficient XLM to make the transaction';
+    }
+
+    if (address === values.address) {
+      errorMessage = 'Sender and receiver are the same';
     }
   }
 

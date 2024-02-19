@@ -4,6 +4,8 @@ const calculateStreamAmounts = (
   startDate: number,
   endDate: number,
   cliffDate: number,
+  isCancalled: boolean,
+  withdrawn: string,
   amount: string,
 ) => {
   const currentDate = Math.round(new Date().getTime() / 1000);
@@ -19,6 +21,13 @@ const calculateStreamAmounts = (
     return {
       senderAmount: new BN(amount),
       receiverAmount: new BN(0),
+    };
+  }
+
+  if (isCancalled) {
+    return {
+      senderAmount: new BN(amount).minus(withdrawn),
+      receiverAmount: new BN(withdrawn),
     };
   }
 

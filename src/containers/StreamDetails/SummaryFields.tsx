@@ -5,8 +5,10 @@ import CPageCard from 'src/components/CPageCard';
 import CSummaryField from 'src/components/CSummaryField';
 import { IResponseStream } from 'src/models';
 import formatUnits from 'src/utils/formatUnits';
+import { shortenAddress } from 'src/utils/shortenAddress';
 
 import tokenLogo from 'public/images/token.svg';
+import dateToSeconds from 'src/utils/dateToSeconds';
 
 const options = {
   year: 'numeric',
@@ -26,7 +28,7 @@ const SummaryFields = ({ data, isCancellable }: SummaryFieldsProps) => {
   const cliffDate = new Date(data.cliff_date * 1000);
   const streamAmount = formatUnits(data.amount, data.token.decimals);
 
-  const isCliffed = cliffDate === startDate;
+  const isCliffed = dateToSeconds(cliffDate) !== dateToSeconds(startDate);
 
   const summaryTitle = (
     <div className="w-full flex justify-between items-center pb-4 pl-4">
@@ -52,20 +54,31 @@ const SummaryFields = ({ data, isCancellable }: SummaryFieldsProps) => {
     <div className="w-full">
       <CPageCard title={summaryTitle} className="px-3 py-4 mb-4 w-full">
         <div className="grid gap-2 text-midnightBlue ">
-          <CSummaryField label="Total amount" value={totalAmountField} />
+          <CSummaryField label="Total amount" value={totalAmountField} fieldSize="large" />
           <CSummaryField
             label="Start date"
             value={startDate.toLocaleDateString('en-US', options)}
+            fieldSize="large"
           />
           {isCliffed && (
             <CSummaryField
               label="Cliff date"
               value={cliffDate.toLocaleDateString('en-US', options)}
+              fieldSize="large"
             />
           )}
 
-          <CSummaryField label="End date" value={endDate.toLocaleDateString('en-US', options)} />
-          <CSummaryField label="Cancellable" value={isCancellable ? 'Yes' : 'No'} />
+          <CSummaryField
+            label="End date"
+            value={endDate.toLocaleDateString('en-US', options)}
+            fieldSize="large"
+          />
+          <CSummaryField
+            label="Cancellable"
+            value={isCancellable ? 'Yes' : 'No'}
+            fieldSize="large"
+          />
+          <CSummaryField label="To" value={shortenAddress(data.receiver, 5)} fieldSize="large" />
         </div>
       </CPageCard>
     </div>

@@ -10,7 +10,7 @@ const nextConfig = {
     buildActivity: false,
   },
   images: {
-    domains: ['s3.coinmarketcap.com'],
+    domains: ['s3.coinmarketcap.com', 's2.coinmarketcap.com'],
   },
 };
 

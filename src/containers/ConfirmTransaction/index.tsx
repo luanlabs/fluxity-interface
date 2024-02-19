@@ -20,7 +20,12 @@ import { FLUXITY_CONTRACT } from 'src/constants/contracts';
 import toDecimals from 'src/utils/createStream/toDecimals';
 import approve from 'src/features/soroban/approve';
 import createStream from 'src/features/soroban/createStream';
-import { sendStreamId } from 'src/features/sendStreamId';
+import informCreatestreamAPI from 'src/features/informCreatestreamAPI';
+import CModalSuccess from 'src/components/CModalSuccess';
+import DoubleButtonModal from 'src/components/DoubleButtonModal';
+import SingleButtonModal from 'src/components/SingleButtonModal';
+import humanizeAmount from 'src/utils/humanizeAmount';
+import { ExternalPages } from 'src/constants/externalPages';
 
 interface ConfirmTransactions {
   isConfirm: boolean;
@@ -166,7 +171,7 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
         return;
       }
 
-      await sendStreamId(scValToNative(finalize?.returnValue).toString());
+      await informCreatestreamAPI(scValToNative(finalize?.returnValue).toString());
 
       setStreamDetails({
         hash: tx.hash,
@@ -192,6 +197,23 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
     totalAmount = calculateTotalAmount(values).toFixed(3).toString();
   } catch (e) {}
 
+  const ModalButton = (
+    <DoubleButtonModal
+      buttonText="View Stream Details"
+      closeOnClick={handleCloseTransactionSuccessModal}
+      stream={streamDetails}
+    />
+  );
+
+  const ConfirmSuccessButton = (
+    <SingleButtonModal
+      buttonText="Create Stream"
+      buttonVariant="form"
+      logoColor="#fff"
+      onClick={handleCreateStreamConfirmClick}
+    />
+  );
+
   return (
     <div>
       <ApproveFormModal
@@ -213,15 +235,6 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
         setIsOpen={setIsSendingApproveTxModalOpen}
       />
 
-      <CreateStreamConfirmModal
-        from={address}
-        to={values.address}
-        amount={totalAmount}
-        isOpen={isCreateStreamConfirmModalOpen}
-        setIsOpen={setIsCreateStreamConfirmModalOpen}
-        onClick={handleCreateStreamConfirmClick}
-      />
-
       <CProcessModal
         title="Waiting for transaction confirmation"
         isOpen={isWalletLoadingConfirmModalOpen}
@@ -234,12 +247,25 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
         setIsOpen={setIsSendingCreateStreamTxModalOpen}
       />
 
-      <TransactionSuccessModal
+      <CModalSuccess
+        successLogoColor="green"
         title="Transaction Successful"
+        explorerLink={ExternalPages.EXPLORER + '/transactions/' + streamDetails.hash}
         isOpen={isCreateStreamResultModalOpen}
         setIsOpen={setIsCreateStreamResultModalOpen}
-        stream={streamDetails}
-        closeOnClick={handleCloseTransactionSuccessModal}
+        ButtonPart={ModalButton}
+      />
+
+      <CModalSuccess
+        successLogoColor="black"
+        title="You can now complete your transaction."
+        from={address}
+        to={values.address}
+        amount={humanizeAmount(totalAmount).toString()}
+        amountTitle="Total Amount"
+        isOpen={isCreateStreamConfirmModalOpen}
+        setIsOpen={setIsCreateStreamConfirmModalOpen}
+        ButtonPart={ConfirmSuccessButton}
       />
     </div>
   );

@@ -1,9 +1,15 @@
 import dateToSeconds from '../utils/dateToSeconds';
 
-const isStreamCancellable = (endDate: number, cancellableDate: number, isCancelled: boolean) => {
+export const isStreamCancellable = (endDate: number, cancellableDate: number) => {
+  return cancellableDate !== endDate;
+};
+
+export const isStreamCancelledStatus = (
+  endDate: number,
+  cancellableDate: number,
+  isCancelled: boolean,
+) => {
   const currentDate = dateToSeconds(new Date());
 
   return endDate > currentDate && cancellableDate < currentDate && !isCancelled;
 };
-
-export default isStreamCancellable;
