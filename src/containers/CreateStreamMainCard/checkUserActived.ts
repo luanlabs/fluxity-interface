@@ -12,7 +12,7 @@ export const checkUserActived = (token: UserInfo) => {
 };
 
 export const checkUserBalance = (token: UserInfo) => {
-  if (Number(token.balance) < 3) {
+  if (Number(token.balance) < 2) {
     return false;
   }
 
