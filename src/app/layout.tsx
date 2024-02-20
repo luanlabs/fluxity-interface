@@ -78,6 +78,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="rating" content="General" />
         <meta name="revisit-after" content="7 days" />
         <meta name="subtitle" content="Unlock New Payment Possibilities" />
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/react-spring-bottom-sheet/dist/style.css"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className="bg-alabaster">
         <Provider store={store}>

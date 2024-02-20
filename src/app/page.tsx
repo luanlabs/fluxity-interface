@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import CPageCard from 'src/components/CPageCard';
 import FaqCard from 'src/containers/FaqCard';
 import WelcomeToFluxityCard from 'src/containers/WelcomeToFluxityCard';
-import ClaimTokenCard from 'src/containers/ClaimTokensCard';
+import ClaimTokenCard from 'src/containers/ClaimTokens';
 
 export const metadata: Metadata = {
   title: 'Fluxity - Home',

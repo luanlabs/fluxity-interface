@@ -1,9 +1,10 @@
 'use Client';
 
+import Link from 'next/link';
+
+import useIsActive from './useIsActive';
 import CareRight from 'src/assets/CareRight';
 import { CNavLinkProps as Type } from 'src/constants/types';
-import useIsActive from './useIsActive';
-import Link from 'next/link';
 
 const CNavLink = ({ title, icon, activeIcon, url, isMinimized }: Type) => {
   const isActive = useIsActive(url);

@@ -5,6 +5,13 @@ export type CLinkProps = {
   title: string;
 };
 
+export type CModalProps = {
+  isOpen: boolean;
+  setIsOpen: (_: boolean) => void;
+  title: string;
+  message?: string;
+};
+
 export interface CNavLinkProps {
   url: string;
   title: string;

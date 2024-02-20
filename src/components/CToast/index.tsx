@@ -18,7 +18,7 @@ const toastStyle = {
 
 const toast = (variant: 'error' | 'success', message: string) => {
   t(
-    <div className="flex items-center justify-between w-full">
+    <div className="flex items-center justify-between w-full z-[9999]">
       <div className="items-center">
         <Image
           src={variant === 'error' ? errorLogo : successLogo}

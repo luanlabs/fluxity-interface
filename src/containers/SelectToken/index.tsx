@@ -54,7 +54,7 @@ const SelectToken = ({ onChange, className }: SelectTokenProps) => {
 
   return (
     <div className={`${className}`}>
-      <CLabel label="Token" htmlFor={id} />
+      <CLabel label="Token" htmlFor={id} tooltipTitle="Token" />
 
       <button
         className="flex justify-between w-full items-center h-14 px-4 text-lg text-mutedBlue rounded-xl bg-[#f5f5f5]"

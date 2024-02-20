@@ -21,7 +21,7 @@ const FaqCard = () => {
   return (
     <CCard
       borderColor="#0000001A"
-      className="relative bg-white p-[19.6px] h-[238px] mobile:h-[208px] w-1/2 mobile:w-full"
+      className="relative bg-white p-[19.6px] short:h-[200px] h-[238px] mobile:h-[208px] w-1/2 mobile:w-full"
     >
       <h1 className="font-medium text-2xl mobile:text-lg">Frequently Asked Questions</h1>
 

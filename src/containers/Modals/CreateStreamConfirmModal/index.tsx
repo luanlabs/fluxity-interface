@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 import CCard from 'src/components/CCard';
-import CModal from 'src/components/CModal';
+import CModal from 'src/components/CDialog';
 import CButton from 'src/components/CButton';
 import CPageCard from 'src/components/CPageCard';
 import humanizeAmount from 'src/utils/humanizeAmount';

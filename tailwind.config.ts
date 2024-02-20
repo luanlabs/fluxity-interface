@@ -69,6 +69,7 @@ const config: Config = {
         '3xl': { min: '3200px', max: '7800px' },
         '4xl': { min: '7500px', max: '10000px' },
         tall: { raw: '(min-height: 933px)' },
+        short: { raw: '(max-height: 710px)' },
       },
       backgroundImage: {
         calendar: "url('/images/calendar.svg')",
