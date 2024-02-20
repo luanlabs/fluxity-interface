@@ -20,5 +20,8 @@ export const CreateStreamConfirm: Story = {
   args: {
     isOpen: true,
     setIsOpen: true,
+    from: 'from',
+    to: 'to',
+    amount: '1000',
   },
 };

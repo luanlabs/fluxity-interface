@@ -1,9 +1,9 @@
 import fetch from 'src/utils/request';
 import { ExternalPages } from 'src/constants/externalPages';
 
-export const sendStreamId = async (id: string) => {
+const informWithdrawAPI = async (id: string) => {
   await fetch(ExternalPages.FLUXITY_API + '/testnet/stream', {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -12,3 +12,5 @@ export const sendStreamId = async (id: string) => {
     }),
   });
 };
+
+export default informWithdrawAPI;

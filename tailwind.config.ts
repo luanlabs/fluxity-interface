@@ -56,9 +56,12 @@ const config: Config = {
       },
       screens: {
         sm: { max: '767px' },
+        lowTablet: { min: '500px', max: '767px' },
         md: { min: '768px', max: '1023px' },
+        md2: { min: '900px', max: '1023px' },
         mobile: { max: '1023px' },
         desktop: { min: '1024px' },
+        'fix-box': { min: '1023px', max: '1260px' },
         lg: { min: '1024px', max: '1279px' },
         xl: { min: '1280px', max: '1535px' },
         xxl: { min: '1536px' },

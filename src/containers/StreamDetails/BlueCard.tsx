@@ -21,6 +21,7 @@ interface BlueCardProps {
   endDate: number;
   amount: string;
   token: string;
+  streamedAmount: string;
   onClick?: () => void;
   onCopyClick?: () => void;
 }
@@ -31,6 +32,7 @@ const BlueCard = ({
   startDate,
   endDate,
   amount,
+  streamedAmount,
   token,
   onClick,
 }: BlueCardProps) => {
@@ -44,7 +46,12 @@ const BlueCard = ({
   const calulateFlowRate = new BN(amount).times(rate).div(streamDuration);
   const flowRateToNumber = Math.round(Number(calulateFlowRate.toString()));
 
-  const completionPercentage = calculateCompletionPercentage(startDate, endDate);
+  const completionPercentage = calculateCompletionPercentage(
+    startDate,
+    endDate,
+    amount,
+    streamedAmount,
+  );
 
   return (
     <div className="w-[420px] mt-[32px]">

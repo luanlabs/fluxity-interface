@@ -1,12 +1,21 @@
 import BN from './BN';
 
-export const calculateCompletionPercentage = (start_date: number, end_date: number) => {
+export const calculateCompletionPercentage = (
+  start_date: number,
+  end_date: number,
+  amount?: string,
+  dynamicAmount?: string,
+) => {
   const currentDate = Date.now();
   const endDate = new Date(end_date).getTime() * 1000;
   const startDate = new Date(start_date).getTime() * 1000;
 
   if (currentDate < startDate) {
     return '0';
+  }
+
+  if (dynamicAmount && amount) {
+    return new BN(dynamicAmount).times(100).div(amount).toFixed(0);
   }
 
   if (currentDate >= endDate) {

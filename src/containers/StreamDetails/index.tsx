@@ -4,13 +4,14 @@
 'use client';
 import { useEffect, useState } from 'react';
 
+import { CancelAmounts } from 'src/models';
 import formatUnits from 'src/utils/formatUnits';
 import CPageCard from 'src/components/CPageCard';
-import isCancellable from 'src/features/isStreamCancellable';
 import { useAppSelector } from 'src/hooks/useRedux';
 import useGetStreamById from 'src/utils/getStreamById';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import CStreamStatusButton from 'src/components/CStreamStatusButton';
+import { isStreamCancellable, isStreamCancelledStatus } from 'src/features/isStreamCancellable';
 
 import Loading from './Loading';
 import BlueCard from './BlueCard';
@@ -19,6 +20,7 @@ import SummaryFields from './SummaryFields';
 import SenderStatusCard from './SenderStatusCard';
 import ReceiverStatusCard from './ReceiverStatusCard';
 import DynamicStreamedAmount from './DynamicStreamedAmount';
+import BN from 'src/utils/BN';
 
 interface StreamDetailsProps {
   id: string;
@@ -26,27 +28,44 @@ interface StreamDetailsProps {
 
 const StreamDetails = ({ id }: StreamDetailsProps) => {
   const address = useAppSelector((state) => state.user.address);
+
   const { loading, data, error } = useGetStreamById(id);
+
+  const [cancelAmounts, setCancelAmounts] = useState<CancelAmounts>({
+    senderAmount: 0,
+    receiverAmount: 0,
+  });
+
+  const [withdrawnAmount, setWithdrawnAmount] = useState(0);
+
+  const isStreamCancelled = cancelAmounts.senderAmount !== 0 || cancelAmounts.receiverAmount !== 0;
+
   const [sendStreamAmount, setSendStreamAmount] = useState(
-    calculateStreamAmounts(0, 0, 0, '0').receiverAmount,
+    calculateStreamAmounts(0, 0, 0, false, '0', '0').receiverAmount,
   );
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      if (data) {
-        setSendStreamAmount(
-          calculateStreamAmounts(
-            data.start_date,
-            data.end_date,
-            data.cliff_date,
-            formatUnits(data.amount, data.token.decimals),
-          ).receiverAmount,
-        );
-      }
-    }, 100);
+    let intervalId: NodeJS.Timer;
+
+    if (!isStreamCancelled) {
+      intervalId = setInterval(() => {
+        if (data) {
+          setSendStreamAmount(
+            calculateStreamAmounts(
+              data.start_date,
+              data.end_date,
+              data.cliff_date,
+              data.is_cancelled,
+              formatUnits(data.withdrawn, data.token.decimals),
+              formatUnits(data.amount, data.token.decimals),
+            ).receiverAmount,
+          );
+        }
+      }, 100);
+    }
 
     return () => clearInterval(intervalId);
-  }, [data]);
+  }, [data, isStreamCancelled]);
 
   if (loading) {
     return <Loading />;
@@ -56,7 +75,12 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
     return <p>error</p>;
   }
 
-  const cancellable = isCancellable(data.end_date, data.cancellable_date, data.is_cancelled);
+  const cancellable = isStreamCancellable(data.end_date, data.cancellable_date);
+  const cancelled = isStreamCancelledStatus(
+    data.end_date,
+    data.cancellable_date,
+    data.is_cancelled,
+  );
 
   const amount = formatUnits(data.amount, data.token.decimals);
   const withdraw = formatUnits(data.withdrawn, data.token.decimals);
@@ -64,10 +88,18 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
   const isSender = address === data.sender;
   const isReceiver = address === data.receiver;
 
+  const receiverAmount = new BN(
+    formatUnits(cancelAmounts.receiverAmount.toString(), data.token.decimals),
+  ).toFixed(3);
+
   const mainTitle = (
     <div className="w-full flex justify-between items-center pb-2">
       <h1 className="text-[24px] text-midnightBlue pl-2 mt-2">Stream #{data.id}</h1>
-      <CStreamStatusButton type={data.status} />
+      <CStreamStatusButton
+        type={data.status}
+        isCancelled={data.is_cancelled}
+        isStreamCancelled={isStreamCancelled}
+      />
     </div>
   );
 
@@ -86,15 +118,17 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
 
           <DynamicStreamedAmount
             token={data.token.symbol}
-            streamAmount={sendStreamAmount.toFixed(3)}
+            streamAmount={isStreamCancelled ? receiverAmount : sendStreamAmount.toFixed(3)}
+            isCancelled={data.is_cancelled}
           />
 
           <BlueCard
+            streamedAmount={sendStreamAmount.toString()}
             sender={data.sender}
             flowRate={data.rate}
             startDate={data.start_date}
             endDate={data.end_date}
-            amount={formatUnits(data.amount, data.token.decimals)}
+            amount={amount}
             token={data.token.symbol}
           />
         </section>
@@ -109,7 +143,14 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             startDate={data.start_date}
             endDate={data.end_date}
             cliffDate={data.cliff_date}
-            isCancellable={cancellable}
+            isCancelled={data.is_cancelled}
+            withdrawn={withdraw}
+            isCancellable={cancelled}
+            id={data.id}
+            token={data.token}
+            setCancellAmount={setCancelAmounts}
+            cancelAmount={cancelAmounts}
+            isStreamCancelled={isStreamCancelled}
           />
         )}
 
@@ -120,7 +161,14 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             cliffDate={data.cliff_date}
             amount={amount}
             withdrawn={withdraw}
+            isCancelled={data.is_cancelled}
             isCanellable={cancellable}
+            id={data.id}
+            token={data.token.symbol}
+            sender={data.sender}
+            withdrawnAmount={withdrawnAmount}
+            setWithdrawnAmount={setWithdrawnAmount}
+            decimalToken={data.token.decimals}
           />
         )}
       </div>
