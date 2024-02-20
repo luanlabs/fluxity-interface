@@ -15,7 +15,10 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <CPageCard className="w-full py-[23px] px-[27px] mobile:pt-3 mobile:px-5">
+    <CPageCard
+      className="w-full py-[23px] px-[27px] mobile:pt-3 mobile:px-5 mobile:mb-[50px]"
+      borderStatus="bordered"
+    >
       <WelcomeToFluxityCard />
       <p className="text-2xl font-medium my-[18px] mobile:my-3 ml-1">More with Fluxity</p>
       <div className="flex mobile:flex-col mobile:basis-full basis-1/2 w-full gap-4 mobile:gap-2">
