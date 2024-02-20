@@ -24,6 +24,10 @@ interface BlueCardProps {
   streamedAmount: string;
   onClick?: () => void;
   onCopyClick?: () => void;
+  setIsOpenCancelModal: (_: boolean) => void;
+  isStreamCancelled: boolean;
+  isCancelable: boolean;
+  isSender: boolean;
 }
 
 const BlueCard = ({
@@ -35,6 +39,10 @@ const BlueCard = ({
   streamedAmount,
   token,
   onClick,
+  setIsOpenCancelModal,
+  isCancelable,
+  isStreamCancelled,
+  isSender,
 }: BlueCardProps) => {
   const handleCopy = () => {
     copyText(sender);
@@ -46,6 +54,10 @@ const BlueCard = ({
   const calulateFlowRate = new BN(amount).times(rate).div(streamDuration);
   const flowRateToNumber = Math.round(Number(calulateFlowRate.toString()));
 
+  const handleCancelClick = () => {
+    setIsOpenCancelModal(true);
+  };
+
   const completionPercentage = calculateCompletionPercentage(
     startDate,
     endDate,
@@ -54,7 +66,7 @@ const BlueCard = ({
   );
 
   return (
-    <div className="w-[420px] mt-[32px]">
+    <div className="w-[420px] sm:w-full mt-[32px]">
       <CCard
         className="flex flex-col rounded-[20px] justify-center items-center w-full h-full px-3 py-4"
         bgColor="#3A21D4"
@@ -70,7 +82,7 @@ const BlueCard = ({
           </div>
         </div>
 
-        <div className="flex justify-between w-full mt-2 text-white overflow-hidden whitespace-nowrap items-center bg-darkOrchid h-[56px] px-4 text-base rounded-[10px]">
+        <div className="flex justify-between w-full mt-2 text-white overflow-hidden whitespace-nowrap items-center bg-darkOrchid h-[56px] sm:h-10 px-4 text-base rounded-[10px]">
           <span>Sender</span>
 
           <div className="flex">
@@ -98,6 +110,20 @@ const BlueCard = ({
           className="mt-3 !rounded-[10px]"
         />
       </CCard>
+      {isSender && (
+        <div className="w-full flex justify-center items-center desktop:hidden">
+          <CButton
+            variant="simple"
+            color="white"
+            content="Cancel Stream"
+            onClick={handleCancelClick}
+            disabled={!isCancelable || isStreamCancelled}
+            className={`mt-3 !rounded-[10px] border-none ${
+              (!isCancelable || isStreamCancelled) && '!text-softGray'
+            }`}
+          />
+        </div>
+      )}
     </div>
   );
 };
