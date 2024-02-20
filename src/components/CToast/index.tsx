@@ -5,13 +5,15 @@ import exitLight from '/public/images/exitLight.svg';
 import successLogo from '/public/images/success.svg';
 import errorLogo from '/public/images/error.svg';
 
+const isResponsive = window.innerWidth > 768;
+
 const toastStyle = {
   style: {
     padding: '16px',
     color: '#fff',
     backgroundColor: '#050142',
     width: 'auto',
-    minWidth: '550px',
+    minWidth: isResponsive ? '550px' : '200px',
   },
   duration: 2000,
 };
@@ -32,6 +34,7 @@ const toast = (variant: 'error' | 'success', message: string) => {
         <Image src={exitLight} width={0} height={0} alt="error" />
       </button>
     </div>,
+
     toastStyle,
   );
 };
