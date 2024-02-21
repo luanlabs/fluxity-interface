@@ -21,6 +21,7 @@ import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
 import withdrawStreamReturnValue from 'src/utils/soroban/withdrawStreamReturnValue';
 
 import withdrawLogo from '/public/images/withdrawSolid.svg';
+import whiteWithdrawLogo from '/public/images/whiteWithdraw.svg';
 import SingleButtonModal from 'src/components/SingleButtonModal';
 
 interface ReceiverStatusCardProps {
@@ -133,7 +134,7 @@ const ReceiverStatusCard = ({
   };
 
   const ReceiverStatusCardTitle = (
-    <div className="w-full flex justify-between items-center pb-4 pl-4">
+    <div className="w-full flex justify-between items-center pb-4 pl-4 sm:hidden">
       <h1 className="text-2xl text-midnightBlue">Status</h1>
       <CButton
         variant="simple"
@@ -161,14 +162,19 @@ const ReceiverStatusCard = ({
   const withdrawAmount = new BN(formatUnits(withdrawnAmount.toString(), decimalToken)).toFixed(3);
 
   return (
-    <div className="w-full">
-      <CPageCard title={ReceiverStatusCardTitle} className="px-3 py-4 mb-4 w-full">
+    <div className="w-full relative">
+      <CPageCard
+        title={ReceiverStatusCardTitle}
+        borderStatus="bordered"
+        className="px-3 py-4 mb-4 w-full"
+      >
         <div className="grid gap-2 text-midnightBlue">
           <CSummaryField label="Available" value={available.toFixed(3)} fieldSize="large" />
           <CSummaryField
             label="Withdrawn"
             value={new BN(totalWithdrawnAmount).toFixed(3)}
             fieldSize="large"
+            hideDivider
           />
         </div>
       </CPageCard>
@@ -191,6 +197,19 @@ const ReceiverStatusCard = ({
         setIsOpen={setIsWithdrawSuccessOpen}
         ButtonPart={ModalButton}
       />
+      <div className="fixed bottom-[80px] right-2 desktop:hidden md:hidden">
+        <CButton
+          variant="simple"
+          color="blue"
+          content="Withdraw"
+          disabled={withdrawable}
+          logo={whiteWithdrawLogo}
+          className={`!px-6 !py-8 h-[40px] rounded-2xl !text-[18px] font-medium tracking-wide !bg-royalBlue ${
+            withdrawable && '!text-softGray !border-softGray hover:!bg-transparent'
+          }`}
+          onClick={handleWithdrawClick}
+        />
+      </div>
     </div>
   );
 };

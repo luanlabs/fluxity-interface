@@ -31,7 +31,7 @@ const SummaryFields = ({ data, isCancellable }: SummaryFieldsProps) => {
   const isCliffed = dateToSeconds(cliffDate) !== dateToSeconds(startDate);
 
   const summaryTitle = (
-    <div className="w-full flex justify-between items-center pb-4 pl-4">
+    <div className="w-full flex justify-between items-center pb-4 pl-4 sm:hidden">
       <h1 className="text-2xl text-midnightBlue">Summary</h1>
     </div>
   );
@@ -52,7 +52,11 @@ const SummaryFields = ({ data, isCancellable }: SummaryFieldsProps) => {
 
   return (
     <div className="w-full">
-      <CPageCard title={summaryTitle} className="px-3 py-4 mb-4 w-full">
+      <CPageCard
+        title={summaryTitle}
+        borderStatus="bordered"
+        className="px-3 py-4 sm:pb-2 mb-4 w-full"
+      >
         <div className="grid gap-2 text-midnightBlue ">
           <CSummaryField label="Total amount" value={totalAmountField} fieldSize="large" />
           <CSummaryField
@@ -78,7 +82,12 @@ const SummaryFields = ({ data, isCancellable }: SummaryFieldsProps) => {
             value={isCancellable ? 'Yes' : 'No'}
             fieldSize="large"
           />
-          <CSummaryField label="To" value={shortenAddress(data.receiver, 5)} fieldSize="large" />
+          <CSummaryField
+            hideDivider
+            label="To"
+            value={shortenAddress(data.receiver, 5)}
+            fieldSize="large"
+          />
         </div>
       </CPageCard>
     </div>

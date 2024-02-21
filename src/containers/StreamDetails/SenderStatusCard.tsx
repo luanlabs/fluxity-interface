@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import BN from 'src/utils/BN';
 import timeout from 'src/utils/timeout';
@@ -29,11 +29,13 @@ interface SenderStatusCardProps {
   token: ITokenStream;
   isCancelled: boolean;
   withdrawn: string;
-  isCancellable: boolean;
+  isCancelable: boolean;
   id: string;
   setCancellAmount: (_: CancelAmounts) => void;
   cancelAmount: CancelAmounts;
   isStreamCancelled: boolean;
+  setIsOpenCancelModal: (_: boolean) => void;
+  isOpenCancelModal: boolean;
 }
 
 const SenderStatusCard = ({
@@ -44,11 +46,13 @@ const SenderStatusCard = ({
   token,
   isCancelled,
   withdrawn,
-  isCancellable,
+  isCancelable,
   id,
   setCancellAmount,
   cancelAmount,
   isStreamCancelled,
+  setIsOpenCancelModal,
+  isOpenCancelModal,
 }: SenderStatusCardProps) => {
   const address = useAppSelector((state) => state.user.address);
 
@@ -56,6 +60,16 @@ const SenderStatusCard = ({
   const [isCancelStreamConfirmOpen, setIsCancelStreamConfirmOpen] = useState(false);
   const [isReclamationModalOpen, setIsReclamationModalOpen] = useState(false);
   const [txHash, setTxHash] = useState('');
+
+  useEffect(() => {
+    if (isOpenCancelModal) {
+      setIsApprovalOpen(true);
+    }
+  }, [isOpenCancelModal]);
+
+  useEffect(() => {
+    setIsOpenCancelModal(false);
+  }, [isApprovalOpen]);
 
   const handleCancelClick = async () => {
     setIsApprovalOpen(true);
@@ -122,15 +136,15 @@ const SenderStatusCard = ({
   ).toFixed(3);
 
   const SenderStatusCardTitle = (
-    <div className="w-full flex justify-between items-center pb-4 pl-4">
+    <div className="w-full flex justify-between items-center pb-4 pl-4 sm:hidden">
       <h1 className="text-2xl text-midnightBlue">Status</h1>
       <CButton
         variant="simple"
         color="outline"
         content="Cancel Stream"
-        disabled={!isCancellable || isStreamCancelled}
+        disabled={!isCancelable || isStreamCancelled}
         className={`w-[146px] !py-2 h-[40px] text-[14px] ${
-          (!isCancellable || isStreamCancelled) &&
+          (!isCancelable || isStreamCancelled) &&
           '!text-softGray !border-softGray hover:!bg-transparent'
         }`}
         onClick={handleCancelClick}
@@ -148,10 +162,15 @@ const SenderStatusCard = ({
   );
 
   return (
-    <div className="w-full">
-      <CPageCard title={SenderStatusCardTitle} className="px-3 py-4 mb-4 w-full">
+    <div className="w-full sm:pb-4">
+      <CPageCard
+        title={SenderStatusCardTitle}
+        borderStatus="bordered"
+        className="px-3 py-4 mb-4 sm:pb-1 sm:mb-0 sm:pt-3 w-full"
+      >
         <div className="grid gap-2 text-midnightBlue">
           <CSummaryField
+            hideDivider
             label="Remaining amount"
             value={isStreamCancelled ? '0' : senderAmount}
             fieldSize="large"

@@ -8,12 +8,14 @@ interface CStreamStatusButtonProps {
   type: Status;
   isCancelled: boolean;
   isStreamCancelled: boolean;
+  className?: string;
 }
 
 const CStreamStatusButton = ({
   type,
   isCancelled,
   isStreamCancelled,
+  className,
 }: CStreamStatusButtonProps) => {
   const [status, setStatus] = useState('');
 
@@ -33,7 +35,13 @@ const CStreamStatusButton = ({
   }
 
   return (
-    <div className={cn('border rounded-[63px] px-4 py-2', statusStyle)}>
+    <div
+      className={cn(
+        'border rounded-[63px] px-4 py-2 flex items-center justify-center',
+        statusStyle,
+        className,
+      )}
+    >
       {capitalizeFirstLetter(status)}
     </div>
   );

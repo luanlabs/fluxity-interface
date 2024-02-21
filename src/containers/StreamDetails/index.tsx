@@ -37,6 +37,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
   });
 
   const [withdrawnAmount, setWithdrawnAmount] = useState(0);
+  const [isOpenCancelModal, setIsOpenCancelModal] = useState(false);
 
   const isStreamCancelled = cancelAmounts.senderAmount !== 0 || cancelAmounts.receiverAmount !== 0;
 
@@ -93,7 +94,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
   ).toFixed(3);
 
   const mainTitle = (
-    <div className="w-full flex justify-between items-center pb-2">
+    <div className="w-full flex justify-between items-center pb-2 sm:hidden">
       <h1 className="text-[24px] text-midnightBlue pl-2 mt-2">Stream #{data.id}</h1>
       <CStreamStatusButton
         type={data.status}
@@ -104,12 +105,23 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
   );
 
   return (
-    <div className="w-full flex gap-4 h-[87vh] 2xl:h-[69vh] 3xl:h-[43vh] 4xl:h-[26vh]">
+    <div className="w-full flex gap-4 md:gap-2 md:px-2 h-[87vh] 2xl:h-[69vh] 3xl:h-[43vh] 4xl:h-[26vh] md:h-[83vh] sm:flex-col sm:w-[90%] sm:m-auto">
+      <div className="w-full flex justify-between items-center desktop:hidden lg:hidden xl:hidden md:hidden px-1 mt-8">
+        <h1 className="text-[24px] text-midnightBlue pl-2">Stream #{data.id}</h1>
+        <CStreamStatusButton
+          className="!py-1 !px-3"
+          type={data.status}
+          isCancelled={data.is_cancelled}
+          isStreamCancelled={isStreamCancelled}
+        />
+      </div>
       <CPageCard
         divider
+        borderStatus="bordered"
         title={mainTitle}
-        className="w-full px-6 py-[15px] h-full"
+        className="w-full px-6 sm:px-2 py-[15px] h-full md:!w-[100%] md:px-3"
         childrenClassName="!pl-0"
+        dividerReponsiveClassName="sm:hidden"
       >
         <section className="flex flex-col items-center justify-center">
           <div className="flex justify-center mb-6 mt-8">
@@ -123,6 +135,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
           />
 
           <BlueCard
+            setIsOpenCancelModal={setIsOpenCancelModal}
             streamedAmount={sendStreamAmount.toString()}
             sender={data.sender}
             flowRate={data.rate}
@@ -130,11 +143,14 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             endDate={data.end_date}
             amount={amount}
             token={data.token.symbol}
+            isStreamCancelled={isStreamCancelled}
+            isCancelable={cancellable}
+            isSender={isSender}
           />
         </section>
       </CPageCard>
 
-      <div className="w-full">
+      <div className="w-full sm:pb-[100px]">
         {data && <SummaryFields isCancellable={cancellable} data={data} />}
 
         {isSender && (
@@ -145,12 +161,14 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             cliffDate={data.cliff_date}
             isCancelled={data.is_cancelled}
             withdrawn={withdraw}
-            isCancellable={cancelled}
+            isCancelable={cancelled}
             id={data.id}
             token={data.token}
             setCancellAmount={setCancelAmounts}
             cancelAmount={cancelAmounts}
             isStreamCancelled={isStreamCancelled}
+            setIsOpenCancelModal={setIsOpenCancelModal}
+            isOpenCancelModal={isOpenCancelModal}
           />
         )}
 
