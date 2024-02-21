@@ -21,8 +21,13 @@ interface BlueCardProps {
   endDate: number;
   amount: string;
   token: string;
+  streamedAmount: string;
   onClick?: () => void;
   onCopyClick?: () => void;
+  setIsOpenCancelModal: (_: boolean) => void;
+  isStreamCancelled: boolean;
+  isCancelable: boolean;
+  isSender: boolean;
 }
 
 const BlueCard = ({
@@ -31,8 +36,13 @@ const BlueCard = ({
   startDate,
   endDate,
   amount,
+  streamedAmount,
   token,
   onClick,
+  setIsOpenCancelModal,
+  isCancelable,
+  isStreamCancelled,
+  isSender,
 }: BlueCardProps) => {
   const handleCopy = () => {
     copyText(sender);
@@ -44,13 +54,22 @@ const BlueCard = ({
   const calulateFlowRate = new BN(amount).times(rate).div(streamDuration);
   const flowRateToNumber = Math.round(Number(calulateFlowRate.toString()));
 
-  const completionPercentage = calculateCompletionPercentage(startDate, endDate);
+  const handleCancelClick = () => {
+    setIsOpenCancelModal(true);
+  };
+
+  const completionPercentage = calculateCompletionPercentage(
+    startDate,
+    endDate,
+    amount,
+    streamedAmount,
+  );
 
   return (
-    <div className="w-[420px] mt-[32px]">
+    <div className="w-[420px] sm:w-full mt-[32px]">
       <CCard
         className="flex flex-col rounded-[20px] justify-center items-center w-full h-full px-3 py-4"
-        bgColor="royalBlue"
+        bgColor="#3A21D4"
         borderColor="rgba(0, 0, 0, 0.10)"
       >
         <div className="flex justify-between items-center w-full">
@@ -63,7 +82,7 @@ const BlueCard = ({
           </div>
         </div>
 
-        <div className="flex justify-between w-full mt-2 text-white overflow-hidden whitespace-nowrap items-center bg-[#442cd6] h-10 px-4 text-base rounded-[10px]">
+        <div className="flex justify-between w-full mt-2 text-white overflow-hidden whitespace-nowrap items-center bg-darkOrchid h-[56px] sm:h-10 px-4 text-base rounded-[10px]">
           <span>Sender</span>
 
           <div className="flex">
@@ -88,9 +107,23 @@ const BlueCard = ({
           content="Share"
           logo={shareLogo}
           onClick={onClick}
-          className="mt-3"
+          className="mt-3 !rounded-[10px]"
         />
       </CCard>
+      {isSender && (
+        <div className="w-full flex justify-center items-center desktop:hidden">
+          <CButton
+            variant="simple"
+            color="white"
+            content="Cancel Stream"
+            onClick={handleCancelClick}
+            disabled={!isCancelable || isStreamCancelled}
+            className={`mt-3 !rounded-[10px] border-none ${
+              (!isCancelable || isStreamCancelled) && '!text-softGray'
+            }`}
+          />
+        </div>
+      )}
     </div>
   );
 };

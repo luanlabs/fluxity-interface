@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 
-import BN from 'src/utils/BN';
 import CModal from 'src/components/CModal';
 import CInput from 'src/components/CInput';
 import CLabel from 'src/components/CLabel';
@@ -19,9 +18,10 @@ import humanizeAmount from 'src/utils/humanizeAmount';
 
 interface SelectTokenProps {
   onChange: (_: ISelectToken) => void;
+  className?: string;
 }
 
-const SelectToken = ({ onChange }: SelectTokenProps) => {
+const SelectToken = ({ onChange, className }: SelectTokenProps) => {
   const [selectedToken, setSelectedToken] = useState<null | IToken>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -53,11 +53,11 @@ const SelectToken = ({ onChange }: SelectTokenProps) => {
   );
 
   return (
-    <div>
-      <CLabel label="Token" htmlFor={id} />
+    <div className={`${className}`}>
+      <CLabel label="Token" htmlFor={id} tooltipTitle="Token" />
 
       <button
-        className="flex justify-between w-[218px] items-center h-14 px-4 text-lg text-mutedBlue rounded-xl bg-[#f5f5f5]"
+        className="flex justify-between w-full items-center h-14 px-4 text-lg text-mutedBlue rounded-xl bg-[#f5f5f5]"
         onClick={openModal}
         id={id}
       >

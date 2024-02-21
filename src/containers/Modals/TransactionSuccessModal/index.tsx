@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import CModal from 'src/components/CModal';
+import CModal from 'src/components/CDialog';
 import CButton from 'src/components/CButton';
 import { shortenAddress } from 'src/utils/shortenAddress';
 import { ExternalPages } from 'src/constants/externalPages';

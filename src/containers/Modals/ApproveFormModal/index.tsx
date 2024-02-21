@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import CModal from 'src/components/CModal';
+import CModal from 'src/components/CDialog';
 import CButton from 'src/components/CButton';
 
 import successLogo from 'public/images/successBlack.svg';

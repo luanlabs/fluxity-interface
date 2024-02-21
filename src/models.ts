@@ -8,6 +8,8 @@ export interface ISelectItem<T> {
   value: T;
 }
 
+export type Status = 'ongoing' | 'expired' | 'pending';
+
 export type ISelectItemString = ISelectItem<string>;
 
 export type Rates = keyof typeof rates;
@@ -49,7 +51,6 @@ export interface IFluxityAPIResponse<T> {
 }
 
 export interface ITokenStream {
-  _id: string;
   address: string;
   decimals: number;
   logo: string;
@@ -71,7 +72,18 @@ export interface IResponseStream {
   start_date: number;
   token: ITokenStream;
   withdrawn: string;
-  status: string;
+  status: Status;
 }
 
 export type IResponseStreamResult = IFluxityAPIResponse<IResponseStream>;
+
+export interface StreamDetailsIconProps {
+  fill: string;
+  arrowFill: string;
+  lineFill: string;
+}
+
+export type CancelAmounts = {
+  senderAmount: number;
+  receiverAmount: number;
+};

@@ -1,25 +1,20 @@
-import { scValToNative, Contract, Server, Address } from "soroban-client";
+import { Contract, SorobanRpc, Address, scValToBigInt } from 'stellar-sdk';
 
-import createTransaction from "../../utils/soroban/baseTransaction";
-// import getServer from "../getServer";
-// import ToScVal from "../scVal";
+import createTransaction from '../../utils/soroban/baseTransaction';
 
-export const getERC20Balance = async (
-  user: string,
-  contract: Contract
-): Promise<string> => {
-  // const server = getServer();
-  const server = new Server(String("https://rpc-futurenet.stellar.org"));
+export const getERC20Balance = async (user: string, contract: Contract): Promise<string> => {
+  const server = new SorobanRpc.Server('https://rpc-futurenet.stellar.org:443');
   const account = await server.getAccount(user);
 
   const addressScVal = Address.fromString(user).toScVal();
-  const call = contract.call("balance", addressScVal);
+  const call = contract.call('balance', addressScVal);
   const transactionResult = createTransaction(account, call);
 
   const txSimulate = await server.simulateTransaction(transactionResult);
-  const retval: bigint = scValToNative(Object(txSimulate).result.retval);
 
-  return retval.toString();
+  const value = scValToBigInt(txSimulate.result.retval);
+
+  return value.toString();
 };
 
 export default getERC20Balance;

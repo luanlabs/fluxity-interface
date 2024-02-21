@@ -15,9 +15,9 @@ const CancellableStream = ({ onChange, tooltipTitle, tooltipDetails }: Cancellab
   };
 
   return (
-    <div className="w-full flex items-center justify-between">
+    <div className="w-full flex items-center justify-between sm:mb-10">
       <div className="flex items-center">
-        <span className="text-[18px] text-darkBlue">Cancellable stream</span>
+        <span className="text-[18px] text-darkBlue sm:font-[500]">Cancellable stream</span>
         <CLabel tooltipDetails={tooltipDetails} tooltipTitle={tooltipTitle} />
       </div>
       <div className="flex items-center">

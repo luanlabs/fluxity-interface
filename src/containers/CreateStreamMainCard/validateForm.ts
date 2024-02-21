@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import BN from 'src/utils/BN';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 import { checkBalance } from 'src/utils/checkBalance';
 import { CustomError } from 'src/models';
 import { FormValues } from './index';
+import { UserInfo, checkUserActived } from './checkUserActived';
 
 type Validation = {
   address: CustomError;
@@ -14,9 +16,9 @@ const validateForm = (
   values: FormValues,
   setIsFormValidated: (_: boolean) => void,
   address: string,
+  user: UserInfo,
 ) => {
   const errors = {} as Validation;
-
   setIsFormValidated(false);
 
   if (
@@ -26,6 +28,15 @@ const validateForm = (
     new BN(values.rate?.amount).isZero() ||
     !values.endDate
   ) {
+    return {
+      values,
+      errors,
+    };
+  }
+
+  const isActiveAccount = checkUserActived(user);
+
+  if (!isActiveAccount) {
     return {
       values,
       errors,

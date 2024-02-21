@@ -3,16 +3,24 @@
 interface DynamicStreamedAmountProps {
   token: string;
   streamAmount: string;
+  isCancelled: boolean;
 }
 
-const DynamicStreamedAmount = ({ token, streamAmount }: DynamicStreamedAmountProps) => {
+const DynamicStreamedAmount = ({
+  token,
+  streamAmount,
+  isCancelled,
+}: DynamicStreamedAmountProps) => {
   return (
     <div className="flex flex-col items-center justify-center w-full">
-      <div className="text-[40px] flex justify-center w-[100%] gap-2">
+      <div className="text-[40px] flex justify-center w-[100%] gap-2 sm:font-medium">
         <div className="text-center">
-          <h2 className="text-[40px]">+{streamAmount}</h2>
+          <h2 className="text-[40px]">
+            {isCancelled ? '' : '+'}
+            {streamAmount}
+          </h2>
         </div>
-        <div className="w-[31%]">
+        <div>
           <p>{token}</p>
         </div>
       </div>
