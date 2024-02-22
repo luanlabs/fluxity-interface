@@ -58,15 +58,14 @@ const Transactions = () => {
   };
 
   return (
-    <>
-      <div className="relative inline-flex justify-between w-full mb-[17px]">
+    <div className="h-full">
+      <div className="desktop:relative inline-flex mobile:flex mobile:justify-center justify-between w-full mb-[17px]">
         <CStreamStatus onChange={setSelectedStatus} />
-        <div className="inline-flex gap-2">
+        <div className="desktop:inline-flex mobile:flex mobile:gap-0 desktop:gap-2">
           <Styled.Circle
             isopen={openSearch}
-            className={`${
-              openSearch ? 'bg-[#F5F5F5]' : ''
-            } hover:bg-[#f5f5f5] transition-colors duration-700`}
+            className={`mobile:absolute mobile:!w-14 mobile:!h-14 mobile:top-[72px] mobile:right-4 desktop:static mobile:!border-none 
+            ${openSearch ? 'bg-[#F5F5F5]' : ''} hover:bg-[#f5f5f5] transition-colors duration-700`}
           >
             <input
               placeholder="Search wallet address"
@@ -85,7 +84,7 @@ const Transactions = () => {
             />
           </Styled.Circle>
           <Styled.Circle
-            className={`${
+            className={`mobile:absolute mobile:!w-14 mobile:!h-14 mobile:bottom-20 mobile:right-4 desktop:static ${
               submittedForm && '!border-royalBlue bg-lavenderBlush'
             } hover:bg-lavenderBlush transition-all duration-700`}
           >
@@ -111,7 +110,7 @@ const Transactions = () => {
         filteredValues={filteredValues}
         searchValue={searchValue}
       />
-    </>
+    </div>
   );
 };
 

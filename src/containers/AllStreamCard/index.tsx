@@ -25,7 +25,7 @@ const AllStreamCard = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full mobile:hidden desktop:block">
       <CCard
         className={`relative h-[201px] mb-5 justify-between w-full ${
           isClosed ? 'hidden' : 'flex'

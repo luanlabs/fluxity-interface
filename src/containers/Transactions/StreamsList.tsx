@@ -64,17 +64,17 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
 
   if (isLoading && address) {
     return (
-      <div className="flex flex-col justify-center items-center w-full text-[#8F8F8F] font-medium">
+      <div className="flex flex-col mobile:h-[calc(100%-150px)] justify-center items-center w-full text-[#8F8F8F] font-medium">
         <div className="flex justify-center items-center h-12 w-12 rounded-full bg-midnightBlue mb-8">
           <Image src={rolling} alt="rolling" />
         </div>
         <p className="text-2xl">Loading Activity Data</p>
-        <p>Server is fetching your streams log, please wait.</p>
+        <p className="mobile:text-center">Server is fetching your streams log, please wait.</p>
       </div>
     );
   }
   return (
-    <div>
+    <div className="h-full">
       {filteredStreams.map((stream) => (
         <CCard
           className="my-1 rounded-[14px] h-[74px] inline-flex items-center 
@@ -137,7 +137,7 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
         </CCard>
       ))}
       {((!address && !isLoading) || !filteredStreams.length) && (
-        <div className="flex flex-col justify-center items-center w-full select-none">
+        <div className="flex flex-col mobile:h-[calc(100%-150px)] justify-center items-center w-full select-none">
           <Image src={noStreams} alt="icon" />
           <p className="font-medium text-2xl text-[#8F8F8F]">No {selectedStatus} Streams</p>
           <p className="mt-2 font-medium text-base text-[#8F8F8F] leading-4">
