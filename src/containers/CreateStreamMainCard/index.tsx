@@ -238,6 +238,7 @@ const CreateStream = () => {
               type="submit"
               variant="form"
               content="Create Stream"
+              svgLogo="fluxityLogo"
               fill={isFormCompleteValidation ? '#050142' : '#fff'}
               className={cn(
                 isFormCompleteValidation
@@ -266,6 +267,7 @@ const CreateStream = () => {
               type="submit"
               variant="form"
               content="Create Stream"
+              svgLogo="fluxityLogo"
               fill={isFormCompleteValidation ? '#050142' : '#fff'}
               className={
                 isFormCompleteValidation
