@@ -12,7 +12,7 @@ interface CPageCard {
   scroll?: boolean;
   childrenClassName?: string;
   borderStatus: CPageCardResponsive;
-  dividerReponsiveClassName?: string;
+  dividerResponsiveClassName?: string;
 }
 
 const CPageCard = ({
@@ -23,7 +23,7 @@ const CPageCard = ({
   scroll = false,
   childrenClassName,
   borderStatus,
-  dividerReponsiveClassName,
+  dividerResponsiveClassName,
   ...props
 }: CPageCard) => {
   let dividerStyle = '';
@@ -50,7 +50,7 @@ const CPageCard = ({
       {...props}
     >
       {title && <div className="w-full font-medium">{title}</div>}
-      {divider && <div className={cn(dividerStyle, dividerReponsiveClassName)} />}
+      {divider && <div className={cn(dividerStyle, dividerResponsiveClassName)} />}
       <div
         className={`${cn(padding, childrenClassName)} ${
           scroll && 'overflow-y-scroll h-full'
