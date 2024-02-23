@@ -20,6 +20,7 @@ import capitalize from 'src/utils/capitalizeFirstLetter';
 import { IFilterTokens } from 'src/constants/types';
 
 import getStatusStyles from './getStatusStyle';
+import isStreamWithdrawable from 'src/features/isStreamWithdrawable';
 
 type StreamListProps = {
   searchValue: string;
@@ -121,7 +122,7 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
                     src={coin}
                     alt="coin"
                     className={`${
-                      stream.status === StreamStatus.EXPIRED
+                      isStreamWithdrawable(stream)
                         ? 'mobile:block desktop:hidden bg-[#FFF59A] rounded-full mr-1'
                         : 'hidden'
                     }`}
@@ -153,7 +154,7 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
                   src={coin}
                   alt="coin"
                   className={`${
-                    stream.status === StreamStatus.EXPIRED
+                    isStreamWithdrawable(stream)
                       ? 'mobile:hidden desktop:block bg-[#FFF59A] rounded-full mr-1'
                       : 'hidden'
                   }`}

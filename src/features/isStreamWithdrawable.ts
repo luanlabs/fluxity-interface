@@ -1,21 +1,18 @@
+import { IStream } from 'src/constants/types';
 import dateToSeconds from '../utils/dateToSeconds';
+import { IResponseStream } from 'src/models';
 
-const isStreamWithdrawable = (
-  startDate: number,
-  endDate: number,
-  cliffDate: number,
-  amount: number,
-  withdrawn: number,
-  isCancelled: boolean,
-) => {
+const isStreamWithdrawable = ({
+  start_date,
+  cliff_date,
+  amount,
+  withdrawn,
+  is_cancelled,
+}: IStream | IResponseStream) => {
   const currentDate = dateToSeconds(new Date());
 
   return (
-    cliffDate < currentDate &&
-    startDate > currentDate &&
-    endDate > currentDate &&
-    !isCancelled &&
-    withdrawn < amount
+    cliff_date < currentDate && start_date < currentDate && !is_cancelled && withdrawn < amount
   );
 };
 

@@ -164,7 +164,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             isCancelable={cancelled}
             id={data.id}
             token={data.token}
-            setCancellAmount={setCancelAmounts}
+            setCancelAmount={setCancelAmounts}
             cancelAmount={cancelAmounts}
             isStreamCancelled={isStreamCancelled}
             setIsOpenCancelModal={setIsOpenCancelModal}
@@ -174,16 +174,8 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
 
         {isReceiver && (
           <ReceiverStatusCard
-            startDate={data.start_date}
-            endDate={data.end_date}
-            cliffDate={data.cliff_date}
-            amount={amount}
-            withdrawn={withdraw}
-            isCancelled={data.is_cancelled}
-            isCanellable={cancellable}
-            id={data.id}
+            stream={data}
             token={data.token.symbol}
-            sender={data.sender}
             withdrawnAmount={withdrawnAmount}
             setWithdrawnAmount={setWithdrawnAmount}
             decimalToken={data.token.decimals}

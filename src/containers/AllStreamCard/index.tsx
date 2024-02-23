@@ -41,7 +41,7 @@ const AllStreamCard = () => {
         />
         <div className="pl-[38px] pt-4 text-royalBlue">
           <h1 className="text-[28px] w-full font-medium">All stream are Here!</h1>
-          <p className="text-[15px] mt-[10px] mb-5">
+          <p className="text-[15px] lg:text-sm mt-[10px] mb-5">
             Keep all your present, future, and past streams under your touch. Enjoy secure,
             efficient, and user-friendly experience of token streaming.
           </p>
@@ -56,7 +56,7 @@ const AllStreamCard = () => {
             />
           </div>
         </div>
-        <Image src={cardLogo} alt="logo" width={650} />
+        <Image src={cardLogo} alt="logo" width={600} className="lg:w-[520px]" />
       </CCard>
     </div>
   );
