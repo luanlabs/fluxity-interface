@@ -27,6 +27,7 @@ const SummaryFields = ({ data, isCancellable }: SummaryFieldsProps) => {
   const endDate = new Date(data.end_date * 1000);
   const cliffDate = new Date(data.cliff_date * 1000);
   const streamAmount = formatUnits(data.amount, data.token.decimals);
+  const token = data.token.symbol === 'native' ? 'XLM' : data.token.symbol;
 
   const isCliffed = dateToSeconds(cliffDate) !== dateToSeconds(startDate);
 
@@ -39,7 +40,7 @@ const SummaryFields = ({ data, isCancellable }: SummaryFieldsProps) => {
   const totalAmountField = (
     <div className="flex items-center gap-1 font-medium">
       <p>{new BN(streamAmount).toFixed(3)}</p>
-      <p>{data.token.symbol}</p>
+      <p>{token}</p>
       <Image
         src={data.token.logo ? data.token.logo : tokenLogo}
         alt="logo"

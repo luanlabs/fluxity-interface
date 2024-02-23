@@ -31,7 +31,7 @@ interface SenderStatusCardProps {
   withdrawn: string;
   isCancelable: boolean;
   id: string;
-  setCancellAmount: (_: CancelAmounts) => void;
+  setCancelAmount: (_: CancelAmounts) => void;
   cancelAmount: CancelAmounts;
   isStreamCancelled: boolean;
   setIsOpenCancelModal: (_: boolean) => void;
@@ -48,7 +48,7 @@ const SenderStatusCard = ({
   withdrawn,
   isCancelable,
   id,
-  setCancellAmount,
+  setCancelAmount,
   cancelAmount,
   isStreamCancelled,
   setIsOpenCancelModal,
@@ -60,6 +60,8 @@ const SenderStatusCard = ({
   const [isCancelStreamConfirmOpen, setIsCancelStreamConfirmOpen] = useState(false);
   const [isReclamationModalOpen, setIsReclamationModalOpen] = useState(false);
   const [txHash, setTxHash] = useState('');
+
+  const tokenSymbol = token.symbol === 'native' ? 'XLM' : token.symbol;
 
   useEffect(() => {
     if (isOpenCancelModal) {
@@ -114,7 +116,7 @@ const SenderStatusCard = ({
     setIsReclamationModalOpen(false);
     await timeout(100);
     setIsCancelStreamConfirmOpen(true);
-    setCancellAmount(cancelStreamReturnValues(finalize));
+    setCancelAmount(cancelStreamReturnValues(finalize));
     informCancelAPI(id);
   };
 
@@ -194,7 +196,7 @@ const SenderStatusCard = ({
           tooltipDetails="This is the amount refunded to your wallet after stream cancellation."
           successLogoColor="green"
           title="Stream cancellation successful"
-          token={token.symbol}
+          token={tokenSymbol}
           amountTitle="Amount"
           amount={cancelledAmount}
           explorerLink={ExternalPages.EXPLORER + '/transactions/' + txHash}

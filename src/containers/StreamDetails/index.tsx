@@ -85,6 +85,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
 
   const amount = formatUnits(data.amount, data.token.decimals);
   const withdraw = formatUnits(data.withdrawn, data.token.decimals);
+  const token = data.token.symbol === 'native' ? 'XLM' : data.token.symbol;
 
   const isSender = address === data.sender;
   const isReceiver = address === data.receiver;
@@ -121,7 +122,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
         title={mainTitle}
         className="w-full px-6 sm:px-2 py-[15px] h-full md:!w-[100%] md:px-3"
         childrenClassName="!pl-0"
-        dividerReponsiveClassName="sm:hidden"
+        dividerResponsiveClassName="sm:hidden"
       >
         <section className="flex flex-col items-center justify-center">
           <div className="flex justify-center mb-6 mt-8">
@@ -129,7 +130,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
           </div>
 
           <DynamicStreamedAmount
-            token={data.token.symbol}
+            token={token}
             streamAmount={isStreamCancelled ? receiverAmount : sendStreamAmount.toFixed(3)}
             isCancelled={data.is_cancelled}
           />
@@ -142,7 +143,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             startDate={data.start_date}
             endDate={data.end_date}
             amount={amount}
-            token={data.token.symbol}
+            token={token}
             isStreamCancelled={isStreamCancelled}
             isCancelable={cancellable}
             isSender={isSender}
@@ -164,7 +165,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             isCancelable={cancelled}
             id={data.id}
             token={data.token}
-            setCancellAmount={setCancelAmounts}
+            setCancelAmount={setCancelAmounts}
             cancelAmount={cancelAmounts}
             isStreamCancelled={isStreamCancelled}
             setIsOpenCancelModal={setIsOpenCancelModal}
@@ -180,9 +181,8 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             amount={amount}
             withdrawn={withdraw}
             isCancelled={data.is_cancelled}
-            isCanellable={cancellable}
             id={data.id}
-            token={data.token.symbol}
+            token={token}
             sender={data.sender}
             withdrawnAmount={withdrawnAmount}
             setWithdrawnAmount={setWithdrawnAmount}
