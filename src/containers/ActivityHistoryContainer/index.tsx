@@ -11,7 +11,7 @@ const ActivityHistoryContainer = () => {
       divider
       borderStatus="borderless"
       className="py-[15px] px-5 h-full"
-      dividerResponsiveClassName="border-none"
+      dividerResponsiveClassName="mobile:border-none"
       childrenClassName="mobile:h-[calc(100vh-220px)]"
       title={<h1 className="text-2xl text-midnightBlue mb-[10px] mt-1 pl-2">Activity History</h1>}
     >

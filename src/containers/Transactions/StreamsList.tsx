@@ -9,8 +9,8 @@ import { useAppSelector } from 'src/hooks/useRedux';
 import { findTokenByAddress } from 'src/utils/findTokenByAddress';
 import humanizeAmount from 'src/utils/humanizeAmount';
 import { shortenAddress } from 'src/utils/shortenAddress';
-import getStatusStyles from './getStatusStyle';
 
+import coin from 'public/images/coin.svg';
 import divider from 'public/images/divider.svg';
 import noStreams from 'public/images/noStreams.svg';
 import rolling from 'public/images/rolling.svg';
@@ -18,6 +18,8 @@ import defaultToken from 'public/images/defaultToken.svg';
 
 import capitalize from 'src/utils/capitalizeFirstLetter';
 import { IFilterTokens } from 'src/constants/types';
+
+import getStatusStyles from './getStatusStyle';
 
 type StreamListProps = {
   searchValue: string;
@@ -42,24 +44,20 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
       stream.receiver.startsWith(searchValue.toUpperCase()) ||
       stream.sender.startsWith(searchValue.toUpperCase());
 
-    const matchesReceivedStreams = !filteredValues.showReceivedStreams || !stream.isSender;
+    let matchesFilter = true;
 
-    const matchesSentStreams = !filteredValues.showSentStreams || stream.isSender;
-
-    const matchesBothStreams =
-      !filteredValues.showSentStreams || !filteredValues.showReceivedStreams;
+    if (!filteredValues.showSentStreams && stream.isSender) {
+      matchesFilter = false;
+    }
+    if (!filteredValues.showReceivedStreams && !stream.isSender) {
+      matchesFilter = false;
+    }
 
     const matchesTokens =
       filteredValues.tokens.length === 0 ||
       filteredValues.tokens.some((token) => token.address === stream.token.address);
 
-    return (
-      matchesSearch &&
-      matchesReceivedStreams &&
-      matchesSentStreams &&
-      matchesBothStreams &&
-      matchesTokens
-    );
+    return matchesSearch && matchesFilter && matchesTokens;
   });
 
   if (isLoading && address) {
@@ -73,65 +71,114 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
       </div>
     );
   }
+
   return (
     <div className="h-full">
       {filteredStreams.map((stream) => (
         <CCard
-          className="my-1 rounded-[14px] h-[74px] inline-flex items-center 
-            w-full px-[15px] py-[14px] justify-between cursor-pointer hover:bg-[#f5f5f5] transition-all duration-700"
+          className="mobile:z-40 mobile:flex-col mobile:relative mobile:my-2 my-1 rounded-[14px] desktop:h-[74px] desktop:inline-flex items-center 
+            w-full desktop:px-[15px] desktop:py-[14px] mobile:p-2 mobile:pb-4 cursor-pointer hover:bg-[#f5f5f5] transition-all duration-700"
           borderColor="#0000001A"
           key={`stream-${stream.id}`}
           onClick={() => handleClick(stream.id)}
         >
-          <div className="inline-flex items-center">
+          <div className="desktop:inline-flex items-center">
             <CStreamType isSender={stream.isSender} streamStatus={stream.status} />
-            <div className={`flex gap-2 ${stream.isSender ? 'ml-8' : 'ml-4'} w-[160px]`}>
+            <hr className="desktop:hidden w-full" />
+            <div
+              className={`flex desktop:gap-2 ${
+                stream.isSender ? 'desktop:ml-8' : 'desktop:ml-4'
+              } desktop:w-[160px] mobile:justify-between mobile:bg-alabaster mobile:p-2 mobile:rounded-[10px] mobile:my-1`}
+            >
               <span
-                className={`text-transparentMidnightBlue ${stream.isSender && 'pr-5'} w-[100px]`}
+                className={`text-transparentMidnightBlue mobile:text-midnightBlue ${
+                  stream.isSender && 'pr-5'
+                } w-[100px]`}
               >
                 {stream.isSender ? 'To' : 'From'}
               </span>
               {shortenAddress(stream.sender === address ? stream.receiver : stream.sender, 4)}
             </div>
-            <div className="flex flex-row gap-5">
-              <Image
-                src={divider}
-                alt="divider"
-                className={`mx-5 ${stream.status === StreamStatus.PENDING ? 'hidden' : 'block'}`}
-              />
-              <span
-                className={`text-sm ${stream.status === StreamStatus.PENDING ? 'hidden' : 'block'}
-                  ${stream.status === StreamStatus.EXPIRED && 'flex items-center '}`}
-              >
-                {stream.status === StreamStatus.EXPIRED ? (
-                  <span className="text-base font-medium">Completed</span>
-                ) : (
-                  <>
-                    {stream.completionPercentage}% Completed
-                    <div className="w-[190px] bg-[#EBEBEB] rounded-full h-1 mt-1">
-                      <div
-                        className="bg-royalBlue rounded-full h-1"
-                        style={{
-                          width: stream.completionPercentage + '%',
-                        }}
-                      />
-                    </div>
-                  </>
-                )}
-              </span>
-            </div>
           </div>
-          <div className="flex items-center gap-[47px]">
+          <Image
+            src={divider}
+            alt="divider"
+            className={`mx-5  ${
+              stream.status === StreamStatus.PENDING ? 'hidden' : 'block'
+            } mobile:hidden`}
+          />
+          <div className="flex mobile:flex-col-reverse w-full desktop:justify-between items-center">
             <div
-              className={`select-none rounded-full px-4 py-0.5
-            ${getStatusStyles(stream.status)}`}
+              className={`text-sm mobile:w-full mobile:mt-5 ${
+                stream.status === StreamStatus.PENDING ? 'hidden' : 'block'
+              }
+                  ${stream.status === StreamStatus.EXPIRED && 'flex items-center'}`}
             >
-              {stream.status === StreamStatus.ONGOING ? 'Active' : capitalize(stream.status)}
+              {stream.status === StreamStatus.EXPIRED ? (
+                <div className="flex justify-between items-center w-full text-base font-medium">
+                  <p> Completed</p>
+                  <Image
+                    src={coin}
+                    alt="coin"
+                    className={`${
+                      stream.status === StreamStatus.EXPIRED
+                        ? 'mobile:block desktop:hidden bg-[#FFF59A] rounded-full mr-1'
+                        : 'hidden'
+                    }`}
+                  />
+                </div>
+              ) : (
+                <div className="mobile:flex mobile:flex-col-reverse mobile:gap-2 mobile:font-medium">
+                  <div className="mobile:ml-1"> {stream.completionPercentage}% Completed</div>
+                  <div className="desktop:w-[190px] mobile:!w-full bg-[#EBEBEB] rounded-full h-1 mt-1">
+                    <div
+                      className="bg-royalBlue rounded-full h-1"
+                      style={{
+                        width: stream.completionPercentage + '%',
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
-            <div className="flex items-center justify-end font-bold gap-2 w-[160px]">
-              <span> {humanizeAmount(stream.streamAmount)}</span>
-              <span> {findTokenByAddress(stream.token.address, tokens)}</span>
-              <Image src={stream.token.logo ? stream.token.logo : defaultToken} alt="icon" />
+            <div className="flex items-center mobile:w-full desktop:gap-[47px]">
+              <div className="flex gap-3">
+                <div
+                  className={`select-none rounded-full px-4 py-0.5 mobile:absolute mobile:top-4 mobile:right-4
+            ${getStatusStyles(stream.status)}`}
+                >
+                  {stream.status === StreamStatus.ONGOING ? 'Active' : capitalize(stream.status)}
+                </div>
+                <Image
+                  src={coin}
+                  alt="coin"
+                  className={`${
+                    stream.status === StreamStatus.EXPIRED
+                      ? 'mobile:hidden desktop:block bg-[#FFF59A] rounded-full mr-1'
+                      : 'hidden'
+                  }`}
+                />
+              </div>
+
+              <div
+                className="flex items-center desktop:justify-end desktop:font-bold gap-2 desktop:w-[160px]
+              mobile:justify-between mobile:bg-alabaster mobile:p-2 mobile:rounded-[10px] mobile:my-1 mobile:w-full"
+              >
+                <span className="desktop:hidden text-midnightBlue">Amount</span>
+                <div className="inline-flex gap-2 items-center">
+                  <span> {humanizeAmount(stream.streamAmount)}</span>
+                  <span> {findTokenByAddress(stream.token.address, tokens)}</span>
+                  <span>
+                    <Image
+                      src={stream.token.logo ? stream.token.logo : defaultToken}
+                      alt="icon"
+                      className="mobile:w-5 mobile:h-5"
+                      width={24}
+                      height={24}
+                    />
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </CCard>

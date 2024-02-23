@@ -2,7 +2,7 @@
 
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { IStreamHistory } from 'src/constants/types';
-import { AccountResponse } from 'stellar-sdk';
+import { AccountResponse } from 'stellar-sdk/lib/horizon';
 
 interface IUser {
   address: string;

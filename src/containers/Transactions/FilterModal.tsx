@@ -9,19 +9,22 @@ import close from 'public/images/whiteClose.svg';
 import searchLogo from 'public/images/search.svg';
 import { IFilterTokens } from 'src/constants/types';
 import defaultToken from 'public/images/defaultToken.svg';
+import CBottomSheet from 'src/components/CBottomSheet';
 
 type ModalProps = {
   open: boolean;
   closeModal: () => void;
-  handleSubmitFilter: (filteredValuesObject: IFilterTokens, selectedTokens: IToken[]) => void;
-  selectedTokenValue: IToken[];
-  setSelectedTokenValue: React.Dispatch<React.SetStateAction<IToken[]>>;
-  initialReceivedChecked: boolean;
   initialSentChecked: boolean;
+  selectedTokenValue: IToken[];
+  setIsOpen: (_: boolean) => void;
+  initialReceivedChecked: boolean;
+  setSelectedTokenValue: React.Dispatch<React.SetStateAction<IToken[]>>;
+  handleSubmitFilter: (filteredValuesObject: IFilterTokens, selectedTokens: IToken[]) => void;
 };
 
 const FilterModal = ({
   open,
+  setIsOpen,
   closeModal,
   handleSubmitFilter,
   selectedTokenValue,
@@ -70,6 +73,12 @@ const FilterModal = ({
     setInputValue(e.target.value);
   };
 
+  const handleClickInput = (e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setIsListVisible(true);
+  };
+
   const handleReceivedChange = () => {
     setReceivedChecked(!receivedChecked);
   };
@@ -108,14 +117,9 @@ const FilterModal = ({
     setSelectedTokenValue(filteredTokens);
   };
 
-  return (
-    <div
-      ref={modalRef}
-      className={`p-[12px] bg-red-white shadow shadow-[#00000014] rounded-xl ${
-        open ? `absolute top-16 right-4 w-[246px] z-50` : 'hidden'
-      }`}
-    >
-      <div className="relative flex justify-between items-center rounded-[10px] w-full h-10 p-4 bg-[#F5F5F5] gap-2">
+  const ModalContent = () => (
+    <>
+      <div className="relative mobile:mb-3 flex justify-between items-center rounded-[10px] w-full h-10 mobile:h-12 p-4 bg-[#F5F5F5] gap-2">
         <Image
           src={searchLogo}
           alt="search"
@@ -131,11 +135,10 @@ const FilterModal = ({
           autoComplete="off"
           value={inputValue}
           onChange={handleInputChange}
-          onClick={() => setIsListVisible(true)}
-          className={`h-9 w-[180px] focus:outline-none bg-[#F5F5F5]`}
+          onClick={handleClickInput}
+          className={`mobile:h-12 h-9 desktop:w-[180px] mobile:w-full focus:outline-none bg-[#F5F5F5]`}
         />
       </div>
-
       {isListVisible && (
         <ul
           ref={secondModalRef}
@@ -167,7 +170,6 @@ const FilterModal = ({
           ))}
         </ul>
       )}
-
       <div className={`${selectedTokenValue.length && 'mt-[19px]'} flex gap-1 flex-wrap`}>
         {selectedTokenValue.map((suggestion, index) => (
           <div
@@ -185,9 +187,8 @@ const FilterModal = ({
           </div>
         ))}
       </div>
-
       <form onSubmit={handleSubmit}>
-        <div className="flex flex-col py-[19px] select-none space-y-1">
+        <div className="flex flex-col py-[19px] select-none gap-2">
           <span className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -216,10 +217,31 @@ const FilterModal = ({
           content="Confirm"
           variant="simple"
           color="blue"
-          className="h-9 w-full bg-royalBlue text-white transition-colors duration-700 !rounded-[10px]"
+          className="desktop:h-9 mobile:mt-3 w-full bg-royalBlue text-white transition-colors duration-700 !rounded-[10px]"
         />
       </form>
-    </div>
+    </>
+  );
+
+  return (
+    <>
+      <div
+        ref={modalRef}
+        className={`mobile:hidden p-[12px] bg-white shadow shadow-[#00000014] rounded-xl ${
+          open ? `absolute top-16 right-4 w-[246px] z-50` : 'hidden'
+        }`}
+      >
+        <ModalContent />
+      </div>
+      <CBottomSheet
+        isOpen={open}
+        setIsOpen={setIsOpen}
+        className="desktop:!hidden"
+        contentClass="p-4 pt-0"
+      >
+        <ModalContent />
+      </CBottomSheet>
+    </>
   );
 };
 

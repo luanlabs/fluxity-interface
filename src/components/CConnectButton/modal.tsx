@@ -37,7 +37,7 @@ const Modal = ({ open, address, closeModal, isMinimized, setIsOpen }: ModalProps
   };
 
   const handleCopy = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
-    e.stopPropagation(); // Stop event propagation
+    e.stopPropagation();
     copyText(address);
     toast('success', 'Address copied successfully');
   };

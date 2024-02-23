@@ -121,7 +121,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
         title={mainTitle}
         className="w-full px-6 sm:px-2 py-[15px] h-full md:!w-[100%] md:px-3"
         childrenClassName="!pl-0"
-        dividerReponsiveClassName="sm:hidden"
+        dividerResponsiveClassName="sm:hidden"
       >
         <section className="flex flex-col items-center justify-center">
           <div className="flex justify-center mb-6 mt-8">
