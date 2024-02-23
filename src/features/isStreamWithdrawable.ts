@@ -1,4 +1,4 @@
-import dateToSeconds from '../utils/dateToSeconds';
+import dateToSeconds from 'src/utils/dateToSeconds';
 
 const isStreamWithdrawable = (
   startDate: number,
@@ -9,12 +9,13 @@ const isStreamWithdrawable = (
   isCancelled: boolean,
 ) => {
   const currentDate = dateToSeconds(new Date());
-
+  if (isCancelled) {
+    return false;
+  }
   return (
     cliffDate < currentDate &&
-    startDate > currentDate &&
+    startDate < currentDate &&
     endDate > currentDate &&
-    !isCancelled &&
     withdrawn < amount
   );
 };

@@ -26,21 +26,29 @@ const useGetStreamById = (id: string) => {
   });
 
   useEffect(() => {
-    getStreamById(id)
-      .then((stream) => {
-        setStreamData({
-          loading: false,
-          data: stream,
-          error: null,
-        });
-      })
-      .catch((error) =>
-        setStreamData({
-          loading: false,
-          data: null,
-          error: true,
-        }),
-      );
+    const data = () => {
+      getStreamById(id)
+        .then((stream) => {
+          setStreamData({
+            loading: false,
+            data: stream,
+            error: null,
+          });
+        })
+        .catch((error) =>
+          setStreamData({
+            loading: false,
+            data: null,
+            error: true,
+          }),
+        );
+    };
+
+    data();
+
+    const intervalId = setInterval(data, 3000);
+
+    return () => clearInterval(intervalId);
   }, [id]);
 
   return streamData;

@@ -31,7 +31,6 @@ interface ReceiverStatusCardProps {
   endDate: number;
   cliffDate: number;
   isCancelled: boolean;
-  isCanellable: boolean;
   id: string;
   token: string;
   sender: string;
@@ -46,19 +45,19 @@ const ReceiverStatusCard = ({
   startDate,
   endDate,
   cliffDate,
-  isCanellable,
+  isCancelled,
   id,
   setWithdrawnAmount,
   withdrawnAmount,
   decimalToken,
 }: ReceiverStatusCardProps) => {
   const address = useAppSelector((state) => state.user.address);
-  const [totalWithdrawnAmount, setTotalWithdrawnAmount] = useState(withdrawn);
-  const [availableAmount, setAvailableAmount] = useState(0);
   const [txHash, setTxHash] = useState('');
 
   const [approvalOpen, setIsApprovalOpen] = useState(false);
   const [withdrawSuccessOpen, setIsWithdrawSuccessOpen] = useState(false);
+
+  let totalWithdrawnAmount = withdrawn;
 
   const available = calculateStreamAmounts(
     startDate,
@@ -75,7 +74,7 @@ const ReceiverStatusCard = ({
     cliffDate,
     Number(amount),
     Number(withdrawn),
-    isCanellable,
+    isCancelled,
   );
 
   const handleWithdrawClick = async () => {
@@ -121,17 +120,16 @@ const ReceiverStatusCard = ({
     const withdrawFinalize = withdrawStreamReturnValue(finalize);
     setWithdrawnAmount(withdrawFinalize);
 
-    setAvailableAmount(0);
-    setTotalWithdrawnAmount(
-      new BN(formatUnits(withdrawFinalize, decimalToken))
-        .plus(new BN(totalWithdrawnAmount))
-        .toString(),
-    );
+    totalWithdrawnAmount = new BN(formatUnits(withdrawFinalize, decimalToken))
+      .plus(new BN(totalWithdrawnAmount))
+      .toString();
   };
 
   const handleModalButton = () => {
     setIsWithdrawSuccessOpen(false);
   };
+
+  console.log(withdrawable);
 
   const ReceiverStatusCardTitle = (
     <div className="w-full flex justify-between items-center pb-4 pl-4 sm:hidden">
@@ -140,10 +138,11 @@ const ReceiverStatusCard = ({
         variant="simple"
         color="outline"
         content="Withdraw"
-        disabled={withdrawable}
-        logo={withdrawLogo}
+        disabled={!withdrawable}
+        svgLogo="withdraw"
+        fill={!withdrawable ? '#9C9EA5' : 'royalBlue'}
         className={`!px-3 !py-2 h-[40px] ${
-          withdrawable && '!text-softGray !border-softGray hover:!bg-transparent'
+          !withdrawable && '!text-softGray !border-softGray hover:!bg-transparent'
         }`}
         onClick={handleWithdrawClick}
       />
@@ -169,7 +168,11 @@ const ReceiverStatusCard = ({
         className="px-3 py-4 mb-4 w-full"
       >
         <div className="grid gap-2 text-midnightBlue">
-          <CSummaryField label="Available" value={available.toFixed(3)} fieldSize="large" />
+          <CSummaryField
+            label="Available"
+            value={isCancelled ? '0' : available.toFixed(3)}
+            fieldSize="large"
+          />
           <CSummaryField
             label="Withdrawn"
             value={new BN(totalWithdrawnAmount).toFixed(3)}
@@ -202,10 +205,10 @@ const ReceiverStatusCard = ({
           variant="simple"
           color="blue"
           content="Withdraw"
-          disabled={withdrawable}
+          disabled={!withdrawable}
           logo={whiteWithdrawLogo}
-          className={`!px-6 !py-8 h-[40px] rounded-2xl !text-[18px] font-medium tracking-wide !bg-royalBlue ${
-            withdrawable && '!text-softGray !border-softGray hover:!bg-transparent'
+          className={`!px-6 !py-8 h-[40px] rounded-xl !text-[18px] font-medium tracking-wide !bg-royalBlue hover:!bg-darkPurple shadow-xl ${
+            !withdrawable && '!text-softGray !border-softGray hover:!bg-transparent'
           }`}
           onClick={handleWithdrawClick}
         />
