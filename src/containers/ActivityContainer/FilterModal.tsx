@@ -47,9 +47,6 @@ const FilterModal = ({
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         closeModal();
       }
-      // if (secondModalRef.current && !secondModalRef.current.contains(event.target as Node)) {
-      //   setIsListVisible(false);
-      // }
     };
 
     if (open) {
