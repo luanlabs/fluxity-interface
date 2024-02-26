@@ -121,7 +121,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
         title={mainTitle}
         className="w-full px-6 sm:px-2 py-[15px] h-full md:!w-[100%] md:px-3"
         childrenClassName="!pl-0"
-        dividerReponsiveClassName="sm:hidden"
+        dividerResponsiveClassName="sm:hidden"
       >
         <section className="flex flex-col items-center justify-center">
           <div className="flex justify-center mb-6 mt-8">
@@ -164,7 +164,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             isCancelable={cancelled}
             id={data.id}
             token={data.token}
-            setCancellAmount={setCancelAmounts}
+            setCancelAmount={setCancelAmounts}
             cancelAmount={cancelAmounts}
             isStreamCancelled={isStreamCancelled}
             setIsOpenCancelModal={setIsOpenCancelModal}
@@ -180,7 +180,6 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             amount={amount}
             withdrawn={withdraw}
             isCancelled={data.is_cancelled}
-            isCanellable={cancellable}
             id={data.id}
             token={data.token.symbol}
             sender={data.sender}

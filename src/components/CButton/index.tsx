@@ -4,7 +4,9 @@ import Image from 'next/image';
 
 import buttonCustomStyles from './buttonCustomStyles';
 import FluxityLogoButton from 'src/assets/FluxityLogoButton';
+import WithdrawLogo from 'src/assets/withdrawLogo';
 
+export type CButtonSvgLogoType = 'fluxityLogo' | 'withdraw';
 export type CButtonVariantType = 'simple' | 'form';
 export type CButtonColorType =
   | 'orange'
@@ -24,6 +26,7 @@ interface ButtonProps {
   className?: string;
   fill?: string;
   logo?: string;
+  svgLogo?: CButtonSvgLogoType;
   onClick?: () => void;
 }
 
@@ -37,6 +40,7 @@ const CButton = ({
   content,
   fill,
   logo,
+  svgLogo,
   ...props
 }: ButtonProps) => {
   return (
@@ -47,9 +51,13 @@ const CButton = ({
       {...props}
       onClick={onClick}
     >
-      {fill && (
+      {svgLogo && (
         <div className="mr-[10px]">
-          <FluxityLogoButton fill={fill} />
+          {svgLogo === 'fluxityLogo' ? (
+            <FluxityLogoButton fill={fill} />
+          ) : (
+            <WithdrawLogo fill={fill} />
+          )}
         </div>
       )}
       {logo && (
