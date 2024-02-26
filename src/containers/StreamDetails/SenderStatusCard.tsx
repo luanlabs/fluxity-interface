@@ -61,8 +61,6 @@ const SenderStatusCard = ({
   const [isReclamationModalOpen, setIsReclamationModalOpen] = useState(false);
   const [txHash, setTxHash] = useState('');
 
-  const tokenSymbol = token.symbol === 'native' ? 'XLM' : token.symbol;
-
   useEffect(() => {
     if (isOpenCancelModal) {
       setIsApprovalOpen(true);
@@ -196,7 +194,7 @@ const SenderStatusCard = ({
           tooltipDetails="This is the amount refunded to your wallet after stream cancellation."
           successLogoColor="green"
           title="Stream cancellation successful"
-          token={tokenSymbol}
+          token={token.symbol}
           amountTitle="Amount"
           amount={cancelledAmount}
           explorerLink={ExternalPages.EXPLORER + '/transactions/' + txHash}

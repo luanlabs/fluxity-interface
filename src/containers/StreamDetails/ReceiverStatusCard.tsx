@@ -129,8 +129,6 @@ const ReceiverStatusCard = ({
     setIsWithdrawSuccessOpen(false);
   };
 
-  console.log(withdrawable);
-
   const ReceiverStatusCardTitle = (
     <div className="w-full flex justify-between items-center pb-4 pl-4 sm:hidden">
       <h1 className="text-2xl text-midnightBlue">Status</h1>

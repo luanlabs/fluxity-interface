@@ -85,7 +85,6 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
 
   const amount = formatUnits(data.amount, data.token.decimals);
   const withdraw = formatUnits(data.withdrawn, data.token.decimals);
-  const token = data.token.symbol === 'native' ? 'XLM' : data.token.symbol;
 
   const isSender = address === data.sender;
   const isReceiver = address === data.receiver;
@@ -130,7 +129,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
           </div>
 
           <DynamicStreamedAmount
-            token={token}
+            token={data.token.symbol}
             streamAmount={isStreamCancelled ? receiverAmount : sendStreamAmount.toFixed(3)}
             isCancelled={data.is_cancelled}
           />
@@ -143,7 +142,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             startDate={data.start_date}
             endDate={data.end_date}
             amount={amount}
-            token={token}
+            token={data.token.symbol}
             isStreamCancelled={isStreamCancelled}
             isCancelable={cancellable}
             isSender={isSender}
@@ -182,7 +181,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             withdrawn={withdraw}
             isCancelled={data.is_cancelled}
             id={data.id}
-            token={token}
+            token={data.token.symbol}
             sender={data.sender}
             withdrawnAmount={withdrawnAmount}
             setWithdrawnAmount={setWithdrawnAmount}
