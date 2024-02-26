@@ -74,7 +74,7 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
   }
 
   return (
-    <div className="overflow-scroll desktop:min-h-[300px]">
+    <div className="overflow-scroll desktop:min-h-[200px]">
       {filteredStreams.map((stream) => (
         <CCard
           className="mobile:z-40 mobile:flex-col mobile:relative mobile:my-2 my-1 rounded-[14px] desktop:h-[74px] desktop:inline-flex items-center 
