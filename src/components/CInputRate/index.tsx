@@ -1,16 +1,15 @@
 import cn from 'classnames';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Select from 'react-select';
 
 import { RateValue } from 'src/models';
+import CInput from 'src/components/CInput';
 import flowRateOptions from 'src/constants/rates';
 import { forceInputNumber } from 'src/utils/forceInputNumber';
+import selectStyles from 'src/components/CInputRate/selectStyles';
 
 import arrowLogo from 'public/images/arrow.svg';
-
-import CInput from '../CInput';
-import selectStyles from './selectStyles';
 
 export type CInputRateValue = { amount: string; rate: RateValue };
 
@@ -23,6 +22,7 @@ interface CInputRateProps {
   error?: boolean;
   onChange: (values: CInputRateValue) => void;
   tooltipTitle: string;
+  value: CInputRateValue;
 }
 
 const DropdownIndicator = () => {
@@ -42,6 +42,7 @@ const CInputRate = ({
   errorMsg,
   error,
   tooltipTitle,
+  value,
   ...props
 }: CInputRateProps) => {
   const [inputValue, setInputValue] = useState('');
@@ -55,6 +56,13 @@ const CInputRate = ({
 
     setInputValue(e.target.value);
   };
+
+  useEffect(() => {
+    if (!value) {
+      setInputValue('');
+      setSelectValue(flowRateOptions[2]);
+    }
+  }, [value]);
 
   const handleSelectChange = (e: RateValue) => {
     onChange({

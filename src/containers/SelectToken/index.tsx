@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import CModal from 'src/components/CModal';
 import CInput from 'src/components/CInput';
@@ -19,12 +19,14 @@ import humanizeAmount from 'src/utils/humanizeAmount';
 interface SelectTokenProps {
   onChange: (_: ISelectToken) => void;
   className?: string;
+  value: ISelectToken;
 }
 
-const SelectToken = ({ onChange, className }: SelectTokenProps) => {
-  const [selectedToken, setSelectedToken] = useState<null | IToken>(null);
+const SelectToken = ({ onChange, className, value }: SelectTokenProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [selectedToken, setSelectedToken] = useState<null | IToken>(null);
+
   const id = useCustomID('selectToken');
   const tokens = useAppSelector((store) => store.tokens);
 
@@ -47,6 +49,13 @@ const SelectToken = ({ onChange, className }: SelectTokenProps) => {
   const openModal = () => {
     setIsOpen(true);
   };
+
+  useEffect(() => {
+    if (!value) {
+      setSelectedToken(null);
+      setSearchValue('');
+    }
+  }, [value]);
 
   const filteredTokens = tokens.filter((token) =>
     token.symbol.toLowerCase().startsWith(searchValue.toLowerCase()),

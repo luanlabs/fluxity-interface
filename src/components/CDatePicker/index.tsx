@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 
 import cn from 'classnames';
 import DatePicker from 'react-datepicker';
@@ -29,12 +29,19 @@ const CDatePicker = ({
   readonly,
   tooltipDetails,
   tooltipTitle,
+  value,
 }: CDatePickerProps) => {
   const id = useCustomID('CDatePicker');
   const [selectedDate, setSelectedDate] = useState(minDate || new Date());
   const [isDatePickerUsed, setIsDatePickerUsed] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    if (!value) {
+      setIsDatePickerUsed(false);
+    }
+  }, [value]);
 
   const handleChange = (value: Date) => {
     setIsOpen(!isOpen);

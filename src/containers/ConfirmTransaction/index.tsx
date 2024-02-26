@@ -31,9 +31,10 @@ interface ConfirmTransactions {
   isConfirm: boolean;
   setIsConfirm: (_: boolean) => void;
   form: UseFormReturn<any, undefined>;
+  resetField: () => void;
 }
 
-const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactions) => {
+const ConfirmTransaction = ({ isConfirm, setIsConfirm, form, resetField }: ConfirmTransactions) => {
   const address = useAppSelector((state) => state.user.address);
   const values: FormValues = form.getValues();
 
@@ -188,6 +189,8 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
   };
 
   const handleCloseTransactionSuccessModal = () => {
+    resetField();
+
     setIsCreateStreamResultModalOpen(false);
   };
 

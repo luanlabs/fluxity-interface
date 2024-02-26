@@ -35,8 +35,8 @@ export interface FormValues {
 const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');
 
 const CreateStream = () => {
-  const [isFormValidated, setIsFormValidated] = useState(false);
   const [isConfirm, setIsConfirm] = useState(false);
+  const [isFormValidated, setIsFormValidated] = useState(false);
 
   const { address } = useAppSelector((state) => state.user);
   const usrInfo = useAppSelector((state) => state.user?.info?.balances[0]);
@@ -67,6 +67,15 @@ const CreateStream = () => {
   watch(['startDate', 'endDate', 'cliffDate', 'rate', 'token', 'address']);
 
   const onSubmit = (data: FormValues) => {};
+
+  const shouldBeResetField = () => {
+    form.resetField('address');
+    form.resetField('token');
+    form.resetField('startDate');
+    form.resetField('endDate');
+    form.resetField('cliffDate');
+    form.resetField('rate');
+  };
 
   const handleOpenModals = () => {
     setIsConfirm(true);
@@ -279,7 +288,12 @@ const CreateStream = () => {
         </div>
       </div>
 
-      <ConfirmTransaction form={form} isConfirm={isConfirm} setIsConfirm={setIsConfirm} />
+      <ConfirmTransaction
+        form={form}
+        isConfirm={isConfirm}
+        setIsConfirm={setIsConfirm}
+        resetField={shouldBeResetField}
+      />
     </form>
   );
 };
