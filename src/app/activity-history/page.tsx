@@ -19,7 +19,7 @@ const ActivityHistory = () => {
       divider
       scroll
       borderStatus="borderless"
-      className="py-[15px] px-5 mobile:h-[85vh]"
+      className="py-[15px] px-5 mobile:h-[85vh] h-[100%]"
       dividerResponsiveClassName="mobile:border-none"
       title={<h1 className="text-2xl text-midnightBlue mb-[10px] mt-1 pl-2">Activity History</h1>}
     >

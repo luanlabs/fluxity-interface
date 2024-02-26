@@ -3,31 +3,19 @@ import React, { useEffect } from 'react';
 import formatUnits from 'src/utils/formatUnits';
 import { loadTokens } from 'src/reducers/tokens';
 import { IStreamHistory } from 'src/constants/types';
-import { loadStreamHistory, setAddress } from 'src/reducers/user';
+import { loadStreamHistory } from 'src/reducers/user';
 import getStreamList from 'src/features/getStreamList';
 import { getTokenList } from 'src/features/getTokenList';
 import getTokenBalances from 'src/features/getTokenBalances';
 import { useAppDispatch, useAppSelector } from 'src/hooks/useRedux';
 import { calculateCompletionPercentage } from 'src/utils/calculateCompletionPercentage';
-import { isConnected, getPublicKey } from '@stellar/freighter-api';
+import useConnectWallet from 'src/hooks/useConnectWallet';
 
 const AppDataFetch = () => {
+  useConnectWallet();
   const dispatch = useAppDispatch();
   const tokens = useAppSelector((state) => state.tokens);
   const address = useAppSelector((state) => state.user.address);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const connected = await isConnected();
-
-      if (connected) {
-        const address = await getPublicKey();
-        dispatch(setAddress(address));
-      }
-    };
-
-    fetchData();
-  }, [dispatch, tokens]);
 
   useEffect(() => {
     if (!tokens.length) {

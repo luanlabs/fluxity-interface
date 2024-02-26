@@ -53,12 +53,11 @@ const Transactions = () => {
     setFilteredValues(filters);
     setSubmittedForm(!isDefaultFilters);
     setSelectedTokenValue(selectedTokens);
-
     closeModal();
   };
 
   return (
-    <div className="h-full overflow-scroll">
+    <div className="h-fit overflow-scroll">
       <div className="desktop:relative inline-flex mobile:flex mobile:!justify-center justify-between w-full mb-[17px]">
         <CStreamStatus onChange={setSelectedStatus} />
         <div className="desktop:inline-flex mobile:flex mobile:gap-0 desktop:gap-2">

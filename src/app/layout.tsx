@@ -87,9 +87,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
       <body className="bg-alabaster overflow-hidden">
         <Provider store={store}>
+          <AppDataFetch />
           <StyledComponentsRegistry>
             <ThemeProvider theme={theme}>
-              <AppDataFetch />
               <main
                 className="relative px-8 mobile:p-0 pt-[9px] pb-7 w-full 
                 xxl:w-[100%] 2xl:!w-[60%] 3xl:!w-[35%] h-screen
