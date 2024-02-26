@@ -6,6 +6,7 @@ import { useAppSelector } from 'src/hooks/useRedux';
 import { IToken } from 'src/reducers/tokens';
 
 import close from 'public/images/whiteClose.svg';
+import blackClose from 'public/images/close.svg';
 import searchLogo from 'public/images/search.svg';
 import { IFilterTokens } from 'src/constants/types';
 import defaultToken from 'public/images/defaultToken.svg';
@@ -46,9 +47,9 @@ const FilterModal = ({
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         closeModal();
       }
-      if (secondModalRef.current && !secondModalRef.current.contains(event.target as Node)) {
-        setIsListVisible(false);
-      }
+      // if (secondModalRef.current && !secondModalRef.current.contains(event.target as Node)) {
+      //   setIsListVisible(false);
+      // }
     };
 
     if (open) {
@@ -144,6 +145,14 @@ const FilterModal = ({
           ref={secondModalRef}
           className={`absolute max-h-[105px] overflow-auto top-14 right-[12px] left-[12px] p-[15px] shadow shadow-[#00000033] rounded-lg mt-1 bg-white`}
         >
+          <Image
+            src={blackClose}
+            alt="close"
+            onClick={() => {
+              setIsListVisible(false);
+            }}
+            className="absolute top-2 right-[12px] cursor-pointer w-4 h-4"
+          />
           {filteredTokensBySearch.map((suggestion, index) => (
             <div key={index}>
               <li className="flex gap-1 items-center">

@@ -17,7 +17,7 @@ const Header = () => {
   const handleClick = () => {};
 
   return (
-    <header className="flex justify-between items-center py-3 px-6">
+    <header className="flex justify-between w-full items-center py-3 px-6">
       <div
         className="inline-flex mobile:hidden gap-[14px] cursor-pointer"
         onClick={() => router.push(ExternalPages.LANDING)}

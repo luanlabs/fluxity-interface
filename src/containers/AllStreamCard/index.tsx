@@ -56,7 +56,7 @@ const AllStreamCard = () => {
             />
           </div>
         </div>
-        <Image src={cardLogo} alt="logo" width={600} className="lg:w-[520px]" />
+        <Image src={cardLogo} alt="logo" width={490} className="md:w-[300px] lg:w-[400px]" />
       </CCard>
     </div>
   );

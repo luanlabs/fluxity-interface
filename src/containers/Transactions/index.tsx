@@ -58,8 +58,8 @@ const Transactions = () => {
   };
 
   return (
-    <div className="h-full">
-      <div className="desktop:relative inline-flex mobile:flex mobile:justify-center justify-between w-full mb-[17px]">
+    <div className="h-full overflow-scroll">
+      <div className="desktop:relative inline-flex mobile:flex mobile:!justify-center justify-between w-full mb-[17px]">
         <CStreamStatus onChange={setSelectedStatus} />
         <div className="desktop:inline-flex mobile:flex mobile:gap-0 desktop:gap-2">
           <Styled.Circle
@@ -86,13 +86,12 @@ const Transactions = () => {
             />
           </Styled.Circle>
           <Styled.Circle
+            onClick={handleOpenModal}
             className={`mobile:absolute mobile:z-50 mobile:bg-white mobile:!w-14 mobile:!h-14 mobile:bottom-20 mobile:right-4 desktop:static ${
               submittedForm && '!border-royalBlue bg-lavenderBlush'
             } hover:bg-lavenderBlush transition-all duration-700`}
           >
-            <div onClick={handleOpenModal}>
-              <Funnel fill={submittedForm ? '#3a21d4' : '#050142'} />
-            </div>
+            <Funnel fill={submittedForm ? '#3a21d4' : '#050142'} />
           </Styled.Circle>
         </div>
         {openModal && (
@@ -108,11 +107,13 @@ const Transactions = () => {
           />
         )}
       </div>
-      <StreamsList
-        selectedStatus={selectedStatus}
-        filteredValues={filteredValues}
-        searchValue={searchValue}
-      />
+      <div className="overflow-scroll">
+        <StreamsList
+          selectedStatus={selectedStatus}
+          filteredValues={filteredValues}
+          searchValue={searchValue}
+        />
+      </div>
     </div>
   );
 };

@@ -53,7 +53,7 @@ const CPageCard = ({
       {divider && <div className={cn(dividerStyle, dividerResponsiveClassName)} />}
       <div
         className={`${cn(padding, childrenClassName)} ${
-          scroll && 'overflow-y-scroll h-full'
+          scroll && 'desktop:overflow-y-scroll h-full'
         } mobile:overflow-y-scroll mobile:overflow-x-hidden`}
       >
         {children}

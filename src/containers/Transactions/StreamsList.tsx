@@ -63,7 +63,7 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
 
   if (isLoading && address) {
     return (
-      <div className="flex flex-col mobile:h-[calc(100%-150px)] justify-center items-center w-full text-[#8F8F8F] font-medium">
+      <div className="flex flex-col justify-center items-center w-full text-[#8F8F8F] font-medium">
         <div className="flex justify-center items-center h-12 w-12 rounded-full bg-midnightBlue mb-8">
           <Image src={rolling} alt="rolling" />
         </div>
@@ -74,7 +74,7 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
   }
 
   return (
-    <div className="h-full">
+    <div className="overflow-scroll desktop:min-h-[300px]">
       {filteredStreams.map((stream) => (
         <CCard
           className="mobile:z-40 mobile:flex-col mobile:relative mobile:my-2 my-1 rounded-[14px] desktop:h-[74px] desktop:inline-flex items-center 
@@ -108,23 +108,30 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
               stream.status === StreamStatus.PENDING ? 'hidden' : 'block'
             } mobile:hidden`}
           />
-          <div className="flex mobile:flex-col-reverse w-full desktop:justify-between items-center">
+          <div
+            className={`flex mobile:flex-col-reverse w-full ${
+              stream.status === StreamStatus.PENDING
+                ? 'desktop:justify-end'
+                : 'desktop:justify-between'
+            }  items-center`}
+          >
             <div
               className={`text-sm mobile:w-full mobile:mt-5 ${
                 stream.status === StreamStatus.PENDING ? 'hidden' : 'block'
               }
                   ${stream.status === StreamStatus.EXPIRED && 'flex items-center'}`}
             >
+              <div></div>
               {stream.status === StreamStatus.EXPIRED ? (
                 <div className="flex justify-between items-center w-full text-base font-medium">
-                  <p> Completed</p>
+                  <p> Completed</p>{' '}
                   <Image
                     src={coin}
                     alt="coin"
                     className={`${
                       isStreamWithdrawable(stream)
                         ? 'mobile:block desktop:hidden bg-[#FFF59A] rounded-full mr-1'
-                        : 'hidden'
+                        : ''
                     }`}
                   />
                 </div>
@@ -142,27 +149,25 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
                 </div>
               )}
             </div>
-            <div className="flex items-center mobile:w-full desktop:gap-[47px]">
-              <div className="flex gap-3">
-                <div
-                  className={`select-none rounded-full px-4 py-0.5 mobile:absolute mobile:top-4 mobile:right-4
+            <div className="flex items-center mobile:w-full">
+              <div
+                className={`select-none rounded-full px-4 py-0.5 mobile:absolute mobile:top-4 mobile:right-4
             ${getStatusStyles(stream.status)}`}
-                >
-                  {stream.status === StreamStatus.ONGOING ? 'Active' : capitalize(stream.status)}
-                </div>
+              >
+                {stream.status === StreamStatus.ONGOING ? 'Active' : capitalize(stream.status)}
+              </div>
+              {isStreamWithdrawable(stream) && stream.status === StreamStatus.EXPIRED ? (
                 <Image
                   src={coin}
                   alt="coin"
-                  className={`${
-                    isStreamWithdrawable(stream)
-                      ? 'mobile:hidden desktop:block bg-[#FFF59A] rounded-full mr-1'
-                      : 'hidden'
-                  }`}
+                  className={`ml-3 mobile:hidden desktop:block bg-[#FFF59A] rounded-full mr-1`}
                 />
-              </div>
+              ) : (
+                <div className="mobile:hidden h-6 w-6 ml-3" />
+              )}
 
               <div
-                className="flex items-center desktop:justify-end desktop:font-bold gap-2 desktop:w-[160px]
+                className="flex desktop:ml-[47px] items-center desktop:justify-end desktop:font-bold gap-2 desktop:w-[160px]
               mobile:justify-between mobile:bg-alabaster mobile:p-2 mobile:rounded-[10px] mobile:my-1 mobile:w-full"
               >
                 <span className="desktop:hidden text-midnightBlue">Amount</span>
@@ -185,10 +190,10 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
         </CCard>
       ))}
       {((!address && !isLoading) || !filteredStreams.length) && (
-        <div className="flex flex-col mobile:h-[calc(100%-150px)] justify-center items-center w-full select-none">
+        <div className="flex flex-col justify-center items-center w-full select-none desktop:min-h-[200px]">
           <Image src={noStreams} alt="icon" />
           <p className="font-medium text-2xl text-[#8F8F8F]">No {selectedStatus} Streams</p>
-          <p className="mt-2 font-medium text-base text-[#8F8F8F] leading-4">
+          <p className="mt-2 font-medium text-base text-[#8F8F8F] leading-4 mobile:text-center">
             There are no active streams at the moment.
           </p>
         </div>

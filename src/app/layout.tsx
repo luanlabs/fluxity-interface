@@ -84,24 +84,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           crossOrigin="anonymous"
         />
       </head>
+
       <body className="bg-alabaster overflow-hidden">
         <Provider store={store}>
           <StyledComponentsRegistry>
             <ThemeProvider theme={theme}>
               <AppDataFetch />
               <main
-                className="relative px-8 mobile:p-0 pt-[9px] pb-7 w-full xxl:w-[100%] 2xl:!w-[60%] 3xl:!w-[35%] h-screen
+                className="relative px-8 mobile:p-0 pt-[9px] pb-7 w-full 
+                xxl:w-[100%] 2xl:!w-[60%] 3xl:!w-[35%] h-screen
                 2xl:h-[80vh] 3xl:h-[50vh] 4xl:h-[30vh] 4xl:!w-[30%] m-auto"
               >
                 <CCard
-                  className={`mobile:sticky mobile:top-0 mobile:right-0 mobile:left-0 
+                  className={`!w-full mobile:sticky mobile:top-0 mobile:right-0 mobile:left-0 
                   desktop:mb-[10px] mobile:rounded-none mobile:border-t-0 z-[999]
                   ${currentPath === Pages.FAQ ? 'mobile:hidden desktop:block' : 'block'}`}
                   bgColor="white"
                 >
                   <Header />
                 </CCard>
-                <section className="inline-flex basis-full gap-4 w-full desktop:h-[90%]">
+                <section className="desktop:inline-flex basis-full gap-4 w-full desktop:h-[90%]">
                   <CCard
                     className={`desktop:relative mobile:fixed mobile:bottom-0 z-10
                     mobile:h-16 mobile:right-0 mobile:left-0 overflow-hidden 

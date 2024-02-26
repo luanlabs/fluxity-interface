@@ -98,7 +98,7 @@ const ClaimTokens = () => {
         Try how token streaming works with some test tokens at no cost.
       </p>
 
-      <div className="absolute bottom-[22px] left-[24.47px]">
+      <div className="absolute mobile:bottom-[18px] bottom-[22px] left-[24.47px]">
         <CButton
           onClick={handleClick}
           content="Claim Tokens"

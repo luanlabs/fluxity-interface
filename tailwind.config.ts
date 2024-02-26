@@ -55,6 +55,7 @@ const config: Config = {
         normalGray: '#8F8F8F',
       },
       screens: {
+        xs: { max: '360px' },
         sm: { max: '767px' },
         xxl: { min: '1536px' },
         mobile: { max: '1023px' },
