@@ -1,9 +1,9 @@
 import React from 'react';
+import cn from 'classnames';
 import Image from 'next/image';
 
-import cn from 'classnames';
-import useCustomID from 'src/hooks/useCustomId';
 import CLabel from '../CLabel';
+import useCustomID from 'src/hooks/useCustomId';
 
 import alertLogo from 'public/images/error.png';
 import clearInputLogo from 'public/images/x.svg';
@@ -11,50 +11,50 @@ import clearInputLogo from 'public/images/x.svg';
 interface CInputProps {
   icon?: string;
   label?: string;
-  placeholder?: string;
-  className?: string;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  tooltipDetails?: string;
   error?: boolean;
-  errorMsg?: string;
-  clearInput?: boolean;
-  clearInputClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   paste?: boolean;
-  clipboardText?: string;
-  handlePaste?: (event: React.MouseEventHandler<HTMLDivElement>) => void;
   border?: boolean;
-  value?: string | number | any;
+  errorMsg?: string;
   disabled?: boolean;
-  tooltipTitle?: string;
-  onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
-  inputClassName?: string;
-  iconClassName?: string;
+  className?: string;
   autoFocus?: boolean;
+  clearInput?: boolean;
+  placeholder?: string;
+  tooltipTitle?: string;
+  iconClassName?: string;
+  clipboardText?: string;
+  tooltipDetails?: string;
+  inputClassName?: string;
+  value?: string | number | any;
+  onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  clearInputClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  handlePaste?: (event: React.MouseEventHandler<HTMLDivElement>) => void;
   enterKeyHint?: 'search' | 'done' | 'enter' | 'go' | 'next' | 'previous' | 'send';
 }
 
 const CInput = ({
   icon,
-  autoFocus,
-  placeholder,
-  inputClassName,
-  iconClassName,
-  className,
   label,
-  tooltipDetails,
   error,
-  errorMsg,
-  clearInput,
-  clearInputClick,
-  onChange,
   paste,
-  border,
-  handlePaste,
   value,
-  disabled,
-  tooltipTitle,
+  border,
   onClick,
+  disabled,
+  onChange,
+  errorMsg,
+  autoFocus,
+  className,
+  clearInput,
+  placeholder,
+  handlePaste,
+  tooltipTitle,
   enterKeyHint,
+  iconClassName,
+  inputClassName,
+  tooltipDetails,
+  clearInputClick,
   ...props
 }: CInputProps) => {
   const id = useCustomID('Cinput');
@@ -105,9 +105,14 @@ const CInput = ({
 
         <input
           id={id}
-          autoFocus={autoFocus}
+          {...props}
+          value={value}
+          onClick={onClick}
+          disabled={disabled}
           onChange={onChange}
+          autoFocus={autoFocus}
           placeholder={placeholder}
+          enterKeyHint={enterKeyHint}
           autoComplete="off"
           className={cn(
             inputClassName,
@@ -118,11 +123,6 @@ const CInput = ({
             ${disabled && 'cursor-not-allowed !select-none text-mutedBlue'}
           `,
           )}
-          onClick={onClick}
-          value={value}
-          disabled={disabled}
-          enterKeyHint={enterKeyHint}
-          {...props}
         />
 
         <div className="h-[20px] absolute mt-[6px] ml-1">

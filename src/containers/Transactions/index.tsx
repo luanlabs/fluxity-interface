@@ -64,7 +64,7 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
 
   if (isLoading && address) {
     return (
-      <div className="desktop:min-h-[200px] flex flex-col justify-center mobile:h-full items-center w-full text-[#8F8F8F] font-medium">
+      <div className="desktop:min-h-[200px] flex flex-col justify-center h-full items-center w-full text-[#8F8F8F] font-medium">
         <div className="flex justify-center items-center h-12 w-12 rounded-full bg-midnightBlue mb-8">
           <Image src={rolling} alt="rolling" />
         </div>
@@ -75,7 +75,7 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
   }
 
   return (
-    <div className="overflow-scroll desktop:min-h-[200px] mobile:h-full">
+    <div className="overflow-scroll desktop:min-h-[200px] h-full">
       {filteredStreams.map((stream) => (
         <CCard
           className="mobile:z-40 mobile:flex-col mobile:relative mobile:my-2 my-1 rounded-[14px] desktop:h-[74px] desktop:inline-flex items-center 
@@ -191,7 +191,7 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
         </CCard>
       ))}
       {((!address && !isLoading) || !filteredStreams.length) && (
-        <div className="flex flex-col justify-center mobile:h-full items-center w-full select-none desktop:min-h-[200px]">
+        <div className="flex flex-col justify-center h-full items-center w-full select-none desktop:min-h-[200px]">
           <Image src={noStreams} alt="icon" />
           <p className="font-medium text-2xl text-[#8F8F8F]">No {selectedStatus} Streams</p>
           <p className="mt-2 font-medium text-base text-[#8F8F8F] leading-4 mobile:text-center">

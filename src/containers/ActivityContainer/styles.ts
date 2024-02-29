@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 interface ICircle {
-  isopen?: boolean;
+  isopen?: boolean | undefined;
 }
 
 export const Circle = styled.div<ICircle>`

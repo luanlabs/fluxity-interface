@@ -1,13 +1,14 @@
-import Sheet from 'react-modal-sheet';
 import Image from 'next/image';
+import Sheet from 'react-modal-sheet';
+
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 
 type CModalProps = {
-  isOpen: boolean;
+  isModalOpen: boolean;
   className?: string;
   headerClass?: string;
   contentClass?: string;
-  setIsOpen: (_: boolean) => void;
+  setIsModalOpen: (_: boolean) => void;
   children: React.ReactNode;
   headerImage?: string | StaticImport;
   headerClassName?: string;
@@ -15,9 +16,9 @@ type CModalProps = {
 };
 
 const CBottomSheet = ({
-  isOpen,
+  isModalOpen,
   children,
-  setIsOpen,
+  setIsModalOpen,
   className,
   headerClass,
   contentClass,
@@ -26,12 +27,12 @@ const CBottomSheet = ({
   detent = 'content-height',
 }: CModalProps) => {
   const closeModal = () => {
-    setIsOpen(false);
+    setIsModalOpen(false);
   };
 
   return (
     <Sheet
-      isOpen={isOpen}
+      isOpen={isModalOpen}
       onClose={closeModal}
       detent={detent}
       className={className}

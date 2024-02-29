@@ -1,38 +1,40 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
+import { Optional, ReactState } from 'src/models';
+import CInput from 'src/components/CInput';
 import CButton from 'src/components/CButton';
-import { useAppSelector } from 'src/hooks/useRedux';
 import { IToken } from 'src/reducers/tokens';
+import { useAppSelector } from 'src/hooks/useRedux';
+import CBottomSheet from 'src/components/CBottomSheet';
+import useOutsideClickHandler from 'src/hooks/useOutsideClickHandler';
 
 import close from 'public/images/whiteClose.svg';
 import blackClose from 'public/images/close.svg';
 import searchLogo from 'public/images/search.svg';
 import { IFilterTokens } from 'src/constants/types';
 import defaultToken from 'public/images/defaultToken.svg';
-import CBottomSheet from 'src/components/CBottomSheet';
-import CInput from 'src/components/CInput';
 
 type ModalProps = {
-  open: boolean;
-  closeModal: () => void;
-  initialSentChecked: boolean;
-  selectedTokenValue: IToken[];
-  setIsOpen: (_: boolean) => void;
-  initialReceivedChecked: boolean;
-  setSelectedTokenValue: React.Dispatch<React.SetStateAction<IToken[]>>;
-  handleSubmitFilter: (filteredValuesObject: IFilterTokens, selectedTokens: IToken[]) => void;
+  isModalOpen: boolean;
+  handleCloseModal: () => void;
+  selectedTokens: IToken[];
+  isInitialSentChecked: boolean;
+  isInitialReceivedChecked: boolean;
+  setIsModalOpen: (_: boolean) => void;
+  setSelectedTokens: ReactState<IToken[]>;
+  handleFilterSubmit: (filteredValuesObject: IFilterTokens, selectedTokens: IToken[]) => void;
 };
 
 const FilterModal = ({
-  open,
-  setIsOpen,
-  closeModal,
-  handleSubmitFilter,
-  selectedTokenValue,
-  setSelectedTokenValue,
-  initialReceivedChecked,
-  initialSentChecked,
+  isModalOpen,
+  setIsModalOpen,
+  handleCloseModal,
+  handleFilterSubmit,
+  selectedTokens,
+  setSelectedTokens,
+  isInitialReceivedChecked,
+  isInitialSentChecked,
 }: ModalProps) => {
   const [inputValue, setInputValue] = useState('');
   const [isListVisible, setIsListVisible] = useState(false);
@@ -40,35 +42,17 @@ const FilterModal = ({
   const [sentChecked, setSentChecked] = useState(true);
 
   const tokens = useAppSelector((store) => store.tokens);
-  const modalRef = useRef<HTMLDivElement | null>(null);
-  const bottomSheetRef = useRef<HTMLDivElement | null>(null);
-  const secondModalRef = useRef<HTMLUListElement | null>(null);
+  const modalRef = useRef<Optional<HTMLDivElement>>(null);
+  const bottomSheetRef = useRef<Optional<HTMLDivElement>>(null);
+  const secondModalRef = useRef<Optional<HTMLUListElement>>(null);
+
+  useOutsideClickHandler(isModalOpen, handleCloseModal, modalRef, bottomSheetRef);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node) &&
-        bottomSheetRef.current &&
-        !bottomSheetRef.current.contains(event.target as Node)
-      ) {
-        closeModal();
-      }
-    };
+    setReceivedChecked(isInitialReceivedChecked);
 
-    if (open) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-    setReceivedChecked(initialReceivedChecked);
-
-    setSentChecked(initialSentChecked);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [open, initialReceivedChecked, initialSentChecked, closeModal]);
+    setSentChecked(isInitialSentChecked);
+  }, [isInitialReceivedChecked, isInitialSentChecked]);
 
   const filteredTokensBySearch = tokens.filter((token) =>
     token.symbol.toLowerCase().startsWith(inputValue.toLowerCase()),
@@ -95,30 +79,26 @@ const FilterModal = ({
     e.preventDefault();
 
     const filteredValuesObject: IFilterTokens = {
-      tokens: selectedTokenValue,
+      tokens: selectedTokens,
       showSentStreams: sentChecked,
       showReceivedStreams: receivedChecked,
     };
 
-    handleSubmitFilter(filteredValuesObject, selectedTokenValue);
+    handleFilterSubmit(filteredValuesObject, selectedTokens);
   };
 
   const handleTokenSelect = (suggestion: IToken, isChecked: boolean) => {
     if (isChecked) {
-      setSelectedTokenValue([...selectedTokenValue, suggestion]);
+      setSelectedTokens([...selectedTokens, suggestion]);
     } else {
-      const filteredTokens = selectedTokenValue.filter(
-        (token) => token.address !== suggestion.address,
-      );
-      setSelectedTokenValue(filteredTokens);
+      const filteredTokens = selectedTokens.filter((token) => token.address !== suggestion.address);
+      setSelectedTokens(filteredTokens);
     }
   };
 
   const handleRemoveSuggestion = (suggestion: IToken) => {
-    const filteredTokens = selectedTokenValue.filter(
-      (token) => token.address !== suggestion.address,
-    );
-    setSelectedTokenValue(filteredTokens);
+    const filteredTokens = selectedTokens.filter((token) => token.address !== suggestion.address);
+    setSelectedTokens(filteredTokens);
   };
 
   const ModalContent = () => (
@@ -159,7 +139,7 @@ const FilterModal = ({
                   onChange={(e) => {
                     handleTokenSelect(suggestion, e.target.checked);
                   }}
-                  checked={selectedTokenValue.some((token) => token.symbol === suggestion.symbol)}
+                  checked={selectedTokens.some((token) => token.symbol === suggestion.symbol)}
                   value={suggestion.symbol}
                 />
                 <Image
@@ -176,8 +156,8 @@ const FilterModal = ({
           ))}
         </ul>
       )}
-      <div className={`${selectedTokenValue.length && 'mt-[19px]'} flex gap-1 flex-wrap`}>
-        {selectedTokenValue.map((suggestion, index) => (
+      <div className={`${selectedTokens.length && 'mt-[19px]'} flex gap-1 flex-wrap`}>
+        {selectedTokens.map((suggestion, index) => (
           <div
             key={index}
             className="flex my-1 text-xs select-none items-center w-fit h-6 gap-[6px] rounded-[39px] bg-royalBlue p-[5px] pl-[10px] text-white hover:bg-buttonHover transition-colors duration-700"
@@ -234,14 +214,14 @@ const FilterModal = ({
       <div
         ref={modalRef}
         className={`mobile:hidden p-3 bg-white shadow shadow-[#00000014] rounded-xl ${
-          open ? `absolute top-16 right-4 w-[246px] z-50` : 'hidden'
+          isModalOpen ? `absolute top-16 right-4 w-[246px] z-50` : 'hidden'
         }`}
       >
         <ModalContent />
       </div>
       <CBottomSheet
-        isOpen={open}
-        setIsOpen={setIsOpen}
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
         className="desktop:!hidden"
         contentClass="p-4 pt-0"
       >

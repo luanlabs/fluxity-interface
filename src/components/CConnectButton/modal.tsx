@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -11,23 +11,32 @@ import power from 'public/images/power.svg';
 import blueWorld from 'public/images/blueWorld.svg';
 import arrowRight from 'public/images/arrowCircleRight.svg';
 
+import { Optional } from 'src/models';
 import copyText from 'src/utils/copyText';
 import { shortenAddress } from 'src/utils/shortenAddress';
 import { ExternalPages } from 'src/constants/externalPages';
 import { disconnect } from 'src/reducers/user';
 import { useAppDispatch } from 'src/hooks/useRedux';
 import { clearTokenBalances } from 'src/reducers/tokens';
+import useOutsideClickHandler from 'src/hooks/useOutsideClickHandler';
 
 type ModalProps = {
-  open: boolean;
+  isModalOpen: boolean;
   address: string;
   isMinimized: boolean;
-  closeModal: () => void;
-  setIsOpen: (_: boolean) => void;
+  handleCloseModal: () => void;
+  setIsModalOpen: (_: boolean) => void;
 };
-const Modal = ({ open, address, closeModal, isMinimized, setIsOpen }: ModalProps) => {
-  const modalRef = useRef<HTMLDivElement | null>(null);
-  const bottomSheetRef = useRef<HTMLDivElement | null>(null);
+const Modal = ({
+  isModalOpen,
+  address,
+  handleCloseModal,
+  isMinimized,
+  setIsModalOpen,
+}: ModalProps) => {
+  const modalRef = useRef<Optional<HTMLDivElement>>(null);
+  const bottomSheetRef = useRef<Optional<HTMLDivElement>>(null);
+  useOutsideClickHandler(isModalOpen, handleCloseModal, modalRef, bottomSheetRef);
 
   const dispatch = useAppDispatch();
 
@@ -42,35 +51,12 @@ const Modal = ({ open, address, closeModal, isMinimized, setIsOpen }: ModalProps
     toast('success', 'Address copied successfully');
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node) &&
-        bottomSheetRef.current &&
-        !bottomSheetRef.current.contains(event.target as Node)
-      ) {
-        closeModal();
-      }
-    };
-
-    if (open) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [closeModal, open]);
-
   return (
     <>
       <div
         ref={modalRef}
         className={`bg-midnightBlue p-[6px] rounded-[10px] mobile:!hidden ${
-          open
+          isModalOpen
             ? `fixed bottom-11 ${isMinimized ? 'left-[100px]' : 'left-[20%]'} w-[203px] z-50`
             : 'hidden'
         }`}
@@ -100,8 +86,8 @@ const Modal = ({ open, address, closeModal, isMinimized, setIsOpen }: ModalProps
         </div>
       </div>
       <CBottomSheet
-        isOpen={open}
-        setIsOpen={setIsOpen}
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
         contentClass="!px-6"
         className="desktop:!hidden !z-[9998]"
       >

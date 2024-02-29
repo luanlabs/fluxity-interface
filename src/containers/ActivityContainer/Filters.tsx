@@ -1,20 +1,22 @@
-import CStreamStatus, { StreamStatus } from 'src/components/CStreamStatus';
+import { useState } from 'react';
 import Image from 'next/image';
 
 import FilterModal from './FilterModal';
 import * as Styled from './styles';
 
-import Funnel from 'src/assets/Funnel';
-import searchLogo from 'public/images/search.svg';
-import { useState } from 'react';
+import { ReactState } from 'src/models';
 import { IToken } from 'src/reducers/tokens';
 import { IFilterTokens } from 'src/constants/types';
+import CStreamStatus, { StreamStatus } from 'src/components/CStreamStatus';
+
+import Funnel from 'src/assets/Funnel';
+import searchLogo from 'public/images/search.svg';
 
 type FiltersProps = {
   filteredValues: IFilterTokens;
-  setSearchValue: React.Dispatch<React.SetStateAction<string>>;
-  setSelectedStatus: React.Dispatch<React.SetStateAction<StreamStatus>>;
-  setFilteredValues: React.Dispatch<React.SetStateAction<IFilterTokens>>;
+  setSearchValue: ReactState<string>;
+  setSelectedStatus: ReactState<StreamStatus>;
+  setFilteredValues: ReactState<IFilterTokens>;
 };
 
 const Filters = ({
@@ -24,12 +26,11 @@ const Filters = ({
   setSearchValue,
 }: FiltersProps) => {
   const [openModal, setOpenModal] = useState(false);
+  const [openSearch, setOpenSearch] = useState(false);
   const [submittedForm, setSubmittedForm] = useState(false);
+  const [isInitialSentChecked, setIsInitialSentChecked] = useState(true);
   const [selectedTokenValue, setSelectedTokenValue] = useState<IToken[]>([]);
   const [initialReceivedChecked, setInitialReceivedChecked] = useState(true);
-  const [initialSentChecked, setInitialSentChecked] = useState(true);
-
-  const [openSearch, setOpenSearch] = useState(false);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -56,8 +57,8 @@ const Filters = ({
 
   const handleOpenModal = () => {
     setOpenModal(true);
+    setIsInitialSentChecked(filteredValues.showSentStreams);
     setInitialReceivedChecked(filteredValues.showReceivedStreams);
-    setInitialSentChecked(filteredValues.showSentStreams);
   };
 
   return (
@@ -101,14 +102,14 @@ const Filters = ({
 
       {openModal && (
         <FilterModal
-          open={openModal}
-          closeModal={closeModal}
-          setIsOpen={setOpenModal}
-          handleSubmitFilter={handleSubmitFilter}
-          selectedTokenValue={selectedTokenValue}
-          setSelectedTokenValue={setSelectedTokenValue}
-          initialReceivedChecked={initialReceivedChecked}
-          initialSentChecked={initialSentChecked}
+          isModalOpen={openModal}
+          handleCloseModal={closeModal}
+          setIsModalOpen={setOpenModal}
+          handleFilterSubmit={handleSubmitFilter}
+          selectedTokens={selectedTokenValue}
+          setSelectedTokens={setSelectedTokenValue}
+          isInitialReceivedChecked={initialReceivedChecked}
+          isInitialSentChecked={isInitialSentChecked}
         />
       )}
     </div>
