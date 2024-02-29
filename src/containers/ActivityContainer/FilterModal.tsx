@@ -11,6 +11,7 @@ import searchLogo from 'public/images/search.svg';
 import { IFilterTokens } from 'src/constants/types';
 import defaultToken from 'public/images/defaultToken.svg';
 import CBottomSheet from 'src/components/CBottomSheet';
+import CInput from 'src/components/CInput';
 
 type ModalProps = {
   open: boolean;
@@ -40,11 +41,17 @@ const FilterModal = ({
 
   const tokens = useAppSelector((store) => store.tokens);
   const modalRef = useRef<HTMLDivElement | null>(null);
+  const bottomSheetRef = useRef<HTMLDivElement | null>(null);
   const secondModalRef = useRef<HTMLUListElement | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node) &&
+        bottomSheetRef.current &&
+        !bottomSheetRef.current.contains(event.target as Node)
+      ) {
         closeModal();
       }
     };
@@ -67,13 +74,12 @@ const FilterModal = ({
     token.symbol.toLowerCase().startsWith(inputValue.toLowerCase()),
   );
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
+    setIsListVisible(true);
   };
 
   const handleClickInput = (e: any) => {
-    e.stopPropagation();
-    e.preventDefault();
     setIsListVisible(true);
   };
 
@@ -117,30 +123,23 @@ const FilterModal = ({
 
   const ModalContent = () => (
     <>
-      <div className="relative mobile:mb-3 flex justify-between items-center rounded-[10px] w-full h-10 mobile:h-12 p-4 bg-[#F5F5F5] gap-2">
-        <Image
-          src={searchLogo}
-          alt="search"
-          className="select-none"
-          draggable={false}
-          width={16}
-          height={16}
-        />
-        <input
-          name="input"
-          placeholder="Filter tokens"
+      <div className="relative mb-1">
+        <CInput
           autoFocus
-          autoComplete="off"
+          placeholder="Filter tokens"
+          icon={searchLogo}
           value={inputValue}
-          onChange={handleInputChange}
           onClick={handleClickInput}
-          className={`mobile:h-12 h-9 desktop:w-[180px] mobile:w-full focus:outline-none bg-[#F5F5F5]`}
+          onChange={handleInputChange}
+          enterKeyHint="search"
+          iconClassName="desktop:!bottom-2.5"
+          inputClassName="desktop:!h-10 desktop:w-[180px] mobile:w-full focus:outline-none !w-full bg-[#F5F5F5] rounded-[10px]"
         />
       </div>
       {isListVisible && (
         <ul
           ref={secondModalRef}
-          className={`absolute max-h-[105px] overflow-auto top-14 right-[12px] left-[12px] p-[15px] shadow shadow-[#00000033] rounded-lg mt-1 bg-white`}
+          className={`absolute max-h-[115px] overflow-auto top-14 mobile:right-4 mobile:left-4 desktop:right-3 desktop:left-3 p-[15px] shadow shadow-[#00000033] rounded-lg mt-1 bg-white`}
         >
           <Image
             src={blackClose}
@@ -148,14 +147,14 @@ const FilterModal = ({
             onClick={() => {
               setIsListVisible(false);
             }}
-            className="absolute top-2 right-[12px] cursor-pointer w-4 h-4"
+            className="absolute top-2 right-3 cursor-pointer w-5 h-5"
           />
           {filteredTokensBySearch.map((suggestion, index) => (
             <div key={index}>
               <li className="flex gap-1 items-center">
                 <input
                   type="checkbox"
-                  className="w-4 h-4 accent-black border-black rounded-none border-1 mr-1"
+                  className="w-4 h-4 mobile:w-6 mobile:h-6 accent-black border-black rounded-none border-1 mr-1"
                   name={suggestion.symbol}
                   onChange={(e) => {
                     handleTokenSelect(suggestion, e.target.checked);
@@ -168,10 +167,11 @@ const FilterModal = ({
                   alt="icon"
                   width={20}
                   height={20}
+                  className="mobile:!h-6 mobile:!w-6"
                 />
-                <label> {suggestion.symbol}</label>
+                <label className="mobile:text-base"> {suggestion.symbol}</label>
               </li>
-              {filteredTokensBySearch.length !== index + 1 && <hr className="my-2" />}
+              {filteredTokensBySearch.length !== index + 1 && <hr className="my-2 mobile:my-3" />}
             </div>
           ))}
         </ul>
@@ -233,7 +233,7 @@ const FilterModal = ({
     <>
       <div
         ref={modalRef}
-        className={`mobile:hidden p-[12px] bg-white shadow shadow-[#00000014] rounded-xl ${
+        className={`mobile:hidden p-3 bg-white shadow shadow-[#00000014] rounded-xl ${
           open ? `absolute top-16 right-4 w-[246px] z-50` : 'hidden'
         }`}
       >
@@ -245,7 +245,9 @@ const FilterModal = ({
         className="desktop:!hidden"
         contentClass="p-4 pt-0"
       >
-        <ModalContent />
+        <div ref={bottomSheetRef}>
+          <ModalContent />
+        </div>
       </CBottomSheet>
     </>
   );

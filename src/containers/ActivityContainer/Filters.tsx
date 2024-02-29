@@ -61,7 +61,7 @@ const Filters = ({
   };
 
   return (
-    <div className="relative inline-flex mobile:flex mobile:!justify-center justify-between w-full desktop:mb-3">
+    <div className="desktop:relative inline-flex mobile:flex mobile:!justify-center justify-between w-full mb-3">
       <CStreamStatus onChange={setSelectedStatus} />
       <div className="desktop:inline-flex mobile:flex mobile:gap-0 desktop:gap-2">
         <Styled.Circle
@@ -72,9 +72,10 @@ const Filters = ({
             } hover:bg-[#f5f5f5] transition-colors duration-700`}
         >
           <input
-            placeholder="Search wallet address"
-            onChange={onChange}
             autoFocus
+            enterKeyHint="search"
+            onChange={onChange}
+            placeholder="Search wallet address"
             className={`${
               openSearch ? 'block' : 'hidden'
             } h-9 desktop:w-[190px] mobile:!w-[calc(100%-40px)] focus:outline-none bg-[#F5F5F5]`}
@@ -89,9 +90,10 @@ const Filters = ({
         </Styled.Circle>
         <Styled.Circle
           onClick={handleOpenModal}
-          className={`mobile:absolute mobile:z-50 mobile:bg-white mobile:!w-14 mobile:!h-14 mobile:bottom-20 mobile:right-4 desktop:static ${
-            submittedForm && '!border-royalBlue bg-lavenderBlush'
-          } hover:bg-lavenderBlush transition-all duration-700`}
+          className={`mobile:absolute mobile:z-50 mobile:bg-white mobile:!w-14 mobile:!h-14 mobile:bottom-20 
+            mobile:right-4 desktop:static ${
+              submittedForm && '!border-royalBlue bg-lavenderBlush'
+            } hover:bg-lavenderBlush transition-all duration-700`}
         >
           <Funnel fill={submittedForm ? '#3a21d4' : '#050142'} />
         </Styled.Circle>

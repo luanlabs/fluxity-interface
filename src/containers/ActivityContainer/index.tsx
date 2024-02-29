@@ -22,11 +22,11 @@ const ActivityContainer = () => {
       divider
       borderStatus="borderless"
       className="flex py-[15px] px-5 !h-full"
-      childrenClassName="h-full overflow-hidden"
-      dividerResponsiveClassName="mobile:border-none"
+      childrenClassName="h-full overflow-hidden !px-0"
+      dividerResponsiveClassName="mobile:border-none mobile:relative"
       title={<h1 className="text-2xl text-midnightBlue mb-[10px] mt-1 pl-2">Activity History</h1>}
     >
-      <div style={{ flexFlow: 'column' }} className="h-full flex">
+      <div style={{ flexFlow: 'column' }} className="h-full flex mobile:!h-[calc(100vh-200px)]">
         <AllStreamCard />
 
         <Filters

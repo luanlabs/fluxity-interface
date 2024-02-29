@@ -19,9 +19,9 @@ const CPageCard = ({
   divider,
   title,
   children,
-  className,
+  className = '',
   scroll = false,
-  childrenClassName,
+  childrenClassName = '',
   borderStatus,
   dividerResponsiveClassName,
   ...props

@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 
+import cn from 'classnames';
 import useCustomID from 'src/hooks/useCustomId';
 import CLabel from '../CLabel';
 
@@ -25,11 +26,19 @@ interface CInputProps {
   value?: string | number | any;
   disabled?: boolean;
   tooltipTitle?: string;
+  onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
+  inputClassName?: string;
+  iconClassName?: string;
+  autoFocus?: boolean;
+  enterKeyHint?: 'search' | 'done' | 'enter' | 'go' | 'next' | 'previous' | 'send';
 }
 
 const CInput = ({
   icon,
+  autoFocus,
   placeholder,
+  inputClassName,
+  iconClassName,
   className,
   label,
   tooltipDetails,
@@ -44,6 +53,8 @@ const CInput = ({
   value,
   disabled,
   tooltipTitle,
+  onClick,
+  enterKeyHint,
   ...props
 }: CInputProps) => {
   const id = useCustomID('Cinput');
@@ -59,7 +70,7 @@ const CInput = ({
 
       <div className="relative w-full">
         {icon && (
-          <div className="absolute bottom-4 left-3.5">
+          <div className={cn(iconClassName, `absolute bottom-4 left-3.5`)}>
             <Image src={icon} width={22} height={22} alt="inputIcon" />
           </div>
         )}
@@ -94,17 +105,23 @@ const CInput = ({
 
         <input
           id={id}
+          autoFocus={autoFocus}
           onChange={onChange}
           placeholder={placeholder}
           autoComplete="off"
-          className={`${icon ? 'px-12' : 'px-4'}
-           self-stretch rounded-xl placeholder-mutedBlue text-midnightBlue text-base w-full h-14 p-4 bg-neutral-100 justify-start items-center inline-flex outline-none border
-           ${border ? 'focus:border-darkBlue' : 'border-transparent'}  
-           ${error && 'border !border-error'}
-           ${disabled && 'cursor-not-allowed !select-none text-mutedBlue'}
-          `}
+          className={cn(
+            inputClassName,
+            `${icon ? 'px-12' : 'px-4'}
+            self-stretch rounded-xl placeholder-mutedBlue text-midnightBlue text-base w-full h-14 p-4 bg-neutral-100 justify-start items-center inline-flex outline-none border
+            ${border ? 'focus:border-darkBlue' : 'border-transparent'}  
+            ${error && 'border !border-error'}
+            ${disabled && 'cursor-not-allowed !select-none text-mutedBlue'}
+          `,
+          )}
+          onClick={onClick}
           value={value}
           disabled={disabled}
+          enterKeyHint={enterKeyHint}
           {...props}
         />
 
