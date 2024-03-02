@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-export const ArrowStyle = styled.div`
+interface IArrowStyle {
+  placement?: 'top' | 'bottom';
+}
+
+export const ArrowStyle = styled.div<IArrowStyle>`
   .tippy-svg-arrow {
     transform: ${(props) => (props.placement === 'bottom' ? 'none' : 'rotateX(180deg)')} !important;
     width: 100%;

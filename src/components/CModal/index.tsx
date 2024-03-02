@@ -47,9 +47,9 @@ const CModal = ({
       </CDialog>
 
       <CBottomSheet
-        isOpen={isOpen}
+        isModalOpen={isOpen}
         contentClass="p-4"
-        setIsOpen={setIsOpen}
+        setIsModalOpen={setIsOpen}
         headerImage={headerImage}
         headerClassName={headerClassName}
         className={cn(`desktop:!hidden`, sheetClassName)}

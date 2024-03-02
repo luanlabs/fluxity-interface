@@ -87,6 +87,7 @@ const CreateStream = () => {
           className="w-full pl-[30px] pr-[18px] py-[15px] sm:pr-4 sm:pl-2 md:pb-8 sm:pb-8 mobile:mb-14"
           scroll
           borderStatus="borderless"
+          childrenClassName="mobile:h-[calc(100vh-210px)]"
         >
           <div className="w-full">
             <div className="w-full">

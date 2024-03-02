@@ -17,7 +17,7 @@ body {
   ::-webkit-scrollbar {
     width: 0px;
     display: none;
-    scrollbar-width: none; /* Firefox 64 */
+    scrollbar-width: none;
   }
 
   :hover::-webkit-scrollbar {

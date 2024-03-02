@@ -105,7 +105,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
   );
 
   return (
-    <div className="w-full flex gap-4 md:gap-2 md:px-2 h-[87vh] 2xl:h-[69vh] 3xl:h-[43vh] 4xl:h-[26vh] md:h-[83vh] sm:flex-col sm:w-[90%] sm:m-auto">
+    <div className="w-full flex mobile:overflow-auto gap-4 md:gap-2 md:px-2 h-[87vh] 2xl:h-[69vh] 3xl:h-[43vh] 4xl:h-[26vh] md:h-[83vh] sm:flex-col sm:w-[90%] sm:m-auto">
       <div className="w-full flex justify-between items-center desktop:hidden lg:hidden xl:hidden md:hidden px-1 mt-8">
         <h1 className="text-[24px] text-midnightBlue pl-2">Stream #{data.id}</h1>
         <CStreamStatusButton
@@ -174,15 +174,8 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
 
         {isReceiver && (
           <ReceiverStatusCard
-            startDate={data.start_date}
-            endDate={data.end_date}
-            cliffDate={data.cliff_date}
-            amount={amount}
-            withdrawn={withdraw}
-            isCancelled={data.is_cancelled}
-            id={data.id}
+            stream={data}
             token={data.token.symbol}
-            sender={data.sender}
             withdrawnAmount={withdrawnAmount}
             setWithdrawnAmount={setWithdrawnAmount}
             decimalToken={data.token.decimals}

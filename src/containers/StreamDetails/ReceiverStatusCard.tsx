@@ -23,35 +23,25 @@ import withdrawStreamReturnValue from 'src/utils/soroban/withdrawStreamReturnVal
 import withdrawLogo from '/public/images/withdrawSolid.svg';
 import whiteWithdrawLogo from '/public/images/whiteWithdraw.svg';
 import SingleButtonModal from 'src/components/SingleButtonModal';
+import { IResponseStream } from 'src/models';
 
 interface ReceiverStatusCardProps {
-  withdrawn: string;
-  amount: string;
-  startDate: number;
-  endDate: number;
-  cliffDate: number;
-  isCancelled: boolean;
-  id: string;
+  stream: IResponseStream;
   token: string;
-  sender: string;
   setWithdrawnAmount: (_: number) => void;
   withdrawnAmount: number;
   decimalToken: number;
 }
 
 const ReceiverStatusCard = ({
-  amount,
-  withdrawn,
-  startDate,
-  endDate,
-  cliffDate,
-  isCancelled,
-  id,
+  stream,
   setWithdrawnAmount,
   withdrawnAmount,
   decimalToken,
 }: ReceiverStatusCardProps) => {
   const address = useAppSelector((state) => state.user.address);
+  const [totalWithdrawnAmount, setTotalWithdrawnAmount] = useState(stream.withdrawn);
+  const [availableAmount, setAvailableAmount] = useState(0);
   const [txHash, setTxHash] = useState('');
 
   const [approvalOpen, setIsApprovalOpen] = useState(false);
@@ -60,27 +50,20 @@ const ReceiverStatusCard = ({
   let totalWithdrawnAmount = withdrawn;
 
   const available = calculateStreamAmounts(
-    startDate,
-    endDate,
-    cliffDate,
+    stream.start_date,
+    stream.end_date,
+    stream.cliff_date,
     false,
-    withdrawn,
-    amount,
+    stream.withdrawn,
+    stream.amount,
   ).receiverAmount.minus(totalWithdrawnAmount);
 
-  const withdrawable = isStreamWithdrawable(
-    startDate,
-    endDate,
-    cliffDate,
-    Number(amount),
-    Number(withdrawn),
-    isCancelled,
-  );
+  const withdrawable = isStreamWithdrawable(stream);
 
   const handleWithdrawClick = async () => {
     setIsApprovalOpen(true);
 
-    const withdrawStreamXdr = await withdrawStream(id, address);
+    const withdrawStreamXdr = await withdrawStream(stream.id, address);
 
     let signedXdr;
     let tx;
@@ -116,7 +99,7 @@ const ReceiverStatusCard = ({
     await timeout(100);
     setIsWithdrawSuccessOpen(true);
 
-    informWithdrawAPI(id);
+    informWithdrawAPI(stream.id);
     const withdrawFinalize = withdrawStreamReturnValue(finalize);
     setWithdrawnAmount(withdrawFinalize);
 

@@ -25,11 +25,11 @@ const AllStreamCard = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full mobile:hidden desktop:block">
       <CCard
-        className={`relative h-[201px] mb-5 ${
+        className={`relative h-[201px] mb-5 justify-between w-full ${
           isClosed ? 'hidden' : 'flex'
-        } justify-between w-full h-full transition-all duration-700 mb-5`}
+        } transition-all duration-700 mb-5`}
         bgColor="#EBFDFF"
         borderColor="#3A21D433"
       >
@@ -41,7 +41,7 @@ const AllStreamCard = () => {
         />
         <div className="pl-[38px] pt-4 text-royalBlue">
           <h1 className="text-[28px] w-full font-medium">All stream are Here!</h1>
-          <p className="text-[15px] mt-[10px] mb-5">
+          <p className="text-[15px] lg:text-sm mt-[10px] mb-5">
             Keep all your present, future, and past streams under your touch. Enjoy secure,
             efficient, and user-friendly experience of token streaming.
           </p>
@@ -52,10 +52,11 @@ const AllStreamCard = () => {
               color="blueWhite"
               content="FAQ"
               logo={helpLogo}
+              className="hover:bg-[#F0EFFF] transition-colors duration-700"
             />
           </div>
         </div>
-        <Image src={cardLogo} alt="logo" width={650} />
+        <Image src={cardLogo} alt="logo" width={490} className="md:w-[300px] lg:w-[400px]" />
       </CCard>
     </div>
   );

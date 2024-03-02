@@ -15,7 +15,7 @@ type CStreamTypeProps = {
 const CStreamType = ({ isSender, streamStatus }: CStreamTypeProps) => {
   return (
     <div
-      className={`inline-flex justify-center items-center gap-2 p-[10px] select-none rounded-xl ${getStatusStyles(
+      className={`inline-flex justify-center whitespace-nowrap items-center gap-2 p-[10px] select-none rounded-xl mobile:!bg-transparent ${getStatusStyles(
         streamStatus,
         isSender,
       )}
@@ -30,7 +30,7 @@ const CStreamType = ({ isSender, streamStatus }: CStreamTypeProps) => {
           <ReceiveIcon fill={streamStatus === 'expired' ? '#6A6C74' : '#1C9B47'} />
         )}
       </span>
-      <span className="gap-2">{isSender ? 'Send' : 'Receive'} Stream</span>
+      <span className="gap-2 mobile:whitespace-nowrap">{isSender ? 'Send' : 'Receive'} Stream</span>
     </div>
   );
 };

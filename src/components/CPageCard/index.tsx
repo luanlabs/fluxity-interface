@@ -19,9 +19,9 @@ const CPageCard = ({
   divider,
   title,
   children,
-  className,
+  className = '',
   scroll = false,
-  childrenClassName,
+  childrenClassName = '',
   borderStatus,
   dividerResponsiveClassName,
   ...props
@@ -40,7 +40,7 @@ const CPageCard = ({
   return (
     <CCard
       className={cn(
-        `flex flex-col w-full h-full ${
+        `flex flex-col w-full h-[100%] ${
           borderStatus === 'borderless' ? 'mobile:!border-none mobile:!rounded-none' : 'mt-1'
         }`,
         className,
@@ -53,7 +53,7 @@ const CPageCard = ({
       {divider && <div className={cn(dividerStyle, dividerResponsiveClassName)} />}
       <div
         className={`${cn(padding, childrenClassName)} ${
-          scroll && 'overflow-y-scroll h-full'
+          scroll && 'desktop:overflow-y-scroll h-[100%]'
         } mobile:overflow-y-scroll mobile:overflow-x-hidden`}
       >
         {children}
