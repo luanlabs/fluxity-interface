@@ -53,6 +53,7 @@ const config: Config = {
         darkOrchid: '#442cd6',
         softGreen: '#a5f3c0',
         normalGray: '#8F8F8F',
+        darkPurple: '#1C0894',
       },
       screens: {
         xs: { max: '360px' },

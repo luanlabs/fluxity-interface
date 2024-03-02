@@ -69,6 +69,7 @@ const CreateStreamConfirmModal = ({
             type="submit"
             variant="form"
             content="Create Stream"
+            svgLogo="fluxityLogo"
             fill="#fff"
             className="!bg-darkBlue text-white w-full"
             onClick={onClick}

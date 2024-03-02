@@ -19,6 +19,7 @@ const SingleButtonModal = ({
         type="submit"
         variant={buttonVariant}
         content={buttonText}
+        svgLogo="fluxityLogo"
         fill={logoColor}
         className="!bg-darkBlue text-white text-center w-full mt-4"
         onClick={onClick}

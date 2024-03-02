@@ -69,7 +69,7 @@ const CModalSuccess = ({
           </h1>
 
           {(streamId || from || to || amountStreamed) && (
-            <CPageCard className="px-3 py-4 w-[80%] mt-6">
+            <CPageCard borderStatus="bordered" className="px-3 py-4 w-[80%] mt-6">
               <ul className="grid gap-2 text-midnightBlue">
                 {streamId && <CSummaryField label="Stream" value={streamId} fieldSize="normal" />}
                 {from && (

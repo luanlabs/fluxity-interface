@@ -73,7 +73,7 @@ const Summary = ({ form, userInfo, address }: SummaryProps) => {
 
   return (
     <div className="w-[329px]">
-      <CPageCard title={summaryTitle} className="px-3 py-4 mb-4 w-full ">
+      <CPageCard title={summaryTitle} borderStatus="bordered" className="px-3 py-4 mb-4 w-full ">
         <ul className="grid gap-2 text-midnightBlue">
           {getFormValues.length > 3 &&
             getFormValues.map((x) => (
