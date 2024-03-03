@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Select from 'react-select';
 
 import { RateValue } from 'src/models';
@@ -23,6 +23,7 @@ interface CInputRateProps {
   onChange: (values: CInputRateValue) => void;
   tooltipTitle: string;
   value: CInputRateValue;
+  isReset: boolean;
 }
 
 const DropdownIndicator = () => {
@@ -43,6 +44,7 @@ const CInputRate = ({
   error,
   tooltipTitle,
   value,
+  isReset,
   ...props
 }: CInputRateProps) => {
   const [inputValue, setInputValue] = useState('');
@@ -60,9 +62,12 @@ const CInputRate = ({
   useEffect(() => {
     if (!value) {
       setInputValue('');
-      setSelectValue(flowRateOptions[2]);
+
+      if (isReset) {
+        setSelectValue(flowRateOptions[2]);
+      }
     }
-  }, [value]);
+  }, [value, isReset]);
 
   const handleSelectChange = (e: RateValue) => {
     onChange({
@@ -109,6 +114,7 @@ const CInputRate = ({
         isSearchable={false}
         defaultValue={flowRateOptions[2]}
         onChange={handleSelectChange}
+        value={selectValue}
       />
     </div>
   );

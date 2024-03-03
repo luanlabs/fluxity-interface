@@ -11,15 +11,15 @@ import { useAppSelector } from 'src/hooks/useRedux';
 import CDatePicker from 'src/components/CDatePicker';
 import SummaryContainer from 'src/containers/Summary';
 import { Model } from 'src/components/CStreamingModel';
+import tooltipDetails from 'src/constants/tooltipDetails';
 import SelectTokenContainer from 'src/containers/SelectToken';
-import CStreamingModelContainer from '../CStreamingModelContainer';
+import ConfirmTransaction from 'src/containers/ConfirmTransaction';
 import CInputRate, { CInputRateValue } from 'src/components/CInputRate';
 import WalletAddressContainer from 'src/containers/WalletAddressContainer';
-import tooltipDetails from 'src/constants/tooltipDetails';
+import CStreamingModelContainer from 'src/containers/CStreamingModelContainer';
+import CancellableStream, { ToggleStatus } from 'src/containers/CancellableStream';
 
 import validateForm from './validateForm';
-import ConfirmTransaction from '../ConfirmTransaction';
-import CancellableStream, { ToggleStatus } from '../CancellableStream';
 
 export interface FormValues {
   address: string;
@@ -36,6 +36,7 @@ const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');
 
 const CreateStream = () => {
   const [isConfirm, setIsConfirm] = useState(false);
+  const [isReset, setIsReset] = useState(false);
   const [isFormValidated, setIsFormValidated] = useState(false);
 
   const { address } = useAppSelector((state) => state.user);
@@ -43,6 +44,7 @@ const CreateStream = () => {
 
   const form = useForm<FormValues>({
     mode: 'onChange',
+
     resolver: (formValues) =>
       validateForm(formValues, setIsFormValidated, address, {
         asset_type: usrInfo?.asset_type,
@@ -51,7 +53,6 @@ const CreateStream = () => {
     defaultValues: {
       streamingModel: 'linear',
       isCancellable: 'OFF',
-      startDate: new Date(),
     },
   });
 
@@ -59,6 +60,7 @@ const CreateStream = () => {
     handleSubmit,
     control,
     getValues,
+    setValue,
     watch,
     resetField,
     formState: { errors, isValid, isValidating },
@@ -69,15 +71,16 @@ const CreateStream = () => {
   const onSubmit = (data: FormValues) => {};
 
   const shouldBeResetField = () => {
-    form.resetField('address');
-    form.resetField('token');
-    form.resetField('startDate');
-    form.resetField('endDate');
-    form.resetField('cliffDate');
-    form.resetField('rate');
+    if (!isReset) {
+      setIsReset(true);
+    }
+    form.reset();
   };
 
   const handleOpenModals = () => {
+    if (!getValues('startDate')) {
+      setValue('startDate', new Date(), {});
+    }
     setIsConfirm(true);
   };
 
@@ -159,6 +162,7 @@ const CreateStream = () => {
                       className="basis-4/5 sm:!basis-0 md:basis-0 sm:mt-4 mobile:w-full "
                       errorMsg={errors.rate && errors.rate.message}
                       error={errors.rate?.message ? true : false}
+                      isReset={isReset}
                       {...field}
                     />
                   </div>
@@ -194,8 +198,10 @@ const CreateStream = () => {
                     label="Cliff date"
                     tooltipTitle="Cliff Date"
                     tooltipDetails={tooltipDetails.createStream.cliffDate}
-                    minDate={getValues('startDate')}
+                    minDate={getValues('startDate') ? getValues('startDate') : new Date()}
                     maxDate={getValues('endDate')}
+                    isReset={isReset}
+                    setIsReset={setIsReset}
                     {...field}
                   />
                 )}
@@ -215,6 +221,8 @@ const CreateStream = () => {
                       tooltipDetails={tooltipDetails.createStream.startDate}
                       minDate={new Date()}
                       maxDate={getValues('endDate') && getValues('endDate')}
+                      isReset={isReset}
+                      setIsReset={setIsReset}
                     />
                   )}
                 />
@@ -231,9 +239,7 @@ const CreateStream = () => {
                       tooltipTitle="End Date"
                       tooltipDetails={tooltipDetails.createStream.endDate}
                       minDate={
-                        getValues('cliffDate')
-                          ? new Date(getValues('cliffDate'))
-                          : new Date(getValues('startDate'))
+                        getValues('cliffDate') ? new Date(getValues('cliffDate')) : new Date()
                       }
                       maxDate={INFINITY_DATE}
                       readonly
