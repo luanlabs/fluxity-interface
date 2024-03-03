@@ -1,12 +1,13 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Switch } from '@headlessui/react';
 
 interface CToggleProps {
   onChange: (value: boolean) => void;
   readonly?: boolean;
+  isEnabled?: boolean;
 }
 
-const CToggle = ({ onChange, readonly }: CToggleProps) => {
+const CToggle = ({ onChange, readonly, isEnabled }: CToggleProps) => {
   const [enabled, setEnabled] = useState(readonly);
 
   const handleChange = (value: boolean) => {
@@ -15,6 +16,16 @@ const CToggle = ({ onChange, readonly }: CToggleProps) => {
       onChange(value);
     }
   };
+
+  useEffect(() => {
+    if (!readonly) {
+      if (isEnabled) {
+        setEnabled(true);
+      } else {
+        setEnabled(false);
+      }
+    }
+  }, [isEnabled]);
 
   return (
     <Switch checked={enabled} onChange={handleChange} as={Fragment}>
