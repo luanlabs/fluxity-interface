@@ -20,7 +20,6 @@ import isStreamWithdrawable from 'src/features/isStreamWithdrawable';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
 import withdrawStreamReturnValue from 'src/utils/soroban/withdrawStreamReturnValue';
 
-import withdrawLogo from '/public/images/withdrawSolid.svg';
 import whiteWithdrawLogo from '/public/images/whiteWithdraw.svg';
 import SingleButtonModal from 'src/components/SingleButtonModal';
 import { IResponseStream } from 'src/models';
@@ -46,8 +45,6 @@ const ReceiverStatusCard = ({
 
   const [approvalOpen, setIsApprovalOpen] = useState(false);
   const [withdrawSuccessOpen, setIsWithdrawSuccessOpen] = useState(false);
-
-  let totalWithdrawnAmount = withdrawn;
 
   const available = calculateStreamAmounts(
     stream.start_date,
@@ -103,9 +100,11 @@ const ReceiverStatusCard = ({
     const withdrawFinalize = withdrawStreamReturnValue(finalize);
     setWithdrawnAmount(withdrawFinalize);
 
-    totalWithdrawnAmount = new BN(formatUnits(withdrawFinalize, decimalToken))
-      .plus(new BN(totalWithdrawnAmount))
-      .toString();
+    setTotalWithdrawnAmount(
+      new BN(formatUnits(withdrawFinalize, decimalToken))
+        .plus(new BN(totalWithdrawnAmount))
+        .toString(),
+    );
   };
 
   const handleModalButton = () => {
@@ -151,7 +150,7 @@ const ReceiverStatusCard = ({
         <div className="grid gap-2 text-midnightBlue">
           <CSummaryField
             label="Available"
-            value={isCancelled ? '0' : available.toFixed(3)}
+            value={stream.is_cancelled ? '0' : available.toFixed(3)}
             fieldSize="large"
           />
           <CSummaryField
