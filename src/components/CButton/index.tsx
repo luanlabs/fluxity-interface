@@ -2,9 +2,9 @@ import React from 'react';
 import cn from 'classnames';
 import Image from 'next/image';
 
+import WithdrawLogo from 'src/assets/WithdrawLogo';
 import buttonCustomStyles from './buttonCustomStyles';
 import FluxityLogoButton from 'src/assets/FluxityLogoButton';
-import WithdrawLogo from 'src/assets/withdrawLogo';
 
 export type CButtonSvgLogoType = 'fluxityLogo' | 'withdraw';
 export type CButtonVariantType = 'simple' | 'form';
