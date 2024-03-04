@@ -15,18 +15,25 @@ import { IToken } from 'src/reducers/tokens';
 import tokenToLogo from 'src/utils/tokenToLogo';
 import fromDecimals from 'src/utils/soroban/fromDecimals';
 import humanizeAmount from 'src/utils/humanizeAmount';
+import CEmptyList from 'src/components/CEmptyList';
+import { UserInfo, checkIsUserActive } from '../CreateStreamMainCard/checkIsUserActive';
 
 interface SelectTokenProps {
   onChange: (_: ISelectToken) => void;
   className?: string;
+  userInfo: UserInfo;
 }
 
-const SelectToken = ({ onChange, className }: SelectTokenProps) => {
+const SelectToken = ({ onChange, className, userInfo }: SelectTokenProps) => {
   const [selectedToken, setSelectedToken] = useState<null | IToken>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const id = useCustomID('selectToken');
   const tokens = useAppSelector((store) => store.tokens);
+
+  const address = useAppSelector((state) => state.user.address);
+
+  const isAccountActived = checkIsUserActive(userInfo);
 
   const handleTokenSelect = (token: IToken) => {
     setIsOpen(false);
@@ -61,7 +68,7 @@ const SelectToken = ({ onChange, className }: SelectTokenProps) => {
         onClick={openModal}
         id={id}
       >
-        {selectedToken ? (
+        {selectedToken && address && isAccountActived ? (
           <div className="flex items-center justify-start">
             <Image
               src={
@@ -81,37 +88,51 @@ const SelectToken = ({ onChange, className }: SelectTokenProps) => {
       </button>
 
       <CModal title="Select token" isOpen={isOpen} setIsOpen={setIsOpen}>
-        <CInput placeholder="Search name of token" icon={searchLogo} onChange={handleInputChange} />
+        {address && isAccountActived && (
+          <CInput
+            placeholder="Search name of token"
+            icon={searchLogo}
+            onChange={handleInputChange}
+          />
+        )}
 
         <div className="mt-[23px]">
-          {filteredTokens.map((token) => (
-            <div
-              className="flex items-center px-2 w-full cursor-pointer h-[72px] border-b last:border-none"
-              key={token.symbol}
-              onClick={() => handleTokenSelect(token)}
-            >
-              <div className="flex w-full items-center">
-                <div className="w-[70px]">
-                  <Image
-                    src={require(`../../../public/images/assets/${tokenToLogo(token)}.svg`).default}
-                    width={45}
-                    height={45}
-                    alt="a"
-                  />
+          {address && isAccountActived ? (
+            filteredTokens.map((token) => (
+              <div
+                className="flex items-center px-2 w-full cursor-pointer h-[72px] border-b last:border-none"
+                key={token.symbol}
+                onClick={() => handleTokenSelect(token)}
+              >
+                <div className="flex w-full items-center">
+                  <div className="w-[70px]">
+                    <Image
+                      src={
+                        require(`../../../public/images/assets/${tokenToLogo(token)}.svg`).default
+                      }
+                      width={45}
+                      height={45}
+                      alt="a"
+                    />
+                  </div>
+                  <div className="text-left w-full">
+                    <p className="text-black text-base w-full font-bold">{token.symbol}</p>
+                  </div>
                 </div>
-                <div className="text-left w-full">
-                  <p className="text-black text-base w-full font-bold">{token.symbol}</p>
-                </div>
-              </div>
 
-              <div className="flex items-center">
-                <span className="mr-5">{humanizeAmount(fromDecimals(token.balance))}</span>
-                <div className="h-[35px] w-[35px] rounded-[100px] bg-lavenderBlush hover:bg-[#f0efff95] flex justify-center items-center">
-                  <Image src={plusLogo} width={0} height={0} alt="plusLogo" />
+                <div className="flex items-center">
+                  <span className="mr-5">{humanizeAmount(fromDecimals(token.balance))}</span>
+                  <div className="h-[35px] w-[35px] rounded-[100px] bg-lavenderBlush hover:bg-[#f0efff95] flex justify-center items-center">
+                    <Image src={plusLogo} width={0} height={0} alt="plusLogo" />
+                  </div>
                 </div>
               </div>
+            ))
+          ) : (
+            <div>
+              <CEmptyList status="No token found" description="Please connect your wallet first" />
             </div>
-          ))}
+          )}
         </div>
       </CModal>
     </div>
