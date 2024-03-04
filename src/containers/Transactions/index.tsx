@@ -21,6 +21,7 @@ import { IFilterTokens } from 'src/constants/types';
 
 import getStatusStyles from './getStatusStyle';
 import isStreamWithdrawable from 'src/features/isStreamWithdrawable';
+import CEmptyList from 'src/components/CEmptyList';
 
 type StreamListProps = {
   searchValue: string;
@@ -191,13 +192,10 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
         </CCard>
       ))}
       {((!address && !isLoading) || !filteredStreams.length) && (
-        <div className="flex flex-col justify-center h-full items-center w-full select-none desktop:min-h-[200px]">
-          <Image src={noStreams} alt="icon" />
-          <p className="font-medium text-2xl text-[#8F8F8F]">No {selectedStatus} Streams</p>
-          <p className="mt-2 font-medium text-base text-[#8F8F8F] leading-4 mobile:text-center">
-            There are no active streams at the moment.
-          </p>
-        </div>
+        <CEmptyList
+          status={`No ${selectedStatus} Streams`}
+          description="There are no active streams at the moment."
+        />
       )}
     </div>
   );
