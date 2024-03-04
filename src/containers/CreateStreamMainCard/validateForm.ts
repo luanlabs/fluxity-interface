@@ -4,7 +4,7 @@ import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 import { checkBalance } from 'src/utils/checkBalance';
 import { CustomError } from 'src/models';
 import { FormValues } from './index';
-import { UserInfo, checkUserActived } from './checkUserActived';
+import { UserInfo, checkUserActived } from './checkIsUserActive';
 
 type Validation = {
   address: CustomError;

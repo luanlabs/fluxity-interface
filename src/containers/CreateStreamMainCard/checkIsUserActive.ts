@@ -3,7 +3,7 @@ export type UserInfo = {
   balance?: string;
 };
 
-export const checkUserActived = (token: UserInfo) => {
+export const checkIsUserActive = (token: UserInfo) => {
   if (token.balance) {
     return true;
   }

@@ -132,6 +132,10 @@ const CreateStream = () => {
                 control={control}
                 render={({ field }) => (
                   <SelectTokenContainer
+                    userInfo={{
+                      asset_type: usrInfo?.asset_type,
+                      balance: usrInfo?.balance,
+                    }}
                     className="desktop:w-full mobile:w-full fix-box:w-[90%]"
                     {...field}
                   />

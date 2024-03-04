@@ -16,9 +16,9 @@ import CTooltip from 'src/components/CTooltip';
 import tooltipDetails from 'src/constants/tooltipDetails';
 import {
   UserInfo,
-  checkUserActived,
+  checkIsUserActive,
   checkUserBalance,
-} from '../CreateStreamMainCard/checkUserActived';
+} from 'src/containers/CreateStreamMainCard/checkIsUserActive';
 
 interface SummaryProps {
   form: UseFormReturn<any, undefined>;
@@ -47,7 +47,7 @@ const Summary = ({ form, userInfo, address }: SummaryProps) => {
       errorMessage = 'Insufficient balance';
     }
 
-    const isAccountActived = checkUserActived(userInfo);
+    const isAccountActived = checkIsUserActive(userInfo);
     if (!isAccountActived) {
       errorMessage = 'Your account is inactive';
     }
