@@ -263,7 +263,7 @@ const CreateStream = () => {
               isFormValidated={isFormValidated}
               userInfo={{
                 asset_type: userInfo?.asset_type,
-                balance: usreInfo?.balance,
+                balance: userInfo?.balance,
               }}
               address={address}
             />
