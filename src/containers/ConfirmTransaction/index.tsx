@@ -26,13 +26,18 @@ import informCreatestreamAPI from 'src/features/informCreatestreamAPI';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
 
 interface ConfirmTransactions {
-  isConfirm: boolean;
-  setIsConfirm: (_: boolean) => void;
+  isConfirmClicked: boolean;
+  setIsConfirmClicked: (_: boolean) => void;
   form: UseFormReturn<any, undefined>;
-  resetField: () => void;
+  resetFields: () => void;
 }
 
-const ConfirmTransaction = ({ isConfirm, setIsConfirm, form, resetField }: ConfirmTransactions) => {
+const ConfirmTransaction = ({
+  isConfirmClicked,
+  setIsConfirmClicked,
+  form,
+  resetFields,
+}: ConfirmTransactions) => {
   const address = useAppSelector((state) => state.user.address);
   const values: FormValues = form.getValues();
 
@@ -50,13 +55,13 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form, resetField }: Confi
   });
 
   useEffect(() => {
-    if (isConfirm) {
+    if (isConfirmClicked) {
       setIsApproveModalOpen(true);
     }
-  }, [isConfirm]);
+  }, [isConfirmClicked]);
 
   useEffect(() => {
-    setIsConfirm(false);
+    setIsConfirmClicked(false);
   }, [isApproveModalOpen]);
 
   const handleCreateStreamOnClick = async () => {
@@ -180,7 +185,7 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form, resetField }: Confi
       setIsSendingCreateStreamTxModalOpen(false);
       return;
     }
-    resetField();
+    resetFields();
 
     setIsSendingCreateStreamTxModalOpen(false);
     await timeout(100);
