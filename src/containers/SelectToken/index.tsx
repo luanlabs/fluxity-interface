@@ -112,7 +112,7 @@ const SelectToken = ({ onChange, className, userInfo }: SelectTokenProps) => {
                       }
                       width={45}
                       height={45}
-                      alt="a"
+                      alt="logo"
                     />
                   </div>
                   <div className="text-left w-full">
