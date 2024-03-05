@@ -23,7 +23,7 @@ interface CInputRateProps {
   onChange: (values: CInputRateValue) => void;
   tooltipTitle: string;
   value: CInputRateValue;
-  isReset: boolean;
+  isFormReset: boolean;
 }
 
 const DropdownIndicator = () => {
@@ -44,7 +44,7 @@ const CInputRate = ({
   error,
   tooltipTitle,
   value,
-  isReset,
+  isFormReset,
   ...props
 }: CInputRateProps) => {
   const [inputValue, setInputValue] = useState('');
@@ -63,11 +63,11 @@ const CInputRate = ({
     if (!value) {
       setInputValue('');
 
-      if (isReset) {
+      if (isFormReset) {
         setSelectValue(flowRateOptions[2]);
       }
     }
-  }, [value, isReset]);
+  }, [value, isFormReset]);
 
   const handleSelectChange = (e: RateValue) => {
     onChange({

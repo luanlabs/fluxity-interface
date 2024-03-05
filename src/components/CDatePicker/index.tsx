@@ -19,8 +19,8 @@ interface CDatePickerProps {
   readonly?: boolean;
   tooltipTitle: string;
   tooltipDetails?: string;
-  isReset?: boolean;
-  setIsReset?: (_: boolean) => void;
+  isFormReset?: boolean;
+  setIsFormReset?: (_: boolean) => void;
   value: Date;
 }
 
@@ -34,46 +34,46 @@ const CDatePicker = ({
   tooltipDetails,
   tooltipTitle,
   value,
-  isReset,
-  setIsReset,
+  isFormReset,
+  setIsFormReset,
 }: CDatePickerProps) => {
   const id = useCustomID('CDatePicker');
   const [selectedDate, setSelectedDate] = useState(minDate || new Date());
   const [isDatePickerUsed, setIsDatePickerUsed] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [enabled, setEnabled] = useState(false);
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isOpenDatePicker, setIsOpenDatePicker] = useState(false);
+  const [enabledDatePicker, setEnabledDatePicker] = useState(false);
+  const [isEnabledToggle, setIsEnabledToggle] = useState(false);
 
   useEffect(() => {
     if (!value) {
       setIsDatePickerUsed(false);
-      setIsEnabled(false);
-      setEnabled(false);
+      setIsEnabledToggle(false);
+      setEnabledDatePicker(false);
 
-      if (isReset && setIsReset) {
-        if (!isEnabled && !isDatePickerUsed && enabled) {
-          setIsEnabled(true);
-          setIsReset(false);
+      if (isFormReset && setIsFormReset) {
+        if (!isEnabledToggle && !isDatePickerUsed && enabledDatePicker) {
+          setIsEnabledToggle(true);
+          setIsFormReset(false);
         } else {
-          setIsReset(true);
-          setIsEnabled(false);
+          setIsFormReset(true);
+          setIsEnabledToggle(false);
         }
       }
     } else {
-      setIsEnabled(true);
-      setEnabled(true);
+      setIsEnabledToggle(true);
+      setEnabledDatePicker(true);
     }
-    if (setIsReset) {
-      setIsReset(false);
+    if (setIsFormReset) {
+      setIsFormReset(false);
     }
-  }, [value, isEnabled, isReset, setIsReset]);
+  }, [value, isEnabledToggle, isFormReset, setIsFormReset]);
 
   const handleToggleStatus = (value: boolean) => {
-    setEnabled(value);
+    setEnabledDatePicker(value);
   };
 
   const handleChange = (value: Date) => {
-    setIsOpen(!isOpen);
+    setIsOpenDatePicker(!isOpenDatePicker);
     setSelectedDate(value);
     onChange(value);
 
@@ -97,7 +97,7 @@ const CDatePicker = ({
         ref={ref}
       >
         <span className={`${!isDatePickerUsed ? '' : 'text-sm text-midnightBlue'} `}>
-          <span className={!enabled && !readonly ? 'text-[#a2a1b7]' : ''}>
+          <span className={!enabledDatePicker && !readonly ? 'text-[#a2a1b7]' : ''}>
             {!isDatePickerUsed ? 'Choose date' : value}
           </span>
         </span>
@@ -108,7 +108,7 @@ const CDatePicker = ({
         bottom-[10px]
         w-[25px]
         h-[30px]
-        ${enabled || readonly ? 'bg-calendar' : 'bg-disableCalendar'}
+        ${enabledDatePicker || readonly ? 'bg-calendar' : 'bg-disableCalendar'}
         bg-no-repeat
         bg-right
         `}
@@ -127,11 +127,15 @@ const CDatePicker = ({
           tooltipDetails={tooltipDetails}
           tooltipTitle={tooltipTitle}
           htmlFor={id}
-          className={`mr-[10px] ${enabled || readonly ? '' : '!text-[#817fa0]'}`}
-          disabled={!enabled && !readonly ? true : false}
+          className={`mr-[10px] ${enabledDatePicker || readonly ? '' : '!text-[#817fa0]'}`}
+          disabled={!enabledDatePicker && !readonly ? true : false}
         />
         <div className="mb-1.5">
-          <CToggle onChange={handleToggleStatus} readonly={readonly} isEnabled={isEnabled} />
+          <CToggle
+            onChange={handleToggleStatus}
+            readonly={readonly}
+            isEnabledToggle={isEnabledToggle}
+          />
         </div>
       </div>
 
@@ -149,7 +153,7 @@ const CDatePicker = ({
             filterTime={filterPassedTime}
             timeCaption="Time"
             dateFormat="MMM dd, yyyy HH:mm"
-            disabled={!enabled && !readonly}
+            disabled={!enabledDatePicker && !readonly}
           />
         </Wrapper>
       </div>

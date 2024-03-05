@@ -35,8 +35,8 @@ export interface FormValues {
 const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');
 
 const CreateStream = () => {
-  const [isConfirm, setIsConfirm] = useState(false);
-  const [isReset, setIsReset] = useState(false);
+  const [isConfirmClicked, setIsConfirmClicked] = useState(false);
+  const [isFormReset, setIsFormReset] = useState(false);
   const [isFormValidated, setIsFormValidated] = useState(false);
 
   const { address } = useAppSelector((state) => state.user);
@@ -70,9 +70,13 @@ const CreateStream = () => {
 
   const onSubmit = (data: FormValues) => {};
 
-  const shouldBeResetField = () => {
-    if (!isReset) {
-      setIsReset(true);
+  const startDate = getValues('startDate') || new Date();
+  const endDate = getValues('endDate') && getValues('endDate');
+  const cliffDate = getValues('cliffDate') && getValues('cliffDate');
+
+  const resetFields = () => {
+    if (!isFormReset) {
+      setIsFormReset(true);
     }
     form.reset();
   };
@@ -81,7 +85,7 @@ const CreateStream = () => {
     if (!getValues('startDate')) {
       setValue('startDate', new Date(), {});
     }
-    setIsConfirm(true);
+    setIsConfirmClicked(true);
   };
 
   const isFormCompleteValidation = !isValid || isValidating || !isFormValidated || !address;
@@ -162,7 +166,7 @@ const CreateStream = () => {
                       className="basis-4/5 sm:!basis-0 md:basis-0 sm:mt-4 mobile:w-full "
                       errorMsg={errors.rate && errors.rate.message}
                       error={errors.rate?.message ? true : false}
-                      isReset={isReset}
+                      isFormReset={isFormReset}
                       {...field}
                     />
                   </div>
@@ -198,10 +202,10 @@ const CreateStream = () => {
                     label="Cliff date"
                     tooltipTitle="Cliff Date"
                     tooltipDetails={tooltipDetails.createStream.cliffDate}
-                    minDate={getValues('startDate') ? getValues('startDate') : new Date()}
-                    maxDate={getValues('endDate')}
-                    isReset={isReset}
-                    setIsReset={setIsReset}
+                    minDate={startDate}
+                    maxDate={endDate}
+                    isFormReset={isFormReset}
+                    setIsFormReset={setIsFormReset}
                     {...field}
                   />
                 )}
@@ -219,10 +223,10 @@ const CreateStream = () => {
                       label="Start date"
                       tooltipTitle="Start Date"
                       tooltipDetails={tooltipDetails.createStream.startDate}
-                      minDate={new Date()}
-                      maxDate={getValues('endDate') && getValues('endDate')}
-                      isReset={isReset}
-                      setIsReset={setIsReset}
+                      minDate={startDate}
+                      maxDate={endDate}
+                      isFormReset={isFormReset}
+                      setIsFormReset={setIsFormReset}
                     />
                   )}
                 />
@@ -238,9 +242,7 @@ const CreateStream = () => {
                       label="End date"
                       tooltipTitle="End Date"
                       tooltipDetails={tooltipDetails.createStream.endDate}
-                      minDate={
-                        getValues('cliffDate') ? new Date(getValues('cliffDate')) : new Date()
-                      }
+                      minDate={cliffDate ? cliffDate : startDate}
                       maxDate={INFINITY_DATE}
                       readonly
                     />
@@ -296,9 +298,9 @@ const CreateStream = () => {
 
       <ConfirmTransaction
         form={form}
-        isConfirm={isConfirm}
-        setIsConfirm={setIsConfirm}
-        resetField={shouldBeResetField}
+        isConfirmClicked={isConfirmClicked}
+        setIsConfirmClicked={setIsConfirmClicked}
+        resetFields={resetFields}
       />
     </form>
   );
