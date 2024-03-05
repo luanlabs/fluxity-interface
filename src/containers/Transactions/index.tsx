@@ -130,9 +130,9 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
                     src={coin}
                     alt="coin"
                     className={`${
-                      isStreamWithdrawable(stream)
+                      isStreamWithdrawable(stream) && !stream.isSender
                         ? 'mobile:block desktop:hidden bg-[#FFF59A] rounded-full mr-1'
-                        : ''
+                        : 'desktop:hidden mobile:hidden'
                     }`}
                   />
                 </div>
@@ -157,15 +157,17 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
               >
                 {stream.status === StreamStatus.ONGOING ? 'Active' : capitalize(stream.status)}
               </div>
-              {isStreamWithdrawable(stream) && stream.status === StreamStatus.EXPIRED ? (
-                <Image
-                  src={coin}
-                  alt="coin"
-                  className={`ml-3 mobile:hidden desktop:block bg-[#FFF59A] rounded-full mr-1`}
-                />
-              ) : (
-                <div className="mobile:hidden h-6 w-6 ml-3" />
-              )}
+              <div>
+                {isStreamWithdrawable(stream) && !stream.isSender ? (
+                  <Image
+                    src={coin}
+                    alt="coin"
+                    className={`ml-3 mobile:hidden desktop:block bg-[#FFF59A] rounded-full mr-1`}
+                  />
+                ) : (
+                  <div className="mobile:hidden h-6 w-6 mr-[19px]" />
+                )}
+              </div>
 
               <div
                 className="flex desktop:ml-[47px] items-center desktop:justify-end desktop:font-bold gap-2 desktop:w-[160px]

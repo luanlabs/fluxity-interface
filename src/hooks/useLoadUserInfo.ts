@@ -9,16 +9,18 @@ const useLoadUserInfo = (address: string) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (address) {
-      getAccount(address).then((info) => {
+    const fetchData = async () => {
+      if (address) {
+        const info = await getAccount(address);
         dispatch(loadAccount(info));
-      });
-      getAlreadyMinted(address).then((isMinted) => {
+
+        const isMinted = await getAlreadyMinted(address);
         if (isMinted) {
           dispatch(hasTestnetTokens());
         }
-      });
-    }
+      }
+    };
+    fetchData();
   }, [dispatch, address]);
 };
 

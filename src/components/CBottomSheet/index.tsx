@@ -13,6 +13,7 @@ type CModalProps = {
   headerImage?: string | StaticImport;
   headerClassName?: string;
   detent?: 'full-height' | 'content-height';
+  isSticky?: boolean;
 };
 
 const CBottomSheet = ({
@@ -25,9 +26,12 @@ const CBottomSheet = ({
   headerImage,
   headerClassName,
   detent = 'content-height',
+  isSticky,
 }: CModalProps) => {
   const closeModal = () => {
-    setIsModalOpen(false);
+    if (!isSticky) {
+      setIsModalOpen(false);
+    }
   };
 
   return (
