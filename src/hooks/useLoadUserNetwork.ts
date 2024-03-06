@@ -6,7 +6,7 @@ const useLoadUserNetwork = () => {
 
   useEffect(() => {
     const fetchNetwork = () => {
-      getNetwork().then((network: any) => {
+      getNetwork().then((network: string) => {
         setCurrentNetwork(network);
       });
     };
