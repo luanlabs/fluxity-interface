@@ -10,6 +10,7 @@ type CModalProps = {
   isOpen: boolean;
   width?: string;
   title?: string;
+  isSticky?: boolean;
   sheetClassName?: string;
   dialogClassName?: string;
   hasCloseButton?: boolean;
@@ -23,6 +24,7 @@ const CModal = ({
   title,
   isOpen,
   children,
+  isSticky,
   setIsOpen,
   headerImage,
   hasCloseButton,
@@ -37,6 +39,7 @@ const CModal = ({
         width={width}
         title={title}
         isOpen={isOpen}
+        isSticky={isSticky}
         setIsOpen={setIsOpen}
         headerImage={headerImage}
         className={dialogClassName}
@@ -47,10 +50,11 @@ const CModal = ({
       </CDialog>
 
       <CBottomSheet
-        isModalOpen={isOpen}
         contentClass="p-4"
-        setIsModalOpen={setIsOpen}
+        isSticky={isSticky}
+        isModalOpen={isOpen}
         headerImage={headerImage}
+        setIsModalOpen={setIsOpen}
         headerClassName={headerClassName}
         className={cn(`desktop:!hidden`, sheetClassName)}
       >

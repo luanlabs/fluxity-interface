@@ -19,7 +19,7 @@ export type CButtonColorType =
 
 interface ButtonProps {
   color?: CButtonColorType;
-  content: string;
+  content: string | React.ReactNode;
   variant: CButtonVariantType;
   disabled?: boolean;
   type?: 'button' | 'submit';
