@@ -82,9 +82,6 @@ const CreateStream = () => {
   };
 
   const handleOpenModals = () => {
-    if (!getValues('startDate')) {
-      setValue('startDate', new Date(), {});
-    }
     setIsConfirmClicked(true);
   };
 

@@ -13,7 +13,7 @@ const { scvMap } = xdr.ScVal;
 const { ScMapEntry: addToMap } = xdr;
 
 const toXdrValue = (params: FormValues, address: string) => {
-  let startDate = dateToSeconds(params.startDate).toString();
+  let startDate = dateToSeconds(params.startDate ? params.startDate : new Date()).toString();
 
   const endDate = dateToSeconds(params.endDate).toString();
   const currentDate = dateToSeconds(new Date()).toString();
