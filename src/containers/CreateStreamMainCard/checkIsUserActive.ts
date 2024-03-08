@@ -1,9 +1,9 @@
-export type UserInfo = {
+export type xlmAssetType = {
   asset_type?: string;
   balance?: string;
 };
 
-export const checkIsUserActive = (token: UserInfo) => {
+export const checkIsUserActive = (token: xlmAssetType) => {
   if (token.balance) {
     return true;
   }
@@ -11,7 +11,7 @@ export const checkIsUserActive = (token: UserInfo) => {
   return false;
 };
 
-export const checkUserBalance = (token: UserInfo) => {
+export const checkUserBalance = (token: xlmAssetType) => {
   if (Number(token.balance) < 2) {
     return false;
   }

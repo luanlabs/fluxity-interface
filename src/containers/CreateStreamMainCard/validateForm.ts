@@ -4,7 +4,7 @@ import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 import { checkBalance } from 'src/utils/checkBalance';
 import { CustomError } from 'src/models';
 import { FormValues } from './index';
-import { UserInfo, checkUserActived } from './checkIsUserActive';
+import { xlmAssetType, checkIsUserActive } from './checkIsUserActive';
 
 type Validation = {
   address: CustomError;
@@ -16,7 +16,7 @@ const validateForm = (
   values: FormValues,
   setIsFormValidated: (_: boolean) => void,
   address: string,
-  user: UserInfo,
+  user: xlmAssetType,
 ) => {
   const errors = {} as Validation;
   setIsFormValidated(false);
@@ -34,7 +34,7 @@ const validateForm = (
     };
   }
 
-  const isActiveAccount = checkUserActived(user);
+  const isActiveAccount = checkIsUserActive(user);
 
   if (!isActiveAccount) {
     return {

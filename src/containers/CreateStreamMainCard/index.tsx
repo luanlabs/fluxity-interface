@@ -39,14 +39,14 @@ const CreateStream = () => {
   const [isConfirm, setIsConfirm] = useState(false);
 
   const { address } = useAppSelector((state) => state.user);
-  const userInfo = useAppSelector((state) => state.user?.info?.balances[0]);
+  const xlmAsset = useAppSelector((state) => state.user?.info?.balances[0]);
 
   const form = useForm<FormValues>({
     mode: 'onChange',
     resolver: (formValues) =>
       validateForm(formValues, setIsFormValidated, address, {
-        asset_type: userInfo?.asset_type,
-        balance: userInfo?.balance,
+        asset_type: xlmAsset?.asset_type,
+        balance: xlmAsset?.balance,
       }),
     defaultValues: {
       streamingModel: 'linear',
@@ -132,9 +132,9 @@ const CreateStream = () => {
                 control={control}
                 render={({ field }) => (
                   <SelectTokenContainer
-                    userInfo={{
-                      asset_type: userInfo?.asset_type,
-                      balance: userInfo?.balance,
+                    xlmAsset={{
+                      asset_type: xlmAsset?.asset_type,
+                      balance: xlmAsset?.balance,
                     }}
                     className="desktop:w-full mobile:w-full fix-box:w-[90%]"
                     {...field}
@@ -261,9 +261,9 @@ const CreateStream = () => {
             <SummaryContainer
               form={form}
               isFormValidated={isFormValidated}
-              userInfo={{
-                asset_type: userInfo?.asset_type,
-                balance: userInfo?.balance,
+              xlmAsset={{
+                asset_type: xlmAsset?.asset_type,
+                balance: xlmAsset?.balance,
               }}
               address={address}
             />

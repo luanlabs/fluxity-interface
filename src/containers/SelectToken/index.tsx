@@ -16,15 +16,15 @@ import tokenToLogo from 'src/utils/tokenToLogo';
 import fromDecimals from 'src/utils/soroban/fromDecimals';
 import humanizeAmount from 'src/utils/humanizeAmount';
 import CEmptyList from 'src/components/CEmptyList';
-import { UserInfo, checkIsUserActive } from '../CreateStreamMainCard/checkIsUserActive';
+import { xlmAssetType, checkIsUserActive } from '../CreateStreamMainCard/checkIsUserActive';
 
 interface SelectTokenProps {
   onChange: (_: ISelectToken) => void;
   className?: string;
-  userInfo: UserInfo;
+  xlmAsset: xlmAssetType;
 }
 
-const SelectToken = ({ onChange, className, userInfo }: SelectTokenProps) => {
+const SelectToken = ({ onChange, className, xlmAsset }: SelectTokenProps) => {
   const [selectedToken, setSelectedToken] = useState<null | IToken>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -33,7 +33,7 @@ const SelectToken = ({ onChange, className, userInfo }: SelectTokenProps) => {
 
   const address = useAppSelector((state) => state.user.address);
 
-  const isAccountActived = checkIsUserActive(userInfo);
+  const isAccountActived = checkIsUserActive(xlmAsset);
 
   const handleTokenSelect = (token: IToken) => {
     setIsOpen(false);

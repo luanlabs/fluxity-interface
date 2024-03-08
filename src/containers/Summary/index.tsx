@@ -15,7 +15,7 @@ import humanizeAmount from 'src/utils/humanizeAmount';
 import CTooltip from 'src/components/CTooltip';
 import tooltipDetails from 'src/constants/tooltipDetails';
 import {
-  UserInfo,
+  xlmAssetType,
   checkIsUserActive,
   checkUserBalance,
 } from 'src/containers/CreateStreamMainCard/checkIsUserActive';
@@ -23,11 +23,11 @@ import {
 interface SummaryProps {
   form: UseFormReturn<any, undefined>;
   isFormValidated: boolean;
-  userInfo: UserInfo;
+  xlmAsset: xlmAssetType;
   address: string;
 }
 
-const Summary = ({ form, userInfo, address }: SummaryProps) => {
+const Summary = ({ form, xlmAsset, address }: SummaryProps) => {
   const values: FormValues = form.getValues();
   const getFormValues = mapFormValues(values);
 
@@ -47,12 +47,12 @@ const Summary = ({ form, userInfo, address }: SummaryProps) => {
       errorMessage = 'Insufficient balance';
     }
 
-    const isAccountActived = checkIsUserActive(userInfo);
+    const isAccountActived = checkIsUserActive(xlmAsset);
     if (!isAccountActived) {
       errorMessage = 'Your account is inactive';
     }
 
-    const isAccountNativeBalance = checkUserBalance(userInfo);
+    const isAccountNativeBalance = checkUserBalance(xlmAsset);
     if (!isAccountNativeBalance) {
       errorMessage = ' Insufficient XLM to make the transaction';
     }
