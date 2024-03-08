@@ -42,31 +42,31 @@ const CDatePicker = ({
   const [isDatePickerUsed, setIsDatePickerUsed] = useState(false);
   const [isOpenDatePicker, setIsOpenDatePicker] = useState(false);
   const [enabledDatePicker, setEnabledDatePicker] = useState(false);
-  const [isEnabledToggle, setIsEnabledToggle] = useState(false);
+  const [isToggleEnabled, setIsToggleEnabled] = useState(false);
 
   useEffect(() => {
     if (!value) {
       setIsDatePickerUsed(false);
-      setIsEnabledToggle(false);
+      setIsToggleEnabled(false);
       setEnabledDatePicker(false);
 
       if (isFormReset && setIsFormReset) {
-        if (!isEnabledToggle && !isDatePickerUsed && enabledDatePicker) {
-          setIsEnabledToggle(true);
+        if (!isToggleEnabled && !isDatePickerUsed && enabledDatePicker) {
+          setIsToggleEnabled(true);
           setIsFormReset(false);
         } else {
           setIsFormReset(true);
-          setIsEnabledToggle(false);
+          setIsToggleEnabled(false);
         }
       }
     } else {
-      setIsEnabledToggle(true);
+      setIsToggleEnabled(true);
       setEnabledDatePicker(true);
     }
     if (setIsFormReset) {
       setIsFormReset(false);
     }
-  }, [value, isEnabledToggle, isFormReset, setIsFormReset]);
+  }, [value, isToggleEnabled, isFormReset, setIsFormReset]);
 
   const handleToggleStatus = (value: boolean) => {
     setEnabledDatePicker(value);
@@ -134,7 +134,7 @@ const CDatePicker = ({
           <CToggle
             onChange={handleToggleStatus}
             readonly={readonly}
-            isEnabledToggle={isEnabledToggle}
+            isToggleEnabled={isToggleEnabled}
           />
         </div>
       </div>

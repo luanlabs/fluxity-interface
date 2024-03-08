@@ -17,7 +17,7 @@ const CancellableStream = ({
   tooltipDetails,
   value,
 }: CancellableStreamProps) => {
-  const [isEnabledToggle, setIsEnabledToggle] = useState(false);
+  const [isToggleEnabled, setIsToggleEnabled] = useState(false);
 
   const handleToggleChecker = (value: boolean) => {
     onChange(value ? 'ON' : 'OFF');
@@ -25,11 +25,11 @@ const CancellableStream = ({
 
   useEffect(() => {
     if (value === 'OFF') {
-      setIsEnabledToggle(false);
+      setIsToggleEnabled(false);
     } else {
-      setIsEnabledToggle(true);
+      setIsToggleEnabled(true);
     }
-  }, [value, isEnabledToggle]);
+  }, [value, isToggleEnabled]);
 
   return (
     <div className="w-full flex items-center justify-between sm:mb-10">
@@ -38,7 +38,7 @@ const CancellableStream = ({
         <CLabel tooltipDetails={tooltipDetails} tooltipTitle={tooltipTitle} />
       </div>
       <div className="flex items-center">
-        <CToggle onChange={handleToggleChecker} isEnabledToggle={isEnabledToggle} />
+        <CToggle onChange={handleToggleChecker} isToggleEnabled={isToggleEnabled} />
       </div>
     </div>
   );
