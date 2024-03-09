@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import CModal from 'src/components/CModal';
 import CInput from 'src/components/CInput';
@@ -21,13 +21,16 @@ import { xlmAssetType, checkIsUserActive } from '../CreateStreamMainCard/checkIs
 interface SelectTokenProps {
   onChange: (_: ISelectToken) => void;
   className?: string;
+  value: ISelectToken;
   xlmAsset: xlmAssetType;
 }
 
-const SelectToken = ({ onChange, className, xlmAsset }: SelectTokenProps) => {
+const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps) => {
   const [selectedToken, setSelectedToken] = useState<null | IToken>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [selectedToken, setSelectedToken] = useState<null | IToken>(null);
+
   const id = useCustomID('selectToken');
   const tokens = useAppSelector((store) => store.tokens);
 
@@ -54,6 +57,13 @@ const SelectToken = ({ onChange, className, xlmAsset }: SelectTokenProps) => {
   const openModal = () => {
     setIsOpen(true);
   };
+
+  useEffect(() => {
+    if (!value) {
+      setSelectedToken(null);
+      setSearchValue('');
+    }
+  }, [value]);
 
   const filteredTokens = tokens.filter((token) =>
     token.symbol.toLowerCase().startsWith(searchValue.toLowerCase()),

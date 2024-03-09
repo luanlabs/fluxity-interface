@@ -3,37 +3,41 @@ import { scValToNative } from 'stellar-sdk';
 import { UseFormReturn } from 'react-hook-form';
 
 import BN from 'src/utils/BN';
-import CreateStreamConfirmModal from 'src/containers/Modals/CreateStreamConfirmModal';
-import TransactionSuccessModal from 'src/containers/Modals/TransactionSuccessModal';
-import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
-import sendTransaction from 'src/features/soroban/sendTransaction';
-import ApproveFormModal from 'src/containers/Modals/ApproveFormModal';
-import CProcessModal from 'src/components/CProcessModal';
-import toast from 'src/components/CToast';
-import signTransaction from 'src/utils/soroban/signTransaction';
 import timeout from 'src/utils/timeout';
-import getERC20Allowance from 'src/features/soroban/getERC20Allowance';
+import toast from 'src/components/CToast';
+import approve from 'src/features/soroban/approve';
 import { useAppSelector } from 'src/hooks/useRedux';
-import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
-import { FormValues } from '../CreateStreamMainCard';
+import humanizeAmount from 'src/utils/humanizeAmount';
+import CProcessModal from 'src/components/CProcessModal';
+import CModalSuccess from 'src/components/CModalSuccess';
 import { FLUXITY_CONTRACT } from 'src/constants/contracts';
 import toDecimals from 'src/utils/createStream/toDecimals';
-import approve from 'src/features/soroban/approve';
+import { ExternalPages } from 'src/constants/externalPages';
 import createStream from 'src/features/soroban/createStream';
-import informCreatestreamAPI from 'src/features/informCreatestreamAPI';
-import CModalSuccess from 'src/components/CModalSuccess';
+import signTransaction from 'src/utils/soroban/signTransaction';
+import { FormValues } from 'src/containers/CreateStreamMainCard';
 import DoubleButtonModal from 'src/components/DoubleButtonModal';
 import SingleButtonModal from 'src/components/SingleButtonModal';
-import humanizeAmount from 'src/utils/humanizeAmount';
-import { ExternalPages } from 'src/constants/externalPages';
+import sendTransaction from 'src/features/soroban/sendTransaction';
+import ApproveFormModal from 'src/containers/Modals/ApproveFormModal';
+import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
+import getERC20Allowance from 'src/features/soroban/getERC20Allowance';
+import informCreatestreamAPI from 'src/features/informCreatestreamAPI';
+import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
 
 interface ConfirmTransactions {
-  isConfirm: boolean;
-  setIsConfirm: (_: boolean) => void;
+  isConfirmClicked: boolean;
+  setIsConfirmClicked: (_: boolean) => void;
   form: UseFormReturn<any, undefined>;
+  resetFields: () => void;
 }
 
-const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactions) => {
+const ConfirmTransaction = ({
+  isConfirmClicked,
+  setIsConfirmClicked,
+  form,
+  resetFields,
+}: ConfirmTransactions) => {
   const address = useAppSelector((state) => state.user.address);
   const values: FormValues = form.getValues();
 
@@ -51,13 +55,13 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
   });
 
   useEffect(() => {
-    if (isConfirm) {
+    if (isConfirmClicked) {
       setIsApproveModalOpen(true);
     }
-  }, [isConfirm]);
+  }, [isConfirmClicked]);
 
   useEffect(() => {
-    setIsConfirm(false);
+    setIsConfirmClicked(false);
   }, [isApproveModalOpen]);
 
   const handleCreateStreamOnClick = async () => {
@@ -181,6 +185,7 @@ const ConfirmTransaction = ({ isConfirm, setIsConfirm, form }: ConfirmTransactio
       setIsSendingCreateStreamTxModalOpen(false);
       return;
     }
+    resetFields();
 
     setIsSendingCreateStreamTxModalOpen(false);
     await timeout(100);

@@ -25,6 +25,8 @@ const WalletAddressContainer = ({
   clearInputClick,
   tooltipDetails,
   tooltipTitle,
+  value,
+  ...props
 }: WalletAddressContainer) => {
   const [recipientWalletAddress, setRecipientWalletAddress] = useState('');
   const [inputValue, setInputValue] = useState('');
@@ -48,6 +50,13 @@ const WalletAddressContainer = ({
   }, []);
 
   useEffect(() => {
+    if (!value) {
+      setRecipientWalletAddress('');
+      setInputValue('');
+    }
+  }, [value]);
+
+  useEffect(() => {
     setRandomColor(generateRandomHexColor());
   }, [recipientWalletAddress]);
 
@@ -57,6 +66,7 @@ const WalletAddressContainer = ({
 
   const handleCloseModal = () => {
     setIsOpen(false);
+
     if (recipientWalletAddress) {
       setInputValue('');
       setRecipientWalletAddress('');
@@ -147,6 +157,7 @@ const WalletAddressContainer = ({
           clearInput={isValidateAddress && recipientWalletAddress != ''}
           paste={recipientWalletAddress === ''}
           border
+          {...props}
         />
 
         <div className="h-10 mt-3">

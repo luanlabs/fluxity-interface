@@ -1,13 +1,14 @@
-import React, { forwardRef, useState } from 'react';
-
+import React, { forwardRef, useEffect, useState } from 'react';
 import cn from 'classnames';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 
 import useCustomID from 'src/hooks/useCustomId';
-import CToggle from '../CToggle';
-import CLabel from '../CLabel';
+import CToggle from 'src/components/CToggle';
+import CLabel from 'src/components/CLabel';
+
 import { Wrapper } from './datePickerStyles';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 interface CDatePickerProps {
   label?: string;
@@ -18,6 +19,9 @@ interface CDatePickerProps {
   readonly?: boolean;
   tooltipTitle: string;
   tooltipDetails?: string;
+  isFormReset?: boolean;
+  setIsFormReset?: (_: boolean) => void;
+  value: Date;
 }
 
 const CDatePicker = ({
@@ -29,15 +33,47 @@ const CDatePicker = ({
   readonly,
   tooltipDetails,
   tooltipTitle,
+  value,
+  isFormReset,
+  setIsFormReset,
 }: CDatePickerProps) => {
   const id = useCustomID('CDatePicker');
   const [selectedDate, setSelectedDate] = useState(minDate || new Date());
   const [isDatePickerUsed, setIsDatePickerUsed] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [enabled, setEnabled] = useState(false);
+  const [isOpenDatePicker, setIsOpenDatePicker] = useState(false);
+  const [enabledDatePicker, setEnabledDatePicker] = useState(false);
+  const [isToggleEnabled, setIsToggleEnabled] = useState(false);
+
+  useEffect(() => {
+    if (!value) {
+      setIsDatePickerUsed(false);
+      setIsToggleEnabled(false);
+      setEnabledDatePicker(false);
+
+      if (isFormReset && setIsFormReset) {
+        if (!isToggleEnabled && !isDatePickerUsed && enabledDatePicker) {
+          setIsToggleEnabled(true);
+          setIsFormReset(false);
+        } else {
+          setIsFormReset(true);
+          setIsToggleEnabled(false);
+        }
+      }
+    } else {
+      setIsToggleEnabled(true);
+      setEnabledDatePicker(true);
+    }
+    if (setIsFormReset) {
+      setIsFormReset(false);
+    }
+  }, [value, isToggleEnabled, isFormReset, setIsFormReset]);
+
+  const handleToggleStatus = (value: boolean) => {
+    setEnabledDatePicker(value);
+  };
 
   const handleChange = (value: Date) => {
-    setIsOpen(!isOpen);
+    setIsOpenDatePicker(!isOpenDatePicker);
     setSelectedDate(value);
     onChange(value);
 
@@ -53,10 +89,6 @@ const CDatePicker = ({
     return minDate.getTime() < time.getTime() && maxDate.getTime() > time.getTime();
   };
 
-  const handleToggleStatus = (value: boolean) => {
-    setEnabled(value);
-  };
-
   const CustomInput = forwardRef<HTMLInputElement>(({ value, onClick }, ref) => (
     <div className={cn('relative w-full', className)}>
       <button
@@ -65,7 +97,7 @@ const CDatePicker = ({
         ref={ref}
       >
         <span className={`${!isDatePickerUsed ? '' : 'text-sm text-midnightBlue'} `}>
-          <span className={!enabled && !readonly ? 'text-[#a2a1b7]' : ''}>
+          <span className={!enabledDatePicker && !readonly ? 'text-[#a2a1b7]' : ''}>
             {!isDatePickerUsed ? 'Choose date' : value}
           </span>
         </span>
@@ -76,7 +108,7 @@ const CDatePicker = ({
         bottom-[10px]
         w-[25px]
         h-[30px]
-        ${enabled || readonly ? 'bg-calendar' : 'bg-disableCalendar'}
+        ${enabledDatePicker || readonly ? 'bg-calendar' : 'bg-disableCalendar'}
         bg-no-repeat
         bg-right
         `}
@@ -95,11 +127,15 @@ const CDatePicker = ({
           tooltipDetails={tooltipDetails}
           tooltipTitle={tooltipTitle}
           htmlFor={id}
-          className={`mr-[10px] ${enabled || readonly ? '' : '!text-[#817fa0]'}`}
-          disabled={!enabled && !readonly ? true : false}
+          className={`mr-[10px] ${enabledDatePicker || readonly ? '' : '!text-[#817fa0]'}`}
+          disabled={!enabledDatePicker && !readonly ? true : false}
         />
         <div className="mb-1.5">
-          <CToggle onChange={handleToggleStatus} readonly={readonly} />
+          <CToggle
+            onChange={handleToggleStatus}
+            readonly={readonly}
+            isToggleEnabled={isToggleEnabled}
+          />
         </div>
       </div>
 
@@ -117,7 +153,7 @@ const CDatePicker = ({
             filterTime={filterPassedTime}
             timeCaption="Time"
             dateFormat="MMM dd, yyyy HH:mm"
-            disabled={!enabled && !readonly}
+            disabled={!enabledDatePicker && !readonly}
           />
         </Wrapper>
       </div>

@@ -10,6 +10,10 @@ const options = {
 };
 
 export const mapFormValues = (values: FormValues) => {
+  if (!values.startDate) {
+    values.startDate = new Date();
+  }
+
   const newValues = Object.entries(values)
     .filter((value) => value[1])
     .filter((value) => {

@@ -34,10 +34,6 @@ const Summary = ({ form, xlmAsset, address }: SummaryProps) => {
   let totalAmount = new BN(0);
   let errorMessage = '';
 
-  if (!values.startDate) {
-    values.startDate = new Date();
-  }
-
   if (values.endDate && values?.rate?.amount && values?.rate?.rate?.value && values.token) {
     totalAmount = calculateTotalAmount(values);
 
