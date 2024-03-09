@@ -1,22 +1,25 @@
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
+import { useAppSelector } from 'src/hooks/useRedux';
+import { ISelectToken } from 'src/models';
 import CModal from 'src/components/CModal';
 import CInput from 'src/components/CInput';
 import CLabel from 'src/components/CLabel';
-import { ISelectToken } from 'src/models';
+import { IToken } from 'src/reducers/tokens';
 import useCustomID from 'src/hooks/useCustomId';
+import tokenToLogo from 'src/utils/tokenToLogo';
+import CEmptyList from 'src/components/CEmptyList';
+import humanizeAmount from 'src/utils/humanizeAmount';
+import fromDecimals from 'src/utils/soroban/fromDecimals';
+import {
+  xlmAssetType,
+  checkIsUserActive,
+} from 'src/containers/CreateStreamMainCard/checkIsUserActive';
 
 import plusLogo from 'public/images/Plus.svg';
 import arrowLogo from 'public/images/arrow.svg';
 import searchLogo from 'public/images/search.svg';
-import { useAppSelector } from 'src/hooks/useRedux';
-import { IToken } from 'src/reducers/tokens';
-import tokenToLogo from 'src/utils/tokenToLogo';
-import fromDecimals from 'src/utils/soroban/fromDecimals';
-import humanizeAmount from 'src/utils/humanizeAmount';
-import CEmptyList from 'src/components/CEmptyList';
-import { xlmAssetType, checkIsUserActive } from '../CreateStreamMainCard/checkIsUserActive';
 
 interface SelectTokenProps {
   onChange: (_: ISelectToken) => void;
@@ -29,7 +32,6 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
   const [selectedToken, setSelectedToken] = useState<null | IToken>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const [selectedToken, setSelectedToken] = useState<null | IToken>(null);
 
   const id = useCustomID('selectToken');
   const tokens = useAppSelector((store) => store.tokens);
