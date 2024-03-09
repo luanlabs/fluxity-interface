@@ -53,7 +53,6 @@ const numberToScVal = (value: bigint) => {
 
   const padded = Buffer.alloc(16);
   buf.copy(padded, padded.length - buf.length);
-  console.debug({ value: value.toString(), padded });
 
   if (b < 0) {
     padded[0] |= 0x80;

@@ -1,78 +1,37 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import formatUnits from 'src/utils/formatUnits';
-import { loadTokens } from 'src/reducers/tokens';
-import { IStreamHistory } from 'src/constants/types';
-import { loadStreamHistory } from 'src/reducers/user';
-import getStreamList from 'src/features/getStreamList';
-import { getTokenList } from 'src/features/getTokenList';
-import getTokenBalances from 'src/features/getTokenBalances';
-import { useAppDispatch, useAppSelector } from 'src/hooks/useRedux';
-import { calculateCompletionPercentage } from 'src/utils/calculateCompletionPercentage';
+import CModal from 'src/components/CModal';
+import useLoadTokens from 'src/hooks/useLoadTokens';
+import { useAppSelector } from 'src/hooks/useRedux';
+import useLoadStreams from 'src/hooks/useLoadStreams';
+import useLoadUserInfo from 'src/hooks/useLoadUserInfo';
+import useConnectWallet from 'src/hooks/useConnectWallet';
+import useLoadTokenBalances from 'src/hooks/useLoadTokenBalances';
+import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
+import ChangeNetworkModal from '../ChangeNetworkModal';
 
 const AppDataFetch = () => {
-  const dispatch = useAppDispatch();
-  const tokens = useAppSelector((state) => state.tokens);
+  const [shouldModalOpen, setShouldModalOpen] = useState(false);
   const address = useAppSelector((state) => state.user.address);
 
-  useEffect(() => {
-    if (!tokens.length) {
-      getTokenList().then((data) => {
-        const mappedTokens = data.data.result.map((token) => {
-          return { ...token, balance: '0' };
-        });
-
-        dispatch(loadTokens(mappedTokens));
-      });
-    }
-  }, [dispatch, tokens.length]);
+  useConnectWallet();
+  useLoadUserInfo(address);
+  const currentNetwork = useLoadUserNetwork();
+  useLoadTokens();
+  useLoadTokenBalances(address);
+  useLoadStreams(address);
 
   useEffect(() => {
-    if (address) {
-      const fetchStreams = () => {
-        getStreamList(address).then((data) => {
-          const streamHistories: IStreamHistory[] = data.map((stream) => {
-            const completionPercentage = calculateCompletionPercentage(
-              stream.start_date,
-              stream.end_date,
-            );
-            const streamAmount = formatUnits(stream.amount, 7);
-            return {
-              ...stream,
-              streamAmount,
-              completionPercentage,
-              isSender: address === stream.sender,
-            };
-          });
-          dispatch(loadStreamHistory(streamHistories));
-        });
-      };
+    setShouldModalOpen(currentNetwork !== 'FUTURENET');
+  }, [currentNetwork]);
 
-      fetchStreams();
-
-      const intervalId = setInterval(fetchStreams, 5000);
-
-      return () => clearInterval(intervalId);
-    }
-  }, [dispatch, address]);
-
-  useEffect(() => {
-    const fetchTokenBalances = () => {
-      if (address) {
-        getTokenBalances(address, tokens)
-          .then((updatedTokens) => {
-            dispatch(loadTokens(updatedTokens));
-          })
-          .catch((_) => {});
-      }
-    };
-
-    const intervalId = setInterval(fetchTokenBalances, 25000);
-
-    return () => clearInterval(intervalId);
-  }, [address, dispatch, tokens]);
-
-  return <></>;
+  return (
+    <>
+      <CModal isOpen={shouldModalOpen} setIsOpen={setShouldModalOpen} isSticky>
+        <ChangeNetworkModal />
+      </CModal>
+    </>
+  );
 };
 
 export default AppDataFetch;

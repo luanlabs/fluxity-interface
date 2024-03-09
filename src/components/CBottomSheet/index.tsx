@@ -1,33 +1,47 @@
-import Sheet from 'react-modal-sheet';
 import Image from 'next/image';
+import Sheet from 'react-modal-sheet';
+
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 
 type CModalProps = {
-  isOpen: boolean;
+  isModalOpen: boolean;
   className?: string;
   headerClass?: string;
   contentClass?: string;
-  setIsOpen: (_: boolean) => void;
+  setIsModalOpen: (_: boolean) => void;
   children: React.ReactNode;
   headerImage?: string | StaticImport;
   headerClassName?: string;
+  detent?: 'full-height' | 'content-height';
+  isSticky?: boolean;
 };
 
 const CBottomSheet = ({
-  isOpen,
+  isModalOpen,
   children,
-  setIsOpen,
+  setIsModalOpen,
   className,
   headerClass,
   contentClass,
   headerImage,
   headerClassName,
+  detent = 'content-height',
+  isSticky,
 }: CModalProps) => {
   const closeModal = () => {
-    setIsOpen(false);
+    if (!isSticky) {
+      setIsModalOpen(false);
+    }
   };
+
   return (
-    <Sheet isOpen={isOpen} onClose={closeModal} detent="content-height" className={className}>
+    <Sheet
+      isOpen={isModalOpen}
+      onClose={closeModal}
+      detent={detent}
+      className={className}
+      disableScrollLocking
+    >
       <Sheet.Container className="!rounded-t-[20px]">
         <Sheet.Header className={headerClass}>
           {headerImage && (
@@ -38,7 +52,7 @@ const CBottomSheet = ({
         </Sheet.Header>
         <Sheet.Content className={contentClass}>{children}</Sheet.Content>
       </Sheet.Container>
-      <Sheet.Backdrop />
+      <Sheet.Backdrop onTap={closeModal} />
     </Sheet>
   );
 };

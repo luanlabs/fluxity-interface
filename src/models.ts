@@ -1,3 +1,4 @@
+import { SetStateAction } from 'react';
 import { GroupBase, StylesConfig, MultiValue, SingleValue, ActionMeta } from 'react-select';
 
 import { rates } from './constants/rates';
@@ -7,6 +8,10 @@ export interface ISelectItem<T> {
   label: string;
   value: T;
 }
+
+export type Optional<T> = T | null;
+
+export type ReactState<T> = React.Dispatch<SetStateAction<T>>;
 
 export type Status = 'ongoing' | 'expired' | 'pending';
 
@@ -56,7 +61,6 @@ export interface ITokenStream {
   logo: string;
   name: string;
   symbol: string;
-  _id: string;
 }
 
 export interface IResponseStream {

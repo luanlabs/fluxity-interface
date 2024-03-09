@@ -18,11 +18,13 @@ interface IModalProps {
   headerClassName?: string;
   width?: string;
   hidden?: boolean;
+  isSticky?: boolean;
 }
 
 const CDialog = ({
   children,
   hidden,
+  isSticky,
   title,
   isOpen,
   width,
@@ -33,7 +35,9 @@ const CDialog = ({
   headerClassName,
 }: IModalProps) => {
   const closeModal = () => {
-    setIsOpen(false);
+    if (!isSticky) {
+      setIsOpen(false);
+    }
   };
 
   return (

@@ -15,6 +15,7 @@
     "@hookform/devtools": "^4.3.1",
     "@reduxjs/toolkit": "^1.9.7",
     "@stellar/freighter-api": "^1.7.1",
+    "@tailwindcss/nesting": "^0.0.0-insiders.565cd3e",
     "@tippyjs/react": "^4.2.6",
     "@types/node": "20.4.10",
     "@types/react": "18.2.20",
@@ -29,6 +30,8 @@
     "next": "^13.5.4",
     "numeral": "^2.0.6",
     "postcss": "^8.4.35",
+    "postcss-import": "^16.0.1",
+    "postcss-nested": "^6.0.1",
     "qs": "^6.11.2",
     "react": "18.2.0",
     "react-datepicker": "^4.16.0",
@@ -53,8 +56,10 @@
     "@storybook/react": "^7.2.3",
     "@storybook/testing-library": "^0.2.0",
     "@types/numeral": "^2.0.4",
+    "@types/postcss-import": "^14.0.3",
     "@types/react-datepicker": "^4.15.0",
     "eslint-plugin-storybook": "^0.6.13",
+    "postcss-nesting": "^12.0.4",
     "storybook": "^7.2.3"
   }
 }

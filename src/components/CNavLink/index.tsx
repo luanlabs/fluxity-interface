@@ -13,6 +13,7 @@ const CNavLink = ({ title, icon, activeIcon, url, isMinimized }: Type) => {
     <Link
       href={url}
       prefetch
+      as={url}
       className={`select-none w-full ${
         isMinimized ? 'flex justify-start' : 'inline-flex justify-between mobile:justify-center'
       } items-center rounded-xl ${

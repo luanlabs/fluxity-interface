@@ -1,23 +1,24 @@
 import React from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-import CButton from 'src/components/CButton';
 import CLink from 'src/components/CLink';
+import CButton from 'src/components/CButton';
 import { ExternalPages } from 'src/constants/externalPages';
 
-import stellarLogo from 'public/images/stellar.svg';
+import StellarLogo from 'src/assets/StellarLogo';
 import logoWithName from 'public/images/logoWithName.svg';
 import FluxityLogo from 'src/assets/FluxityLogo';
 import FluxityTypography from 'src/assets/FluxityTypography';
-import Image from 'next/image';
+import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
+import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 
 const Header = () => {
   const router = useRouter();
-
-  const handleClick = () => {};
+  const currentNetwork = useLoadUserNetwork();
 
   return (
-    <header className="flex justify-between items-center py-3 px-6">
+    <header className="flex justify-between w-full items-center py-3 px-6">
       <div
         className="inline-flex mobile:hidden gap-[14px] cursor-pointer"
         onClick={() => router.push(ExternalPages.LANDING)}
@@ -39,10 +40,17 @@ const Header = () => {
         <CButton
           variant="simple"
           color="gray"
-          content="Testnet"
-          logo={stellarLogo}
-          onClick={handleClick}
-          className="mobile:w-[122px] h-9"
+          content={
+            <span className="flex gap-2 items-center">
+              <StellarLogo fill={`${currentNetwork === 'FUTURENET' ? '#1C9B47' : 'black'}`} />
+              {capitalizeFirstLetter(currentNetwork.toLowerCase())}
+            </span>
+          }
+          className={`${
+            currentNetwork === 'FUTURENET'
+              ? '!bg-paleMint !text-forestGreen !border-forestGreen'
+              : ''
+          } mobile:w-[122px] h-9`}
         />
       </div>
     </header>

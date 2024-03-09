@@ -31,7 +31,7 @@ interface SenderStatusCardProps {
   withdrawn: string;
   isCancelable: boolean;
   id: string;
-  setCancellAmount: (_: CancelAmounts) => void;
+  setCancelAmount: (_: CancelAmounts) => void;
   cancelAmount: CancelAmounts;
   isStreamCancelled: boolean;
   setIsOpenCancelModal: (_: boolean) => void;
@@ -48,7 +48,7 @@ const SenderStatusCard = ({
   withdrawn,
   isCancelable,
   id,
-  setCancellAmount,
+  setCancelAmount,
   cancelAmount,
   isStreamCancelled,
   setIsOpenCancelModal,
@@ -114,7 +114,7 @@ const SenderStatusCard = ({
     setIsReclamationModalOpen(false);
     await timeout(100);
     setIsCancelStreamConfirmOpen(true);
-    setCancellAmount(cancelStreamReturnValues(finalize));
+    setCancelAmount(cancelStreamReturnValues(finalize));
     informCancelAPI(id);
   };
 

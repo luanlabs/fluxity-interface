@@ -40,15 +40,15 @@ const CreateStream = () => {
   const [isFormValidated, setIsFormValidated] = useState(false);
 
   const { address } = useAppSelector((state) => state.user);
-  const usrInfo = useAppSelector((state) => state.user?.info?.balances[0]);
+  const xlmAsset = useAppSelector((state) => state.user?.info?.balances[0]);
 
   const form = useForm<FormValues>({
     mode: 'onChange',
 
     resolver: (formValues) =>
       validateForm(formValues, setIsFormValidated, address, {
-        asset_type: usrInfo?.asset_type,
-        balance: usrInfo?.balance,
+        asset_type: xlmAsset?.asset_type,
+        balance: xlmAsset?.balance,
       }),
     defaultValues: {
       streamingModel: 'linear',
@@ -100,6 +100,7 @@ const CreateStream = () => {
           className="w-full pl-[30px] pr-[18px] py-[15px] sm:pr-4 sm:pl-2 md:pb-8 sm:pb-8 mobile:mb-14"
           scroll
           borderStatus="borderless"
+          childrenClassName="mobile:h-[calc(100vh-210px)]"
         >
           <div className="w-full">
             <div className="w-full">
@@ -144,6 +145,10 @@ const CreateStream = () => {
                 control={control}
                 render={({ field }) => (
                   <SelectTokenContainer
+                    xlmAsset={{
+                      asset_type: xlmAsset?.asset_type,
+                      balance: xlmAsset?.balance,
+                    }}
                     className="desktop:w-full mobile:w-full fix-box:w-[90%]"
                     {...field}
                   />
@@ -252,6 +257,7 @@ const CreateStream = () => {
               type="submit"
               variant="form"
               content="Create Stream"
+              svgLogo="fluxityLogo"
               fill={isFormCompleteValidation ? '#050142' : '#fff'}
               className={cn(
                 isFormCompleteValidation
@@ -269,9 +275,9 @@ const CreateStream = () => {
             <SummaryContainer
               form={form}
               isFormValidated={isFormValidated}
-              userInfo={{
-                asset_type: usrInfo?.asset_type,
-                balance: usrInfo?.balance,
+              xlmAsset={{
+                asset_type: xlmAsset?.asset_type,
+                balance: xlmAsset?.balance,
               }}
               address={address}
             />
@@ -280,6 +286,7 @@ const CreateStream = () => {
               type="submit"
               variant="form"
               content="Create Stream"
+              svgLogo="fluxityLogo"
               fill={isFormCompleteValidation ? '#050142' : '#fff'}
               className={
                 isFormCompleteValidation

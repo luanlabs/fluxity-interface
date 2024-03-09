@@ -20,40 +20,26 @@ import isStreamWithdrawable from 'src/features/isStreamWithdrawable';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
 import withdrawStreamReturnValue from 'src/utils/soroban/withdrawStreamReturnValue';
 
-import withdrawLogo from '/public/images/withdrawSolid.svg';
 import whiteWithdrawLogo from '/public/images/whiteWithdraw.svg';
 import SingleButtonModal from 'src/components/SingleButtonModal';
+import { IResponseStream } from 'src/models';
 
 interface ReceiverStatusCardProps {
-  withdrawn: string;
-  amount: string;
-  startDate: number;
-  endDate: number;
-  cliffDate: number;
-  isCancelled: boolean;
-  isCanellable: boolean;
-  id: string;
+  stream: IResponseStream;
   token: string;
-  sender: string;
   setWithdrawnAmount: (_: number) => void;
   withdrawnAmount: number;
   decimalToken: number;
 }
 
 const ReceiverStatusCard = ({
-  amount,
-  withdrawn,
-  startDate,
-  endDate,
-  cliffDate,
-  isCanellable,
-  id,
+  stream,
   setWithdrawnAmount,
   withdrawnAmount,
   decimalToken,
 }: ReceiverStatusCardProps) => {
   const address = useAppSelector((state) => state.user.address);
-  const [totalWithdrawnAmount, setTotalWithdrawnAmount] = useState(withdrawn);
+  const [totalWithdrawnAmount, setTotalWithdrawnAmount] = useState(stream.withdrawn);
   const [availableAmount, setAvailableAmount] = useState(0);
   const [txHash, setTxHash] = useState('');
 
@@ -61,27 +47,20 @@ const ReceiverStatusCard = ({
   const [withdrawSuccessOpen, setIsWithdrawSuccessOpen] = useState(false);
 
   const available = calculateStreamAmounts(
-    startDate,
-    endDate,
-    cliffDate,
+    stream.start_date,
+    stream.end_date,
+    stream.cliff_date,
     false,
-    withdrawn,
-    amount,
+    stream.withdrawn,
+    stream.amount,
   ).receiverAmount.minus(totalWithdrawnAmount);
 
-  const withdrawable = isStreamWithdrawable(
-    startDate,
-    endDate,
-    cliffDate,
-    Number(amount),
-    Number(withdrawn),
-    isCanellable,
-  );
+  const withdrawable = isStreamWithdrawable(stream);
 
   const handleWithdrawClick = async () => {
     setIsApprovalOpen(true);
 
-    const withdrawStreamXdr = await withdrawStream(id, address);
+    const withdrawStreamXdr = await withdrawStream(stream.id, address);
 
     let signedXdr;
     let tx;
@@ -117,11 +96,10 @@ const ReceiverStatusCard = ({
     await timeout(100);
     setIsWithdrawSuccessOpen(true);
 
-    informWithdrawAPI(id);
+    informWithdrawAPI(stream.id);
     const withdrawFinalize = withdrawStreamReturnValue(finalize);
     setWithdrawnAmount(withdrawFinalize);
 
-    setAvailableAmount(0);
     setTotalWithdrawnAmount(
       new BN(formatUnits(withdrawFinalize, decimalToken))
         .plus(new BN(totalWithdrawnAmount))
@@ -140,10 +118,11 @@ const ReceiverStatusCard = ({
         variant="simple"
         color="outline"
         content="Withdraw"
-        disabled={withdrawable}
-        logo={withdrawLogo}
+        disabled={!withdrawable}
+        svgLogo="withdraw"
+        fill={!withdrawable ? '#9C9EA5' : 'royalBlue'}
         className={`!px-3 !py-2 h-[40px] ${
-          withdrawable && '!text-softGray !border-softGray hover:!bg-transparent'
+          !withdrawable && '!text-softGray !border-softGray hover:!bg-transparent'
         }`}
         onClick={handleWithdrawClick}
       />
@@ -169,7 +148,11 @@ const ReceiverStatusCard = ({
         className="px-3 py-4 mb-4 w-full"
       >
         <div className="grid gap-2 text-midnightBlue">
-          <CSummaryField label="Available" value={available.toFixed(3)} fieldSize="large" />
+          <CSummaryField
+            label="Available"
+            value={stream.is_cancelled ? '0' : available.toFixed(3)}
+            fieldSize="large"
+          />
           <CSummaryField
             label="Withdrawn"
             value={new BN(totalWithdrawnAmount).toFixed(3)}
@@ -202,10 +185,10 @@ const ReceiverStatusCard = ({
           variant="simple"
           color="blue"
           content="Withdraw"
-          disabled={withdrawable}
+          disabled={!withdrawable}
           logo={whiteWithdrawLogo}
-          className={`!px-6 !py-8 h-[40px] rounded-2xl !text-[18px] font-medium tracking-wide !bg-royalBlue ${
-            withdrawable && '!text-softGray !border-softGray hover:!bg-transparent'
+          className={`!px-6 !py-8 h-[40px] rounded-xl !text-[18px] font-medium tracking-wide !bg-royalBlue hover:!bg-darkPurple shadow-xl ${
+            !withdrawable && '!text-softGray !border-softGray hover:!bg-transparent'
           }`}
           onClick={handleWithdrawClick}
         />

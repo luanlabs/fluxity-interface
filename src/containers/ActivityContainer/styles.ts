@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 interface ICircle {
-  isopen?: boolean;
+  isopen?: boolean | undefined;
 }
 
 export const Circle = styled.div<ICircle>`
@@ -15,5 +15,5 @@ export const Circle = styled.div<ICircle>`
   border-radius: 30px;
   cursor: pointer;
   overflow: hidden;
-  transition: ${({ isopen }) => isopen && 'all 600ms'};
+  transition: ${({ isopen }) => (isopen ? 'all 600ms' : '')};
 `;

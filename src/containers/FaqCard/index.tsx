@@ -29,13 +29,13 @@ const FaqCard = () => {
 
       <p className="mobile:text-sm">Find quick answers to common queries.</p>
 
-      <div className="absolute bottom-[22px] left-[24.47px]">
+      <div className="absolute bottom-[22px] mobile:bottom-[18px] left-[24.47px]">
         <CButton
           onClick={handleClick}
           content="FAQ"
           variant="simple"
           logo={lifeBuoy}
-          className="w-[89px] mobile:w-[85px] mobile:h-10 mobile:text-sm  font-medium border-royalBlue border hover:bg-lavenderBlush transition-all duration-700"
+          className="w-[89px] mobile:w-[85px] mobile:h-10 mobile:text-sm font-medium border-royalBlue border hover:bg-lavenderBlush transition-all duration-700"
         />
       </div>
     </CCard>

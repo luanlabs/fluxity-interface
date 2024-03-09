@@ -1,7 +1,7 @@
 import React from 'react';
 import { Metadata } from 'next';
 
-import ActivityHistoryContainer from 'src/containers/ActivityHistoryContainer';
+import ActivityContainer from 'src/containers/ActivityContainer';
 
 export const metadata: Metadata = {
   title: 'Fluxity - Activity History',
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 const ActivityHistory = () => {
-  return <ActivityHistoryContainer />;
+  return <ActivityContainer />;
 };
 
 export default ActivityHistory;

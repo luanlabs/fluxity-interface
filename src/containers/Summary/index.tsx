@@ -15,19 +15,19 @@ import humanizeAmount from 'src/utils/humanizeAmount';
 import CTooltip from 'src/components/CTooltip';
 import tooltipDetails from 'src/constants/tooltipDetails';
 import {
-  UserInfo,
-  checkUserActived,
+  xlmAssetType,
+  checkIsUserActive,
   checkUserBalance,
-} from '../CreateStreamMainCard/checkUserActived';
+} from 'src/containers/CreateStreamMainCard/checkIsUserActive';
 
 interface SummaryProps {
   form: UseFormReturn<any, undefined>;
   isFormValidated: boolean;
-  userInfo: UserInfo;
+  xlmAsset: xlmAssetType;
   address: string;
 }
 
-const Summary = ({ form, userInfo, address }: SummaryProps) => {
+const Summary = ({ form, xlmAsset, address }: SummaryProps) => {
   const values: FormValues = form.getValues();
   const getFormValues = mapFormValues(values);
 
@@ -43,12 +43,12 @@ const Summary = ({ form, userInfo, address }: SummaryProps) => {
       errorMessage = 'Insufficient balance';
     }
 
-    const isAccountActived = checkUserActived(userInfo);
+    const isAccountActived = checkIsUserActive(xlmAsset);
     if (!isAccountActived) {
       errorMessage = 'Your account is inactive';
     }
 
-    const isAccountNativeBalance = checkUserBalance(userInfo);
+    const isAccountNativeBalance = checkUserBalance(xlmAsset);
     if (!isAccountNativeBalance) {
       errorMessage = ' Insufficient XLM to make the transaction';
     }
@@ -69,7 +69,7 @@ const Summary = ({ form, userInfo, address }: SummaryProps) => {
 
   return (
     <div className="w-[329px]">
-      <CPageCard title={summaryTitle} className="px-3 py-4 mb-4 w-full ">
+      <CPageCard title={summaryTitle} borderStatus="bordered" className="px-3 py-4 mb-4 w-full ">
         <ul className="grid gap-2 text-midnightBlue">
           {getFormValues.length > 3 &&
             getFormValues.map((x) => (

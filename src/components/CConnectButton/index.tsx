@@ -108,11 +108,11 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
           )}
           {openModal && (
             <Modal
-              open={openModal}
+              isModalOpen={openModal}
               address={address}
-              closeModal={closeModal}
+              handleCloseModal={closeModal}
               isMinimized={isMinimized}
-              setIsOpen={setOpenModal}
+              setIsModalOpen={setOpenModal}
             />
           )}
         </div>

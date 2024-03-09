@@ -1,3 +1,5 @@
+import { ITokenStream } from 'src/models';
+import { IToken } from 'src/reducers/tokens';
 import { StreamStatus } from 'src/components/CStreamStatus';
 
 export type CLinkProps = {
@@ -41,7 +43,14 @@ export interface IResponseToken {
   decimals: string;
   name: string;
   symbol: string;
+  logo: string;
   _id: string;
+}
+
+export interface IFilterTokens {
+  tokens: IToken[];
+  showSentStreams: boolean;
+  showReceivedStreams: boolean;
 }
 
 export type IResponseTokenResult = IFluxityAPIResponse<IResponseToken[]>;
@@ -59,7 +68,7 @@ export interface IStream {
   receiver: string;
   sender: string;
   start_date: number;
-  token: string;
+  token: ITokenStream;
   withdrawn: string;
   createdAt: string;
   updatedAt: string;

@@ -12,18 +12,18 @@ interface CPageCard {
   scroll?: boolean;
   childrenClassName?: string;
   borderStatus: CPageCardResponsive;
-  dividerReponsiveClassName?: string;
+  dividerResponsiveClassName?: string;
 }
 
 const CPageCard = ({
   divider,
   title,
   children,
-  className,
+  className = '',
   scroll = false,
-  childrenClassName,
+  childrenClassName = '',
   borderStatus,
-  dividerReponsiveClassName,
+  dividerResponsiveClassName,
   ...props
 }: CPageCard) => {
   let dividerStyle = '';
@@ -40,7 +40,7 @@ const CPageCard = ({
   return (
     <CCard
       className={cn(
-        `flex flex-col w-full h-full ${
+        `flex flex-col w-full h-[100%] ${
           borderStatus === 'borderless' ? 'mobile:!border-none mobile:!rounded-none' : 'mt-1'
         }`,
         className,
@@ -50,10 +50,10 @@ const CPageCard = ({
       {...props}
     >
       {title && <div className="w-full font-medium">{title}</div>}
-      {divider && <div className={cn(dividerStyle, dividerReponsiveClassName)} />}
+      {divider && <div className={cn(dividerStyle, dividerResponsiveClassName)} />}
       <div
         className={`${cn(padding, childrenClassName)} ${
-          scroll && 'overflow-y-scroll h-full'
+          scroll && 'desktop:overflow-y-scroll h-[100%]'
         } mobile:overflow-y-scroll mobile:overflow-x-hidden`}
       >
         {children}
