@@ -1,5 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
+import humanizeAmount from 'src/utils/humanizeAmount';
+
 interface DynamicStreamedAmountProps {
   token: string;
   streamAmount: string;
@@ -17,7 +19,7 @@ const DynamicStreamedAmount = ({
         <div className="text-center">
           <h2 className="text-[40px]">
             {isCancelled ? '' : '+'}
-            {streamAmount}
+            {humanizeAmount(streamAmount)}
           </h2>
         </div>
         <div>
