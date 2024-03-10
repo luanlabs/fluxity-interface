@@ -10,7 +10,18 @@ const nextConfig = {
     buildActivity: false,
   },
   images: {
-    domains: ['s3.coinmarketcap.com', 's2.coinmarketcap.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: '**',
+      },
+    ],
   },
 };
 

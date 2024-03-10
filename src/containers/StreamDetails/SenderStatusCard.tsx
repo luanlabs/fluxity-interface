@@ -7,6 +7,7 @@ import CButton from 'src/components/CButton';
 import formatUnits from 'src/utils/formatUnits';
 import CPageCard from 'src/components/CPageCard';
 import { useAppSelector } from 'src/hooks/useRedux';
+import humanizeAmount from 'src/utils/humanizeAmount';
 import { ITokenStream, CancelAmounts } from 'src/models';
 import CProcessModal from 'src/components/CProcessModal';
 import CSummaryField from 'src/components/CSummaryField';
@@ -122,14 +123,16 @@ const SenderStatusCard = ({
     setIsCancelStreamConfirmOpen(false);
   };
 
-  const senderAmount = calculateStreamAmounts(
-    startDate,
-    endDate,
-    cliffDate,
-    isCancelled,
-    withdrawn,
-    amount,
-  ).senderAmount.toFixed(3);
+  const senderAmount = humanizeAmount(
+    calculateStreamAmounts(
+      startDate,
+      endDate,
+      cliffDate,
+      isCancelled,
+      withdrawn,
+      amount,
+    ).senderAmount.toString(),
+  );
 
   const cancelledAmount = new BN(
     formatUnits(cancelAmount.senderAmount.toString(), Number(token.decimals)),

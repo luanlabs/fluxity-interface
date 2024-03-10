@@ -1,14 +1,14 @@
 import Image from 'next/image';
-import BN from 'src/utils/BN';
 
-import CPageCard from 'src/components/CPageCard';
-import CSummaryField from 'src/components/CSummaryField';
 import { IResponseStream } from 'src/models';
 import formatUnits from 'src/utils/formatUnits';
+import CPageCard from 'src/components/CPageCard';
+import dateToSeconds from 'src/utils/dateToSeconds';
+import humanizeAmount from 'src/utils/humanizeAmount';
+import CSummaryField from 'src/components/CSummaryField';
 import { shortenAddress } from 'src/utils/shortenAddress';
 
 import tokenLogo from 'public/images/token.svg';
-import dateToSeconds from 'src/utils/dateToSeconds';
 
 const options = {
   year: 'numeric',
@@ -26,7 +26,7 @@ const SummaryFields = ({ data, isCancellable }: SummaryFieldsProps) => {
   const startDate = new Date(data.start_date * 1000);
   const endDate = new Date(data.end_date * 1000);
   const cliffDate = new Date(data.cliff_date * 1000);
-  const streamAmount = formatUnits(data.amount, data.token.decimals);
+  const streamAmount = humanizeAmount(formatUnits(data.amount, data.token.decimals));
 
   const isCliffed = dateToSeconds(cliffDate) !== dateToSeconds(startDate);
 
@@ -38,7 +38,7 @@ const SummaryFields = ({ data, isCancellable }: SummaryFieldsProps) => {
 
   const totalAmountField = (
     <div className="flex items-center gap-1 font-medium">
-      <p>{new BN(streamAmount).toFixed(3)}</p>
+      <p>{streamAmount}</p>
       <p>{data.token.symbol}</p>
       <Image
         src={data.token.logo ? data.token.logo : tokenLogo}

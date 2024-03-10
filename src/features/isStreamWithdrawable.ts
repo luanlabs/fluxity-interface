@@ -1,6 +1,7 @@
-import { IStream } from 'src/constants/types';
-import dateToSeconds from '../utils/dateToSeconds';
+import BN from 'src/utils/BN';
 import { IResponseStream } from 'src/models';
+import { IStream } from 'src/constants/types';
+import dateToSeconds from 'src/utils/dateToSeconds';
 
 const isStreamWithdrawable = ({
   start_date,
@@ -16,7 +17,10 @@ const isStreamWithdrawable = ({
   }
 
   return (
-    cliff_date < currentDate && start_date < currentDate && !is_cancelled && withdrawn < amount
+    cliff_date < currentDate &&
+    start_date < currentDate &&
+    new BN(withdrawn).isLessThan(amount) &&
+    !is_cancelled
   );
 };
 
