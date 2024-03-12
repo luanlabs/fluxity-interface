@@ -97,7 +97,7 @@ const ConfirmTransaction = ({
       signedTx = await signTransaction(address, approveXdr);
     } catch {
       setIsWalletLoadingApproveModalOpen(false);
-      toast('error', 'Failed to sign the transaction');
+      toast('error', 'Error signing approval transaction');
 
       return;
     }
@@ -121,7 +121,7 @@ const ConfirmTransaction = ({
       setIsWalletLoadingApproveModalOpen(false);
 
       if (!finalize) {
-        toast('error', 'Approve failed');
+        toast('error', 'Approval transaction failed to finalize');
         return;
       }
     } else {
@@ -145,7 +145,7 @@ const ConfirmTransaction = ({
       signedXdr = await signTransaction(address, createStreamXdr);
     } catch (e) {
       setIsWalletLoadingConfirmModalOpen(false);
-      toast('error', 'Failed to sign the transaction');
+      toast('error', 'Error signing create stream transaction');
 
       return;
     }
@@ -170,7 +170,7 @@ const ConfirmTransaction = ({
 
       if (!finalize) {
         setIsSendingCreateStreamTxModalOpen(false);
-        toast('error', 'Approve failed');
+        toast('error', 'Create stream transaction failed to finalize');
 
         return;
       }
