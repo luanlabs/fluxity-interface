@@ -1,15 +1,14 @@
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
-import { useAppSelector } from 'src/hooks/useRedux';
 import { ISelectToken } from 'src/models';
 import CModal from 'src/components/CModal';
 import CInput from 'src/components/CInput';
 import CLabel from 'src/components/CLabel';
 import { IToken } from 'src/reducers/tokens';
 import useCustomID from 'src/hooks/useCustomId';
-import tokenToLogo from 'src/utils/tokenToLogo';
 import CEmptyList from 'src/components/CEmptyList';
+import { useAppSelector } from 'src/hooks/useRedux';
 import humanizeAmount from 'src/utils/humanizeAmount';
 import fromDecimals from 'src/utils/soroban/fromDecimals';
 import {
@@ -35,7 +34,6 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
 
   const id = useCustomID('selectToken');
   const tokens = useAppSelector((store) => store.tokens);
-
   const address = useAppSelector((state) => state.user.address);
 
   const isAccountActived = checkIsUserActive(xlmAsset);
@@ -82,14 +80,7 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
       >
         {selectedToken && address && isAccountActived ? (
           <div className="flex items-center justify-start">
-            <Image
-              src={
-                require(`../../../public/images/assets/${tokenToLogo(selectedToken)}.svg`).default
-              }
-              width={35}
-              height={35}
-              alt="Token"
-            />
+            <Image src={selectedToken.logo} width={35} height={35} alt="Token" />
 
             <p className="ml-4 text-midnightBlue">{selectedToken.symbol}</p>
           </div>
@@ -118,14 +109,7 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
               >
                 <div className="flex w-full items-center">
                   <div className="w-[70px]">
-                    <Image
-                      src={
-                        require(`../../../public/images/assets/${tokenToLogo(token)}.svg`).default
-                      }
-                      width={45}
-                      height={45}
-                      alt="logo"
-                    />
+                    <Image src={token.logo} width={45} height={45} alt="logo" />
                   </div>
                   <div className="text-left w-full">
                     <p className="text-black text-base w-full font-bold">{token.symbol}</p>
