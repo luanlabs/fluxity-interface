@@ -142,7 +142,7 @@ const ReceiverStatusCard = ({
     />
   );
 
-  const withdrawAmount = new BN(formatUnits(withdrawnAmount.toString(), decimalToken)).toFixed(3);
+  const withdrawAmount = new BN(formatUnits(withdrawnAmount.toString(), decimalToken)).toString();
 
   return (
     <div className="w-full relative">

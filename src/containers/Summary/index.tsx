@@ -111,7 +111,7 @@ const Summary = ({ form, xlmAsset, address }: SummaryProps) => {
             ) : (
               <div className="flex justify-end">
                 <p className="text-right overflow-hidden">
-                  {humanizeAmount(totalAmount.toFixed(3))}
+                  {humanizeAmount(totalAmount.toString())}
                 </p>
               </div>
             )}
