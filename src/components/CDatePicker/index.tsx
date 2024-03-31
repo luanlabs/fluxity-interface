@@ -9,6 +9,8 @@ import CLabel from 'src/components/CLabel';
 import { Wrapper } from './datePickerStyles';
 
 import 'react-datepicker/dist/react-datepicker.css';
+import CBottomSheet from '../CBottomSheet';
+import CButton from '../CButton';
 
 interface CDatePickerProps {
   label?: string;
@@ -22,6 +24,7 @@ interface CDatePickerProps {
   isFormReset?: boolean;
   setIsFormReset?: (_: boolean) => void;
   value: Date;
+  isSticky?: boolean;
 }
 
 const CDatePicker = ({
@@ -36,6 +39,7 @@ const CDatePicker = ({
   value,
   isFormReset,
   setIsFormReset,
+  isSticky,
 }: CDatePickerProps) => {
   const id = useCustomID('CDatePicker');
   const [selectedDate, setSelectedDate] = useState(minDate || new Date());
@@ -43,6 +47,7 @@ const CDatePicker = ({
   const [isOpenDatePicker, setIsOpenDatePicker] = useState(false);
   const [enabledDatePicker, setEnabledDatePicker] = useState(false);
   const [isToggleEnabled, setIsToggleEnabled] = useState(false);
+  const [isOpenSheet, setIsOpenSheet] = useState(false);
 
   useEffect(() => {
     if (!value) {
@@ -79,6 +84,7 @@ const CDatePicker = ({
 
     if (!isDatePickerUsed) {
       setIsDatePickerUsed(true);
+      setIsOpenSheet(true);
     }
   };
 
@@ -89,8 +95,20 @@ const CDatePicker = ({
     return minDate.getTime() < time.getTime() && maxDate.getTime() > time.getTime();
   };
 
+  const handleOpenSheet = () => {
+    setIsOpenSheet(true);
+  };
+
+  const handleCloseSheetClick = () => {
+    setIsDatePickerUsed(false);
+    setIsOpenSheet(false);
+  };
+
+  const handleConfirmSheetClick = () => {
+    setIsOpenSheet(false);
+  };
   const CustomInput = forwardRef<HTMLInputElement>(({ value, onClick }, ref) => (
-    <div className={cn('relative w-full', className)}>
+    <div className={cn('relative w-full', className)} onClick={handleOpenSheet}>
       <button
         className="text-left rounded-xl h-14 px-4 outline-none text-lg placeholder-[#7D7B9B] text-[#7D7B9B] leading-[18.78px] !w-full bg-neutral-100"
         onClick={onClick}
@@ -154,8 +172,51 @@ const CDatePicker = ({
             timeCaption="Time"
             dateFormat="MMM dd, yyyy HH:mm"
             disabled={!enabledDatePicker && !readonly}
+            calendarClassName="mobile:!hidden"
           />
         </Wrapper>
+
+        <CBottomSheet
+          contentClass="justify-center items-center"
+          isSticky={isSticky}
+          isModalOpen={isOpenSheet}
+          setIsModalOpen={setIsOpenSheet}
+          className="desktop:!hidden"
+        >
+          <Wrapper>
+            <DatePicker
+              selected={selectedDate}
+              onChange={handleChange}
+              customInput={<CustomInput />}
+              minDate={minDate}
+              maxDate={maxDate}
+              showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={60}
+              filterTime={filterPassedTime}
+              timeCaption="Time"
+              dateFormat="MMM dd, yyyy HH:mm"
+              disabled={!enabledDatePicker && !readonly}
+              inline
+            />
+          </Wrapper>
+          <div className=" w-full flex justify-end px-4 py-5 gap-2">
+            <CButton
+              variant="simple"
+              color="blueWhite"
+              content="Close"
+              className="rounded-xl !py-5 !h-[60px] text-slate-700"
+              onClick={handleCloseSheetClick}
+            />
+            <CButton
+              variant="simple"
+              color="blue"
+              content="ok"
+              className="rounded-xl !py-5 !h-[60px]"
+              onClick={handleConfirmSheetClick}
+            />
+          </div>
+        </CBottomSheet>
       </div>
     </div>
   );
