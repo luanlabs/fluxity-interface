@@ -41,7 +41,7 @@ const CPageCard = ({
     <CCard
       className={cn(
         `flex flex-col w-full h-[100%] ${
-          borderStatus === 'borderless' ? 'mobile:!border-none mobile:!rounded-none' : 'mt-1'
+          borderStatus === 'borderless' ? 'mobile:!border-none mobile:!rounded-none' : ''
         }`,
         className,
       )}
