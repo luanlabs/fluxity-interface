@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <CPageCard
       scroll
-      className="w-full h-full py-[23px] px-[27px] mobile:pt-3 mobile:px-5 mobile:mb-[50px]"
+      className="w-full h-full pb-2 pt-[23px] px-[27px] mobile:pt-3 mobile:px-5 mobile:mb-[50px]"
       borderStatus="borderless"
       childrenClassName="mobile:h-[calc(100vh-140px)]"
     >
