@@ -124,7 +124,7 @@ const ReceiverStatusCard = ({
         content="Withdraw"
         disabled={!withdrawable}
         svgLogo="withdraw"
-        fill={!withdrawable ? '#9C9EA5' : 'royalBlue'}
+        fill={!withdrawable ? '#9C9EA5' : '#3a21d4'}
         className={`!px-3 !py-2 h-[40px] ${
           !withdrawable && '!text-softGray !border-softGray hover:!bg-transparent'
         }`}
