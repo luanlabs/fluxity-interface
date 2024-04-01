@@ -84,7 +84,6 @@ const CDatePicker = ({
 
     if (!isDatePickerUsed) {
       setIsDatePickerUsed(true);
-      setIsOpenSheet(true);
     }
   };
 
