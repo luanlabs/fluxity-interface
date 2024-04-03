@@ -1,11 +1,13 @@
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+import { Contract, StrKey } from 'stellar-sdk';
 
 import { ISelectToken } from 'src/models';
 import CModal from 'src/components/CModal';
 import CInput from 'src/components/CInput';
 import CLabel from 'src/components/CLabel';
 import { IToken } from 'src/reducers/tokens';
+import CButton from 'src/components/CButton';
 import useCustomID from 'src/hooks/useCustomId';
 import CEmptyList from 'src/components/CEmptyList';
 import { useAppSelector } from 'src/hooks/useRedux';
@@ -19,7 +21,11 @@ import {
 import plusLogo from 'public/images/Plus.svg';
 import arrowLogo from 'public/images/arrow.svg';
 import searchLogo from 'public/images/search.svg';
+import Loading from 'src/assets/Loading';
 import defaultTokenLogo from 'public/images/defaultToken.svg';
+import getERC20Details, { TokenDetailsType } from 'src/features/soroban/getERC20Details';
+import formatUnits from 'src/utils/formatUnits';
+
 
 interface SelectTokenProps {
   onChange: (_: ISelectToken) => void;
@@ -32,12 +38,33 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
   const [selectedToken, setSelectedToken] = useState<null | IToken>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [showLoading, setShowLoading] = useState(true);
+  const [tokenDetails, setTokenDetails] = useState<TokenDetailsType>({});
 
   const id = useCustomID('selectToken');
   const tokens = useAppSelector((store) => store.tokens);
   const address = useAppSelector((state) => state.user.address);
 
   const isAccountActived = checkIsUserActive(xlmAsset);
+
+  const isValidateContractAddress = StrKey.isValidContract(searchValue.toUpperCase());
+
+  useEffect(() => {
+    const timeout = setTimeout(async () => {
+      if (isValidateContractAddress) {
+        const contract = new Contract(searchValue);
+        setTokenDetails(await getERC20Details(address, contract));
+
+        setShowLoading(false);
+      }
+    }, 3000);
+
+    if (isValidateContractAddress) {
+      setShowLoading(true);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [searchValue]);
 
   const handleTokenSelect = (token: IToken) => {
     setIsOpen(false);
@@ -51,12 +78,22 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
     });
   };
 
+  const handleTokenDetails = (token: TokenDetailsType) => {
+    handleTokenSelect({
+      ...token,
+      name: token.symbol,
+      logo: '',
+      _id: '',
+    });
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
+    setSearchValue(e.target.value.trim());
   };
 
   const openModal = () => {
     setIsOpen(true);
+    setSearchValue('');
   };
 
   useEffect(() => {
@@ -69,6 +106,16 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
   const filteredTokens = tokens.filter((token) =>
     token.symbol.toLowerCase().startsWith(searchValue.toLowerCase()),
   );
+
+  const handlePaste = () => {
+    try {
+      navigator.clipboard.readText().then((clipText) => {
+        setSearchValue(clipText);
+      });
+    } catch (e) {
+      // toast('error', 'The Clipboard API is not available for this browser.');
+    }
+  };
 
   return (
     <div className={`${className}`}>
@@ -83,8 +130,8 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
           <div className="flex items-center justify-start">
             <Image
               src={selectedToken.logo ? selectedToken.logo : defaultTokenLogo}
-              width={selectedToken.logo ? 45 : 30}
-              height={selectedToken.logo ? 45 : 30}
+              width={40}
+              height={40}
               alt="logo"
             />
 
@@ -100,13 +147,16 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
         {address && isAccountActived && (
           <CInput
             placeholder="Search name of token"
+            value={searchValue}
             icon={searchLogo}
             onChange={handleInputChange}
+            handlePaste={handlePaste}
+            paste
           />
         )}
 
         <div className="mt-[23px]">
-          {address && isAccountActived ? (
+          {address && isAccountActived && !isValidateContractAddress ? (
             filteredTokens.map((token) => (
               <div
                 className="flex items-center px-2 w-full cursor-pointer h-[72px] border-b last:border-none"
@@ -117,8 +167,8 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
                   <div className="w-[70px]">
                     <Image
                       src={token.logo ? token.logo : defaultTokenLogo}
-                      width={token.logo ? 45 : 30}
-                      height={45}
+                      width={40}
+                      height={40}
                       alt="logo"
                     />
                   </div>
@@ -135,6 +185,36 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
                 </div>
               </div>
             ))
+          ) : isAccountActived && address ? (
+            <div className="pb-4">
+              {showLoading ? (
+                <div className="w-full flex justify-center">
+                  <Loading fill="#222" />
+                </div>
+              ) : (
+                <div className="flex justify-center mt-3 items-center w-full">
+                  <div
+                    className="flex justify-between items-center cursor-pointer rounded-xl bg-[#F9F9F9] px-2 py-[10px] w-full"
+                    onClick={() => handleTokenDetails(tokenDetails)}
+                  >
+                    <div className="flex items-center">
+                      <Image src={defaultTokenLogo} width={30} alt="defaultTokenLogo" />
+                      <span className="ml-3 text-lg">{tokenDetails.symbol}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="mr-5">
+                        {humanizeAmount(
+                          formatUnits(tokenDetails.balance, Number(tokenDetails.decimals)),
+                        )}
+                      </span>
+                      <div className="h-[35px] w-[35px] rounded-[100px] bg-lavenderBlush hover:bg-[#f0efff95] flex justify-center items-center">
+                        <Image src={plusLogo} width={0} height={0} alt="plusLogo" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           ) : (
             <div>
               <CEmptyList status="No token found" description="Please connect your wallet first" />

@@ -80,13 +80,7 @@ const Summary = ({ form, xlmAsset, address }: SummaryProps) => {
                 <span>{x.label}</span>
                 <div className="flex">
                   {x.icon && (
-                    <Image
-                      src={require(`/public/images/assets/${x.icon}`)}
-                      alt="logo"
-                      width={20}
-                      height={20}
-                      className="mr-2"
-                    />
+                    <Image src={x.icon} alt="logo" width={20} height={20} className="mr-2" />
                   )}
 
                   <span>{x.value}</span>
