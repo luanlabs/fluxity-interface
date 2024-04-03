@@ -19,6 +19,7 @@ import {
 import plusLogo from 'public/images/Plus.svg';
 import arrowLogo from 'public/images/arrow.svg';
 import searchLogo from 'public/images/search.svg';
+import defaultTokenLogo from 'public/images/defaultToken.svg';
 
 interface SelectTokenProps {
   onChange: (_: ISelectToken) => void;
@@ -80,7 +81,12 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
       >
         {selectedToken && address && isAccountActived ? (
           <div className="flex items-center justify-start">
-            <Image src={selectedToken.logo} width={35} height={35} alt="Token" />
+            <Image
+              src={selectedToken.logo ? selectedToken.logo : defaultTokenLogo}
+              width={selectedToken.logo ? 45 : 30}
+              height={selectedToken.logo ? 45 : 30}
+              alt="logo"
+            />
 
             <p className="ml-4 text-midnightBlue">{selectedToken.symbol}</p>
           </div>
@@ -109,7 +115,12 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
               >
                 <div className="flex w-full items-center">
                   <div className="w-[70px]">
-                    <Image src={token.logo} width={45} height={45} alt="logo" />
+                    <Image
+                      src={token.logo ? token.logo : defaultTokenLogo}
+                      width={token.logo ? 45 : 30}
+                      height={45}
+                      alt="logo"
+                    />
                   </div>
                   <div className="text-left w-full">
                     <p className="text-black text-base w-full font-bold">{token.symbol}</p>
