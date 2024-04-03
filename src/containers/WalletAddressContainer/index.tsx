@@ -97,6 +97,7 @@ const WalletAddressContainer = ({
   };
 
   const isValidateAddress = StrKey.isValidEd25519PublicKey(recipientWalletAddress.toUpperCase());
+  const isValidateContractAddress = StrKey.isValidContract(recipientWalletAddress.toUpperCase());
 
   const handlePaste = () => {
     try {
@@ -134,7 +135,7 @@ const WalletAddressContainer = ({
           </div>
         </button>
 
-        {isValidateAddress && trashLogo && inputValue && (
+        {(isValidateAddress || isValidateContractAddress) && trashLogo && inputValue && (
           <span
             className="absolute bottom-4 right-3.5 z-10 cursor-pointer"
             onClick={handleButtonClick}
@@ -153,15 +154,17 @@ const WalletAddressContainer = ({
           handlePaste={handlePaste}
           onChange={handleCInputChange}
           errorMsg="The address is invalid"
-          error={!isValidateAddress && recipientWalletAddress != ''}
-          clearInput={isValidateAddress && recipientWalletAddress != ''}
+          error={!isValidateAddress && !isValidateContractAddress && recipientWalletAddress != ''}
+          clearInput={
+            (isValidateAddress || isValidateContractAddress) && recipientWalletAddress != ''
+          }
           paste={recipientWalletAddress === ''}
           border
           {...props}
         />
 
         <div className="h-10 mt-3">
-          {isValidateAddress && (
+          {(isValidateAddress || isValidateContractAddress) && (
             <div>
               <div className="flex justify-between items-center rounded-xl bg-[#F9F9F9] px-2 py-[10px]">
                 <div className="flex items-center">
@@ -169,7 +172,9 @@ const WalletAddressContainer = ({
                     className="w-8 h-8 rounded-[100px] ml-1"
                     style={{ backgroundColor: randomColor }}
                   />
-                  <span className="ml-3 text-lg">{isValidateAddress && shortAddress}</span>
+                  <span className="ml-3 text-lg">
+                    {(isValidateAddress || isValidateContractAddress) && shortAddress}
+                  </span>
                 </div>
                 <div className="flex items-center">
                   <Image src={tickLogo} alt="tickLogo" width={0} height={0} />
@@ -185,11 +190,11 @@ const WalletAddressContainer = ({
           </button>
           <button
             className={` ${
-              !isValidateAddress
+              !isValidateAddress && !isValidateContractAddress
                 ? 'bg-lavenderGray text-softGray'
                 : 'bg-royalBlue text-white hover:bg-buttonHover'
             }  px-[24px] py-[14px] text-base rounded-[10px] text-midnightBlue`}
-            disabled={!isValidateAddress}
+            disabled={!isValidateAddress && !isValidateContractAddress}
             onClick={handleButtonModal}
             ref={confirmButtonRef}
           >
