@@ -13,7 +13,7 @@ export type Optional<T> = T | null;
 
 export type ReactState<T> = React.Dispatch<SetStateAction<T>>;
 
-export type Status = 'ongoing' | 'expired' | 'pending';
+export type Status = 'ongoing' | 'completed' | 'pending';
 
 export type ISelectItemString = ISelectItem<string>;
 

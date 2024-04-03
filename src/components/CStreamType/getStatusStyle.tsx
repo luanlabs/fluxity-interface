@@ -14,7 +14,8 @@ const getStatusStyles = (streamStatus: StreamStatus, isSender: boolean) => {
       }
       return 'bg-lemonChiffon text-bronzeYellow';
 
-    case StreamStatus.EXPIRED:
+    case StreamStatus.COMPLETED:
+    case StreamStatus.CANCELLED:
       if (isSender) {
         return 'bg-platinum text-grayish';
       }

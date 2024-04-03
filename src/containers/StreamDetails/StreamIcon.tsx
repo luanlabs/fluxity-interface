@@ -20,7 +20,7 @@ const statusColors = {
     lineFill: '#1C9B47',
   },
 
-  expired: {
+  completed: {
     fill: '#E1E1E9',
     arrowFill: '#6A6C74',
     lineFill: '#6A6C74',
@@ -38,10 +38,10 @@ const StreamIcon = ({ sender, receiver, streamStatus }: StreamIconProps) => {
     fill: statusColors.ongoing.lineFill,
   };
 
-  if (streamStatus === 'expired') {
+  if (streamStatus === 'completed') {
     receiverStyle = {
-      bg: statusColors.expired.fill,
-      fill: statusColors.expired.lineFill,
+      bg: statusColors.completed.fill,
+      fill: statusColors.completed.lineFill,
     };
   } else if (streamStatus === 'pending') {
     receiverStyle = {
@@ -50,10 +50,10 @@ const StreamIcon = ({ sender, receiver, streamStatus }: StreamIconProps) => {
     };
   }
 
-  if (streamStatus === 'expired') {
+  if (streamStatus === 'completed') {
     senderStyle = {
-      bg: statusColors.expired.fill,
-      fill: statusColors.expired.lineFill,
+      bg: statusColors.completed.fill,
+      fill: statusColors.completed.lineFill,
     };
   } else if (streamStatus === 'pending') {
     senderStyle = {

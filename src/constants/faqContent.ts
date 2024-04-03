@@ -35,7 +35,7 @@ const FAQContent = [
       {
         question: 'Can I use Fluxity on my mobile phone? ',
         answer:
-          'Due to the limitations of the Freighter extension, you can only use Fluxity on a desktop or any other device that supports it. Fluxity will be available on all devices in the near future, so you can leave your email [here] to be there first to hear about it.',
+          'Due to the limitations of the Freighter extension, you can only use Fluxity on a desktop or any other device that supports it. Fluxity will be available on all devices in the near future.',
       },
       {
         question: 'How can I get test tokens to try token streaming on Fluxity? ',

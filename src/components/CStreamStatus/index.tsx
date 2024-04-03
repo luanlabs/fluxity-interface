@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 export enum StreamStatus {
   ONGOING = 'ongoing',
   PENDING = 'pending',
-  EXPIRED = 'expired',
+  COMPLETED = 'completed',
+  CANCELLED = 'cancelled',
 }
 
 type CStreamStatusProps = {
@@ -13,7 +14,7 @@ type CStreamStatusProps = {
 const streamStatuses = [
   { label: 'Ongoing', value: StreamStatus.ONGOING },
   { label: 'Pending', value: StreamStatus.PENDING },
-  { label: 'Expired', value: StreamStatus.EXPIRED },
+  { label: 'Completed', value: StreamStatus.COMPLETED },
 ];
 
 const CStreamStatus = ({ onChange }: CStreamStatusProps) => {

@@ -9,15 +9,17 @@ import { useAppSelector } from 'src/hooks/useRedux';
 import { findTokenByAddress } from 'src/utils/findTokenByAddress';
 import { shortenAddress } from 'src/utils/shortenAddress';
 import humanizeAmount from 'src/utils/humanizeAmount';
+import formatUnits from 'src/utils/formatUnits';
+import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
+import { calculateCompletionPercentage } from 'src/utils/calculateCompletionPercentage';
 
 import coin from 'public/images/coin.svg';
 import divider from 'public/images/divider.svg';
-import noStreams from 'public/images/noStreams.svg';
 import rolling from 'public/images/rolling.svg';
 import defaultToken from 'public/images/defaultToken.svg';
 
 import capitalize from 'src/utils/capitalizeFirstLetter';
-import { IFilterTokens } from 'src/constants/types';
+import { IFilterTokens, IStreamHistory } from 'src/constants/types';
 
 import getStatusStyles from './getStatusStyle';
 import isStreamWithdrawable from 'src/features/isStreamWithdrawable';
@@ -40,7 +42,15 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
     router.push(`/stream/${streamId}`);
   };
 
-  const filteredStreamsByStatus = history.filter((stream) => stream.status === selectedStatus);
+  const filteredStreamsByStatus = history.filter((stream) => {
+    if (
+      (stream.status === StreamStatus.CANCELLED || stream.status === StreamStatus.COMPLETED) &&
+      selectedStatus === StreamStatus.COMPLETED
+    ) {
+      return true;
+    }
+    return stream.status === selectedStatus;
+  });
 
   const filteredStreams = filteredStreamsByStatus.filter((stream) => {
     const matchesSearch =
@@ -62,6 +72,24 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
 
     return matchesSearch && matchesFilter && matchesTokens;
   });
+  const completionPercentage = (stream: IStreamHistory) => {
+    const { receiverAmount } = calculateStreamAmounts(
+      stream.start_date,
+      stream.end_date,
+      stream.cliff_date,
+      stream.is_cancelled,
+      formatUnits(stream.withdrawn, stream.token.decimals),
+      formatUnits(stream.amount, stream.token.decimals),
+    );
+    const formattedAmount = formatUnits(stream.amount, stream.token.decimals);
+
+    return calculateCompletionPercentage(
+      stream.start_date,
+      stream.end_date,
+      formattedAmount,
+      receiverAmount.toString(),
+    );
+  };
 
   if (isLoading && address) {
     return (
@@ -74,6 +102,19 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
       </div>
     );
   }
+
+  const handleStatus = (status: string) => {
+    if (status === StreamStatus.ONGOING) {
+      return 'Active';
+    }
+    if (status === StreamStatus.COMPLETED) {
+      return 'Settled';
+    }
+    if (status === StreamStatus.CANCELLED) {
+      return 'Cancelled';
+    }
+    return capitalize(status);
+  };
 
   return (
     <div className="overflow-scroll desktop:min-h-[200px] h-full">
@@ -121,29 +162,39 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
               className={`text-sm mobile:w-full mobile:mt-5 ${
                 stream.status === StreamStatus.PENDING ? 'hidden' : 'block'
               }
-                  ${stream.status === StreamStatus.EXPIRED && 'flex items-center'}`}
+                  ${stream.status === StreamStatus.COMPLETED && 'flex items-center'}`}
             >
-              {stream.status === StreamStatus.EXPIRED ? (
+              {stream.status === StreamStatus.COMPLETED ? (
                 <div className="flex justify-between items-center w-full text-base font-medium">
-                  <p> Completed</p>
-                  <Image
-                    src={coin}
-                    alt="coin"
-                    className={`${
-                      isStreamWithdrawable(stream) && !stream.isSender
-                        ? 'mobile:block desktop:hidden bg-[#FFF59A] rounded-full mr-1'
-                        : 'desktop:hidden mobile:hidden'
-                    }`}
-                  />
+                  <div>
+                    <p> {completionPercentage(stream)}% Completed</p>
+                    <div className="desktop:w-[190px] mobile:!w-full bg-[#EBEBEB] rounded-full h-1 mt-1">
+                      <div
+                        className="bg-royalBlue rounded-full h-1"
+                        style={{
+                          width: completionPercentage(stream) + '%',
+                        }}
+                      />
+                    </div>
+                    <Image
+                      src={coin}
+                      alt="coin"
+                      className={`${
+                        isStreamWithdrawable(stream) && !stream.isSender
+                          ? 'mobile:block desktop:hidden bg-[#FFF59A] rounded-full mr-1'
+                          : 'desktop:hidden mobile:hidden'
+                      }`}
+                    />
+                  </div>
                 </div>
               ) : (
                 <div className="mobile:flex mobile:flex-col-reverse mobile:gap-2 mobile:font-medium">
-                  <div className="mobile:ml-1"> {stream.completionPercentage}% Completed</div>
+                  <div className="mobile:ml-1"> {completionPercentage(stream)}% Completed</div>
                   <div className="desktop:w-[190px] mobile:!w-full bg-[#EBEBEB] rounded-full h-1 mt-1">
                     <div
                       className="bg-royalBlue rounded-full h-1"
                       style={{
-                        width: stream.completionPercentage + '%',
+                        width: completionPercentage(stream) + '%',
                       }}
                     />
                   </div>
@@ -153,9 +204,10 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
             <div className="flex items-center mobile:w-full">
               <div
                 className={`select-none rounded-full px-4 py-0.5 mobile:absolute mobile:top-4 mobile:right-4
-            ${getStatusStyles(stream.status)}`}
+            ${getStatusStyles(stream.status)}
+            ${stream.status === StreamStatus.COMPLETED ? 'mr-[10px]' : ''}`}
               >
-                {stream.status === StreamStatus.ONGOING ? 'Active' : capitalize(stream.status)}
+                {handleStatus(stream.status)}
               </div>
               <div>
                 {isStreamWithdrawable(stream) && !stream.isSender ? (
