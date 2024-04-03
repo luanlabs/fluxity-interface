@@ -2,6 +2,8 @@ import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
 import { FormValues } from '../CreateStreamMainCard';
 import { shortenAddress } from 'src/utils/shortenAddress';
 
+import defaultTokenLogo from 'public/images/defaultToken.svg';
+
 const options = {
   year: 'numeric',
   month: 'short',
@@ -32,7 +34,7 @@ export const mapFormValues = (values: FormValues) => {
         return {
           label: 'Token',
           value: value.label,
-          icon: value.icon,
+          icon: value.value.logo ? value.value.logo : defaultTokenLogo,
         };
       }
 
