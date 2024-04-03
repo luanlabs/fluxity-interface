@@ -82,3 +82,10 @@ export interface IStreamHistory extends IStream {
 }
 
 export type IResponseStreamsResult = IFluxityAPIResponse<IStream[]>;
+
+export type INetwork = {
+  network: string;
+  networkUrl: string;
+  networkPassphrase: string;
+  sorobanRpcUrl?: string;
+};
