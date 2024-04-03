@@ -17,13 +17,12 @@ export default function Home() {
   return (
     <CPageCard
       scroll
-      className="w-full h-full pb-2 pt-[23px] px-[27px] mobile:pt-3 mobile:px-5 mobile:mb-[50px]"
       borderStatus="borderless"
-      childrenClassName="mobile:h-[calc(100vh-140px)]"
+      className="w-full h-full pb-2 pt-[23px] px-[27px] mobile:h-full mobile:overflow-y-scroll mobile:pt-3 mobile:px-5 mobile:mb-[50px]"
     >
       <WelcomeToFluxityCard />
       <p className="text-2xl font-medium my-[18px] mobile:my-3 ml-1">More with Fluxity</p>
-      <div className="flex mobile:flex-col mobile:basis-full basis-1/2 w-full gap-4 mobile:gap-2">
+      <div className="flex mobile:flex-col mobile:basis-full basis-1/2 w-full gap-4 mobile:gap-2 mobile:mb-2">
         <FaqCard />
         <ClaimTokenCard />
       </div>

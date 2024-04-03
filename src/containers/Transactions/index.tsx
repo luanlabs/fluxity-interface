@@ -123,7 +123,6 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
               }
                   ${stream.status === StreamStatus.EXPIRED && 'flex items-center'}`}
             >
-              <div></div>
               {stream.status === StreamStatus.EXPIRED ? (
                 <div className="flex justify-between items-center w-full text-base font-medium">
                   <p> Completed</p>
