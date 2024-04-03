@@ -16,14 +16,14 @@ export const checkIsUserActive = (token: xlmAssetType) => {
 };
 
 export const checkUserBalance = (token: xlmAssetType) => {
-  let isSalability;
+  let isXLMInsufficient;
   if (token.balance && token.sellingLiabilities && token.buyingLiabilities) {
-    isSalability = new BN(token.balance).minus(
+    isXLMInsufficient = new BN(token.balance).minus(
       new BN(token.sellingLiabilities).plus(token.buyingLiabilities),
     );
   }
 
-  if (isSalability?.isLessThan(1.2)) {
+  if (isXLMInsufficient?.isLessThan(1.2)) {
     return false;
   }
 
