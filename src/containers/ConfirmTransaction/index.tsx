@@ -199,7 +199,7 @@ const ConfirmTransaction = ({
   let totalAmount = new BN(0).toString();
 
   try {
-    totalAmount = calculateTotalAmount(values).toFixed(3).toString();
+    totalAmount = calculateTotalAmount(values).toString();
   } catch (e) {}
 
   const ModalButton = (

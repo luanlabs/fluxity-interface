@@ -26,6 +26,7 @@ import defaultTokenLogo from 'public/images/defaultToken.svg';
 import getERC20Details, { TokenDetailsType } from 'src/features/soroban/getERC20Details';
 import formatUnits from 'src/utils/formatUnits';
 
+
 interface SelectTokenProps {
   onChange: (_: ISelectToken) => void;
   className?: string;

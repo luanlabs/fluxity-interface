@@ -49,6 +49,8 @@ const CreateStream = () => {
       validateForm(formValues, setIsFormValidated, address, {
         asset_type: xlmAsset?.asset_type,
         balance: xlmAsset?.balance,
+        buyingLiabilities: xlmAsset?.buying_liabilities,
+        sellingLiabilities: xlmAsset?.selling_liabilities,
       }),
     defaultValues: {
       streamingModel: 'linear',
@@ -278,6 +280,8 @@ const CreateStream = () => {
               xlmAsset={{
                 asset_type: xlmAsset?.asset_type,
                 balance: xlmAsset?.balance,
+                buyingLiabilities: xlmAsset?.buying_liabilities,
+                sellingLiabilities: xlmAsset?.selling_liabilities,
               }}
               address={address}
             />

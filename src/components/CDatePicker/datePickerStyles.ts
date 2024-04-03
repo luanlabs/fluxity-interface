@@ -117,7 +117,7 @@ export const Wrapper = styled.div`
 
   .react-datepicker__time-container {
     float: right;
-    border-left: 1px solid #d9d9d9;
+    border-left: 1px solid #ebebeb;
     width: 85px;
   }
 
@@ -143,5 +143,18 @@ export const Wrapper = styled.div`
     background-color: #ababab;
     border-radius: 6px;
     border: 0px solid #ffffff;
+  }
+
+  @media (max-width: 480px) {
+    .react-datepicker {
+      box-shadow: none !important;
+      width: 100%;
+    }
+
+    .react-datepicker__day.react-datepicker__day {
+      line-height: 2.1rem;
+      font-size: 0.875rem;
+      padding: 0 14px !important;
+    }
   }
 `;

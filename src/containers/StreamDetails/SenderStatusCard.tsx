@@ -136,7 +136,7 @@ const SenderStatusCard = ({
 
   const cancelledAmount = new BN(
     formatUnits(cancelAmount.senderAmount.toString(), Number(token.decimals)),
-  ).toFixed(3);
+  ).toString();
 
   const SenderStatusCardTitle = (
     <div className="w-full flex justify-between items-center pb-4 pl-4 sm:hidden">
@@ -199,7 +199,7 @@ const SenderStatusCard = ({
           title="Stream cancellation successful"
           token={token.symbol}
           amountTitle="Amount"
-          amount={cancelledAmount}
+          amount={humanizeAmount(cancelledAmount).toString()}
           explorerLink={ExternalPages.EXPLORER + '/transactions/' + txHash}
           isOpen={isCancelStreamConfirmOpen}
           setIsOpen={setIsCancelStreamConfirmOpen}
