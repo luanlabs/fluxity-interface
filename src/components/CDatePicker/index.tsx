@@ -5,12 +5,12 @@ import DatePicker from 'react-datepicker';
 import useCustomID from 'src/hooks/useCustomId';
 import CToggle from 'src/components/CToggle';
 import CLabel from 'src/components/CLabel';
+import CBottomSheet from 'src/components/CBottomSheet';
+import CButton from 'src/components/CButton';
 
 import { Wrapper } from './datePickerStyles';
 
 import 'react-datepicker/dist/react-datepicker.css';
-import CBottomSheet from '../CBottomSheet';
-import CButton from '../CButton';
 
 interface CDatePickerProps {
   label?: string;
