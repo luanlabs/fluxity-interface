@@ -26,7 +26,6 @@ import defaultTokenLogo from 'public/images/defaultToken.svg';
 import getERC20Details, { TokenDetailsType } from 'src/features/soroban/getERC20Details';
 import formatUnits from 'src/utils/formatUnits';
 
-
 interface SelectTokenProps {
   onChange: (_: ISelectToken) => void;
   className?: string;
@@ -48,6 +47,16 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
   const isAccountActived = checkIsUserActive(xlmAsset);
 
   const isValidateContractAddress = StrKey.isValidContract(searchValue.toUpperCase());
+
+  useEffect(() => {
+    const updatedToken = tokens.find((x) => x.address === selectedToken?.address);
+
+    if (selectedToken?.balance === '0' && updatedToken && updatedToken.balance != '0') {
+      setSelectedToken(updatedToken);
+
+      handleTokenSelect(updatedToken);
+    }
+  }, [tokens]);
 
   useEffect(() => {
     const timeout = setTimeout(async () => {
