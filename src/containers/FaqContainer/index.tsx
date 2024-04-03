@@ -38,8 +38,8 @@ const FaqContainer = () => {
         </p>
       </div>
 
-      <div className="flex desktop:flex-row mobile:flex-col w-full">
-        <div className="flex justify-start items-center basis-1/5 mobile:w-[100vw] mobile:bg-white mobile:px-6">
+      <div className="flex desktop:flex-row mobile:flex-col w-full desktop:mt-[42px]">
+        <div className="flex justify-start mobile:items-center basis-1/5 mobile:w-[100vw] mobile:bg-white mobile:px-6">
           <ul className="desktop:w-5/6 mobile:gap-4 mobile:inline-flex mobile:overflow-auto mobile:tracking-tight">
             {FAQContent.map((item, index) => (
               <li
@@ -59,15 +59,15 @@ const FaqContainer = () => {
             ))}
           </ul>
         </div>
-        <div className="basis-4/5">
+        <div className="basis-4/5 mobile:overflow-auto mobile:h-full">
           <div
-            className="w-full desktop:bg-white mobile:p-0 pt-[34px] pb-4 px-[52px] mobile:mt-4 mt-[42px]
+            className="w-full mobile:h-full desktop:bg-white mobile:p-0 pt-[34px] pb-4 px-[52px] mobile:mt-4
             rounded-[14px] border border-[#0501421A] mobile:border-none mobile:px-6"
           >
             <p className="font-medium tall:text-[32px] text-[28px] mb-[37px] mobile:hidden">
               {FAQContent[isActive].title}
             </p>
-            <div className="tall:h-[55vh] desktop:h-[40vh] overflow-scroll">
+            <div className="mobile:!h-[calc(100vh-35vh)] mobile:overflow-auto overflow-scroll tall:h-[55vh] desktop:h-[40vh]">
               {FAQContent[isActive].questions.map(({ question, answer }) => (
                 <Disclosure key={question}>
                   {({ open }) => (
