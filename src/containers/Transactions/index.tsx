@@ -205,7 +205,7 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
               <div
                 className={`select-none rounded-full px-4 py-0.5 mobile:absolute mobile:top-4 mobile:right-4
             ${getStatusStyles(stream.status)}
-            ${stream.status === StreamStatus.COMPLETED ? 'mr-[10px]' : ''}`}
+            ${stream.status === StreamStatus.COMPLETED ? 'mobile:mr-[10px]' : ''}`}
               >
                 {handleStatus(stream.status)}
               </div>
