@@ -35,6 +35,7 @@ const Header = () => {
       <div className="inline-flex gap-[12px] items-center">
         <span className="mr-1 sm:hidden">
           <CLink title="Whitepaper" url={ExternalPages.WHITEPAPER} />
+          <CLink title="Documentation" url={ExternalPages.DOCUMENTATION} />
           <CLink title="Community" url={ExternalPages.COMMUNITY} />
         </span>
         <CButton
