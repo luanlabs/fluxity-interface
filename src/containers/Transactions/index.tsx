@@ -167,8 +167,11 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
               {stream.status === StreamStatus.COMPLETED ? (
                 <div className="flex justify-between items-center w-full text-base font-medium">
                   <div>
-                    <p> {completionPercentage(stream)}% Completed</p>
-                    <div className="desktop:w-[190px] mobile:!w-full bg-[#EBEBEB] rounded-full h-1 mt-1">
+                    <p>
+                      <span className="mobile:hidden">{completionPercentage(stream)}% </span>
+                      Completed
+                    </p>
+                    <div className="desktop:w-[190px] mobile:hidden bg-[#EBEBEB] rounded-full h-1 mt-1">
                       <div
                         className="bg-royalBlue rounded-full h-1"
                         style={{
@@ -204,8 +207,8 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
             <div className="flex items-center mobile:w-full">
               <div
                 className={`select-none rounded-full px-4 py-0.5 mobile:absolute mobile:top-4 mobile:right-4
-            ${getStatusStyles(stream.status)}
-            ${stream.status === StreamStatus.COMPLETED ? 'mobile:mr-[10px]' : ''}`}
+              ${getStatusStyles(stream.status)}
+              ${stream.status === StreamStatus.COMPLETED ? 'desktop:mr-[10px]' : ''}`}
               >
                 {handleStatus(stream.status)}
               </div>
