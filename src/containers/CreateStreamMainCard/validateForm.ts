@@ -47,6 +47,13 @@ const validateForm = (
 
   const isSuccessful = checkBalance(values.token.value, totalAmount);
 
+  if (totalAmount.isLessThan(0)) {
+    return {
+      values,
+      errors,
+    };
+  }
+
   if (!isSuccessful) {
     return {
       values,
