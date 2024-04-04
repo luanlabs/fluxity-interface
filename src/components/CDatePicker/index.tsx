@@ -178,7 +178,7 @@ const CDatePicker = ({
         </Wrapper>
 
         <CBottomSheet
-          contentClass="justify-center items-center"
+          contentClass="justify-center items-center w-full"
           isSticky={isSticky}
           isModalOpen={isOpenSheet}
           setIsModalOpen={setIsOpenSheet}

@@ -149,12 +149,13 @@ export const Wrapper = styled.div`
     .react-datepicker {
       box-shadow: none !important;
       width: 100%;
+      padding: 0 0;
     }
 
     .react-datepicker__day.react-datepicker__day {
       line-height: 2.1rem;
       font-size: 0.875rem;
-      padding: 0 14px !important;
+      padding: 0 13px !important;
     }
   }
 `;
