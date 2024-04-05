@@ -103,7 +103,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 >
                   <Header />
                 </CCard>
-                <section className="desktop:inline-flex basis-full gap-4 w-full desktop:h-[90%]">
+                <section className="desktop:inline-flex basis-full gap-4 w-full desktop:h-[90%] mobile:h-[100dvh] mobile:!overflow-auto">
                   <CCard
                     className={`desktop:relative mobile:fixed mobile:bottom-0 z-10
                     mobile:h-16 mobile:right-0 mobile:left-0 overflow-hidden 
@@ -121,7 +121,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                       onMinimized={() => setIsMinimized(!isMinimized)}
                     />
                   </CCard>
-                  <article className="basis-full">{children}</article>
+                  <article className="basis-full">
+                    {children}
+                    <div className="mobile:h-16 mobile:w-full !bg-white"></div>
+                  </article>
                 </section>
                 <Toaster position="bottom-center" />
               </main>

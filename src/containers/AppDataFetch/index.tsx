@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import CModal from 'src/components/CModal';
+import { Futurenet } from 'src/constants/networks';
 import useLoadTokens from 'src/hooks/useLoadTokens';
 import { useAppSelector } from 'src/hooks/useRedux';
 import useLoadStreams from 'src/hooks/useLoadStreams';
@@ -22,7 +23,7 @@ const AppDataFetch = () => {
   useLoadStreams(address);
 
   useEffect(() => {
-    setShouldModalOpen(currentNetwork !== 'FUTURENET');
+    setShouldModalOpen(currentNetwork.networkPassphrase !== Futurenet.networkPassphrase);
   }, [currentNetwork]);
 
   return (

@@ -35,6 +35,7 @@ const Header = () => {
       <div className="inline-flex gap-[12px] items-center">
         <span className="mr-1 sm:hidden">
           <CLink title="Whitepaper" url={ExternalPages.WHITEPAPER} />
+          <CLink title="Documentation" url={ExternalPages.DOCUMENTATION} />
           <CLink title="Community" url={ExternalPages.COMMUNITY} />
         </span>
         <CButton
@@ -42,12 +43,14 @@ const Header = () => {
           color="gray"
           content={
             <span className="flex gap-2 items-center">
-              <StellarLogo fill={`${currentNetwork === 'FUTURENET' ? '#1C9B47' : 'black'}`} />
-              {capitalizeFirstLetter(currentNetwork.toLowerCase())}
+              <StellarLogo
+                fill={`${currentNetwork.network === 'FUTURENET' ? '#1C9B47' : 'black'}`}
+              />
+              {capitalizeFirstLetter(currentNetwork.network.toLowerCase())}
             </span>
           }
           className={`${
-            currentNetwork === 'FUTURENET'
+            currentNetwork.network === 'FUTURENET'
               ? '!bg-paleMint !text-forestGreen !border-forestGreen'
               : ''
           } mobile:w-[122px] h-9`}

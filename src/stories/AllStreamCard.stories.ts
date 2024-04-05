@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import AllStreamCard from '../containers/AllStreamCard';
+import AllStreamCard from '../containers/AllStreamsCard';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta = {

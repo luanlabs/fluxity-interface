@@ -68,8 +68,6 @@ const ConfirmTransaction = ({
     setIsApproveModalOpen(false);
     setIsWalletLoadingApproveModalOpen(true);
 
-    await timeout(100);
-
     const checkAllowance = await getERC20Allowance(
       values.token.value.address,
       address,
@@ -77,7 +75,8 @@ const ConfirmTransaction = ({
     );
 
     if (toDecimals(calculateTotalAmount(values)) <= BigInt(checkAllowance)) {
-      setIsSendingApproveTxModalOpen(false);
+      setIsWalletLoadingApproveModalOpen(false);
+
       setIsCreateStreamConfirmModalOpen(true);
 
       toast('success', 'Transaction has been approved successfully');
@@ -121,6 +120,8 @@ const ConfirmTransaction = ({
       setIsWalletLoadingApproveModalOpen(false);
 
       if (!finalize) {
+        setIsSendingApproveTxModalOpen(false);
+
         toast('error', 'Approval transaction failed to finalize');
         return;
       }
@@ -188,6 +189,7 @@ const ConfirmTransaction = ({
     resetFields();
 
     setIsSendingCreateStreamTxModalOpen(false);
+    setIsSendingApproveTxModalOpen(false);
     await timeout(100);
     setIsCreateStreamResultModalOpen(true);
   };

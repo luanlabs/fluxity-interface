@@ -99,7 +99,7 @@ const CreateStream = () => {
         <CPageCard
           title={CreateStreamTitle}
           divider
-          className="w-full pl-[30px] pr-[18px] py-[15px] sm:pr-4 sm:pl-2 md:pb-8 sm:pb-8 mobile:mb-14"
+          className="w-full pl-[30px] pr-[18px] py-[15px] sm:pr-4 sm:pl-2 md:pb-8 sm:pb-8"
           scroll
           borderStatus="borderless"
           childrenClassName="mobile:h-[calc(100vh-210px)]"
@@ -265,7 +265,7 @@ const CreateStream = () => {
                 isFormCompleteValidation
                   ? '!bg-[#E6E6EC] !text-[#050142]'
                   : '!bg-darkBlue !text-white',
-                'xl:hidden xxl:hidden 2xl:hidden 3xl:hidden md2:hidden lg:hidden mt-12 sm:mt-4 md:mt-5 w-3/4 m-auto',
+                'xl:hidden xxl:hidden 2xl:hidden 3xl:hidden md2:hidden lg:hidden mt-12 sm:mt-4 md:mt-5 w-3/4 mobile:w-full m-auto',
               )}
               disabled={isFormCompleteValidation}
               onClick={handleOpenModals}

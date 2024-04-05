@@ -30,7 +30,7 @@ const CStreamStatusButton = ({
   let statusStyle = 'bg-brightYellow border-burntOrange text-burntOrange';
   if (status === 'ongoing') {
     statusStyle = 'border-forestGreen bg-paleMint text-forestGreen';
-  } else if (status === 'expired' || status === 'cancelled') {
+  } else if (status === 'completed' || status === 'cancelled') {
     statusStyle = 'bg-lightGrayishBlue border-darkGrayishTeal text-darkGrayishTeal';
   }
 

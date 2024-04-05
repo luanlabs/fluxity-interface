@@ -25,9 +25,17 @@ const CStreamType = ({ isSender, streamStatus }: CStreamTypeProps) => {
         {streamStatus === 'pending' ? (
           <Pause />
         ) : isSender ? (
-          <SendIcon fill={streamStatus === 'expired' ? '#6A6C74' : '#3A21D5'} />
+          <SendIcon
+            fill={
+              streamStatus === 'completed' || streamStatus === 'cancelled' ? '#6A6C74' : '#3A21D5'
+            }
+          />
         ) : (
-          <ReceiveIcon fill={streamStatus === 'expired' ? '#6A6C74' : '#1C9B47'} />
+          <ReceiveIcon
+            fill={
+              streamStatus === 'completed' || streamStatus === 'cancelled' ? '#6A6C74' : '#1C9B47'
+            }
+          />
         )}
       </span>
       <span className="gap-2 mobile:whitespace-nowrap">{isSender ? 'Send' : 'Receive'} Stream</span>

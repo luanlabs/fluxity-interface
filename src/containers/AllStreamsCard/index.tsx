@@ -12,7 +12,7 @@ import close from 'public/images/close.svg';
 import helpLogo from 'public/images/help.svg';
 import cardLogo from 'public/images/cardLogo.svg';
 
-const AllStreamCard = () => {
+const AllStreamsCard = () => {
   const [isClosed, setIsClosed] = useState(false);
   const router = useRouter();
 
@@ -39,13 +39,13 @@ const AllStreamCard = () => {
           onClick={handleClose}
           className="absolute top-[18px] right-[21px] cursor-pointer"
         />
-        <div className="pl-[38px] pt-4 text-royalBlue">
-          <h1 className="text-[28px] w-full font-medium">All stream are Here!</h1>
-          <p className="text-[15px] lg:text-sm mt-[10px] mb-5">
+        <div className="pl-8 pt-4 text-royalBlue">
+          <h1 className="text-[28px] w-full font-medium">All streams are Here!</h1>
+          <p className="text-[15px] lg:text-sm mt-2 mb-4 leading-[22px]">
             Keep all your present, future, and past streams under your touch. Enjoy secure,
             efficient, and user-friendly experience of token streaming.
           </p>
-          <div className="pb-7">
+          <div className="absolute bottom-4 left-8">
             <CButton
               onClick={handleClick}
               variant="simple"
@@ -62,4 +62,4 @@ const AllStreamCard = () => {
   );
 };
 
-export default AllStreamCard;
+export default AllStreamsCard;

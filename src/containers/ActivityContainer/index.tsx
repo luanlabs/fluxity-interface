@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 
 import Transactions from '../Transactions';
-import AllStreamCard from '../AllStreamCard';
+import AllStreamsCard from '../AllStreamsCard';
 import CPageCard from 'src/components/CPageCard';
 import { StreamStatus } from 'src/components/CStreamStatus';
 import { IFilterTokens } from 'src/constants/types';
@@ -28,7 +28,7 @@ const ActivityContainer = () => {
       title={<h1 className="text-2xl text-midnightBlue mb-[10px] mt-1 pl-2">Activity History</h1>}
     >
       <div style={{ flexFlow: 'column' }} className="h-full flex mobile:!h-[calc(100vh-200px)]">
-        <AllStreamCard />
+        <AllStreamsCard />
 
         <Filters
           setSearchValue={setSearchValue}

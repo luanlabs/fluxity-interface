@@ -1,6 +1,6 @@
 export enum ExternalPages {
   LANDING = 'https://fluxity.finance',
-  DOCUMENTATION = '/documentation',
+  DOCUMENTATION = 'https://docs.fluxity.finance',
   COMMUNITY = 'https://discord.gg/JnT7KPEuQs',
   FLUXITY_API = 'https://api.fluxity.finance',
   EXPLORER = 'https://futurenet.stellarchain.io',
