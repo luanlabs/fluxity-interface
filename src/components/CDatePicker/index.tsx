@@ -95,7 +95,9 @@ const CDatePicker = ({
   };
 
   const handleOpenSheet = () => {
-    setIsOpenSheet(true);
+    if (enabledDatePicker || readonly) {
+      setIsOpenSheet(true);
+    }
   };
 
   const handleCloseSheetClick = () => {
@@ -176,7 +178,7 @@ const CDatePicker = ({
         </Wrapper>
 
         <CBottomSheet
-          contentClass="justify-center items-center"
+          contentClass="justify-center items-center w-full"
           isSticky={isSticky}
           isModalOpen={isOpenSheet}
           setIsModalOpen={setIsOpenSheet}
@@ -210,7 +212,7 @@ const CDatePicker = ({
             <CButton
               variant="simple"
               color="blue"
-              content="ok"
+              content="Confirm"
               className="rounded-xl !py-5 !h-[60px]"
               onClick={handleConfirmSheetClick}
             />
