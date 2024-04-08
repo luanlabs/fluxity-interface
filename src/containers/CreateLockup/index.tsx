@@ -20,6 +20,7 @@ import CStreamingModelContainer from 'src/containers/CStreamingModelContainer';
 import CancellableStream, { ToggleStatus } from 'src/containers/CancellableStream';
 
 import validateForm from './validateForm';
+import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
 
 export interface FormValues {
   address: string;
@@ -28,13 +29,19 @@ export interface FormValues {
   startDate: Date;
   endDate: Date;
   cliffDate: Date;
-  streamingModel: Model;
+  streamingModel?: Model;
   isCancellable: ToggleStatus;
+}
+
+export type operationType = 'stream' | 'vesting';
+
+interface lockupProps {
+  operationType: operationType;
 }
 
 const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');
 
-const CreateStream = () => {
+const CreateLockup = ({ operationType }: lockupProps) => {
   const [isConfirmClicked, setIsConfirmClicked] = useState(false);
   const [isFormReset, setIsFormReset] = useState(false);
   const [isFormValidated, setIsFormValidated] = useState(false);
@@ -53,7 +60,7 @@ const CreateStream = () => {
         sellingLiabilities: xlmAsset?.selling_liabilities,
       }),
     defaultValues: {
-      streamingModel: 'linear',
+      ...(operationType === 'stream' && { streamingModel: 'linear' }),
       isCancellable: 'OFF',
     },
   });
@@ -62,7 +69,6 @@ const CreateStream = () => {
     handleSubmit,
     control,
     getValues,
-    setValue,
     watch,
     resetField,
     formState: { errors, isValid, isValidating },
@@ -89,8 +95,10 @@ const CreateStream = () => {
 
   const isFormCompleteValidation = !isValid || isValidating || !isFormValidated || !address;
 
+  const operation = capitalizeFirstLetter(operationType);
+
   const CreateStreamTitle = (
-    <h1 className="text-[24px] text-midnightBlue pl-4 mt-1 mb-1">Create Stream</h1>
+    <h1 className="text-[24px] text-midnightBlue pl-4 mt-1 mb-1">Create {operation}</h1>
   );
 
   return (
@@ -105,24 +113,25 @@ const CreateStream = () => {
           childrenClassName="mobile:h-[calc(100vh-210px)]"
         >
           <div className="w-full">
-            <div className="w-full">
-              <Controller
-                name="streamingModel"
-                control={control}
-                render={({ field }) => (
-                  <div className="w-full">
-                    <CStreamingModelContainer
-                      label="Streaming model"
-                      tooltipTitle="Streaming model"
-                      tooltipDetails={tooltipDetails.createStream.streamingModel}
-                      {...field}
-                    />
-                  </div>
-                )}
-              />
-            </div>
-
-            <hr className="my-6" />
+            {operationType === 'stream' && (
+              <div className="w-full">
+                <Controller
+                  name="streamingModel"
+                  control={control}
+                  render={({ field }) => (
+                    <div className="w-full">
+                      <CStreamingModelContainer
+                        label="Streaming model"
+                        tooltipTitle="Streaming model"
+                        tooltipDetails={tooltipDetails.createStream.streamingModel}
+                        {...field}
+                      />
+                    </div>
+                  )}
+                />
+                <hr className="my-6" />
+              </div>
+            )}
 
             <div className="mb-6">
               <Controller
@@ -258,7 +267,7 @@ const CreateStream = () => {
             <CButton
               type="submit"
               variant="form"
-              content="Create Stream"
+              content={`Create ${operation}`}
               svgLogo="fluxityLogo"
               fill={isFormCompleteValidation ? '#050142' : '#fff'}
               className={cn(
@@ -284,12 +293,13 @@ const CreateStream = () => {
                 sellingLiabilities: xlmAsset?.selling_liabilities,
               }}
               address={address}
+              operationType={operationType}
             />
 
             <CButton
               type="submit"
               variant="form"
-              content="Create Stream"
+              content={`Create ${operation}`}
               svgLogo="fluxityLogo"
               fill={isFormCompleteValidation ? '#050142' : '#fff'}
               className={
@@ -309,9 +319,10 @@ const CreateStream = () => {
         isConfirmClicked={isConfirmClicked}
         setIsConfirmClicked={setIsConfirmClicked}
         resetFields={resetFields}
+        operationType={operationType}
       />
     </form>
   );
 };
 
-export default CreateStream;
+export default CreateLockup;

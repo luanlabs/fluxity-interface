@@ -13,10 +13,7 @@ import CEmptyList from 'src/components/CEmptyList';
 import { useAppSelector } from 'src/hooks/useRedux';
 import humanizeAmount from 'src/utils/humanizeAmount';
 import fromDecimals from 'src/utils/soroban/fromDecimals';
-import {
-  xlmAssetType,
-  checkIsUserActive,
-} from 'src/containers/CreateStreamMainCard/checkIsUserActive';
+import { xlmAssetType, checkIsUserActive } from 'src/containers/CreateLockup/checkIsUserActive';
 
 import plusLogo from 'public/images/Plus.svg';
 import arrowLogo from 'public/images/arrow.svg';

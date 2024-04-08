@@ -1,8 +1,8 @@
 import { Contract, scValToNative } from 'stellar-sdk';
 
-import ToScVal from 'src/utils/createStream/scVal';
-import getServer from 'src/utils/createStream/getServer';
-import getAccount from 'src/utils/createStream/getAccount';
+import ToScVal from 'src/utils/createLockup/scVal';
+import getServer from 'src/utils/createLockup/getServer';
+import getAccount from 'src/utils/createLockup/getAccount';
 import createTransaction from 'src/utils/soroban/baseTransaction';
 
 const getERC20Allowance = async (

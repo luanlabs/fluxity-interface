@@ -1,8 +1,7 @@
 import React from 'react';
-import Image from 'next/image';
 import { Metadata } from 'next';
 
-import emptyLogo from 'public/images/noStreams.svg';
+import CreateLockup from 'src/containers/CreateLockup';
 
 export const metadata: Metadata = {
   title: 'Fluxity - Vesting',
@@ -13,12 +12,7 @@ export const metadata: Metadata = {
 };
 
 const Vesting = () => {
-  return (
-    <div className="h-full w-full flex justify-center items-center flex-col">
-      <Image src={emptyLogo} width={200} alt="empty" className="select-none" draggable={false} />
-      <p className="mt-5 text-3xl font-medium">Coming soon...</p>
-    </div>
-  );
+  return <CreateLockup operationType="vesting" />;
 };
 
 export default Vesting;
