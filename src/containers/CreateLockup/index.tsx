@@ -17,7 +17,7 @@ import ConfirmTransaction from 'src/containers/ConfirmTransaction';
 import CInputRate, { CInputRateValue } from 'src/components/CInputRate';
 import WalletAddressContainer from 'src/containers/WalletAddressContainer';
 import CStreamingModelContainer from 'src/containers/CStreamingModelContainer';
-import CancellableStream, { ToggleStatus } from 'src/containers/CancellableStream';
+import CancellableLockup, { ToggleStatus } from 'src/containers/CancellableLockup';
 
 import validateForm from './validateForm';
 import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
@@ -96,6 +96,7 @@ const CreateLockup = ({ operationType }: lockupProps) => {
   const isFormCompleteValidation = !isValid || isValidating || !isFormValidated || !address;
 
   const operation = capitalizeFirstLetter(operationType);
+  const lockup = operationType === 'stream' ? tooltipDetails.createStream : tooltipDetails.vesting;
 
   const CreateStreamTitle = (
     <h1 className="text-[24px] text-midnightBlue pl-4 mt-1 mb-1">Create {operation}</h1>
@@ -123,7 +124,7 @@ const CreateLockup = ({ operationType }: lockupProps) => {
                       <CStreamingModelContainer
                         label="Streaming model"
                         tooltipTitle="Streaming model"
-                        tooltipDetails={tooltipDetails.createStream.streamingModel}
+                        tooltipDetails={lockup.streamingModel}
                         {...field}
                       />
                     </div>
@@ -142,7 +143,7 @@ const CreateLockup = ({ operationType }: lockupProps) => {
                     <WalletAddressContainer
                       clearInputClick={() => resetField('address')}
                       tooltipTitle="Recipient wallet address"
-                      tooltipDetails={tooltipDetails.createStream.walletAddress}
+                      tooltipDetails={lockup.walletAddress}
                       {...field}
                     />
                   </div>
@@ -175,7 +176,7 @@ const CreateLockup = ({ operationType }: lockupProps) => {
                       placeholder="0.0"
                       label="Flow rate"
                       tooltipTitle="Flow rate"
-                      tooltipDetails={tooltipDetails.createStream.flowRate}
+                      tooltipDetails={lockup.flowRate}
                       className="basis-4/5 sm:!basis-0 md:basis-0 sm:mt-4 mobile:w-full "
                       errorMsg={errors.rate && errors.rate.message}
                       error={errors.rate?.message ? true : false}
@@ -194,9 +195,10 @@ const CreateLockup = ({ operationType }: lockupProps) => {
                 name="isCancellable"
                 control={control}
                 render={({ field }) => (
-                  <CancellableStream
-                    tooltipDetails={tooltipDetails.createStream.cancellableStream}
-                    tooltipTitle="Cancellable Stream"
+                  <CancellableLockup
+                    tooltipDetails={lockup.cancellableStream}
+                    tooltipTitle={`Cancellable ${operationType}`}
+                    operationType={operationType}
                     {...field}
                   />
                 )}
@@ -214,7 +216,7 @@ const CreateLockup = ({ operationType }: lockupProps) => {
                     className="!w-[236px] sm:w-[340px] mobile:!w-full"
                     label="Cliff date"
                     tooltipTitle="Cliff Date"
-                    tooltipDetails={tooltipDetails.createStream.cliffDate}
+                    tooltipDetails={lockup.cliffDate}
                     minDate={startDate}
                     maxDate={endDate}
                     isFormReset={isFormReset}
@@ -235,7 +237,7 @@ const CreateLockup = ({ operationType }: lockupProps) => {
                       className="desktop:!w-[236px] mobile:!w-full"
                       label="Start date"
                       tooltipTitle="Start Date"
-                      tooltipDetails={tooltipDetails.createStream.startDate}
+                      tooltipDetails={lockup.startDate}
                       minDate={startDate}
                       maxDate={endDate}
                       isFormReset={isFormReset}
@@ -254,7 +256,7 @@ const CreateLockup = ({ operationType }: lockupProps) => {
                       className="desktop:!w-[236px] mobile:!w-full md:!w-full"
                       label="End date"
                       tooltipTitle="End Date"
-                      tooltipDetails={tooltipDetails.createStream.endDate}
+                      tooltipDetails={lockup.endDate}
                       minDate={cliffDate ? cliffDate : startDate}
                       maxDate={INFINITY_DATE}
                       readonly
