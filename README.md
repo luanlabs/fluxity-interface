@@ -6,7 +6,7 @@ Fluxity is a token streaming solution designed to enhance the efficiency of fina
 
 **Token Streaming as a Solution**
 
-Token streaming provides an innovative solution to these challenges, offering real-time, continuous transactions that can be adapted to various use cases, ensuring attractiveness, flexibility, and trust in financial engagements. It allows for an ongoing flow of tokens, similar to streaming media content, with predefined start and stop times and transfer rates, providing both parties with predictable, fluid transactions. Token streams can be cancellable and offer maximum flexibility to payment configurations at slashed transaction costs.
+Token streaming provides an innovative solution, offering real-time, continuous transactions that can be adapted to various use cases, ensuring attractiveness, flexibility, and trust in financial engagements. It allows for an ongoing flow of tokens, similar to streaming media content, with predefined start and stop times and transfer rates, providing both parties with predictable, fluid transactions. Token streams can be cancellable and offer maximum flexibility to payment configurations at slashed transaction costs.
 
 **Key Features**
 
