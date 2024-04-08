@@ -1,22 +1,25 @@
 import CToggle from 'src/components/CToggle';
 import CLabel from 'src/components/CLabel';
 import { useEffect, useState } from 'react';
+import { operationType } from '../CreateLockup';
 
 export type ToggleStatus = 'ON' | 'OFF';
 
-interface CancellableStreamProps {
+interface CancellableLockupProps {
   onChange: (value: ToggleStatus) => void;
   tooltipDetails: string;
   tooltipTitle: string;
   value: ToggleStatus;
+  operationType: operationType;
 }
 
-const CancellableStream = ({
+const CancellableLockup = ({
   onChange,
   tooltipTitle,
   tooltipDetails,
   value,
-}: CancellableStreamProps) => {
+  operationType,
+}: CancellableLockupProps) => {
   const [isToggleEnabled, setIsToggleEnabled] = useState(false);
 
   const handleToggleChecker = (value: boolean) => {
@@ -34,7 +37,7 @@ const CancellableStream = ({
   return (
     <div className="w-full flex items-center justify-between sm:mb-10">
       <div className="flex items-center">
-        <span className="text-[18px] text-darkBlue sm:font-[500]">Cancellable stream</span>
+        <span className="text-[18px] text-darkBlue sm:font-[500]">Cancellable {operationType}</span>
         <CLabel tooltipDetails={tooltipDetails} tooltipTitle={tooltipTitle} />
       </div>
       <div className="flex items-center">
@@ -44,4 +47,4 @@ const CancellableStream = ({
   );
 };
 
-export default CancellableStream;
+export default CancellableLockup;
