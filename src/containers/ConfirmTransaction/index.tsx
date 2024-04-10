@@ -11,25 +11,27 @@ import humanizeAmount from 'src/utils/humanizeAmount';
 import CProcessModal from 'src/components/CProcessModal';
 import CModalSuccess from 'src/components/CModalSuccess';
 import { FLUXITY_CONTRACT } from 'src/constants/contracts';
-import toDecimals from 'src/utils/createStream/toDecimals';
+import toDecimals from 'src/utils/createLockup/toDecimals';
 import { ExternalPages } from 'src/constants/externalPages';
-import createStream from 'src/features/soroban/createStream';
+import createLockup from 'src/features/soroban/createLockup';
 import signTransaction from 'src/utils/soroban/signTransaction';
-import { FormValues } from 'src/containers/CreateStreamMainCard';
+import { FormValues, operationType } from 'src/containers/CreateLockup';
 import DoubleButtonModal from 'src/components/DoubleButtonModal';
 import SingleButtonModal from 'src/components/SingleButtonModal';
 import sendTransaction from 'src/features/soroban/sendTransaction';
 import ApproveFormModal from 'src/containers/Modals/ApproveFormModal';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 import getERC20Allowance from 'src/features/soroban/getERC20Allowance';
-import informCreatestreamAPI from 'src/features/informCreatestreamAPI';
+import informCreateLockupAPI from 'src/features/informCreateLockupAPI';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
+import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
 
 interface ConfirmTransactions {
   isConfirmClicked: boolean;
   setIsConfirmClicked: (_: boolean) => void;
   form: UseFormReturn<any, undefined>;
   resetFields: () => void;
+  operationType: operationType;
 }
 
 const ConfirmTransaction = ({
@@ -37,17 +39,20 @@ const ConfirmTransaction = ({
   setIsConfirmClicked,
   form,
   resetFields,
+  operationType,
 }: ConfirmTransactions) => {
   const address = useAppSelector((state) => state.user.address);
   const values: FormValues = form.getValues();
 
+  const variant = capitalizeFirstLetter(operationType);
+
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [isWalletLoadingApproveModalOpen, setIsWalletLoadingApproveModalOpen] = useState(false);
   const [isSendingApproveTxModalOpen, setIsSendingApproveTxModalOpen] = useState(false);
-  const [isCreateStreamConfirmModalOpen, setIsCreateStreamConfirmModalOpen] = useState(false);
+  const [isCreateLockupConfirmModalOpen, setIsCreateLockupConfirmModalOpen] = useState(false);
   const [isWalletLoadingConfirmModalOpen, setIsWalletLoadingConfirmModalOpen] = useState(false);
-  const [isSendingCreateStreamTxModalOpen, setIsSendingCreateStreamTxModalOpen] = useState(false);
-  const [isCreateStreamResultModalOpen, setIsCreateStreamResultModalOpen] = useState(false);
+  const [isSendingCreateLockupTxModalOpen, setIsSendingCreateLockupTxModalOpen] = useState(false);
+  const [isCreateLockupResultModalOpen, setIsCreateLockupResultModalOpen] = useState(false);
 
   const [streamDetails, setStreamDetails] = useState({
     hash: '',
@@ -64,7 +69,7 @@ const ConfirmTransaction = ({
     setIsConfirmClicked(false);
   }, [isApproveModalOpen]);
 
-  const handleCreateStreamOnClick = async () => {
+  const handleCreateLockupOnClick = async () => {
     setIsApproveModalOpen(false);
     setIsWalletLoadingApproveModalOpen(true);
 
@@ -77,7 +82,7 @@ const ConfirmTransaction = ({
     if (toDecimals(calculateTotalAmount(values)) <= BigInt(checkAllowance)) {
       setIsWalletLoadingApproveModalOpen(false);
 
-      setIsCreateStreamConfirmModalOpen(true);
+      setIsCreateLockupConfirmModalOpen(true);
 
       toast('success', 'Transaction has been approved successfully');
 
@@ -131,29 +136,29 @@ const ConfirmTransaction = ({
     }
 
     toast('success', 'Transaction has been approved successfully');
-    setIsCreateStreamConfirmModalOpen(true);
+    setIsCreateLockupConfirmModalOpen(true);
   };
 
-  const handleCreateStreamConfirmClick = async () => {
-    setIsCreateStreamConfirmModalOpen(false);
+  const handleCreateLockupConfirmClick = async () => {
+    setIsCreateLockupConfirmModalOpen(false);
     setIsWalletLoadingConfirmModalOpen(true);
 
-    const createStreamXdr = await createStream(values, address);
+    const CreateLockupXdr = await createLockup(values, address, operationType);
 
     let signedXdr;
 
     try {
-      signedXdr = await signTransaction(address, createStreamXdr);
+      signedXdr = await signTransaction(address, CreateLockupXdr);
     } catch (e) {
       setIsWalletLoadingConfirmModalOpen(false);
-      toast('error', 'Error signing create stream transaction');
+      toast('error', `Error signing create ${operationType} transaction`);
 
       return;
     }
 
     setIsWalletLoadingConfirmModalOpen(false);
     await timeout(50);
-    setIsSendingCreateStreamTxModalOpen(true);
+    setIsSendingCreateLockupTxModalOpen(true);
 
     let tx;
 
@@ -170,32 +175,32 @@ const ConfirmTransaction = ({
       const finalize = await finalizeTransaction(tx.hash);
 
       if (!finalize) {
-        setIsSendingCreateStreamTxModalOpen(false);
-        toast('error', 'Create stream transaction failed to finalize');
+        setIsSendingCreateLockupTxModalOpen(false);
+        toast('error', `Create ${operationType} transaction failed to finalize`);
 
         return;
       }
 
-      await informCreatestreamAPI(scValToNative(finalize?.returnValue).toString());
+      await informCreateLockupAPI(scValToNative(finalize?.returnValue).toString());
 
       setStreamDetails({
         hash: tx.hash,
         id: scValToNative(finalize.returnValue).toString(),
       });
     } else {
-      setIsSendingCreateStreamTxModalOpen(false);
+      setIsSendingCreateLockupTxModalOpen(false);
       return;
     }
     resetFields();
 
-    setIsSendingCreateStreamTxModalOpen(false);
+    setIsSendingCreateLockupTxModalOpen(false);
     setIsSendingApproveTxModalOpen(false);
     await timeout(100);
-    setIsCreateStreamResultModalOpen(true);
+    setIsCreateLockupResultModalOpen(true);
   };
 
   const handleCloseTransactionSuccessModal = () => {
-    setIsCreateStreamResultModalOpen(false);
+    setIsCreateLockupResultModalOpen(false);
   };
 
   let totalAmount = new BN(0).toString();
@@ -206,7 +211,7 @@ const ConfirmTransaction = ({
 
   const ModalButton = (
     <DoubleButtonModal
-      buttonText="View Stream Details"
+      buttonText={`View ${variant} Details`}
       closeOnClick={handleCloseTransactionSuccessModal}
       stream={streamDetails}
     />
@@ -214,10 +219,10 @@ const ConfirmTransaction = ({
 
   const ConfirmSuccessButton = (
     <SingleButtonModal
-      buttonText="Create Stream"
+      buttonText={`Create ${variant}`}
       buttonVariant="form"
       logoColor="#fff"
-      onClick={handleCreateStreamConfirmClick}
+      onClick={handleCreateLockupConfirmClick}
     />
   );
 
@@ -226,7 +231,7 @@ const ConfirmTransaction = ({
       <ApproveFormModal
         isOpen={isApproveModalOpen}
         setIsOpen={setIsApproveModalOpen}
-        onClick={handleCreateStreamOnClick}
+        onClick={handleCreateLockupOnClick}
       />
 
       <CProcessModal
@@ -249,17 +254,17 @@ const ConfirmTransaction = ({
       />
 
       <CProcessModal
-        title="Completing stream creation transaction"
-        isOpen={isSendingCreateStreamTxModalOpen}
-        setIsOpen={setIsSendingCreateStreamTxModalOpen}
+        title={`Completing ${variant} creation transaction`}
+        isOpen={isSendingCreateLockupTxModalOpen}
+        setIsOpen={setIsSendingCreateLockupTxModalOpen}
       />
 
       <CModalSuccess
         successLogoColor="green"
         title="Transaction Successful"
         explorerLink={ExternalPages.EXPLORER + '/transactions/' + streamDetails.hash}
-        isOpen={isCreateStreamResultModalOpen}
-        setIsOpen={setIsCreateStreamResultModalOpen}
+        isOpen={isCreateLockupResultModalOpen}
+        setIsOpen={setIsCreateLockupResultModalOpen}
         ButtonPart={ModalButton}
       />
 
@@ -270,8 +275,8 @@ const ConfirmTransaction = ({
         to={values.address}
         amount={humanizeAmount(totalAmount).toString()}
         amountTitle="Total Amount"
-        isOpen={isCreateStreamConfirmModalOpen}
-        setIsOpen={setIsCreateStreamConfirmModalOpen}
+        isOpen={isCreateLockupConfirmModalOpen}
+        setIsOpen={setIsCreateLockupConfirmModalOpen}
         ButtonPart={ConfirmSuccessButton}
       />
     </div>

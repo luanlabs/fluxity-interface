@@ -1,7 +1,7 @@
 import React from 'react';
 import { Metadata } from 'next';
 
-import CreateStreamMainCard from 'src/containers/CreateStreamMainCard';
+import CreateLockup from 'src/containers/CreateLockup';
 
 export const metadata: Metadata = {
   title: 'Fluxity - Create Stream',
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 const CreateStream = () => {
-  return <CreateStreamMainCard />;
+  return <CreateLockup operationType="stream" />;
 };
 
 export default CreateStream;

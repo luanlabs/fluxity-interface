@@ -1,5 +1,5 @@
 import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
-import { FormValues } from '../CreateStreamMainCard';
+import { FormValues } from '../CreateLockup';
 import { shortenAddress } from 'src/utils/shortenAddress';
 
 import defaultTokenLogo from 'public/images/defaultToken.svg';

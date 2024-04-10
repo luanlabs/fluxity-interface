@@ -1,6 +1,6 @@
 import { Memo, MemoType, Operation, SorobanRpc, Transaction } from 'stellar-sdk';
 
-import getServer from 'src/utils/createStream/getServer';
+import getServer from 'src/utils/createLockup/getServer';
 
 const sendTransaction = async (signedXDR: Transaction<Memo<MemoType>, Operation[]> | void) => {
   const server = getServer();

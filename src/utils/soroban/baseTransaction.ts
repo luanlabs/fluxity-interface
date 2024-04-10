@@ -1,6 +1,6 @@
 import { TransactionBuilder, Networks, Account, xdr, Operation } from 'stellar-sdk';
 
-import getFee from 'src/utils/createStream/getFee';
+import getFee from 'src/utils/createLockup/getFee';
 
 const baseTransaction = (account: Account, call: xdr.Operation<Operation.InvokeHostFunction>) => {
   const fee = getFee();

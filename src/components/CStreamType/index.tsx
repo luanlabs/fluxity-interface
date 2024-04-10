@@ -10,9 +10,10 @@ import Pause from 'src/assets/Pause';
 type CStreamTypeProps = {
   isSender: boolean;
   streamStatus: StreamStatus;
+  isVesting: boolean;
 };
 
-const CStreamType = ({ isSender, streamStatus }: CStreamTypeProps) => {
+const CStreamType = ({ isSender, streamStatus, isVesting }: CStreamTypeProps) => {
   return (
     <div
       className={`inline-flex justify-center whitespace-nowrap items-center gap-2 p-[10px] select-none rounded-xl mobile:!bg-transparent ${getStatusStyles(
@@ -38,7 +39,9 @@ const CStreamType = ({ isSender, streamStatus }: CStreamTypeProps) => {
           />
         )}
       </span>
-      <span className="gap-2 mobile:whitespace-nowrap">{isSender ? 'Send' : 'Receive'} Stream</span>
+      <span className="gap-2 mobile:whitespace-nowrap">
+        {isSender ? 'Send' : 'Receive'} {isVesting ? 'Vesting' : 'Stream'}
+      </span>
     </div>
   );
 };
