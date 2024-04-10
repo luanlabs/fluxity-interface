@@ -1,6 +1,5 @@
 # Fluxity Interface
 
-**Introduction**
 
 Fluxity is a token streaming solution designed to enhance the efficiency of financial transactions within the Stellar blockchain ecosystem. By enabling real-time transfer of cryptographic tokens, Fluxity introduces a new paradigm in financial interactions, fostering dynamic ecosystems.
 
