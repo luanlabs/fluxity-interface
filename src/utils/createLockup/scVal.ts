@@ -2,7 +2,7 @@ import { xdr, Address } from 'stellar-sdk';
 
 import numberToScVal from 'src/utils/soroban/numberToScVal';
 import toXdrValue from 'src/utils/soroban/createStreamValues';
-import { FormValues } from 'src/containers/CreateStreamMainCard';
+import { FormValues } from 'src/containers/CreateLockup';
 
 const { scvU32, scvU64, scvSymbol } = xdr.ScVal;
 

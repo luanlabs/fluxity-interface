@@ -1,9 +1,9 @@
 import { xdr } from 'stellar-sdk';
 
-import ToScVal from 'src/utils/createStream/scVal';
+import ToScVal from 'src/utils/createLockup/scVal';
 import dateToSeconds from 'src/utils/dateToSeconds';
-import toDecimals from 'src/utils/createStream/toDecimals';
-import { FormValues } from 'src/containers/CreateStreamMainCard';
+import toDecimals from 'src/utils/createLockup/toDecimals';
+import { FormValues } from 'src/containers/CreateLockup';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 
 import BN from '../BN';

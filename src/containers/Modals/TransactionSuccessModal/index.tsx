@@ -28,7 +28,7 @@ const TransactionSuccessModal = ({
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/stream/${stream.id}`);
+    router.push(`/lockup/${stream.id}`);
   };
 
   return (

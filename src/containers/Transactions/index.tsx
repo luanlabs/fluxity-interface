@@ -39,7 +39,7 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
   const isLoading = useAppSelector((state) => state.user.loadingHistory);
 
   const handleClick = (streamId: string) => {
-    router.push(`/stream/${streamId}`);
+    router.push(`/lockup/${streamId}`);
   };
 
   const filteredStreamsByStatus = history.filter((stream) => {
@@ -127,7 +127,11 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
           onClick={() => handleClick(stream.id)}
         >
           <div className="desktop:inline-flex items-center">
-            <CStreamType isSender={stream.isSender} streamStatus={stream.status} />
+            <CStreamType
+              isSender={stream.isSender}
+              streamStatus={stream.status}
+              isVesting={stream.is_vesting}
+            />
             <hr className="desktop:hidden w-full" />
             <div
               className={`flex desktop:gap-2 ${

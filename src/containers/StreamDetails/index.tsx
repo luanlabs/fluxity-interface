@@ -3,6 +3,8 @@
 /* eslint-disable @next/next/no-async-client-component */
 'use client';
 import { useEffect, useState } from 'react';
+import { redirect } from 'next/navigation';
+import BN from 'src/utils/BN';
 
 import { CancelAmounts } from 'src/models';
 import formatUnits from 'src/utils/formatUnits';
@@ -20,7 +22,6 @@ import SummaryFields from './SummaryFields';
 import SenderStatusCard from './SenderStatusCard';
 import ReceiverStatusCard from './ReceiverStatusCard';
 import DynamicStreamedAmount from './DynamicStreamedAmount';
-import BN from 'src/utils/BN';
 
 interface StreamDetailsProps {
   id: string;
@@ -73,7 +74,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
   }
 
   if (error || !data) {
-    return <p>error</p>;
+    return redirect(`/not-found`);
   }
 
   const cancellable = isStreamCancellable(data.end_date, data.cancellable_date);
@@ -95,7 +96,9 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
 
   const mainTitle = (
     <div className="w-full flex justify-between items-center pb-2 sm:hidden">
-      <h1 className="text-[24px] text-midnightBlue pl-2 mt-2">Stream #{data.id}</h1>
+      <h1 className="text-[24px] text-midnightBlue pl-2 mt-2">
+        {data.is_vesting ? 'Vesting' : 'Stream'} #{data.id}
+      </h1>
       <CStreamStatusButton
         type={data.status}
         isCancelled={data.is_cancelled}
@@ -107,7 +110,9 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
   return (
     <div className="w-full flex mobile:overflow-auto gap-4 md:gap-2 md:px-2 h-[87vh] 2xl:h-[69vh] 3xl:h-[43vh] 4xl:h-[26vh] md:h-[83vh] sm:flex-col sm:w-[90%] sm:m-auto">
       <div className="w-full flex justify-between items-center desktop:hidden lg:hidden xl:hidden md:hidden px-1 mt-8">
-        <h1 className="text-[24px] text-midnightBlue pl-2">Stream #{data.id}</h1>
+        <h1 className="text-[24px] text-midnightBlue pl-2">
+          {data.is_vesting ? 'Vesting' : 'Stream'} #{data.id}
+        </h1>
         <CStreamStatusButton
           className="!py-1 !px-3"
           type={data.status}

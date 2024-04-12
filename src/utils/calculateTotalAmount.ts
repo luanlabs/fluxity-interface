@@ -1,6 +1,6 @@
 import BN from 'src/utils/BN';
 
-import { FormValues as CreateStreamFormValues } from 'src/containers/CreateStreamMainCard';
+import { FormValues as CreateStreamFormValues } from 'src/containers/CreateLockup';
 
 import { rateToNumber } from './rates';
 import dateToSeconds from './dateToSeconds';

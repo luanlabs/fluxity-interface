@@ -12,7 +12,7 @@ const DoubleButtonModal = ({ closeOnClick, stream, buttonText }: DoubleButtonMod
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/stream/${stream.id}`);
+    router.push(`/lockup/${stream.id}`);
   };
 
   return (

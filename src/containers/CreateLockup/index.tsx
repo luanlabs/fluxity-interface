@@ -17,9 +17,10 @@ import ConfirmTransaction from 'src/containers/ConfirmTransaction';
 import CInputRate, { CInputRateValue } from 'src/components/CInputRate';
 import WalletAddressContainer from 'src/containers/WalletAddressContainer';
 import CStreamingModelContainer from 'src/containers/CStreamingModelContainer';
-import CancellableStream, { ToggleStatus } from 'src/containers/CancellableStream';
+import CancellableLockup, { ToggleStatus } from 'src/containers/CancellableLockup';
 
 import validateForm from './validateForm';
+import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
 
 export interface FormValues {
   address: string;
@@ -28,13 +29,19 @@ export interface FormValues {
   startDate: Date;
   endDate: Date;
   cliffDate: Date;
-  streamingModel: Model;
+  streamingModel?: Model;
   isCancellable: ToggleStatus;
+}
+
+export type operationType = 'stream' | 'vesting';
+
+interface lockupProps {
+  operationType: operationType;
 }
 
 const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');
 
-const CreateStream = () => {
+const CreateLockup = ({ operationType }: lockupProps) => {
   const [isConfirmClicked, setIsConfirmClicked] = useState(false);
   const [isFormReset, setIsFormReset] = useState(false);
   const [isFormValidated, setIsFormValidated] = useState(false);
@@ -53,7 +60,7 @@ const CreateStream = () => {
         sellingLiabilities: xlmAsset?.selling_liabilities,
       }),
     defaultValues: {
-      streamingModel: 'linear',
+      ...(operationType === 'stream' && { streamingModel: 'linear' }),
       isCancellable: 'OFF',
     },
   });
@@ -62,7 +69,6 @@ const CreateStream = () => {
     handleSubmit,
     control,
     getValues,
-    setValue,
     watch,
     resetField,
     formState: { errors, isValid, isValidating },
@@ -89,8 +95,11 @@ const CreateStream = () => {
 
   const isFormCompleteValidation = !isValid || isValidating || !isFormValidated || !address;
 
+  const operation = capitalizeFirstLetter(operationType);
+  const lockup = operationType === 'stream' ? tooltipDetails.createStream : tooltipDetails.vesting;
+
   const CreateStreamTitle = (
-    <h1 className="text-[24px] text-midnightBlue pl-4 mt-1 mb-1">Create Stream</h1>
+    <h1 className="text-[24px] text-midnightBlue pl-4 mt-1 mb-1">Create {operation}</h1>
   );
 
   return (
@@ -104,24 +113,25 @@ const CreateStream = () => {
           borderStatus="borderless"
         >
           <div className="w-full">
-            <div className="w-full">
-              <Controller
-                name="streamingModel"
-                control={control}
-                render={({ field }) => (
-                  <div className="w-full">
-                    <CStreamingModelContainer
-                      label="Streaming model"
-                      tooltipTitle="Streaming model"
-                      tooltipDetails={tooltipDetails.createStream.streamingModel}
-                      {...field}
-                    />
-                  </div>
-                )}
-              />
-            </div>
-
-            <hr className="my-6" />
+            {operationType === 'stream' && (
+              <div className="w-full">
+                <Controller
+                  name="streamingModel"
+                  control={control}
+                  render={({ field }) => (
+                    <div className="w-full">
+                      <CStreamingModelContainer
+                        label="Streaming model"
+                        tooltipTitle="Streaming model"
+                        tooltipDetails={lockup.streamingModel}
+                        {...field}
+                      />
+                    </div>
+                  )}
+                />
+                <hr className="my-6" />
+              </div>
+            )}
 
             <div className="mb-6">
               <Controller
@@ -132,7 +142,7 @@ const CreateStream = () => {
                     <WalletAddressContainer
                       clearInputClick={() => resetField('address')}
                       tooltipTitle="Recipient wallet address"
-                      tooltipDetails={tooltipDetails.createStream.walletAddress}
+                      tooltipDetails={lockup.walletAddress}
                       {...field}
                     />
                   </div>
@@ -165,7 +175,7 @@ const CreateStream = () => {
                       placeholder="0.0"
                       label="Flow rate"
                       tooltipTitle="Flow rate"
-                      tooltipDetails={tooltipDetails.createStream.flowRate}
+                      tooltipDetails={lockup.flowRate}
                       className="basis-4/5 sm:!basis-0 md:basis-0 sm:mt-4 mobile:w-full "
                       errorMsg={errors.rate && errors.rate.message}
                       error={errors.rate?.message ? true : false}
@@ -184,9 +194,10 @@ const CreateStream = () => {
                 name="isCancellable"
                 control={control}
                 render={({ field }) => (
-                  <CancellableStream
-                    tooltipDetails={tooltipDetails.createStream.cancellableStream}
-                    tooltipTitle="Cancellable Stream"
+                  <CancellableLockup
+                    tooltipDetails={lockup.cancellableStream}
+                    tooltipTitle={`Cancellable ${operationType}`}
+                    operationType={operationType}
                     {...field}
                   />
                 )}
@@ -204,7 +215,7 @@ const CreateStream = () => {
                     className="!w-[236px] sm:w-[340px] mobile:!w-full"
                     label="Cliff date"
                     tooltipTitle="Cliff Date"
-                    tooltipDetails={tooltipDetails.createStream.cliffDate}
+                    tooltipDetails={lockup.cliffDate}
                     minDate={startDate}
                     maxDate={endDate}
                     isFormReset={isFormReset}
@@ -225,7 +236,7 @@ const CreateStream = () => {
                       className="desktop:!w-[236px] mobile:!w-full"
                       label="Start date"
                       tooltipTitle="Start Date"
-                      tooltipDetails={tooltipDetails.createStream.startDate}
+                      tooltipDetails={lockup.startDate}
                       minDate={startDate}
                       maxDate={endDate}
                       isFormReset={isFormReset}
@@ -244,7 +255,7 @@ const CreateStream = () => {
                       className="desktop:!w-[236px] mobile:!w-full md:!w-full"
                       label="End date"
                       tooltipTitle="End Date"
-                      tooltipDetails={tooltipDetails.createStream.endDate}
+                      tooltipDetails={lockup.endDate}
                       minDate={cliffDate ? cliffDate : startDate}
                       maxDate={INFINITY_DATE}
                       readonly
@@ -257,7 +268,7 @@ const CreateStream = () => {
             <CButton
               type="submit"
               variant="form"
-              content="Create Stream"
+              content={`Create ${operation}`}
               svgLogo="fluxityLogo"
               fill={isFormCompleteValidation ? '#050142' : '#fff'}
               className={cn(
@@ -283,12 +294,13 @@ const CreateStream = () => {
                 sellingLiabilities: xlmAsset?.selling_liabilities,
               }}
               address={address}
+              operationType={operationType}
             />
 
             <CButton
               type="submit"
               variant="form"
-              content="Create Stream"
+              content={`Create ${operation}`}
               svgLogo="fluxityLogo"
               fill={isFormCompleteValidation ? '#050142' : '#fff'}
               className={
@@ -308,9 +320,10 @@ const CreateStream = () => {
         isConfirmClicked={isConfirmClicked}
         setIsConfirmClicked={setIsConfirmClicked}
         resetFields={resetFields}
+        operationType={operationType}
       />
     </form>
   );
 };
 
-export default CreateStream;
+export default CreateLockup;

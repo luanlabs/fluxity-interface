@@ -6,7 +6,7 @@ import BN from 'src/utils/BN';
 
 import CCard from 'src/components/CCard';
 import CPageCard from 'src/components/CPageCard';
-import { FormValues } from '../CreateStreamMainCard';
+import { FormValues } from '../CreateLockup';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 import { checkBalance } from 'src/utils/checkBalance';
 import { mapFormValues } from './mapFormValues';
@@ -18,18 +18,19 @@ import {
   xlmAssetType,
   checkIsUserActive,
   checkUserBalance,
-} from 'src/containers/CreateStreamMainCard/checkIsUserActive';
+} from 'src/containers/CreateLockup/checkIsUserActive';
 
 interface SummaryProps {
   form: UseFormReturn<any, undefined>;
   isFormValidated: boolean;
   xlmAsset: xlmAssetType;
   address: string;
+  operationType: string;
 }
 
-const Summary = ({ form, xlmAsset, address }: SummaryProps) => {
+const Summary = ({ form, xlmAsset, address, operationType }: SummaryProps) => {
   const values: FormValues = form.getValues();
-  const getFormValues = mapFormValues(values);
+  const getFormValues = mapFormValues(values, operationType);
 
   let totalAmount = new BN(0);
   let errorMessage = '';
@@ -67,11 +68,13 @@ const Summary = ({ form, xlmAsset, address }: SummaryProps) => {
     </div>
   );
 
+  const showSummaryField = operationType === 'stream' ? 4 : 3;
+
   return (
     <div className="w-[329px]">
       <CPageCard title={summaryTitle} borderStatus="bordered" className="px-3 py-4 mb-4 w-full">
         <ul className="grid gap-2 text-midnightBlue">
-          {getFormValues.length > 3 &&
+          {getFormValues.length >= showSummaryField &&
             getFormValues.map((x) => (
               <li
                 key={x.label}
