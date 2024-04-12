@@ -40,8 +40,10 @@ const CPageCard = ({
   return (
     <CCard
       className={cn(
-        `flex flex-col w-full h-[100%] ${
-          borderStatus === 'borderless' ? 'mobile:!border-none mobile:!rounded-none' : ''
+        `flex flex-col w-full h-[100%] mobile:overflow-y-auto mobile:overflow-x-hidden${
+          borderStatus === 'borderless'
+            ? 'mobile:!border-transparent mobile:!border-none mobile:!rounded-none'
+            : ''
         }`,
         className,
       )}
@@ -55,9 +57,7 @@ const CPageCard = ({
         className={`${cn(
           padding,
           childrenClassName,
-          `${
-            scroll && 'desktop:overflow-y-scroll h-[100%]'
-          } mobile:overflow-y-scroll mobile:overflow-x-hidden`,
+          `${scroll && 'desktop:overflow-y-scroll h-[100%]'} `,
         )}`}
       >
         {children}

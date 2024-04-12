@@ -62,12 +62,12 @@ const Filters = ({
   };
 
   return (
-    <div className="desktop:relative inline-flex mobile:flex mobile:!justify-center justify-between w-full mb-3">
+    <div className="inline-flex mobile:flex mobile:!justify-center justify-between w-full mb-3">
       <CStreamStatus onChange={setSelectedStatus} />
       <div className="desktop:inline-flex mobile:flex mobile:gap-0 desktop:gap-2">
         <Styled.Circle
           isopen={openSearch}
-          className={`mobile:absolute mobile:top-[72px] mobile:right-4 desktop:static mobile:!border-none 
+          className={`mobile:absolute mobile:top-4 mobile:right-4 desktop:static mobile:!border-none 
             ${
               openSearch ? 'bg-[#F5F5F5] mobile:!w-[calc(100%-30px)]' : ''
             } hover:bg-[#f5f5f5] transition-colors duration-700`}
@@ -91,7 +91,7 @@ const Filters = ({
         </Styled.Circle>
         <Styled.Circle
           onClick={handleOpenModal}
-          className={`mobile:absolute mobile:z-50 mobile:bg-white mobile:!w-14 mobile:!h-14 mobile:bottom-20 
+          className={`mobile:fixed mobile:z-50 mobile:bg-white mobile:!w-14 mobile:!h-14  mobile:bottom-20 
             mobile:right-4 desktop:static ${
               submittedForm && '!border-royalBlue bg-lavenderBlush'
             } hover:bg-lavenderBlush transition-all duration-700`}

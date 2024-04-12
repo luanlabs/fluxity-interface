@@ -18,7 +18,7 @@ export default function Home() {
     <CPageCard
       scroll
       borderStatus="borderless"
-      className="w-full h-full pb-2 pt-[23px] px-[27px] mobile:h-full mobile:overflow-y-scroll mobile:pt-3 mobile:px-5 mobile:mb-[50px]"
+      className="w-full h-full pb-2 pt-[23px] px-[27px] mobile:h-full mobile:overflow-y-scroll mobile:pt-3 mobile:px-5"
     >
       <WelcomeToFluxityCard />
       <p className="text-2xl font-medium my-[18px] mobile:my-3 ml-1">More with Fluxity</p>

@@ -117,7 +117,7 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
   };
 
   return (
-    <div className="overflow-scroll desktop:min-h-[200px] h-full">
+    <div className="overflow-auto desktop:min-h-[200px] h-full">
       {filteredStreams.map((stream) => (
         <CCard
           className="mobile:z-40 mobile:flex-col mobile:relative mobile:my-2 my-1 rounded-[14px] desktop:h-[74px] desktop:inline-flex items-center 
@@ -167,7 +167,7 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
               {stream.status === StreamStatus.COMPLETED ? (
                 <div className="flex justify-between items-center w-full text-base font-medium">
                   <div>
-                    <p>
+                    <p className="mobile:ml-1">
                       <span className="mobile:hidden">{completionPercentage(stream)}% </span>
                       Completed
                     </p>
@@ -179,16 +179,17 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
                         }}
                       />
                     </div>
-                    <Image
-                      src={coin}
-                      alt="coin"
-                      className={`${
-                        isStreamWithdrawable(stream) && !stream.isSender
-                          ? 'mobile:block desktop:hidden bg-[#FFF59A] rounded-full mr-1'
-                          : 'desktop:hidden mobile:hidden'
-                      }`}
-                    />
                   </div>
+
+                  <Image
+                    src={coin}
+                    alt="coin"
+                    className={`${
+                      isStreamWithdrawable(stream) && !stream.isSender
+                        ? 'mobile:block desktop:hidden bg-[#FFF59A] rounded-full mr-1'
+                        : 'desktop:hidden mobile:hidden'
+                    }`}
+                  />
                 </div>
               ) : (
                 <div className="mobile:flex mobile:flex-col-reverse mobile:gap-2 mobile:font-medium">
