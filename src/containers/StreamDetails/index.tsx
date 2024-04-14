@@ -124,7 +124,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
         divider
         borderStatus="bordered"
         title={mainTitle}
-        className="w-full px-6 sm:px-2 py-[15px] h-full md:!w-[100%] md:px-3"
+        className="w-full px-6 sm:px-2 py-[15px] h-full md:!w-[100%] md:px-3 mobile:min-h-[560px]"
         childrenClassName="!pl-0"
         dividerResponsiveClassName="sm:hidden"
       >
