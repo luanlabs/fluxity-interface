@@ -92,3 +92,5 @@ export type CancelAmounts = {
   senderAmount: number;
   receiverAmount: number;
 };
+
+export type operationType = 'stream' | 'vesting';
