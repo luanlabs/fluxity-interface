@@ -5,6 +5,7 @@ export const calculateCompletionPercentage = (
   end_date: number,
   amount?: string,
   dynamicAmount?: string,
+  isVesting?: boolean,
 ) => {
   const currentDate = Date.now();
   const endDate = new Date(end_date).getTime() * 1000;
@@ -14,8 +15,10 @@ export const calculateCompletionPercentage = (
     return '0';
   }
 
-  if (dynamicAmount && amount) {
-    return new BN(dynamicAmount).times(100).div(amount).toFixed(0);
+  if (!isVesting) {
+    if (dynamicAmount && amount) {
+      return new BN(dynamicAmount).times(100).div(amount).toFixed(0);
+    }
   }
 
   if (currentDate >= endDate) {
