@@ -8,7 +8,6 @@ import formatUnits from 'src/utils/formatUnits';
 import CPageCard from 'src/components/CPageCard';
 import { useAppSelector } from 'src/hooks/useRedux';
 import humanizeAmount from 'src/utils/humanizeAmount';
-import { ITokenStream, CancelAmounts } from 'src/models';
 import CProcessModal from 'src/components/CProcessModal';
 import CSummaryField from 'src/components/CSummaryField';
 import CModalSuccess from 'src/components/CModalSuccess';
@@ -18,8 +17,11 @@ import cancelStream from 'src/features/soroban/cancelStream';
 import SingleButtonModal from 'src/components/SingleButtonModal';
 import signTransaction from 'src/utils/soroban/signTransaction';
 import sendTransaction from 'src/features/soroban/sendTransaction';
+import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
+import calculateVestingAmounts from 'src/utils/calculateVestingAmount';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
+import { ITokenStream, CancelAmounts, operationType } from 'src/models';
 import cancelStreamReturnValues from 'src/utils/soroban/cancelStreamReturnValues';
 
 interface SenderStatusCardProps {
@@ -27,6 +29,7 @@ interface SenderStatusCardProps {
   startDate: number;
   endDate: number;
   cliffDate: number;
+  rate: string;
   token: ITokenStream;
   isCancelled: boolean;
   withdrawn: string;
@@ -37,6 +40,8 @@ interface SenderStatusCardProps {
   isStreamCancelled: boolean;
   setIsOpenCancelModal: (_: boolean) => void;
   isOpenCancelModal: boolean;
+  operationType: operationType;
+  isVesting: boolean;
 }
 
 const SenderStatusCard = ({
@@ -44,6 +49,7 @@ const SenderStatusCard = ({
   startDate,
   endDate,
   cliffDate,
+  rate,
   token,
   isCancelled,
   withdrawn,
@@ -54,6 +60,8 @@ const SenderStatusCard = ({
   isStreamCancelled,
   setIsOpenCancelModal,
   isOpenCancelModal,
+  operationType,
+  isVesting,
 }: SenderStatusCardProps) => {
   const address = useAppSelector((state) => state.user.address);
 
@@ -96,7 +104,7 @@ const SenderStatusCard = ({
 
     if (!tx) {
       setIsReclamationModalOpen(false);
-      toast('error', 'Token stream cancellation unsuccessful');
+      toast('error', `Token ${operationType} cancellation unsuccessful`);
 
       return;
     }
@@ -107,7 +115,7 @@ const SenderStatusCard = ({
 
     if (!finalize) {
       setIsReclamationModalOpen(false);
-      toast('error', 'Token stream cancellation unsuccessful');
+      toast('error', `Token ${operationType} cancellation unsuccessful`);
 
       return;
     }
@@ -124,14 +132,24 @@ const SenderStatusCard = ({
   };
 
   const senderAmount = humanizeAmount(
-    calculateStreamAmounts(
-      startDate,
-      endDate,
-      cliffDate,
-      isCancelled,
-      withdrawn,
-      amount,
-    ).senderAmount.toString(),
+    isVesting
+      ? calculateVestingAmounts(
+          startDate,
+          endDate,
+          cliffDate,
+          isCancelled,
+          withdrawn,
+          rate,
+          amount,
+        ).senderAmount.toString()
+      : calculateStreamAmounts(
+          startDate,
+          endDate,
+          cliffDate,
+          isCancelled,
+          withdrawn,
+          amount,
+        ).senderAmount.toString(),
   );
 
   const cancelledAmount = new BN(
@@ -144,7 +162,7 @@ const SenderStatusCard = ({
       <CButton
         variant="simple"
         color="outline"
-        content="Cancel Stream"
+        content={`Cancel ${capitalizeFirstLetter(operationType)}`}
         disabled={!isCancelable || isStreamCancelled}
         className={`w-[146px] !py-2 h-[40px] text-[14px] ${
           (!isCancelable || isStreamCancelled) &&
@@ -183,7 +201,7 @@ const SenderStatusCard = ({
         <CProcessModal
           isOpen={isApprovalOpen}
           setIsOpen={setIsApprovalOpen}
-          title="Waiting for stream cancellation approval"
+          title={`Waiting for ${operationType} cancellation approval`}
         />
 
         <CProcessModal
@@ -194,9 +212,9 @@ const SenderStatusCard = ({
 
         <CModalSuccess
           tooltipTitle="Cancel"
-          tooltipDetails="This is the amount refunded to your wallet after stream cancellation."
+          tooltipDetails={`This is the amount refunded to your wallet after ${operationType} cancellation`}
           successLogoColor="green"
-          title="Stream cancellation successful"
+          title={`${capitalizeFirstLetter(operationType)} cancellation successful`}
           token={token.symbol}
           amountTitle="Amount"
           amount={humanizeAmount(cancelledAmount).toString()}
