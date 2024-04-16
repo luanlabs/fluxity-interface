@@ -28,6 +28,7 @@ interface BlueCardProps {
   isStreamCancelled: boolean;
   isCancelable: boolean;
   isSender: boolean;
+  isVesting: boolean;
 }
 
 const BlueCard = ({
@@ -43,6 +44,7 @@ const BlueCard = ({
   isCancelable,
   isStreamCancelled,
   isSender,
+  isVesting,
 }: BlueCardProps) => {
   const handleCopy = () => {
     copyText(sender);
@@ -63,6 +65,7 @@ const BlueCard = ({
     endDate,
     amount,
     streamedAmount,
+    isVesting,
   );
 
   return (
@@ -78,7 +81,7 @@ const BlueCard = ({
           </div>
 
           <div className="w-[85%]">
-            <StreamProgress precent={completionPercentage} />
+            <StreamProgress percent={completionPercentage} />
           </div>
         </div>
 
