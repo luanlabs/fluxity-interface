@@ -25,6 +25,12 @@ export const navLinks: Type[] = [
     url: Pages.CREATE_STREAM,
   },
   {
+    title: 'Vesting',
+    icon: <StairsIcon fill="#EBFDFF" />,
+    activeIcon: <StairsIcon />,
+    url: Pages.VESTING,
+  },
+  {
     title: 'Activity History',
     icon: <ActivityIcon fill="#EBFDFF" />,
     activeIcon: <ActivityIcon />,
@@ -36,12 +42,7 @@ export const navLinks: Type[] = [
   //   activeIcon: <CopyIcon />,
   //   url: Pages.NFTS,
   // },
-  {
-    title: 'Vesting',
-    icon: <StairsIcon fill="#EBFDFF" />,
-    activeIcon: <StairsIcon />,
-    url: Pages.VESTING,
-  },
+
   // {
   //   title: 'Address Book',
   //   icon: <NotebookIcon fill="#EBFDFF" />,
