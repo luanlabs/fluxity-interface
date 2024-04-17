@@ -80,6 +80,8 @@ const CreateLockup = ({ operationType }: lockupProps) => {
   const endDate = getValues('endDate') && getValues('endDate');
   const cliffDate = getValues('cliffDate') && getValues('cliffDate');
 
+  const onSubmit = (data: FormValues) => {};
+
   const resetFields = () => {
     if (!isFormReset) {
       setIsFormReset(true);
@@ -106,7 +108,7 @@ const CreateLockup = ({ operationType }: lockupProps) => {
   );
 
   return (
-    <form className="h-full w-full">
+    <form method="" onSubmit={handleSubmit(onSubmit)} className="h-full w-full">
       <div className="flex w-full h-full">
         <CPageCard
           title={CreateStreamTitle}
