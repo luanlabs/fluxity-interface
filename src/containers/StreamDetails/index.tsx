@@ -151,6 +151,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             isStreamCancelled={isStreamCancelled}
             isCancelable={cancellable}
             isSender={isSender}
+            id={data.id}
           />
         </section>
       </CPageCard>
