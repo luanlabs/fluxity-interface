@@ -25,7 +25,7 @@ const FAQContent = [
       {
         question: 'What do I need to do to start streaming with Fluxity? ',
         answer:
-          'First, you need to install the Freighter Wallet extension. Secondly, you need to make sure you add the Futurenet network to your wallet.',
+          'You just need to install the Freighter Wallet extension or any other future wallet options and then you are good to go.',
       },
       {
         question: 'What is the Freighter extension, and how can I install it? ',
@@ -54,11 +54,12 @@ const FAQContent = [
       },
       {
         question: 'What networks does Fluxity support? ',
-        answer: 'Fluxity currently supports standard Futurenet networks supported by Stellar.',
+        answer:
+          'Fluxity currently supports standard Mainnet and Testnet networks supported by Stellar.',
       },
       {
         question: 'Can I stream between different blockchains? ',
-        answer: 'No. However, you can use your trustline in Stellar on Futurenet.',
+        answer: 'No. However, you can use your trust line in Stellar on Mainnet and Testnet.',
       },
     ],
   },
@@ -82,7 +83,7 @@ const FAQContent = [
       {
         question: 'What is the application of vesting?',
         answer:
-          'Vesting is a method for distributing tokens over time to stakeholders, incentivizing long-term involvement and reducing the risk of market volatility by preventing large, immediate sell-offs.',
+          'Vesting is a method for distributing tokens over time to stakeholders, incentivize long-term involvement and reducing the risk of market volatility by preventing large, immediate sell-offs.',
       },
       {
         question: 'What happens if I set a cliff time? ',

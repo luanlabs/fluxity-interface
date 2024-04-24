@@ -2,10 +2,10 @@ import { getNetworkDetails } from '@stellar/freighter-api';
 import { useEffect, useState } from 'react';
 
 import { INetwork } from 'src/constants/types';
-import { Futurenet } from 'src/constants/networks';
+import { Mainnet } from 'src/constants/networks';
 
 const useLoadUserNetwork = () => {
-  const [currentNetwork, setCurrentNetwork] = useState<INetwork>(Futurenet);
+  const [currentNetwork, setCurrentNetwork] = useState<INetwork>(Mainnet);
 
   useEffect(() => {
     const fetchNetwork = () => {

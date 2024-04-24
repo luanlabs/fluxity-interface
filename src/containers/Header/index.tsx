@@ -43,14 +43,14 @@ const Header = () => {
           color="gray"
           content={
             <span className="flex gap-2 items-center">
-              <StellarLogo
-                fill={`${currentNetwork.network === 'FUTURENET' ? '#1C9B47' : 'black'}`}
-              />
-              {capitalizeFirstLetter(currentNetwork.network.toLowerCase())}
+              <StellarLogo fill={`${currentNetwork.network === 'PUBLIC' ? '#1C9B47' : 'black'}`} />
+              {currentNetwork.network === 'PUBLIC'
+                ? 'Mainnet'
+                : capitalizeFirstLetter(currentNetwork.network.toLowerCase())}
             </span>
           }
           className={`${
-            currentNetwork.network === 'FUTURENET'
+            currentNetwork.network === 'PUBLIC'
               ? '!bg-paleMint !text-forestGreen !border-forestGreen'
               : ''
           } mobile:w-[122px] h-9`}

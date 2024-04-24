@@ -6,8 +6,15 @@ export const Futurenet = {
 };
 
 export const Mainnet = {
-  network: 'MAINNET',
-  networkUrl: '',
+  network: 'PUBLIC',
+  networkUrl: 'https://horizon.stellar.org',
   networkPassphrase: 'Public Global Stellar Network ; September 2015',
   sorobanRpcUrl: '',
+};
+
+export const Testnet = {
+  network: 'TESTNET',
+  networkUrl: 'https://horizon-testnet.stellar.org',
+  networkPassphrase: 'Test SDF Network ; September 2015',
+  sorobanRpcUrl: 'https://soroban-testnet.stellar.org',
 };

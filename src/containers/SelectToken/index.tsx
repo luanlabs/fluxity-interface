@@ -7,7 +7,7 @@ import CModal from 'src/components/CModal';
 import CInput from 'src/components/CInput';
 import CLabel from 'src/components/CLabel';
 import { IToken } from 'src/reducers/tokens';
-import CButton from 'src/components/CButton';
+import toast from 'src/components/CToast';
 import useCustomID from 'src/hooks/useCustomId';
 import CEmptyList from 'src/components/CEmptyList';
 import { useAppSelector } from 'src/hooks/useRedux';
@@ -119,7 +119,7 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
         setSearchValue(clipText);
       });
     } catch (e) {
-      // toast('error', 'The Clipboard API is not available for this browser.');
+      toast('error', 'The Clipboard API is not available for this browser.');
     }
   };
 
