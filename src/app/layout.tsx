@@ -115,7 +115,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     } ${
                       isMinimized
                         ? 'basis-[80px] transition-all duration-500'
-                        : 'basis-[24%] lg:basis-[20%] transition-all duration-500'
+                        : 'basis-[24%] lg:basis-[20%] transition-all duration-500 min-w-[220px]'
                     } px-[15px] py-[19px] mobile:p-0`}
                     bgColor="white"
                   >
