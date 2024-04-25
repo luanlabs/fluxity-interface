@@ -15,10 +15,8 @@ export const calculateCompletionPercentage = (
     return '0';
   }
 
-  if (!isVesting) {
-    if (dynamicAmount && amount) {
-      return new BN(dynamicAmount).times(100).div(amount).toFixed(0);
-    }
+  if (!isVesting && dynamicAmount && amount) {
+    return new BN(dynamicAmount).times(100).div(amount).toFixed(0);
   }
 
   if (currentDate >= endDate) {
