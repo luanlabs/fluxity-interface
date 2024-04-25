@@ -21,7 +21,7 @@ import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import calculateVestingAmounts from 'src/utils/calculateVestingAmount';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
-import { ITokenStream, CancelAmounts, operationType } from 'src/models';
+import { ITokenStream, CancelAmounts, OperationType } from 'src/models';
 import cancelStreamReturnValues from 'src/utils/soroban/cancelStreamReturnValues';
 
 interface SenderStatusCardProps {
@@ -40,7 +40,7 @@ interface SenderStatusCardProps {
   isStreamCancelled: boolean;
   setIsOpenCancelModal: (_: boolean) => void;
   isOpenCancelModal: boolean;
-  operationType: operationType;
+  operationType: OperationType;
   isVesting: boolean;
 }
 

@@ -1,7 +1,7 @@
 import CToggle from 'src/components/CToggle';
 import CLabel from 'src/components/CLabel';
 import { useEffect, useState } from 'react';
-import { operationType } from '../CreateLockup';
+import { OperationType } from 'src/models';
 
 export type ToggleStatus = 'ON' | 'OFF';
 
@@ -10,7 +10,7 @@ interface CancellableLockupProps {
   tooltipDetails: string;
   tooltipTitle: string;
   value: ToggleStatus;
-  operationType: operationType;
+  operationType: OperationType;
 }
 
 const CancellableLockup = ({

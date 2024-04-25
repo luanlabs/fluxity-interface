@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import cn from 'classnames';
 
-import { ISelectToken, operationType } from 'src/models';
+import { ISelectToken, OperationType } from 'src/models';
 import CButton from 'src/components/CButton';
 import CPageCard from 'src/components/CPageCard';
 import { useAppSelector } from 'src/hooks/useRedux';
@@ -35,7 +35,7 @@ export interface FormValues {
 }
 
 interface lockupProps {
-  operationType: operationType;
+  operationType: OperationType;
 }
 
 const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');

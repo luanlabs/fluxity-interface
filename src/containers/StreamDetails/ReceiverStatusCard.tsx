@@ -11,7 +11,7 @@ import humanizeAmount from 'src/utils/humanizeAmount';
 import CProcessModal from 'src/components/CProcessModal';
 import CSummaryField from 'src/components/CSummaryField';
 import CModalSuccess from 'src/components/CModalSuccess';
-import { IResponseStream, operationType } from 'src/models';
+import { IResponseStream, OperationType } from 'src/models';
 import { ExternalPages } from 'src/constants/externalPages';
 import informWithdrawAPI from 'src/features/informWithdrawAPI';
 import signTransaction from 'src/utils/soroban/signTransaction';
@@ -31,7 +31,7 @@ interface ReceiverStatusCardProps {
   setWithdrawnAmount: (_: number) => void;
   withdrawnAmount: number;
   decimalToken: number;
-  operationType: operationType;
+  operationType: OperationType;
 }
 
 const ReceiverStatusCard = ({
