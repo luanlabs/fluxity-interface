@@ -13,6 +13,7 @@ import { useAppSelector } from 'src/hooks/useRedux';
 import useGetStreamById from 'src/utils/getStreamById';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import CStreamStatusButton from 'src/components/CStreamStatusButton';
+import calculateVestingAmounts from 'src/utils/calculateVestingAmount';
 import { isStreamCancellable, isStreamCancelledStatus } from 'src/features/isStreamCancellable';
 
 import Loading from './Loading';
@@ -41,9 +42,12 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
   const [isOpenCancelModal, setIsOpenCancelModal] = useState(false);
 
   const isStreamCancelled = cancelAmounts.senderAmount !== 0 || cancelAmounts.receiverAmount !== 0;
+  const operationType = data?.is_vesting ? 'vesting' : 'stream';
 
-  const [sendStreamAmount, setSendStreamAmount] = useState(
-    calculateStreamAmounts(0, 0, 0, false, '0', '0').receiverAmount,
+  const [sendLockupAmount, setSendLockupAmount] = useState(
+    data?.is_vesting
+      ? calculateVestingAmounts(0, 0, 0, false, '0', '0', '0').receiverAmount
+      : calculateStreamAmounts(0, 0, 0, false, '0', '0').receiverAmount,
   );
 
   useEffect(() => {
@@ -52,16 +56,30 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
     if (!isStreamCancelled) {
       intervalId = setInterval(() => {
         if (data) {
-          setSendStreamAmount(
-            calculateStreamAmounts(
-              data.start_date,
-              data.end_date,
-              data.cliff_date,
-              data.is_cancelled,
-              formatUnits(data.withdrawn, data.token.decimals),
-              formatUnits(data.amount, data.token.decimals),
-            ).receiverAmount,
-          );
+          if (!data.is_vesting) {
+            setSendLockupAmount(
+              calculateStreamAmounts(
+                data.start_date,
+                data.end_date,
+                data.cliff_date,
+                data.is_cancelled,
+                formatUnits(data.withdrawn, data.token.decimals),
+                formatUnits(data.amount, data.token.decimals),
+              ).receiverAmount,
+            );
+          } else {
+            setSendLockupAmount(
+              calculateVestingAmounts(
+                data.start_date,
+                data.end_date,
+                data.cliff_date,
+                data.is_cancelled,
+                formatUnits(data.withdrawn, data.token.decimals),
+                data.rate.toString(),
+                formatUnits(data.amount, data.token.decimals),
+              ).receiverAmount,
+            );
+          }
         }
       }, 100);
     }
@@ -135,13 +153,14 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
 
           <DynamicStreamedAmount
             token={data.token.symbol}
-            streamAmount={isStreamCancelled ? receiverAmount : sendStreamAmount.toFixed(3)}
+            streamAmount={isStreamCancelled ? receiverAmount : sendLockupAmount.toFixed(3)}
             isCancelled={data.is_cancelled}
+            isVesting={data.is_vesting}
           />
 
           <BlueCard
             setIsOpenCancelModal={setIsOpenCancelModal}
-            streamedAmount={sendStreamAmount.toString()}
+            streamedAmount={sendLockupAmount.toString()}
             sender={data.sender}
             flowRate={data.rate}
             startDate={data.start_date}
@@ -152,6 +171,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             isCancelable={cancellable}
             isSender={isSender}
             id={data.id}
+            isVesting={data.is_vesting}
           />
         </section>
       </CPageCard>
@@ -165,6 +185,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             startDate={data.start_date}
             endDate={data.end_date}
             cliffDate={data.cliff_date}
+            rate={data.rate.toString()}
             isCancelled={data.is_cancelled}
             withdrawn={withdraw}
             isCancelable={cancelled}
@@ -175,6 +196,8 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             isStreamCancelled={isStreamCancelled}
             setIsOpenCancelModal={setIsOpenCancelModal}
             isOpenCancelModal={isOpenCancelModal}
+            operationType={operationType}
+            isVesting={data.is_vesting}
           />
         )}
 
@@ -185,6 +208,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             withdrawnAmount={withdrawnAmount}
             setWithdrawnAmount={setWithdrawnAmount}
             decimalToken={data.token.decimals}
+            operationType={operationType}
           />
         )}
       </div>

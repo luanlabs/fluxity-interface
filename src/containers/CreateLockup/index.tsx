@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import cn from 'classnames';
 
-import { ISelectToken } from 'src/models';
+import { ISelectToken, OperationType } from 'src/models';
 import CButton from 'src/components/CButton';
 import CPageCard from 'src/components/CPageCard';
 import { useAppSelector } from 'src/hooks/useRedux';
@@ -21,6 +21,7 @@ import CancellableLockup, { ToggleStatus } from 'src/containers/CancellableLocku
 
 import validateForm from './validateForm';
 import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
+import CBottomSheet from 'src/components/CBottomSheet';
 
 export interface FormValues {
   address: string;
@@ -33,10 +34,8 @@ export interface FormValues {
   isCancellable: ToggleStatus;
 }
 
-export type operationType = 'stream' | 'vesting';
-
 interface lockupProps {
-  operationType: operationType;
+  operationType: OperationType;
 }
 
 const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');
@@ -45,6 +44,7 @@ const CreateLockup = ({ operationType }: lockupProps) => {
   const [isConfirmClicked, setIsConfirmClicked] = useState(false);
   const [isFormReset, setIsFormReset] = useState(false);
   const [isFormValidated, setIsFormValidated] = useState(false);
+  const [isOpenSheet, setIsOpenSheet] = useState(false);
 
   const { address } = useAppSelector((state) => state.user);
   const xlmAsset = useAppSelector((state) => state.user?.info?.balances[0]);
@@ -76,11 +76,11 @@ const CreateLockup = ({ operationType }: lockupProps) => {
 
   watch(['startDate', 'endDate', 'cliffDate', 'rate', 'token', 'address']);
 
-  const onSubmit = (data: FormValues) => {};
-
   const startDate = getValues('startDate') || new Date();
   const endDate = getValues('endDate') && getValues('endDate');
   const cliffDate = getValues('cliffDate') && getValues('cliffDate');
+
+  const onSubmit = (data: FormValues) => {};
 
   const resetFields = () => {
     if (!isFormReset) {
@@ -91,6 +91,11 @@ const CreateLockup = ({ operationType }: lockupProps) => {
 
   const handleOpenModals = () => {
     setIsConfirmClicked(true);
+    setIsOpenSheet(false);
+  };
+
+  const handleMobileOpenModals = () => {
+    setIsOpenSheet(true);
   };
 
   const isFormCompleteValidation = !isValid || isValidating || !isFormValidated || !address;
@@ -124,7 +129,7 @@ const CreateLockup = ({ operationType }: lockupProps) => {
                       <CStreamingModelContainer
                         label="Streaming model"
                         tooltipTitle="Streaming model"
-                        tooltipDetails={lockup.streamingModel}
+                        tooltipDetails={tooltipDetails.createStream.streamingModel}
                         {...field}
                       />
                     </div>
@@ -279,7 +284,7 @@ const CreateLockup = ({ operationType }: lockupProps) => {
                 'xl:hidden xxl:hidden 2xl:hidden 3xl:hidden md2:hidden lg:hidden mt-12 sm:mt-4 md:mt-5 w-3/4 mobile:w-full m-auto',
               )}
               disabled={isFormCompleteValidation}
-              onClick={handleOpenModals}
+              onClick={handleMobileOpenModals}
             />
           </div>
         </CPageCard>
@@ -297,7 +302,44 @@ const CreateLockup = ({ operationType }: lockupProps) => {
               address={address}
               operationType={operationType}
             />
-
+            <div className="desktop:hidden w-full">
+              <CBottomSheet
+                contentClass="justify-center items-center w-full pb-4 px-4 "
+                isModalOpen={isOpenSheet}
+                setIsModalOpen={setIsOpenSheet}
+                className="desktop:!hidden"
+              >
+                <SummaryContainer
+                  form={form}
+                  isFormValidated={isFormValidated}
+                  xlmAsset={{
+                    asset_type: xlmAsset?.asset_type,
+                    balance: xlmAsset?.balance,
+                    buyingLiabilities: xlmAsset?.buying_liabilities,
+                    sellingLiabilities: xlmAsset?.selling_liabilities,
+                  }}
+                  address={address}
+                  operationType={operationType}
+                  className="w-full"
+                />
+                <div className="bg-lightGrayishBlue w-full h-[2px] mt-2 mb-4"></div>
+                <CButton
+                  type="submit"
+                  variant="form"
+                  content={`Create ${operation}`}
+                  svgLogo="fluxityLogo"
+                  fill={isFormCompleteValidation ? '#050142' : '#fff'}
+                  className={cn(
+                    isFormCompleteValidation
+                      ? '!bg-[#E6E6EC] !text-[#050142]'
+                      : '!bg-darkBlue !text-white',
+                    'w-full h-16 text-lg',
+                  )}
+                  disabled={isFormCompleteValidation}
+                  onClick={handleOpenModals}
+                />
+              </CBottomSheet>
+            </div>
             <CButton
               type="submit"
               variant="form"

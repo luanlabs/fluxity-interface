@@ -6,12 +6,14 @@ interface DynamicStreamedAmountProps {
   token: string;
   streamAmount: string;
   isCancelled: boolean;
+  isVesting: boolean;
 }
 
 const DynamicStreamedAmount = ({
   token,
   streamAmount,
   isCancelled,
+  isVesting,
 }: DynamicStreamedAmountProps) => {
   return (
     <div className="flex flex-col items-center justify-center w-full">
@@ -26,7 +28,7 @@ const DynamicStreamedAmount = ({
           <p>{token}</p>
         </div>
       </div>
-      <p className="text-base">Total amount streamed</p>
+      <p className="text-base">{isVesting ? 'Total vested amount' : 'Total amount streamed'}</p>
     </div>
   );
 };

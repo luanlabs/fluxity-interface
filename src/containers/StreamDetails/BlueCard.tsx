@@ -30,6 +30,7 @@ interface BlueCardProps {
   isCancelable: boolean;
   isSender: boolean;
   id: string;
+  isVesting: boolean;
 }
 
 const BlueCard = ({
@@ -45,6 +46,7 @@ const BlueCard = ({
   isStreamCancelled,
   isSender,
   id,
+  isVesting,
 }: BlueCardProps) => {
   const [isOpenShareModal, setIsOpenShareModal] = useState(false);
 
@@ -67,6 +69,7 @@ const BlueCard = ({
     endDate,
     amount,
     streamedAmount,
+    isVesting,
   );
 
   const shareHandle = () => {

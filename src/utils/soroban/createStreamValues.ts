@@ -18,7 +18,7 @@ const toXdrValue = (params: FormValues, address: string) => {
   const endDate = dateToSeconds(params.endDate).toString();
   const currentDate = dateToSeconds(new Date()).toString();
 
-  let cliffDate = currentDate;
+  let cliffDate = startDate;
 
   if (params.cliffDate) {
     cliffDate = dateToSeconds(params.cliffDate).toString();
