@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import cn from 'classnames';
 import { UseFormReturn } from 'react-hook-form';
@@ -26,11 +26,12 @@ interface SummaryProps {
   xlmAsset: xlmAssetType;
   address: string;
   operationType: string;
+  className?: string;
 }
 
-const Summary = ({ form, xlmAsset, address, operationType }: SummaryProps) => {
+const Summary = ({ form, xlmAsset, address, operationType, className }: SummaryProps) => {
   const values: FormValues = form.getValues();
-  const getFormValues = mapFormValues(values, operationType);
+  const getFormValues = mapFormValues(values);
 
   let totalAmount = new BN(0);
   let errorMessage = '';
@@ -61,7 +62,7 @@ const Summary = ({ form, xlmAsset, address, operationType }: SummaryProps) => {
 
   const summaryTitle = (
     <div className="w-full flex justify-between items-center pb-4">
-      <h1 className="text-lg text-midnightBlue">Summary</h1>
+      <h1 className="text-lg mobile:text-2xl text-midnightBlue">Summary</h1>
       <CTooltip text={tooltipDetails.createStream.summary} title="Summary" placement="bottom">
         <DetailLogo fill="#050142" />
       </CTooltip>
@@ -71,14 +72,14 @@ const Summary = ({ form, xlmAsset, address, operationType }: SummaryProps) => {
   const showSummaryField = operationType === 'stream' ? 4 : 3;
 
   return (
-    <div className="w-[329px]">
+    <div className={`w-[329px] ${className}`}>
       <CPageCard title={summaryTitle} borderStatus="bordered" className="px-3 py-4 mb-4 w-full">
         <ul className="grid gap-2 text-midnightBlue">
           {getFormValues.length >= showSummaryField &&
             getFormValues.map((x) => (
               <li
                 key={x.label}
-                className="flex justify-between w-full overflow-hidden whitespace-nowrap items-center bg-alabaster h-10 px-4 text-sm rounded-[10px]"
+                className="flex justify-between w-full overflow-hidden whitespace-nowrap items-center bg-alabaster h-10 px-4 text-sm mobile:text-base rounded-[10px]"
               >
                 <span>{x.label}</span>
                 <div className="flex">

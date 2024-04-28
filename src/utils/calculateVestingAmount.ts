@@ -1,10 +1,12 @@
-import { CInputRateValue } from 'src/components/CInputRate';
 import BN from './BN';
+import BigNumber from 'bignumber.js';
 
 const calculateVestingAmounts = (
   startDate: number,
   endDate: number,
   cliffDate: number,
+  isCancelled: boolean,
+  withdrawn: string,
   rate: string,
   amount: string,
 ) => {
@@ -14,6 +16,13 @@ const calculateVestingAmounts = (
     return {
       senderAmount: new BN(amount),
       receiverAmount: new BN(0),
+    };
+  }
+
+  if (isCancelled) {
+    return {
+      senderAmount: new BN(amount).minus(withdrawn),
+      receiverAmount: new BN(withdrawn),
     };
   }
 
@@ -28,10 +37,8 @@ const calculateVestingAmounts = (
   const proceededDate = new BN(currentDate).minus(startDate);
   const rateInSeconds = new BN(rate);
 
-  const times = new BN(proceededDate).div(rateInSeconds);
-  const oneTimeAmount = new BN(totalDate).div(rateInSeconds).times(amount);
-
-  // TODO: Handle non-divisible duration / rate scenario
+  const times = new BN(proceededDate).div(rateInSeconds).integerValue(BigNumber.ROUND_FLOOR);
+  const oneTimeAmount = new BN(amount).times(rateInSeconds).div(totalDate);
 
   const receiverAmount = new BN(times).times(oneTimeAmount);
   const senderAmount = new BN(amount).minus(receiverAmount);

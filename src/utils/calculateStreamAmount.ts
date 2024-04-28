@@ -4,7 +4,7 @@ const calculateStreamAmounts = (
   startDate: number,
   endDate: number,
   cliffDate: number,
-  isCancalled: boolean,
+  isCancelled: boolean,
   withdrawn: string,
   amount: string,
 ) => {
@@ -24,7 +24,7 @@ const calculateStreamAmounts = (
     };
   }
 
-  if (isCancalled) {
+  if (isCancelled) {
     return {
       senderAmount: new BN(amount).minus(withdrawn),
       receiverAmount: new BN(withdrawn),
