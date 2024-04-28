@@ -7,12 +7,13 @@ const shareLinks = (id: string) => {
   const subjectEmail = encodeURIComponent('Fluxity');
   const url = `https://app.fluxity.finance/lockup/${id}`;
   const message = encodeURIComponent(`Stream #${id} in Fluxity`);
-  const body = encodeURIComponent(`Stream #${id} in Fluxity` + '\n' + url);
+  const body = encodeURIComponent(`Stream #${id} in Fluxity \n  ${url}`);
 
   const facebookShareLink = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
   const telegramShareLink = `https://telegram.me/share/url?url=${url}&text=${message}`;
   const twitterShareLink = `https://twitter.com/intent/tweet?url=${url}&text=${message}`;
-  const mailtoLink = `mailto:?subject=${subjectEmail}&body=${body}`;
+  const emailShareLink = `mailto:?subject=${subjectEmail}&body=${body}`;
+
   return [
     {
       name: 'Telegram',
@@ -28,7 +29,7 @@ const shareLinks = (id: string) => {
     },
     {
       name: 'Email',
-      href: mailtoLink,
+      href: emailShareLink,
       alt: 'Email',
       image: emailLogo,
     },
