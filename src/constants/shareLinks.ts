@@ -7,7 +7,8 @@ const shareLinks = (id: string) => {
   const subjectEmail = encodeURIComponent('Fluxity');
   const url = `https://app.fluxity.finance/lockup/${id}`;
   const message = encodeURIComponent(`Stream #${id} in Fluxity`);
-  const body = encodeURIComponent(`Stream #${id} in Fluxity \n  ${url}`);
+  const body = encodeURIComponent(`Stream #${id} in Fluxity 
+   ${url}`);
 
   const facebookShareLink = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
   const telegramShareLink = `https://telegram.me/share/url?url=${url}&text=${message}`;
