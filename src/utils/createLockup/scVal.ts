@@ -1,4 +1,4 @@
-import { xdr, Address } from 'stellar-sdk';
+import { xdr, Address } from '@stellar/stellar-sdk';
 
 import numberToScVal from 'src/utils/soroban/numberToScVal';
 import toXdrValue from 'src/utils/soroban/createStreamValues';

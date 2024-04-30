@@ -1,4 +1,4 @@
-import { xdr } from 'stellar-sdk';
+import { xdr } from '@stellar/stellar-sdk';
 
 import ToScVal from 'src/utils/createLockup/scVal';
 import dateToSeconds from 'src/utils/dateToSeconds';

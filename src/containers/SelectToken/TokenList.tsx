@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Horizon } from 'stellar-sdk';
+import { HorizonApi } from '@stellar/stellar-sdk/lib/horizon';
 
 import BN from 'src/utils/BN';
 
@@ -9,7 +9,7 @@ import logo from 'public/images/explore.svg';
 interface TokenListProps {
   // TODO: change the type
   filteredOptions: any;
-  handleTokenSelect: (_: Horizon.BalanceLine) => void;
+  handleTokenSelect: (_: HorizonApi.BalanceLine) => void;
 }
 
 const TokenList = ({ filteredOptions, handleTokenSelect }: TokenListProps) => {

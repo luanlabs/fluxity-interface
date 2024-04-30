@@ -214,7 +214,7 @@ const FilterModal = ({
       <div
         ref={modalRef}
         className={`mobile:hidden p-3 bg-white shadow shadow-[#00000014] rounded-xl ${
-          isModalOpen ? `absolute top-16 right-4 w-[246px] z-50` : 'hidden'
+          isModalOpen ? `absolute top-16 right-1 w-[246px] z-50` : 'hidden'
         }`}
       >
         <ModalContent />

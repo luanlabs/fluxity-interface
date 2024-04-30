@@ -15,6 +15,7 @@ import CModalSuccess from 'src/components/CModalSuccess';
 import informCancelAPI from 'src/features/informCancelAPI';
 import { ExternalPages } from 'src/constants/externalPages';
 import cancelStream from 'src/features/soroban/cancelStream';
+import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 import SingleButtonModal from 'src/components/SingleButtonModal';
 import signTransaction from 'src/utils/soroban/signTransaction';
 import sendTransaction from 'src/features/soroban/sendTransaction';
@@ -62,6 +63,8 @@ const SenderStatusCard = ({
   const [isReclamationModalOpen, setIsReclamationModalOpen] = useState(false);
   const [txHash, setTxHash] = useState('');
 
+  const currentNetwork = useLoadUserNetwork();
+
   useEffect(() => {
     if (isOpenCancelModal) {
       setIsApprovalOpen(true);
@@ -70,19 +73,19 @@ const SenderStatusCard = ({
 
   useEffect(() => {
     setIsOpenCancelModal(false);
-  }, [isApprovalOpen]);
+  }, [isApprovalOpen, setIsOpenCancelModal]);
 
   const handleCancelClick = async () => {
     setIsApprovalOpen(true);
 
-    const cancelStreamXdr = await cancelStream(id, address);
+    const cancelStreamXdr = await cancelStream(id, currentNetwork.networkPassphrase, address);
 
     let signedXdr;
     let tx;
 
     try {
-      signedXdr = await signTransaction(address, cancelStreamXdr);
-      tx = await sendTransaction(signedXdr);
+      signedXdr = await signTransaction(address, currentNetwork.networkPassphrase, cancelStreamXdr);
+      tx = await sendTransaction(signedXdr, currentNetwork.networkPassphrase);
     } catch (e) {
       setIsApprovalOpen(false);
       toast('error', 'Failed to sign the transaction');
@@ -103,7 +106,7 @@ const SenderStatusCard = ({
 
     setTxHash(tx.hash);
 
-    const finalize = await finalizeTransaction(tx.hash);
+    const finalize = await finalizeTransaction(tx.hash, currentNetwork.networkPassphrase);
 
     if (!finalize) {
       setIsReclamationModalOpen(false);

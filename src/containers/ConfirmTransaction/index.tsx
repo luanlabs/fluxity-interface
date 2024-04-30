@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { scValToNative } from 'stellar-sdk';
+import { scValToNative } from '@stellar/stellar-sdk';
 import { UseFormReturn } from 'react-hook-form';
 
 import BN from 'src/utils/BN';
@@ -25,6 +25,7 @@ import getERC20Allowance from 'src/features/soroban/getERC20Allowance';
 import informCreateLockupAPI from 'src/features/informCreateLockupAPI';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
 import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
+import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 
 interface ConfirmTransactions {
   isConfirmClicked: boolean;
@@ -59,6 +60,8 @@ const ConfirmTransaction = ({
     id: 0,
   });
 
+  const currentNetwork = useLoadUserNetwork();
+
   useEffect(() => {
     if (isConfirmClicked) {
       setIsApproveModalOpen(true);
@@ -67,7 +70,7 @@ const ConfirmTransaction = ({
 
   useEffect(() => {
     setIsConfirmClicked(false);
-  }, [isApproveModalOpen]);
+  }, [isApproveModalOpen, setIsConfirmClicked]);
 
   const handleCreateLockupOnClick = async () => {
     setIsApproveModalOpen(false);
@@ -75,6 +78,7 @@ const ConfirmTransaction = ({
 
     const checkAllowance = await getERC20Allowance(
       values.token.value.address,
+      currentNetwork.networkPassphrase,
       address,
       FLUXITY_CONTRACT,
     );
@@ -91,6 +95,7 @@ const ConfirmTransaction = ({
 
     const approveXdr = await approve(
       values.token.value.address,
+      currentNetwork.networkPassphrase,
       calculateTotalAmount(values),
       address,
     );
@@ -98,7 +103,7 @@ const ConfirmTransaction = ({
     let signedTx;
 
     try {
-      signedTx = await signTransaction(address, approveXdr);
+      signedTx = await signTransaction(address, currentNetwork.networkPassphrase, approveXdr);
     } catch {
       setIsWalletLoadingApproveModalOpen(false);
       toast('error', 'Error signing approval transaction');
@@ -109,7 +114,7 @@ const ConfirmTransaction = ({
     let tx;
 
     try {
-      tx = await sendTransaction(signedTx);
+      tx = await sendTransaction(signedTx, currentNetwork.networkPassphrase);
     } catch {
       toast('error', 'Failed to submit the transaction');
 
@@ -120,7 +125,7 @@ const ConfirmTransaction = ({
       setIsWalletLoadingApproveModalOpen(false);
       await timeout(100);
       setIsSendingApproveTxModalOpen(true);
-      const finalize = await finalizeTransaction(tx.hash);
+      const finalize = await finalizeTransaction(tx.hash, currentNetwork.networkPassphrase);
 
       setIsWalletLoadingApproveModalOpen(false);
 
@@ -143,12 +148,17 @@ const ConfirmTransaction = ({
     setIsCreateLockupConfirmModalOpen(false);
     setIsWalletLoadingConfirmModalOpen(true);
 
-    const CreateLockupXdr = await createLockup(values, address, operationType);
+    const CreateLockupXdr = await createLockup(
+      values,
+      currentNetwork.networkPassphrase,
+      address,
+      operationType,
+    );
 
     let signedXdr;
 
     try {
-      signedXdr = await signTransaction(address, CreateLockupXdr);
+      signedXdr = await signTransaction(address, currentNetwork.networkPassphrase, CreateLockupXdr);
     } catch (e) {
       setIsWalletLoadingConfirmModalOpen(false);
       toast('error', `Error signing create ${operationType} transaction`);
@@ -163,7 +173,7 @@ const ConfirmTransaction = ({
     let tx;
 
     try {
-      tx = await sendTransaction(signedXdr);
+      tx = await sendTransaction(signedXdr, currentNetwork.networkPassphrase);
     } catch {
       setIsSendingApproveTxModalOpen(false);
       toast('error', 'Failed to submit the transaction');
@@ -172,7 +182,7 @@ const ConfirmTransaction = ({
     }
 
     if (tx) {
-      const finalize = await finalizeTransaction(tx.hash);
+      const finalize = await finalizeTransaction(tx.hash, currentNetwork.networkPassphrase);
 
       if (!finalize) {
         setIsSendingCreateLockupTxModalOpen(false);

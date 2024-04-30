@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { loadTokens } from 'src/reducers/tokens';
 import { getTokenList } from 'src/features/getTokenList';

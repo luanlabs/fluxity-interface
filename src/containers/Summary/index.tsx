@@ -30,7 +30,7 @@ interface SummaryProps {
 
 const Summary = ({ form, xlmAsset, address, operationType }: SummaryProps) => {
   const values: FormValues = form.getValues();
-  const getFormValues = mapFormValues(values, operationType);
+  const getFormValues = mapFormValues(values);
 
   let totalAmount = new BN(0);
   let errorMessage = '';
@@ -44,8 +44,8 @@ const Summary = ({ form, xlmAsset, address, operationType }: SummaryProps) => {
       errorMessage = 'Insufficient balance';
     }
 
-    const isAccountActived = checkIsUserActive(xlmAsset);
-    if (!isAccountActived) {
+    const isAccountActivated = checkIsUserActive(xlmAsset);
+    if (!isAccountActivated) {
       errorMessage = 'Your account is inactive';
     }
 

@@ -1,8 +1,8 @@
 import fetch from 'src/utils/request';
 import { ExternalPages } from 'src/constants/externalPages';
 
-const informCreatestreamAPI = async (id: string) => {
-  await fetch(ExternalPages.FLUXITY_API + '/testnet/stream', {
+const informCreateStreamAPI = async (id: string) => {
+  await fetch(ExternalPages.FLUXITY_API + '/testnet/lockup', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -13,4 +13,4 @@ const informCreatestreamAPI = async (id: string) => {
   });
 };
 
-export default informCreatestreamAPI;
+export default informCreateStreamAPI;

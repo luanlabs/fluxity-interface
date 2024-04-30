@@ -13,6 +13,7 @@ import CProcessModal from 'src/components/CProcessModal';
 import CSummaryField from 'src/components/CSummaryField';
 import CModalSuccess from 'src/components/CModalSuccess';
 import { ExternalPages } from 'src/constants/externalPages';
+import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 import informWithdrawAPI from 'src/features/informWithdrawAPI';
 import signTransaction from 'src/utils/soroban/signTransaction';
 import SingleButtonModal from 'src/components/SingleButtonModal';
@@ -48,6 +49,8 @@ const ReceiverStatusCard = ({
   const [approvalOpen, setIsApprovalOpen] = useState(false);
   const [withdrawSuccessOpen, setIsWithdrawSuccessOpen] = useState(false);
 
+  const currentNetwork = useLoadUserNetwork();
+
   const amount = formatUnits(stream.amount, decimalToken);
 
   const available = calculateStreamAmounts(
@@ -64,14 +67,22 @@ const ReceiverStatusCard = ({
   const handleWithdrawClick = async () => {
     setIsApprovalOpen(true);
 
-    const withdrawStreamXdr = await withdrawStream(stream.id, address);
+    const withdrawStreamXdr = await withdrawStream(
+      stream.id,
+      currentNetwork.networkPassphrase,
+      address,
+    );
 
     let signedXdr;
     let tx;
 
     try {
-      signedXdr = await signTransaction(address, withdrawStreamXdr);
-      tx = await sendTransaction(signedXdr);
+      signedXdr = await signTransaction(
+        address,
+        currentNetwork.networkPassphrase,
+        withdrawStreamXdr,
+      );
+      tx = await sendTransaction(signedXdr, currentNetwork.networkPassphrase);
     } catch (e) {
       setIsApprovalOpen(false);
       toast('error', 'Failed to sign the transaction');
@@ -86,7 +97,7 @@ const ReceiverStatusCard = ({
       return;
     }
 
-    const finalize = await finalizeTransaction(tx.hash);
+    const finalize = await finalizeTransaction(tx.hash, currentNetwork.networkPassphrase);
     setTxHash(tx.hash);
 
     if (!finalize) {

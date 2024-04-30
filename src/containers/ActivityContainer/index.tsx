@@ -22,7 +22,7 @@ const ActivityContainer = () => {
     <CPageCard
       divider
       borderStatus="borderless"
-      className="flex py-[15px] px-5 !h-full relative"
+      className="flex py-[15px] px-5 !h-full mobile:relative"
       childrenClassName="h-full overflow-hidden !px-0"
       dividerResponsiveClassName="mobile:border-none"
       title={<h1 className="text-2xl text-midnightBlue mb-[10px] mt-1 pl-2">Activity History</h1>}

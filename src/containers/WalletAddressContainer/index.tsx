@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { StrKey } from 'stellar-sdk';
+import { StrKey } from '@stellar/stellar-sdk';
 
 import CModal from 'src/components/CModal';
 import CInput from 'src/components/CInput';
 import CLabel from 'src/components/CLabel';
-import toast from 'src/components/CToast';
 import { shortenAddress } from 'src/utils/shortenAddress';
 import { generateRandomHexColor } from 'src/utils/generateRandomHexColor';
 
@@ -18,6 +17,7 @@ interface WalletAddressContainer {
   clearInputClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   tooltipDetails: string;
   tooltipTitle: string;
+  value: string;
 }
 
 const WalletAddressContainer = ({

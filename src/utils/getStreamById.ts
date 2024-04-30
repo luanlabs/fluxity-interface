@@ -12,7 +12,7 @@ export type StreamDataType = {
 
 export const getStreamById = async (id: string) => {
   const { data } = await fetch<IResponseStreamResult>(
-    ExternalPages.FLUXITY_API + '/testnet/stream/' + id,
+    ExternalPages.FLUXITY_API + '/testnet/lockup/' + id,
   );
 
   return data.result;

@@ -62,7 +62,7 @@ const Filters = ({
   };
 
   return (
-    <div className="inline-flex mobile:flex mobile:!justify-center justify-between w-full mb-3">
+    <div className="inline-flex desktop:relative mobile:flex mobile:!justify-center justify-between w-full mb-3">
       <CStreamStatus onChange={setSelectedStatus} />
       <div className="desktop:inline-flex mobile:flex mobile:gap-0 desktop:gap-2">
         <Styled.Circle

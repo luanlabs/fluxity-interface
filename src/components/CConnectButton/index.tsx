@@ -6,7 +6,11 @@ import freighterApi from '@stellar/freighter-api';
 
 import copyText from 'src/utils/copyText';
 import getAccount from 'src/utils/getAccount';
+import { loadTokens } from 'src/reducers/tokens';
 import { shortenAddress } from 'src/utils/shortenAddress';
+import getTokenBalances from 'src/features/getTokenBalances';
+import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
+import { getAlreadyMinted } from 'src/features/getAlreadyMinted';
 import { useAppDispatch, useAppSelector } from 'src/hooks/useRedux';
 import { setAddress, loadAccount, hasTestnetTokens } from 'src/reducers/user';
 
@@ -16,9 +20,6 @@ import blackWallet from 'public/images/blackWallet.svg';
 import Modal from './modal';
 import toast from '../CToast';
 import CProcessModal from '../CProcessModal';
-import { getAlreadyMinted } from 'src/features/getAlreadyMinted';
-import getTokenBalances from 'src/features/getTokenBalances';
-import { loadTokens } from 'src/reducers/tokens';
 
 type CConnectButtonProps = {
   isMinimized: boolean;
@@ -29,6 +30,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
   const [openModal, setOpenModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
+  const currentNetwork = useLoadUserNetwork();
   const address = useAppSelector((store) => store.user.address);
   const tokens = useAppSelector((store) => store.tokens);
 
@@ -49,7 +51,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
       const address = await freighterApi.getPublicKey();
       dispatch(setAddress(address));
 
-      getAccount(address).then((info) => {
+      getAccount(address, currentNetwork.networkPassphrase).then((info) => {
         dispatch(loadAccount(info));
       });
 
@@ -59,7 +61,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
         }
       });
 
-      getTokenBalances(address, tokens).then((updatedToken) => {
+      getTokenBalances(address, currentNetwork.networkPassphrase, tokens).then((updatedToken) => {
         dispatch(loadTokens(updatedToken));
       });
 

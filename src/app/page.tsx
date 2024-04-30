@@ -23,8 +23,8 @@ export default function Home() {
       <WelcomeToFluxityCard />
       <p className="text-2xl font-medium my-[18px] mobile:my-3 ml-1">More with Fluxity</p>
       <div className="flex mobile:flex-col mobile:basis-full basis-1/2 w-full gap-4 mobile:gap-2 mobile:mb-2">
-        <FaqCard />
         <ClaimTokenCard />
+        <FaqCard />
       </div>
     </CPageCard>
   );

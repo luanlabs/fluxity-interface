@@ -11,7 +11,7 @@ interface CPageCard {
   className?: string;
   scroll?: boolean;
   childrenClassName?: string;
-  borderStatus: CPageCardResponsive;
+  borderStatus?: CPageCardResponsive;
   dividerResponsiveClassName?: string;
 }
 
@@ -22,7 +22,7 @@ const CPageCard = ({
   className = '',
   scroll = false,
   childrenClassName = '',
-  borderStatus,
+  borderStatus = 'bordered',
   dividerResponsiveClassName,
   ...props
 }: CPageCard) => {

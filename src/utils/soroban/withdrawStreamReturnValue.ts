@@ -1,5 +1,5 @@
-import { scValToNative, xdr } from 'stellar-sdk';
-import { Api } from 'stellar-sdk/lib/soroban';
+import { scValToNative, xdr } from '@stellar/stellar-sdk';
+import { Api } from '@stellar/stellar-sdk/lib/soroban';
 
 const { scvI128 } = xdr.ScVal;
 

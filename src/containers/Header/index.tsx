@@ -53,7 +53,7 @@ const Header = () => {
             currentNetwork.network === 'PUBLIC'
               ? '!bg-paleMint !text-forestGreen !border-forestGreen'
               : ''
-          } mobile:w-[122px] h-9`}
+          } mobile:w-[122px] h-9 !cursor-default`}
         />
       </div>
     </header>

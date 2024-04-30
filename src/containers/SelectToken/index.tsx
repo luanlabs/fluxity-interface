@@ -1,18 +1,21 @@
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import { Contract, StrKey } from 'stellar-sdk';
+import { Contract, StrKey } from '@stellar/stellar-sdk';
 
 import { ISelectToken } from 'src/models';
+import toast from 'src/components/CToast';
 import CModal from 'src/components/CModal';
 import CInput from 'src/components/CInput';
 import CLabel from 'src/components/CLabel';
 import { IToken } from 'src/reducers/tokens';
-import toast from 'src/components/CToast';
+import formatUnits from 'src/utils/formatUnits';
 import useCustomID from 'src/hooks/useCustomId';
 import CEmptyList from 'src/components/CEmptyList';
 import { useAppSelector } from 'src/hooks/useRedux';
 import humanizeAmount from 'src/utils/humanizeAmount';
 import fromDecimals from 'src/utils/soroban/fromDecimals';
+import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
+import getERC20Details, { TokenDetailsType } from 'src/features/soroban/getERC20Details';
 import { xlmAssetType, checkIsUserActive } from 'src/containers/CreateLockup/checkIsUserActive';
 
 import plusLogo from 'public/images/Plus.svg';
@@ -20,8 +23,6 @@ import arrowLogo from 'public/images/arrow.svg';
 import searchLogo from 'public/images/search.svg';
 import Loading from 'src/assets/Loading';
 import defaultTokenLogo from 'public/images/defaultToken.svg';
-import getERC20Details, { TokenDetailsType } from 'src/features/soroban/getERC20Details';
-import formatUnits from 'src/utils/formatUnits';
 
 interface SelectTokenProps {
   onChange: (_: ISelectToken) => void;
@@ -38,12 +39,13 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
   const [tokenDetails, setTokenDetails] = useState<TokenDetailsType>({});
 
   const id = useCustomID('selectToken');
+  const currentNetwork = useLoadUserNetwork();
   const tokens = useAppSelector((store) => store.tokens);
   const address = useAppSelector((state) => state.user.address);
 
-  const isAccountActived = checkIsUserActive(xlmAsset);
+  const isAccountActivated = checkIsUserActive(xlmAsset);
 
-  const isValidateContractAddress = StrKey.isValidContract(searchValue.toUpperCase());
+  const isContractAddressValid = StrKey.isValidContract(searchValue.toUpperCase());
 
   useEffect(() => {
     const updatedToken = tokens.find((x) => x.address === selectedToken?.address);
@@ -57,20 +59,20 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
 
   useEffect(() => {
     const timeout = setTimeout(async () => {
-      if (isValidateContractAddress) {
+      if (isContractAddressValid) {
         const contract = new Contract(searchValue);
-        setTokenDetails(await getERC20Details(address, contract));
+        setTokenDetails(await getERC20Details(address, currentNetwork.networkPassphrase, contract));
 
         setShowLoading(false);
       }
     }, 3000);
 
-    if (isValidateContractAddress) {
+    if (isContractAddressValid) {
       setShowLoading(true);
     }
 
     return () => clearTimeout(timeout);
-  }, [searchValue]);
+  }, [searchValue, address, currentNetwork.networkPassphrase, isContractAddressValid]);
 
   const handleTokenSelect = (token: IToken) => {
     setIsOpen(false);
@@ -132,7 +134,7 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
         onClick={openModal}
         id={id}
       >
-        {selectedToken && address && isAccountActived ? (
+        {selectedToken && address && isAccountActivated ? (
           <div className="flex items-center justify-start">
             <Image
               src={selectedToken.logo ? selectedToken.logo : defaultTokenLogo}
@@ -150,7 +152,7 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
       </button>
 
       <CModal title="Select token" isOpen={isOpen} setIsOpen={setIsOpen}>
-        {address && isAccountActived && (
+        {address && isAccountActivated && (
           <CInput
             placeholder="Search name of token"
             value={searchValue}
@@ -162,7 +164,7 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
         )}
 
         <div className="mt-[23px]">
-          {address && isAccountActived && !isValidateContractAddress ? (
+          {address && isAccountActivated && !isContractAddressValid ? (
             filteredTokens.map((token) => (
               <div
                 className="flex items-center px-2 w-full cursor-pointer h-[72px] border-b last:border-none"
@@ -191,7 +193,7 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
                 </div>
               </div>
             ))
-          ) : isAccountActived && address ? (
+          ) : isAccountActivated && address ? (
             <div className="pb-4">
               {showLoading ? (
                 <div className="w-full flex justify-center">

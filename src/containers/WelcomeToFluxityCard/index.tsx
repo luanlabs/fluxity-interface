@@ -25,14 +25,14 @@ const WelcomeToFluxityCard = () => {
             src={welcomeLogo}
             fill
             alt="logo"
-            className="static object-contain object-right mobile:hidden"
+            className="relative object-contain object-right mobile:hidden"
             draggable={false}
           />
           <Image
             src={halfWelcomeLogo}
             fill
             alt="logo"
-            className="static object-contain object-right desktop:hidden"
+            className="relative object-contain object-right desktop:hidden"
             draggable={false}
           />
         </div>
