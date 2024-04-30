@@ -170,6 +170,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             isStreamCancelled={isStreamCancelled}
             isCancelable={cancellable}
             isSender={isSender}
+            id={data.id}
             isVesting={data.is_vesting}
           />
         </section>
