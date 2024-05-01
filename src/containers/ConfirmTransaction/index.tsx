@@ -96,8 +96,8 @@ const ConfirmTransaction = ({
     const approveXdr = await approve(
       values.token.value.address,
       currentNetwork.networkPassphrase,
-      calculateTotalAmount(values),
       address,
+      calculateTotalAmount(values),
     );
 
     let signedTx;
@@ -149,9 +149,9 @@ const ConfirmTransaction = ({
     setIsWalletLoadingConfirmModalOpen(true);
 
     const CreateLockupXdr = await createLockup(
-      values,
       currentNetwork.networkPassphrase,
       address,
+      values,
       operationType,
     );
 

@@ -1,8 +1,8 @@
 'use client';
 
+import cn from 'classnames';
 import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import cn from 'classnames';
 
 import { ISelectToken } from 'src/models';
 import CButton from 'src/components/CButton';
@@ -14,13 +14,14 @@ import { Model } from 'src/components/CStreamingModel';
 import tooltipDetails from 'src/constants/tooltipDetails';
 import SelectTokenContainer from 'src/containers/SelectToken';
 import ConfirmTransaction from 'src/containers/ConfirmTransaction';
+import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
 import CInputRate, { CInputRateValue } from 'src/components/CInputRate';
 import WalletAddressContainer from 'src/containers/WalletAddressContainer';
 import CStreamingModelContainer from 'src/containers/CStreamingModelContainer';
 import CancellableLockup, { ToggleStatus } from 'src/containers/CancellableLockup';
 
 import validateForm from './validateForm';
-import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
+import { INFINITY_DATE } from 'src/constants/dates';
 
 export interface FormValues {
   address: string;
@@ -39,19 +40,16 @@ interface lockupProps {
   operationType: operationType;
 }
 
-const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');
-
 const CreateLockup = ({ operationType }: lockupProps) => {
-  const [isConfirmClicked, setIsConfirmClicked] = useState(false);
   const [isFormReset, setIsFormReset] = useState(false);
   const [isFormValidated, setIsFormValidated] = useState(false);
+  const [isConfirmClicked, setIsConfirmClicked] = useState(false);
 
   const { address } = useAppSelector((state) => state.user);
   const xlmAsset = useAppSelector((state) => state.user?.info?.balances[0]);
 
   const form = useForm<FormValues>({
     mode: 'onChange',
-
     resolver: (formValues) =>
       validateForm(formValues, setIsFormValidated, address, {
         asset_type: xlmAsset?.asset_type,

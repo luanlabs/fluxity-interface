@@ -1,12 +1,22 @@
 import { Futurenet, Mainnet, Testnet } from 'src/constants/networks';
 
-const passPhraseToRpc = (passPhrase: string) => {
+const passPhraseToNetworkURL = (passPhrase: string) => {
   if (passPhrase === Mainnet.networkPassphrase) {
-    return Mainnet.sorobanRpcUrl;
+    return {
+      sorobanRPC: Mainnet.sorobanRpcUrl,
+      horizonRPC: Mainnet.networkUrl,
+    };
   } else if (passPhrase === Futurenet.networkPassphrase) {
-    return Futurenet.sorobanRpcUrl;
+    return {
+      sorobanRPC: Futurenet.sorobanRpcUrl,
+      horizonRPC: Futurenet.networkUrl,
+    };
   }
-  return Testnet.sorobanRpcUrl;
+
+  return {
+    sorobanRPC: Testnet.sorobanRpcUrl,
+    horizonRPC: Testnet.networkUrl,
+  };
 };
 
-export default passPhraseToRpc;
+export default passPhraseToNetworkURL;

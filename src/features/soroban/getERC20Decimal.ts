@@ -1,24 +1,9 @@
-import { Contract, scValToNative } from '@stellar/stellar-sdk';
+import sorobanCall from './sorobanCall';
 
-import getServer from 'src/utils/soroban/getServer';
-import createTransaction from 'src/utils/soroban/baseTransaction';
+const getERC20Decimal = async (contractAddress: string, passPhrase: string, user: string) => {
+  const retval = await sorobanCall<bigint>(user, passPhrase, contractAddress, 'decimals');
 
-export const getERC20Decimal = async (
-  user: string,
-  passPhrase: string,
-  contract: Contract,
-): Promise<string> => {
-  const server = getServer(passPhrase);
-  const account = await server.getAccount(user);
-
-  const call = contract.call('decimals');
-  const transactionResult = createTransaction(account, passPhrase, call);
-
-  const txSimulate = await server.simulateTransaction(transactionResult);
-
-  const value = scValToNative(txSimulate.result.retval);
-
-  return value.toString();
+  return retval.toString();
 };
 
 export default getERC20Decimal;

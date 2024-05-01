@@ -68,9 +68,9 @@ const ReceiverStatusCard = ({
     setIsApprovalOpen(true);
 
     const withdrawStreamXdr = await withdrawStream(
-      stream.id,
       currentNetwork.networkPassphrase,
       address,
+      stream.id,
     );
 
     let signedXdr;

@@ -9,7 +9,7 @@ export const Mainnet = {
   network: 'PUBLIC',
   networkUrl: 'https://horizon.stellar.org',
   networkPassphrase: 'Public Global Stellar Network ; September 2015',
-  sorobanRpcUrl: '',
+  sorobanRpcUrl: 'https://soroban-testnet.stellar.org', // TODO: change to actual mainnet RPC
 };
 
 export const Testnet = {

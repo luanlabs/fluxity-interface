@@ -1,25 +1,13 @@
-import { Contract, Address, scValToBigInt } from '@stellar/stellar-sdk';
+import { Address } from '@stellar/stellar-sdk';
 
-import getServer from 'src/utils/soroban/getServer';
-import createTransaction from 'src/utils/soroban/baseTransaction';
+import sorobanCall from './sorobanCall';
 
-export const getERC20Balance = async (
-  user: string,
-  passPhrase: string,
-  contract: Contract,
-): Promise<string> => {
-  const server = getServer(passPhrase);
-  const account = await server.getAccount(user);
+const getERC20Balance = async (contractAddress: string, passPhrase: string, user: string) => {
+  const id = Address.fromString(user).toScVal();
 
-  const addressScVal = Address.fromString(user).toScVal();
-  const call = contract.call('balance', addressScVal);
-  const transactionResult = createTransaction(account, passPhrase, call);
+  const retval = await sorobanCall<bigint>(user, passPhrase, contractAddress, 'balance', [id]);
 
-  const txSimulate = await server.simulateTransaction(transactionResult);
-
-  const value = scValToBigInt(txSimulate.result.retval);
-
-  return value.toString();
+  return retval.toString();
 };
 
 export default getERC20Balance;

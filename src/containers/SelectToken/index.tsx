@@ -1,6 +1,6 @@
 import Image from 'next/image';
+import { StrKey } from '@stellar/stellar-sdk';
 import React, { useEffect, useState } from 'react';
-import { Contract, StrKey } from '@stellar/stellar-sdk';
 
 import { ISelectToken } from 'src/models';
 import toast from 'src/components/CToast';
@@ -60,8 +60,9 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
   useEffect(() => {
     const timeout = setTimeout(async () => {
       if (isContractAddressValid) {
-        const contract = new Contract(searchValue);
-        setTokenDetails(await getERC20Details(address, currentNetwork.networkPassphrase, contract));
+        setTokenDetails(
+          await getERC20Details(searchValue, currentNetwork.networkPassphrase, address),
+        );
 
         setShowLoading(false);
       }

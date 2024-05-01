@@ -78,7 +78,7 @@ const SenderStatusCard = ({
   const handleCancelClick = async () => {
     setIsApprovalOpen(true);
 
-    const cancelStreamXdr = await cancelStream(id, currentNetwork.networkPassphrase, address);
+    const cancelStreamXdr = await cancelStream(currentNetwork.networkPassphrase, address, id);
 
     let signedXdr;
     let tx;

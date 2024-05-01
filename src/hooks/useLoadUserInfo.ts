@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 
-import { useAppDispatch } from './useRedux';
+import getServer from 'src/utils/soroban/getServer';
 import { getAlreadyMinted } from 'src/features/getAlreadyMinted';
 import { loadAccount, hasTestnetTokens } from 'src/reducers/user';
-import getServer from 'src/utils/soroban/getServer';
+
+import { useAppDispatch } from './useRedux';
 
 const useLoadUserInfo = (address: string, passPhrase: string) => {
   const dispatch = useAppDispatch();
@@ -11,10 +12,16 @@ const useLoadUserInfo = (address: string, passPhrase: string) => {
   useEffect(() => {
     const fetchData = async () => {
       if (address) {
-        const server = getServer(passPhrase);
-        const info = await server.getAccount(address);
-        dispatch(loadAccount(info));
+        const { horizon: server } = getServer(passPhrase);
+
+        try {
+          const info = await server.loadAccount(address);
+
+          dispatch(loadAccount(info));
+        } catch (e) {}
+
         const isMinted = await getAlreadyMinted(address);
+
         if (isMinted) {
           dispatch(hasTestnetTokens());
         }
