@@ -19,7 +19,7 @@ const AppDataFetch = () => {
   const currentNetwork = useLoadUserNetwork();
   useLoadUserInfo(address, currentNetwork.networkPassphrase);
   useLoadTokens();
-  useLoadTokenBalances(address);
+  useLoadTokenBalances(address, currentNetwork.networkPassphrase);
   useLoadStreams(address);
 
   useEffect(() => {

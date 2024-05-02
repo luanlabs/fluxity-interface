@@ -63,7 +63,6 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
         setTokenDetails(
           await getERC20Details(searchValue, currentNetwork.networkPassphrase, address),
         );
-
         setShowLoading(false);
       }
     }, 3000);
