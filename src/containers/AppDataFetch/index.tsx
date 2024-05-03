@@ -17,6 +17,7 @@ const AppDataFetch = () => {
 
   useConnectWallet();
   const currentNetwork = useLoadUserNetwork();
+
   useLoadUserInfo(address, currentNetwork.networkPassphrase);
   useLoadTokens();
   useLoadTokenBalances(address, currentNetwork.networkPassphrase);
