@@ -7,7 +7,7 @@ const baseTransaction = (account: Account, call: xdr.Operation<Operation.InvokeH
 
   let transaction = new TransactionBuilder(account, {
     fee,
-    networkPassphrase: Networks.FUTURENET,
+    networkPassphrase: Networks.TESTNET,
   });
 
   transaction = transaction.addOperation(call);
