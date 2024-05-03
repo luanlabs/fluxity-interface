@@ -1,9 +1,11 @@
 import { Contract, SorobanRpc, Address, scValToBigInt } from 'stellar-sdk';
 
 import createTransaction from '../../utils/soroban/baseTransaction';
+import getConfigs from '../getConfigs';
 
 export const getERC20Balance = async (user: string, contract: Contract): Promise<string> => {
-  const server = new SorobanRpc.Server('https://rpc-futurenet.stellar.org:443');
+  const { sorobanServer: server } = getConfigs();
+
   const account = await server.getAccount(user);
 
   const addressScVal = Address.fromString(user).toScVal();

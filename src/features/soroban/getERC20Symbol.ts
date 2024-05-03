@@ -1,9 +1,11 @@
 import { Contract, SorobanRpc, scValToNative } from 'stellar-sdk';
 
 import createTransaction from 'src/utils/soroban/baseTransaction';
+import getConfigs from '../getConfigs';
 
 export const getERC20Symbol = async (user: string, contract: Contract): Promise<string> => {
-  const server = new SorobanRpc.Server('https://rpc-futurenet.stellar.org:443');
+  const { sorobanServer: server } = getConfigs();
+
   const account = await server.getAccount(user);
 
   const call = contract.call('symbol');
