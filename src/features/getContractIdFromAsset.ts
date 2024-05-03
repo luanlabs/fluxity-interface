@@ -1,4 +1,4 @@
-import { Asset, Networks, AssetType } from '@stellar/stellar-sdk';
+import { Asset, Networks } from 'stellar-sdk';
 
 import getConfigs from './getConfigs';
 
