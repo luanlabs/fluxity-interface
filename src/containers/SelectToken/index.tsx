@@ -2,26 +2,28 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { Contract, StrKey } from 'stellar-sdk';
 
+import Loading from 'src/assets/Loading';
 import { ISelectToken } from 'src/models';
 import CModal from 'src/components/CModal';
 import CInput from 'src/components/CInput';
 import CLabel from 'src/components/CLabel';
 import { IToken } from 'src/reducers/tokens';
-import CButton from 'src/components/CButton';
+import formatUnits from 'src/utils/formatUnits';
 import useCustomID from 'src/hooks/useCustomId';
+import { Testnet } from 'src/constants/networks';
 import CEmptyList from 'src/components/CEmptyList';
 import { useAppSelector } from 'src/hooks/useRedux';
 import humanizeAmount from 'src/utils/humanizeAmount';
 import fromDecimals from 'src/utils/soroban/fromDecimals';
+import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
+import checkBalanceTokenSoroban from 'src/features/checkBalanceTokenSoroban';
+import getERC20Details, { TokenDetailsType } from 'src/features/soroban/getERC20Details';
 import { xlmAssetType, checkIsUserActive } from 'src/containers/CreateLockup/checkIsUserActive';
 
 import plusLogo from 'public/images/Plus.svg';
 import arrowLogo from 'public/images/arrow.svg';
 import searchLogo from 'public/images/search.svg';
-import Loading from 'src/assets/Loading';
 import defaultTokenLogo from 'public/images/defaultToken.svg';
-import getERC20Details, { TokenDetailsType } from 'src/features/soroban/getERC20Details';
-import formatUnits from 'src/utils/formatUnits';
 
 interface SelectTokenProps {
   onChange: (_: ISelectToken) => void;
@@ -36,14 +38,32 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
   const [searchValue, setSearchValue] = useState('');
   const [showLoading, setShowLoading] = useState(true);
   const [tokenDetails, setTokenDetails] = useState<TokenDetailsType>({});
+  const [userTokens, setUserTokens] = useState<IToken[]>([]);
+  const [tokens, setTokens] = useState<IToken[]>([]);
 
   const id = useCustomID('selectToken');
-  const tokens = useAppSelector((store) => store.tokens);
+  const tokensFromStore = useAppSelector((store) => store.tokens);
   const address = useAppSelector((state) => state.user.address);
+  const currentNetwork = useLoadUserNetwork();
 
   const isAccountActived = checkIsUserActive(xlmAsset);
 
   const isValidateContractAddress = StrKey.isValidContract(searchValue.toUpperCase());
+
+  useEffect(() => {
+    const fetchTokenDetails = async () => {
+      if (currentNetwork.networkPassphrase === Testnet.networkPassphrase) {
+        try {
+          const result = await checkBalanceTokenSoroban(address);
+          setUserTokens(result);
+        } catch {}
+      }
+    };
+
+    fetchTokenDetails();
+
+    setTokens([...tokensFromStore, ...userTokens]);
+  }, [tokensFromStore, userTokens]);
 
   useEffect(() => {
     const updatedToken = tokens.find((x) => x.address === selectedToken?.address);
