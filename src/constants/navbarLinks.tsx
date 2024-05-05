@@ -24,15 +24,15 @@ export const navLinks: Type[] = [
     url: Pages.CREATE_STREAM,
   },
   {
+    title: 'Create Vesting',
+    icon: <StairsIcon fill="#EBFDFF" />,
+    activeIcon: <StairsIcon />,
+    url: Pages.VESTING,
+  },
+  {
     title: 'Activity History',
     icon: <ActivityIcon fill="#EBFDFF" />,
     activeIcon: <ActivityIcon />,
     url: Pages.ACTIVITY_HISTORY,
-  },
-  {
-    title: 'Vesting',
-    icon: <StairsIcon fill="#EBFDFF" />,
-    activeIcon: <StairsIcon />,
-    url: Pages.VESTING,
   },
 ];

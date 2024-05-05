@@ -5,6 +5,7 @@ import { UseFormReturn } from 'react-hook-form';
 import BN from 'src/utils/BN';
 import timeout from 'src/utils/timeout';
 import toast from 'src/components/CToast';
+import { OperationType } from 'src/models';
 import approve from 'src/features/soroban/approve';
 import { useAppSelector } from 'src/hooks/useRedux';
 import humanizeAmount from 'src/utils/humanizeAmount';
@@ -15,7 +16,7 @@ import toDecimals from 'src/utils/createLockup/toDecimals';
 import { ExternalPages } from 'src/constants/externalPages';
 import createLockup from 'src/features/soroban/createLockup';
 import signTransaction from 'src/utils/soroban/signTransaction';
-import { FormValues, operationType } from 'src/containers/CreateLockup';
+import { FormValues } from 'src/containers/CreateLockup';
 import DoubleButtonModal from 'src/components/DoubleButtonModal';
 import SingleButtonModal from 'src/components/SingleButtonModal';
 import sendTransaction from 'src/features/soroban/sendTransaction';
@@ -32,7 +33,7 @@ interface ConfirmTransactions {
   setIsConfirmClicked: (_: boolean) => void;
   form: UseFormReturn<any, undefined>;
   resetFields: () => void;
-  operationType: operationType;
+  operationType: OperationType;
 }
 
 const ConfirmTransaction = ({

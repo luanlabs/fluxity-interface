@@ -4,7 +4,6 @@ import BN from 'src/utils/BN';
 import timeout from 'src/utils/timeout';
 import toast from 'src/components/CToast';
 import CButton from 'src/components/CButton';
-import { IResponseStream } from 'src/models';
 import formatUnits from 'src/utils/formatUnits';
 import CPageCard from 'src/components/CPageCard';
 import { useAppSelector } from 'src/hooks/useRedux';
@@ -12,6 +11,7 @@ import humanizeAmount from 'src/utils/humanizeAmount';
 import CProcessModal from 'src/components/CProcessModal';
 import CSummaryField from 'src/components/CSummaryField';
 import CModalSuccess from 'src/components/CModalSuccess';
+import { IResponseStream, OperationType } from 'src/models';
 import { ExternalPages } from 'src/constants/externalPages';
 import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 import informWithdrawAPI from 'src/features/informWithdrawAPI';
@@ -32,6 +32,7 @@ interface ReceiverStatusCardProps {
   setWithdrawnAmount: (_: number) => void;
   withdrawnAmount: number;
   decimalToken: number;
+  operationType: OperationType;
 }
 
 const ReceiverStatusCard = ({
@@ -39,6 +40,7 @@ const ReceiverStatusCard = ({
   setWithdrawnAmount,
   withdrawnAmount,
   decimalToken,
+  operationType,
 }: ReceiverStatusCardProps) => {
   const address = useAppSelector((state) => state.user.address);
   const withdrawn = formatUnits(stream.withdrawn, decimalToken);
@@ -180,12 +182,12 @@ const ReceiverStatusCard = ({
       <CProcessModal
         isOpen={approvalOpen}
         setIsOpen={setIsApprovalOpen}
-        title="Waiting for stream withdrawal...."
+        title={`Waiting for ${operationType} withdrawal....`}
       />
 
       <CModalSuccess
         tooltipTitle="withdraw"
-        tooltipDetails="This is the amount withdrawn from the stream"
+        tooltipDetails={`This is the amount withdrawn from the ${operationType}`}
         successLogoColor="green"
         explorerLink={ExternalPages.EXPLORER + '/transactions/' + txHash}
         title="Token withdrawal successful"

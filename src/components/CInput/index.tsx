@@ -2,9 +2,10 @@ import React from 'react';
 import cn from 'classnames';
 import Image from 'next/image';
 
-import CLabel from '../CLabel';
+import CLabel from 'src/components/CLabel';
 import useCustomID from 'src/hooks/useCustomId';
 
+import copy from 'public/images/copy.svg';
 import alertLogo from 'public/images/error.png';
 import clearInputLogo from 'public/images/x.svg';
 
@@ -18,6 +19,7 @@ interface CInputProps {
   disabled?: boolean;
   className?: string;
   autoFocus?: boolean;
+  copyButton: boolean;
   clearInput?: boolean;
   placeholder?: string;
   tooltipTitle?: string;
@@ -30,6 +32,7 @@ interface CInputProps {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   clearInputClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   handlePaste?: (event: React.MouseEventHandler<HTMLDivElement>) => void;
+  handleCopyButton?: (event: React.MouseEvent<HTMLImageElement, MouseEvent>) => void;
   enterKeyHint?: 'search' | 'done' | 'enter' | 'go' | 'next' | 'previous' | 'send';
 }
 
@@ -47,6 +50,7 @@ const CInput = ({
   autoFocus,
   className,
   clearInput,
+  copyButton,
   placeholder,
   handlePaste,
   tooltipTitle,
@@ -55,6 +59,7 @@ const CInput = ({
   inputClassName,
   tooltipDetails,
   clearInputClick,
+  handleCopyButton,
   ...props
 }: CInputProps) => {
   const id = useCustomID('Cinput');
@@ -87,6 +92,15 @@ const CInput = ({
             onClick={handlePaste}
           >
             <span>Paste</span>
+          </div>
+        )}
+
+        {copyButton && (
+          <div
+            className="text-midnightBlue text-sm px-2 py-[6px] rounded-lg absolute bottom-3 right-3.5 cursor-pointer transition hover:bg-[#E6E6EC]"
+            onClick={handleCopyButton}
+          >
+            <Image src={copy} alt="copy" />
           </div>
         )}
 
