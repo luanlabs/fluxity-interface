@@ -25,6 +25,7 @@ import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
 import withdrawStreamReturnValue from 'src/utils/soroban/withdrawStreamReturnValue';
 
 import whiteWithdrawLogo from '/public/images/whiteWithdraw.svg';
+import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
 
 interface ReceiverStatusCardProps {
   stream: IResponseStream;
@@ -113,7 +114,10 @@ const ReceiverStatusCard = ({
     await timeout(100);
     setIsWithdrawSuccessOpen(true);
 
-    informWithdrawAPI(stream.id);
+    informWithdrawAPI(
+      stream.id,
+      passPhraseToNetworkDetail(currentNetwork.networkPassphrase).network,
+    );
     const withdrawFinalize = withdrawStreamReturnValue(finalize);
     setWithdrawnAmount(withdrawFinalize);
 

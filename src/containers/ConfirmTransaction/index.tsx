@@ -9,24 +9,25 @@ import { OperationType } from 'src/models';
 import approve from 'src/features/soroban/approve';
 import { useAppSelector } from 'src/hooks/useRedux';
 import humanizeAmount from 'src/utils/humanizeAmount';
+import { FormValues } from 'src/containers/CreateLockup';
 import CProcessModal from 'src/components/CProcessModal';
 import CModalSuccess from 'src/components/CModalSuccess';
 import { FLUXITY_CONTRACT } from 'src/constants/contracts';
 import toDecimals from 'src/utils/createLockup/toDecimals';
 import { ExternalPages } from 'src/constants/externalPages';
 import createLockup from 'src/features/soroban/createLockup';
+import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 import signTransaction from 'src/utils/soroban/signTransaction';
-import { FormValues } from 'src/containers/CreateLockup';
 import DoubleButtonModal from 'src/components/DoubleButtonModal';
 import SingleButtonModal from 'src/components/SingleButtonModal';
 import sendTransaction from 'src/features/soroban/sendTransaction';
+import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
 import ApproveFormModal from 'src/containers/Modals/ApproveFormModal';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 import getERC20Allowance from 'src/features/soroban/getERC20Allowance';
 import informCreateLockupAPI from 'src/features/informCreateLockupAPI';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
-import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
-import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
+import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
 
 interface ConfirmTransactions {
   isConfirmClicked: boolean;
@@ -192,7 +193,10 @@ const ConfirmTransaction = ({
         return;
       }
 
-      await informCreateLockupAPI(scValToNative(finalize?.returnValue).toString());
+      await informCreateLockupAPI(
+        scValToNative(finalize?.returnValue).toString(),
+        passPhraseToNetworkDetail(currentNetwork.networkPassphrase).network,
+      );
 
       setStreamDetails({
         hash: tx.hash,
