@@ -1,7 +1,8 @@
-import ToScVal from 'src/utils/createLockup/scVal';
-import { FLUXITY_CONTRACT } from 'src/constants/contracts';
-import { FormValues } from 'src/containers/CreateLockup';
 import { OperationType } from 'src/models';
+import ToScVal from 'src/utils/createLockup/scVal';
+import { FormValues } from 'src/containers/CreateLockup';
+import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
+
 import sorobanSend from './sorobanSend';
 
 const createLockup = async (
@@ -12,9 +13,13 @@ const createLockup = async (
 ) => {
   const paramsScVal = ToScVal.toXdr(params, address);
 
-  const tx = await sorobanSend(address, passPhrase, FLUXITY_CONTRACT, `create_${operationType}`, [
-    paramsScVal,
-  ]);
+  const tx = await sorobanSend(
+    address,
+    passPhrase,
+    passPhraseToNetworkDetail(passPhrase).contract,
+    `create_${operationType}`,
+    [paramsScVal],
+  );
 
   return tx;
 };

@@ -2,8 +2,8 @@ import BigNumber from 'bignumber.js';
 
 import ToScVal from 'src/utils/createLockup/scVal';
 import getServer from 'src/utils/soroban/getServer';
-import { FLUXITY_CONTRACT } from 'src/constants/contracts';
 import toDecimals from 'src/utils/createLockup/toDecimals';
+import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
 
 import sorobanSend from './sorobanSend';
 
@@ -17,7 +17,7 @@ const approve = async (
   const { sequence } = await server.getLatestLedger();
 
   const from = ToScVal.address(address);
-  const spender = ToScVal.address(FLUXITY_CONTRACT);
+  const spender = ToScVal.address(passPhraseToNetworkDetail(passPhrase).contract);
   const amountScVal = ToScVal.i128(toDecimals(amount));
   const expirationLedger = ToScVal.u32(sequence + 1000);
 

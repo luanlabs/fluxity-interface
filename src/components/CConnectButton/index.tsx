@@ -20,6 +20,7 @@ import blackWallet from 'public/images/blackWallet.svg';
 import Modal from './modal';
 import toast from '../CToast';
 import CProcessModal from '../CProcessModal';
+import explorersLink from 'src/constants/explorersLink';
 
 type CConnectButtonProps = {
   isMinimized: boolean;
@@ -110,6 +111,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
           )}
           {openModal && (
             <Modal
+              explorerAddress={explorersLink(currentNetwork.network).toLowerCase()}
               isModalOpen={openModal}
               address={address}
               handleCloseModal={closeModal}

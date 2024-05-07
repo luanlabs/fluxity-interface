@@ -26,6 +26,7 @@ import withdrawStreamReturnValue from 'src/utils/soroban/withdrawStreamReturnVal
 
 import whiteWithdrawLogo from '/public/images/whiteWithdraw.svg';
 import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
+import explorersLink from 'src/constants/explorersLink';
 
 interface ReceiverStatusCardProps {
   stream: IResponseStream;
@@ -193,7 +194,9 @@ const ReceiverStatusCard = ({
         tooltipTitle="withdraw"
         tooltipDetails={`This is the amount withdrawn from the ${operationType}`}
         successLogoColor="green"
-        explorerLink={ExternalPages.EXPLORER + '/transactions/' + txHash}
+        explorerLink={
+          explorersLink(currentNetwork.network).toLowerCase() + '/transactions/' + txHash
+        }
         title="Token withdrawal successful"
         amountTitle="Amount"
         amount={withdrawAmount}

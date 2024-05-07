@@ -11,10 +11,9 @@ import { useAppSelector } from 'src/hooks/useRedux';
 import humanizeAmount from 'src/utils/humanizeAmount';
 import { FormValues } from 'src/containers/CreateLockup';
 import CProcessModal from 'src/components/CProcessModal';
+import explorersLink from 'src/constants/explorersLink';
 import CModalSuccess from 'src/components/CModalSuccess';
-import { FLUXITY_CONTRACT } from 'src/constants/contracts';
 import toDecimals from 'src/utils/createLockup/toDecimals';
-import { ExternalPages } from 'src/constants/externalPages';
 import createLockup from 'src/features/soroban/createLockup';
 import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 import signTransaction from 'src/utils/soroban/signTransaction';
@@ -82,7 +81,7 @@ const ConfirmTransaction = ({
       values.token.value.address,
       currentNetwork.networkPassphrase,
       address,
-      FLUXITY_CONTRACT,
+      passPhraseToNetworkDetail(currentNetwork.networkPassphrase).contract,
     );
 
     if (toDecimals(calculateTotalAmount(values)) <= BigInt(checkAllowance)) {
@@ -248,41 +247,39 @@ const ConfirmTransaction = ({
         setIsOpen={setIsApproveModalOpen}
         onClick={handleCreateLockupOnClick}
       />
-
       <CProcessModal
         title="Waiting for token access approval"
         message="You are granting Fluxity access to your tokens equal to your total order amount"
         isOpen={isWalletLoadingApproveModalOpen}
         setIsOpen={setIsWalletLoadingApproveModalOpen}
       />
-
       <CProcessModal
         title="Waiting for transaction approval"
         isOpen={isSendingApproveTxModalOpen}
         setIsOpen={setIsSendingApproveTxModalOpen}
       />
-
       <CProcessModal
         title="Waiting for transaction confirmation"
         isOpen={isWalletLoadingConfirmModalOpen}
         setIsOpen={setIsWalletLoadingConfirmModalOpen}
       />
-
       <CProcessModal
         title={`Completing ${variant} creation transaction`}
         isOpen={isSendingCreateLockupTxModalOpen}
         setIsOpen={setIsSendingCreateLockupTxModalOpen}
       />
-
       <CModalSuccess
         successLogoColor="green"
         title="Transaction Successful"
-        explorerLink={ExternalPages.EXPLORER + '/transactions/' + streamDetails.hash}
+        explorerLink={
+          explorersLink(currentNetwork.network).toLowerCase() +
+          '/transactions/' +
+          streamDetails.hash
+        }
         isOpen={isCreateLockupResultModalOpen}
         setIsOpen={setIsCreateLockupResultModalOpen}
         ButtonPart={ModalButton}
       />
-
       <CModalSuccess
         successLogoColor="black"
         title="You can now complete your transaction."
