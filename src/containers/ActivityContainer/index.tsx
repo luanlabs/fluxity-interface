@@ -22,12 +22,12 @@ const ActivityContainer = () => {
     <CPageCard
       divider
       borderStatus="borderless"
-      className="flex py-[15px] px-5 !h-full"
+      className="flex py-[15px] px-5 !h-full mobile:relative"
       childrenClassName="h-full overflow-hidden !px-0"
-      dividerResponsiveClassName="mobile:border-none mobile:relative"
+      dividerResponsiveClassName="mobile:border-none"
       title={<h1 className="text-2xl text-midnightBlue mb-[10px] mt-1 pl-2">Activity History</h1>}
     >
-      <div style={{ flexFlow: 'column' }} className="h-full flex mobile:!h-[calc(100vh-200px)]">
+      <div style={{ flexFlow: 'column' }} className="h-full flex mobile:!h-[calc(100vh-216px)]">
         <AllStreamsCard />
 
         <Filters

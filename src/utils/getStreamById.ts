@@ -10,15 +10,15 @@ export type StreamDataType = {
   error: null | any;
 };
 
-export const getStreamById = async (id: string) => {
+export const getStreamById = async (id: string, network: string) => {
   const { data } = await fetch<IResponseStreamResult>(
-    ExternalPages.FLUXITY_API + '/testnet/stream/' + id,
+    ExternalPages.FLUXITY_API + `/${network}/lockup/` + id,
   );
 
   return data.result;
 };
 
-const useGetStreamById = (id: string) => {
+const useGetStreamById = (id: string, network: string) => {
   const [streamData, setStreamData] = useState<StreamDataType>({
     loading: true,
     data: null,
@@ -27,7 +27,7 @@ const useGetStreamById = (id: string) => {
 
   useEffect(() => {
     const data = () => {
-      getStreamById(id)
+      getStreamById(id, network)
         .then((stream) => {
           setStreamData({
             loading: false,
@@ -49,7 +49,7 @@ const useGetStreamById = (id: string) => {
     const intervalId = setInterval(data, 3000);
 
     return () => clearInterval(intervalId);
-  }, [id]);
+  }, [id, network]);
 
   return streamData;
 };

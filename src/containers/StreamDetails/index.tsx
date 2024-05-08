@@ -11,9 +11,11 @@ import formatUnits from 'src/utils/formatUnits';
 import CPageCard from 'src/components/CPageCard';
 import { useAppSelector } from 'src/hooks/useRedux';
 import useGetStreamById from 'src/utils/getStreamById';
+import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import CStreamStatusButton from 'src/components/CStreamStatusButton';
 import calculateVestingAmounts from 'src/utils/calculateVestingAmount';
+import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
 import { isStreamCancellable, isStreamCancelledStatus } from 'src/features/isStreamCancellable';
 
 import Loading from './Loading';
@@ -30,8 +32,11 @@ interface StreamDetailsProps {
 
 const StreamDetails = ({ id }: StreamDetailsProps) => {
   const address = useAppSelector((state) => state.user.address);
-
-  const { loading, data, error } = useGetStreamById(id);
+  const currentNetwork = useLoadUserNetwork();
+  const { loading, data, error } = useGetStreamById(
+    id,
+    passPhraseToNetworkDetail(currentNetwork.networkPassphrase).network,
+  );
 
   const [cancelAmounts, setCancelAmounts] = useState<CancelAmounts>({
     senderAmount: 0,
@@ -142,7 +147,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
         divider
         borderStatus="bordered"
         title={mainTitle}
-        className="w-full px-6 sm:px-2 py-[15px] h-full md:!w-[100%] md:px-3"
+        className="w-full px-6 sm:px-2 py-[15px] h-full md:!w-[100%] md:px-3 mobile:min-h-[560px]"
         childrenClassName="!pl-0"
         dividerResponsiveClassName="sm:hidden"
       >

@@ -1,8 +1,8 @@
 import timeout from 'src/utils/timeout';
-import getServer from 'src/utils/createLockup/getServer';
+import getServer from 'src/utils/soroban/getServer';
 
-const finalizeTransaction = async (hash: string) => {
-  const server = getServer();
+const finalizeTransaction = async (hash: string, passPhrase: string) => {
+  const { soroban: server } = getServer(passPhrase);
 
   for (let i = 0; i < 15; ++i) {
     const tx = await server.getTransaction(hash);

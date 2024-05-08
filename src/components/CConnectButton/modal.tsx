@@ -23,6 +23,7 @@ import useOutsideClickHandler from 'src/hooks/useOutsideClickHandler';
 type ModalProps = {
   isModalOpen: boolean;
   address: string;
+  explorerAddress: string;
   isMinimized: boolean;
   handleCloseModal: () => void;
   setIsModalOpen: (_: boolean) => void;
@@ -33,6 +34,7 @@ const Modal = ({
   handleCloseModal,
   isMinimized,
   setIsModalOpen,
+  explorerAddress,
 }: ModalProps) => {
   const modalRef = useRef<Optional<HTMLDivElement>>(null);
   const bottomSheetRef = useRef<Optional<HTMLDivElement>>(null);
@@ -71,7 +73,7 @@ const Modal = ({
         <div className="flex flex-col divide-y divide-slate-700 mt-2 px-2 text-white">
           <div className="py-2 flex justify-between items-center w-full">
             <Link
-              href={`${ExternalPages.EXPLORER}/accounts/${address}`}
+              href={`${explorerAddress}/accounts/${address}`}
               className="flex justify-between w-full"
               target="_blank"
             >
@@ -103,7 +105,7 @@ const Modal = ({
             </div>
             <Link
               className="flex mt-1 justify-center h-12 items-center gap-2 !text-royalBlue w-full border rounded-[10px] border-royalBlue"
-              href={`${ExternalPages.EXPLORER}/accounts/${address}`}
+              href={`${explorerAddress}/accounts/${address}`}
               target="_blank"
             >
               <Image src={blueWorld} alt="world" />

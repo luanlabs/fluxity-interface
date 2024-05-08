@@ -1,17 +1,17 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { useAppDispatch, useAppSelector } from './useRedux';
 import { loadTokens } from 'src/reducers/tokens';
 import getTokenBalances from 'src/features/getTokenBalances';
 
-const useLoadTokenBalances = (address: string) => {
+const useLoadTokenBalances = (address: string, passPhrase: string) => {
   const dispatch = useAppDispatch();
   const tokens = useAppSelector((state) => state.tokens);
 
   useEffect(() => {
     const fetchTokenBalances = () => {
       if (address) {
-        getTokenBalances(address, tokens)
+        getTokenBalances(address, passPhrase, tokens)
           .then((updatedTokens) => {
             dispatch(loadTokens(updatedTokens));
           })
@@ -22,7 +22,7 @@ const useLoadTokenBalances = (address: string) => {
     const intervalId = setInterval(fetchTokenBalances, 25000);
 
     return () => clearInterval(intervalId);
-  }, [address, dispatch, tokens]);
+  }, [address, dispatch, tokens, passPhrase]);
 };
 
 export default useLoadTokenBalances;

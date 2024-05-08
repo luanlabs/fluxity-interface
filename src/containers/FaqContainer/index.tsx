@@ -20,7 +20,7 @@ const FaqContainer = () => {
   };
 
   return (
-    <div className="flex overflow-scroll desktop:gap-5 flex-col w-full">
+    <div className="flex overflow-scroll desktop:gap-5 flex-col w-full relative">
       <div className="desktop:ml-[20%] mobile:bg-white mobile:pb-5 mobile:px-6 mobile:pt-6">
         <p className="font-normal desktop:text-[56px] mobile:text-2xl desktop:mb-4">FAQ</p>
         <Image src={blueDivider} alt="Divider" className="py-2 select-none desktop:hidden" />

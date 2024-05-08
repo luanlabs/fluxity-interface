@@ -5,7 +5,7 @@ export type CSummarySize = 'large' | 'normal';
 interface CSummaryFieldProps {
   label: string;
   logo?: string;
-  value: string | JSX.Element;
+  value: string | JSX.Element | number;
   fieldSize: CSummarySize;
   hideDivider?: boolean;
 }

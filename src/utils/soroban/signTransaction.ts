@@ -1,13 +1,13 @@
 import freighterApi from '@stellar/freighter-api';
-import { Networks, Transaction } from 'stellar-sdk';
+import { Transaction } from '@stellar/stellar-sdk';
 
-const signTransaction = async (address: string, xdr: any) => {
+const signTransaction = async (address: string, passPhrase: string, xdr: any) => {
   const signedXdr = await freighterApi.signTransaction(xdr.toXDR(), {
-    networkPassphrase: Networks.FUTURENET,
+    networkPassphrase: passPhrase,
     accountToSign: address,
   });
 
-  return new Transaction(signedXdr, Networks.FUTURENET);
+  return new Transaction(signedXdr, passPhrase);
 };
 
 export default signTransaction;

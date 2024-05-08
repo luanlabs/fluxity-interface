@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import CModal from 'src/components/CModal';
-import { Futurenet } from 'src/constants/networks';
+import { Mainnet, Testnet } from 'src/constants/networks';
 import useLoadTokens from 'src/hooks/useLoadTokens';
 import { useAppSelector } from 'src/hooks/useRedux';
 import useLoadStreams from 'src/hooks/useLoadStreams';
@@ -16,19 +16,23 @@ const AppDataFetch = () => {
   const address = useAppSelector((state) => state.user.address);
 
   useConnectWallet();
-  useLoadUserInfo(address);
   const currentNetwork = useLoadUserNetwork();
+
+  useLoadUserInfo(address, currentNetwork.networkPassphrase);
   useLoadTokens();
-  useLoadTokenBalances(address);
+  useLoadTokenBalances(address, currentNetwork.networkPassphrase);
   useLoadStreams(address);
 
   useEffect(() => {
-    setShouldModalOpen(currentNetwork.networkPassphrase !== Futurenet.networkPassphrase);
+    setShouldModalOpen(
+      currentNetwork.networkPassphrase !== Mainnet.networkPassphrase &&
+        currentNetwork.networkPassphrase !== Testnet.networkPassphrase,
+    );
   }, [currentNetwork]);
 
   return (
     <>
-      <CModal isOpen={shouldModalOpen} setIsOpen={setShouldModalOpen} isSticky>
+      <CModal isOpen={shouldModalOpen} setIsOpen={setShouldModalOpen} isSticky width="396px">
         <ChangeNetworkModal />
       </CModal>
     </>

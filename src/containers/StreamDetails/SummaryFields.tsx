@@ -28,7 +28,7 @@ const SummaryFields = ({ data, isCancellable }: SummaryFieldsProps) => {
   const cliffDate = new Date(data.cliff_date * 1000);
   const streamAmount = humanizeAmount(formatUnits(data.amount, data.token.decimals));
 
-  const isCliffed = dateToSeconds(cliffDate) !== dateToSeconds(startDate);
+  const isCliff = dateToSeconds(cliffDate) !== dateToSeconds(startDate);
 
   const summaryTitle = (
     <div className="w-full flex justify-between items-center pb-4 pl-4 sm:hidden">
@@ -64,7 +64,7 @@ const SummaryFields = ({ data, isCancellable }: SummaryFieldsProps) => {
             value={startDate.toLocaleDateString('en-US', options)}
             fieldSize="large"
           />
-          {isCliffed && (
+          {isCliff && (
             <CSummaryField
               label="Cliff date"
               value={cliffDate.toLocaleDateString('en-US', options)}

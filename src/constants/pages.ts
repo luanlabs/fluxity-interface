@@ -4,7 +4,5 @@ export enum Pages {
   ACTIVITY_HISTORY = '/activity-history',
   FAQ = '/faq',
   STREAM_DETAILS = '/lockup',
-  // NFTS = '/nfts',
-  // ADDRESS_BOOK = '/address-book',
   VESTING = '/vesting',
 }

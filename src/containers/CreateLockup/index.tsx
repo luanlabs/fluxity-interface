@@ -1,27 +1,28 @@
 'use client';
 
+import cn from 'classnames';
 import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import cn from 'classnames';
 
-import { ISelectToken, OperationType } from 'src/models';
 import CButton from 'src/components/CButton';
 import CPageCard from 'src/components/CPageCard';
+import { INFINITY_DATE } from 'src/constants/dates';
 import { useAppSelector } from 'src/hooks/useRedux';
 import CDatePicker from 'src/components/CDatePicker';
 import SummaryContainer from 'src/containers/Summary';
 import { Model } from 'src/components/CStreamingModel';
+import CBottomSheet from 'src/components/CBottomSheet';
+import { ISelectToken, OperationType } from 'src/models';
 import tooltipDetails from 'src/constants/tooltipDetails';
 import SelectTokenContainer from 'src/containers/SelectToken';
 import ConfirmTransaction from 'src/containers/ConfirmTransaction';
+import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
 import CInputRate, { CInputRateValue } from 'src/components/CInputRate';
 import WalletAddressContainer from 'src/containers/WalletAddressContainer';
 import CStreamingModelContainer from 'src/containers/CStreamingModelContainer';
 import CancellableLockup, { ToggleStatus } from 'src/containers/CancellableLockup';
 
 import validateForm from './validateForm';
-import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
-import CBottomSheet from 'src/components/CBottomSheet';
 
 export interface FormValues {
   address: string;
@@ -38,12 +39,10 @@ interface lockupProps {
   operationType: OperationType;
 }
 
-const INFINITY_DATE = new Date('Tue Oct 10 2100 00:00:00');
-
 const CreateLockup = ({ operationType }: lockupProps) => {
-  const [isConfirmClicked, setIsConfirmClicked] = useState(false);
   const [isFormReset, setIsFormReset] = useState(false);
   const [isFormValidated, setIsFormValidated] = useState(false);
+  const [isConfirmClicked, setIsConfirmClicked] = useState(false);
   const [isOpenSheet, setIsOpenSheet] = useState(false);
 
   const { address } = useAppSelector((state) => state.user);
@@ -51,7 +50,6 @@ const CreateLockup = ({ operationType }: lockupProps) => {
 
   const form = useForm<FormValues>({
     mode: 'onChange',
-
     resolver: (formValues) =>
       validateForm(formValues, setIsFormValidated, address, {
         asset_type: xlmAsset?.asset_type,
@@ -113,10 +111,9 @@ const CreateLockup = ({ operationType }: lockupProps) => {
         <CPageCard
           title={CreateStreamTitle}
           divider
-          className="w-full pl-[30px] pr-[18px] py-[15px] sm:pr-4 sm:pl-2 md:pb-8 sm:pb-8"
+          className="w-full pl-[30px] pr-[18px] py-[15px] sm:pr-4 sm:pl-2 mobile:pb-3"
           scroll
           borderStatus="borderless"
-          childrenClassName="mobile:h-[calc(100vh-210px)]"
         >
           <div className="w-full">
             {operationType === 'stream' && (
