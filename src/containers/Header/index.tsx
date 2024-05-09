@@ -18,7 +18,7 @@ const Header = () => {
   const currentNetwork = useLoadUserNetwork();
 
   return (
-    <header className="flex justify-between w-full items-center py-3 px-6">
+    <header className="flex justify-between w-full items-center py-3 desktop:py-[18px] px-6">
       <div
         className="inline-flex mobile:hidden gap-[14px] cursor-pointer"
         onClick={() => router.push(ExternalPages.LANDING)}
@@ -43,17 +43,17 @@ const Header = () => {
           color="gray"
           content={
             <span className="flex gap-2 items-center">
-              <StellarLogo fill={`${currentNetwork.network === 'PUBLIC' ? '#1C9B47' : 'black'}`} />
-              {currentNetwork.network === 'PUBLIC'
-                ? 'Mainnet'
-                : capitalizeFirstLetter(currentNetwork.network.toLowerCase())}
+              <StellarLogo
+                fill={`${currentNetwork.network === 'FUTURENET' ? '#1C9B47' : 'black'}`}
+              />
+              {capitalizeFirstLetter(currentNetwork.network.toLowerCase())}
             </span>
           }
           className={`${
-            currentNetwork.network === 'PUBLIC'
+            currentNetwork.network === 'FUTURENET'
               ? '!bg-paleMint !text-forestGreen !border-forestGreen'
               : ''
-          } mobile:w-[122px] h-9 !cursor-default`}
+          } mobile:w-[122px] h-9`}
         />
       </div>
     </header>
