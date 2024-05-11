@@ -8,12 +8,13 @@ import formatUnits from 'src/utils/formatUnits';
 import CPageCard from 'src/components/CPageCard';
 import { useAppSelector } from 'src/hooks/useRedux';
 import humanizeAmount from 'src/utils/humanizeAmount';
-import CProcessModal from 'src/components/CProcessModal';
+import explorersLink from 'src/constants/explorersLink';
 import CSummaryField from 'src/components/CSummaryField';
 import CModalSuccess from 'src/components/CModalSuccess';
+import CProcessModal from 'src/components/CProcessModal';
 import informCancelAPI from 'src/features/informCancelAPI';
-import { ExternalPages } from 'src/constants/externalPages';
 import cancelStream from 'src/features/soroban/cancelStream';
+import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 import SingleButtonModal from 'src/components/SingleButtonModal';
 import signTransaction from 'src/utils/soroban/signTransaction';
 import sendTransaction from 'src/features/soroban/sendTransaction';
@@ -70,6 +71,8 @@ const SenderStatusCard = ({
   const [isReclamationModalOpen, setIsReclamationModalOpen] = useState(false);
   const [txHash, setTxHash] = useState('');
 
+  const currentNetwork = useLoadUserNetwork();
+
   useEffect(() => {
     if (isOpenCancelModal) {
       setIsApprovalOpen(true);
@@ -78,19 +81,19 @@ const SenderStatusCard = ({
 
   useEffect(() => {
     setIsOpenCancelModal(false);
-  }, [isApprovalOpen]);
+  }, [isApprovalOpen, setIsOpenCancelModal]);
 
   const handleCancelClick = async () => {
     setIsApprovalOpen(true);
 
-    const cancelStreamXdr = await cancelStream(id, address);
+    const cancelStreamXdr = await cancelStream(currentNetwork.networkPassphrase, address, id);
 
     let signedXdr;
     let tx;
 
     try {
-      signedXdr = await signTransaction(address, cancelStreamXdr);
-      tx = await sendTransaction(signedXdr);
+      signedXdr = await signTransaction(address, currentNetwork.networkPassphrase, cancelStreamXdr);
+      tx = await sendTransaction(signedXdr, currentNetwork.networkPassphrase);
     } catch (e) {
       setIsApprovalOpen(false);
       toast('error', 'Failed to sign the transaction');
@@ -111,7 +114,7 @@ const SenderStatusCard = ({
 
     setTxHash(tx.hash);
 
-    const finalize = await finalizeTransaction(tx.hash);
+    const finalize = await finalizeTransaction(tx.hash, currentNetwork.networkPassphrase);
 
     if (!finalize) {
       setIsReclamationModalOpen(false);
@@ -218,7 +221,9 @@ const SenderStatusCard = ({
           token={token.symbol}
           amountTitle="Amount"
           amount={humanizeAmount(cancelledAmount).toString()}
-          explorerLink={ExternalPages.EXPLORER + '/transactions/' + txHash}
+          explorerLink={
+            explorersLink(currentNetwork.network).toLowerCase() + '/transactions/' + txHash
+          }
           isOpen={isCancelStreamConfirmOpen}
           setIsOpen={setIsCancelStreamConfirmOpen}
           ButtonPart={ModalButton}

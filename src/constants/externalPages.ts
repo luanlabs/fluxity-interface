@@ -7,6 +7,6 @@ export enum ExternalPages {
   HORIZON_RPC = 'https://horizon-testnet.stellar.org/',
   SOROBAN_RPC = 'https://soroban-testnet.stellar.org/',
   EXPLORER = 'https://futurenet.stellarchain.io',
-  FRIENDBOT = 'https://friendbot-futurenet.stellar.org/?addr=',
+  FRIENDBOT = 'https://friendbot.stellar.org/?addr=',
   WHITEPAPER = 'https://docs.google.com/document/d/1Yh4wI4RR2WK4CN48HRHJMX78OHcVOYST7MN_U2KSm_4/edit?usp=sharing',
 }

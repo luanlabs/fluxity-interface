@@ -1,13 +1,17 @@
-import { TransactionBuilder, Networks, Account, xdr, Operation } from 'stellar-sdk';
+import { TransactionBuilder, Account, xdr, Operation } from '@stellar/stellar-sdk';
 
 import getFee from 'src/utils/createLockup/getFee';
 
-const baseTransaction = (account: Account, call: xdr.Operation<Operation.InvokeHostFunction>) => {
+const baseTransaction = (
+  account: Account,
+  passPhrase: string,
+  call: xdr.Operation<Operation.InvokeHostFunction>,
+) => {
   const fee = getFee();
 
   let transaction = new TransactionBuilder(account, {
     fee,
-    networkPassphrase: Networks.TESTNET,
+    networkPassphrase: passPhrase,
   });
 
   transaction = transaction.addOperation(call);

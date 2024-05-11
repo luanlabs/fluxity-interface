@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { scValToNative } from 'stellar-sdk';
+import { scValToNative } from '@stellar/stellar-sdk';
 import { UseFormReturn } from 'react-hook-form';
 
 import BN from 'src/utils/BN';
@@ -9,23 +9,24 @@ import { OperationType } from 'src/models';
 import approve from 'src/features/soroban/approve';
 import { useAppSelector } from 'src/hooks/useRedux';
 import humanizeAmount from 'src/utils/humanizeAmount';
-import CProcessModal from 'src/components/CProcessModal';
-import CModalSuccess from 'src/components/CModalSuccess';
-import { FLUXITY_CONTRACT } from 'src/constants/contracts';
-import toDecimals from 'src/utils/createLockup/toDecimals';
-import { ExternalPages } from 'src/constants/externalPages';
-import createLockup from 'src/features/soroban/createLockup';
-import signTransaction from 'src/utils/soroban/signTransaction';
 import { FormValues } from 'src/containers/CreateLockup';
+import CProcessModal from 'src/components/CProcessModal';
+import explorersLink from 'src/constants/explorersLink';
+import CModalSuccess from 'src/components/CModalSuccess';
+import toDecimals from 'src/utils/createLockup/toDecimals';
+import createLockup from 'src/features/soroban/createLockup';
+import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
+import signTransaction from 'src/utils/soroban/signTransaction';
 import DoubleButtonModal from 'src/components/DoubleButtonModal';
 import SingleButtonModal from 'src/components/SingleButtonModal';
 import sendTransaction from 'src/features/soroban/sendTransaction';
+import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
 import ApproveFormModal from 'src/containers/Modals/ApproveFormModal';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 import getERC20Allowance from 'src/features/soroban/getERC20Allowance';
 import informCreateLockupAPI from 'src/features/informCreateLockupAPI';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
-import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
+import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
 
 interface ConfirmTransactions {
   isConfirmClicked: boolean;
@@ -60,6 +61,8 @@ const ConfirmTransaction = ({
     id: 0,
   });
 
+  const currentNetwork = useLoadUserNetwork();
+
   useEffect(() => {
     if (isConfirmClicked) {
       setIsApproveModalOpen(true);
@@ -68,7 +71,7 @@ const ConfirmTransaction = ({
 
   useEffect(() => {
     setIsConfirmClicked(false);
-  }, [isApproveModalOpen]);
+  }, [isApproveModalOpen, setIsConfirmClicked]);
 
   const handleCreateLockupOnClick = async () => {
     setIsApproveModalOpen(false);
@@ -76,8 +79,9 @@ const ConfirmTransaction = ({
 
     const checkAllowance = await getERC20Allowance(
       values.token.value.address,
+      currentNetwork.networkPassphrase,
       address,
-      FLUXITY_CONTRACT,
+      passPhraseToNetworkDetail(currentNetwork.networkPassphrase).contract,
     );
 
     if (toDecimals(calculateTotalAmount(values)) <= BigInt(checkAllowance)) {
@@ -92,14 +96,15 @@ const ConfirmTransaction = ({
 
     const approveXdr = await approve(
       values.token.value.address,
-      calculateTotalAmount(values),
+      currentNetwork.networkPassphrase,
       address,
+      calculateTotalAmount(values),
     );
 
     let signedTx;
 
     try {
-      signedTx = await signTransaction(address, approveXdr);
+      signedTx = await signTransaction(address, currentNetwork.networkPassphrase, approveXdr);
     } catch {
       setIsWalletLoadingApproveModalOpen(false);
       toast('error', 'Error signing approval transaction');
@@ -110,7 +115,7 @@ const ConfirmTransaction = ({
     let tx;
 
     try {
-      tx = await sendTransaction(signedTx);
+      tx = await sendTransaction(signedTx, currentNetwork.networkPassphrase);
     } catch {
       toast('error', 'Failed to submit the transaction');
 
@@ -121,7 +126,7 @@ const ConfirmTransaction = ({
       setIsWalletLoadingApproveModalOpen(false);
       await timeout(100);
       setIsSendingApproveTxModalOpen(true);
-      const finalize = await finalizeTransaction(tx.hash);
+      const finalize = await finalizeTransaction(tx.hash, currentNetwork.networkPassphrase);
 
       setIsWalletLoadingApproveModalOpen(false);
 
@@ -144,12 +149,17 @@ const ConfirmTransaction = ({
     setIsCreateLockupConfirmModalOpen(false);
     setIsWalletLoadingConfirmModalOpen(true);
 
-    const CreateLockupXdr = await createLockup(values, address, operationType);
+    const CreateLockupXdr = await createLockup(
+      currentNetwork.networkPassphrase,
+      address,
+      values,
+      operationType,
+    );
 
     let signedXdr;
 
     try {
-      signedXdr = await signTransaction(address, CreateLockupXdr);
+      signedXdr = await signTransaction(address, currentNetwork.networkPassphrase, CreateLockupXdr);
     } catch (e) {
       setIsWalletLoadingConfirmModalOpen(false);
       toast('error', `Error signing create ${operationType} transaction`);
@@ -164,7 +174,7 @@ const ConfirmTransaction = ({
     let tx;
 
     try {
-      tx = await sendTransaction(signedXdr);
+      tx = await sendTransaction(signedXdr, currentNetwork.networkPassphrase);
     } catch {
       setIsSendingApproveTxModalOpen(false);
       toast('error', 'Failed to submit the transaction');
@@ -173,7 +183,7 @@ const ConfirmTransaction = ({
     }
 
     if (tx) {
-      const finalize = await finalizeTransaction(tx.hash);
+      const finalize = await finalizeTransaction(tx.hash, currentNetwork.networkPassphrase);
 
       if (!finalize) {
         setIsSendingCreateLockupTxModalOpen(false);
@@ -182,7 +192,10 @@ const ConfirmTransaction = ({
         return;
       }
 
-      await informCreateLockupAPI(scValToNative(finalize?.returnValue).toString());
+      await informCreateLockupAPI(
+        scValToNative(finalize?.returnValue).toString(),
+        passPhraseToNetworkDetail(currentNetwork.networkPassphrase).network,
+      );
 
       setStreamDetails({
         hash: tx.hash,
@@ -234,41 +247,39 @@ const ConfirmTransaction = ({
         setIsOpen={setIsApproveModalOpen}
         onClick={handleCreateLockupOnClick}
       />
-
       <CProcessModal
         title="Waiting for token access approval"
         message="You are granting Fluxity access to your tokens equal to your total order amount"
         isOpen={isWalletLoadingApproveModalOpen}
         setIsOpen={setIsWalletLoadingApproveModalOpen}
       />
-
       <CProcessModal
         title="Waiting for transaction approval"
         isOpen={isSendingApproveTxModalOpen}
         setIsOpen={setIsSendingApproveTxModalOpen}
       />
-
       <CProcessModal
         title="Waiting for transaction confirmation"
         isOpen={isWalletLoadingConfirmModalOpen}
         setIsOpen={setIsWalletLoadingConfirmModalOpen}
       />
-
       <CProcessModal
         title={`Completing ${variant} creation transaction`}
         isOpen={isSendingCreateLockupTxModalOpen}
         setIsOpen={setIsSendingCreateLockupTxModalOpen}
       />
-
       <CModalSuccess
         successLogoColor="green"
         title="Transaction Successful"
-        explorerLink={ExternalPages.EXPLORER + '/transactions/' + streamDetails.hash}
+        explorerLink={
+          explorersLink(currentNetwork.network).toLowerCase() +
+          '/transactions/' +
+          streamDetails.hash
+        }
         isOpen={isCreateLockupResultModalOpen}
         setIsOpen={setIsCreateLockupResultModalOpen}
         ButtonPart={ModalButton}
       />
-
       <CModalSuccess
         successLogoColor="black"
         title="You can now complete your transaction."

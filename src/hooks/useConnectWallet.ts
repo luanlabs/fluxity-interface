@@ -20,6 +20,6 @@ const useConnectWallet = () => {
     };
 
     fetchData();
-  }, []);
+  }, [dispatch]);
 };
 export default useConnectWallet;

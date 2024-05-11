@@ -1,9 +1,10 @@
 import Image from 'next/image';
+import { StrKey } from '@stellar/stellar-sdk';
 import React, { useEffect, useState } from 'react';
-import { Contract, StrKey } from 'stellar-sdk';
 
 import Loading from 'src/assets/Loading';
 import { ISelectToken } from 'src/models';
+import toast from 'src/components/CToast';
 import CModal from 'src/components/CModal';
 import CInput from 'src/components/CInput';
 import CLabel from 'src/components/CLabel';
@@ -46,15 +47,16 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
   const address = useAppSelector((state) => state.user.address);
   const currentNetwork = useLoadUserNetwork();
 
-  const isAccountActived = checkIsUserActive(xlmAsset);
+  const isAccountActivated = checkIsUserActive(xlmAsset);
 
-  const isValidateContractAddress = StrKey.isValidContract(searchValue.toUpperCase());
+  const isContractAddressValid = StrKey.isValidContract(searchValue.toUpperCase());
 
   useEffect(() => {
     const fetchTokenDetails = async () => {
       if (currentNetwork.networkPassphrase === Testnet.networkPassphrase) {
         try {
           const result = await checkBalanceTokenSoroban(address);
+
           setUserTokens(result);
         } catch {}
       }
@@ -77,20 +79,20 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
 
   useEffect(() => {
     const timeout = setTimeout(async () => {
-      if (isValidateContractAddress) {
-        const contract = new Contract(searchValue);
-        setTokenDetails(await getERC20Details(address, contract));
-
+      if (isContractAddressValid) {
+        setTokenDetails(
+          await getERC20Details(searchValue, currentNetwork.networkPassphrase, address),
+        );
         setShowLoading(false);
       }
     }, 3000);
 
-    if (isValidateContractAddress) {
+    if (isContractAddressValid) {
       setShowLoading(true);
     }
 
     return () => clearTimeout(timeout);
-  }, [searchValue]);
+  }, [searchValue, address, currentNetwork.networkPassphrase, isContractAddressValid]);
 
   const handleTokenSelect = (token: IToken) => {
     setIsOpen(false);
@@ -139,7 +141,7 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
         setSearchValue(clipText);
       });
     } catch (e) {
-      // toast('error', 'The Clipboard API is not available for this browser.');
+      toast('error', 'The Clipboard API is not available for this browser.');
     }
   };
 
@@ -152,7 +154,7 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
         onClick={openModal}
         id={id}
       >
-        {selectedToken && address && isAccountActived ? (
+        {selectedToken && address && isAccountActivated ? (
           <div className="flex items-center justify-start">
             <Image
               src={selectedToken.logo ? selectedToken.logo : defaultTokenLogo}
@@ -170,7 +172,7 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
       </button>
 
       <CModal title="Select token" isOpen={isOpen} setIsOpen={setIsOpen}>
-        {address && isAccountActived && (
+        {address && isAccountActivated && (
           <CInput
             placeholder="Search name of token"
             value={searchValue}
@@ -182,7 +184,7 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
         )}
 
         <div className="mt-[23px]">
-          {address && isAccountActived && !isValidateContractAddress ? (
+          {address && isAccountActivated && !isContractAddressValid ? (
             filteredTokens.map((token) => (
               <div
                 className="flex items-center px-2 w-full cursor-pointer h-[72px] border-b last:border-none"
@@ -211,7 +213,7 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
                 </div>
               </div>
             ))
-          ) : isAccountActived && address ? (
+          ) : isAccountActivated && address ? (
             <div className="pb-4">
               {showLoading ? (
                 <div className="w-full flex justify-center">

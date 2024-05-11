@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Image from 'next/image';
 
 import BN from 'src/utils/BN';
@@ -6,6 +7,7 @@ import CCard from 'src/components/CCard';
 import toast from 'src/components/CToast';
 import copyText from 'src/utils/copyText';
 import { numberToRate } from 'src/utils/rates';
+import ShareModal from 'src/containers/ShareModal';
 import { shortenAddress } from 'src/utils/shortenAddress';
 import { calculateCompletionPercentage } from 'src/utils/calculateCompletionPercentage';
 
@@ -22,12 +24,12 @@ interface BlueCardProps {
   amount: string;
   token: string;
   streamedAmount: string;
-  onClick?: () => void;
   onCopyClick?: () => void;
   setIsOpenCancelModal: (_: boolean) => void;
   isStreamCancelled: boolean;
   isCancelable: boolean;
   isSender: boolean;
+  id: string;
   isVesting: boolean;
 }
 
@@ -39,13 +41,15 @@ const BlueCard = ({
   amount,
   streamedAmount,
   token,
-  onClick,
   setIsOpenCancelModal,
   isCancelable,
   isStreamCancelled,
   isSender,
+  id,
   isVesting,
 }: BlueCardProps) => {
+  const [isOpenShareModal, setIsOpenShareModal] = useState(false);
+
   const handleCopy = () => {
     copyText(sender);
     toast('success', 'Sender address copied to clipboard');
@@ -53,8 +57,8 @@ const BlueCard = ({
 
   const streamDuration = new BN(endDate).minus(startDate);
   const rate = new BN(flowRate);
-  const calulateFlowRate = new BN(amount).times(rate).div(streamDuration);
-  const flowRateToNumber = Math.round(Number(calulateFlowRate.toString()));
+  const calculateFlowRate = new BN(amount).times(rate).div(streamDuration);
+  const flowRateToNumber = Math.round(Number(calculateFlowRate.toString()));
 
   const handleCancelClick = () => {
     setIsOpenCancelModal(true);
@@ -67,6 +71,10 @@ const BlueCard = ({
     streamedAmount,
     isVesting,
   );
+
+  const shareHandle = () => {
+    setIsOpenShareModal(true);
+  };
 
   return (
     <div className="w-[420px] sm:w-full mt-[32px]">
@@ -109,7 +117,7 @@ const BlueCard = ({
           color="blue"
           content="Share"
           logo={shareLogo}
-          onClick={onClick}
+          onClick={shareHandle}
           className="mt-3 !rounded-[10px]"
         />
       </CCard>
@@ -127,6 +135,8 @@ const BlueCard = ({
           />
         </div>
       )}
+
+      <ShareModal isOpenModal={isOpenShareModal} setIsOpenModal={setIsOpenShareModal} id={id} />
     </div>
   );
 };

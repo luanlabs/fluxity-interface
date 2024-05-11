@@ -1,25 +1,27 @@
-import { Contract } from 'stellar-sdk';
-
 import { OperationType } from 'src/models';
 import ToScVal from 'src/utils/createLockup/scVal';
 import { FormValues } from 'src/containers/CreateLockup';
-import getServer from 'src/utils/createLockup/getServer';
-import getAccount from 'src/utils/createLockup/getAccount';
-import { FLUXITY_CONTRACT } from 'src/constants/contracts';
-import createTransaction from 'src/utils/soroban/baseTransaction';
+import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
 
-const createLockup = async (params: FormValues, address: string, operationType: OperationType) => {
-  const account = await getAccount(address);
+import sorobanSend from './sorobanSend';
 
-  const server = getServer();
-  const contract = new Contract(FLUXITY_CONTRACT);
-
+const createLockup = async (
+  passPhrase: string,
+  address: string,
+  params: FormValues,
+  operationType: OperationType,
+) => {
   const paramsScVal = ToScVal.toXdr(params, address);
 
-  const call = contract.call(`create_${operationType}`, paramsScVal);
-  const xdr = createTransaction(account, call);
+  const tx = await sorobanSend(
+    address,
+    passPhrase,
+    passPhraseToNetworkDetail(passPhrase).contract,
+    `create_${operationType}`,
+    [paramsScVal],
+  );
 
-  return await server.prepareTransaction(xdr);
+  return tx;
 };
 
 export default createLockup;

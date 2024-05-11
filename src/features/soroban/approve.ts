@@ -1,29 +1,34 @@
 import BigNumber from 'bignumber.js';
-import { Contract } from 'stellar-sdk';
 
 import ToScVal from 'src/utils/createLockup/scVal';
-import getServer from 'src/utils/createLockup/getServer';
-import getAccount from 'src/utils/createLockup/getAccount';
-import { FLUXITY_CONTRACT } from 'src/constants/contracts';
+import getServer from 'src/utils/soroban/getServer';
 import toDecimals from 'src/utils/createLockup/toDecimals';
-import createTransaction from 'src/utils/soroban/baseTransaction';
+import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
 
-const approve = async (contractAddress: string, amount: BigNumber, address: string) => {
-  const account = await getAccount(address);
+import sorobanSend from './sorobanSend';
 
-  const server = getServer();
-  const contract = new Contract(contractAddress);
+const approve = async (
+  contractAddress: string,
+  passPhrase: string,
+  address: string,
+  amount: BigNumber,
+) => {
+  const { soroban: server } = getServer(passPhrase);
   const { sequence } = await server.getLatestLedger();
 
   const from = ToScVal.address(address);
-  const spender = ToScVal.address(FLUXITY_CONTRACT);
+  const spender = ToScVal.address(passPhraseToNetworkDetail(passPhrase).contract);
   const amountScVal = ToScVal.i128(toDecimals(amount));
   const expirationLedger = ToScVal.u32(sequence + 1000);
 
-  const call = contract.call('approve', from, spender, amountScVal, expirationLedger);
-  const xdr = createTransaction(account, call);
+  const tx = await sorobanSend(address, passPhrase, contractAddress, 'approve', [
+    from,
+    spender,
+    amountScVal,
+    expirationLedger,
+  ]);
 
-  return await server.prepareTransaction(xdr);
+  return tx;
 };
 
 export default approve;

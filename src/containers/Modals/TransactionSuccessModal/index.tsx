@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import CModal from 'src/components/CDialog';
 import CButton from 'src/components/CButton';
 import { shortenAddress } from 'src/utils/shortenAddress';
-import { ExternalPages } from 'src/constants/externalPages';
 
 import successLogo from 'public/images/success-normal-size.svg';
 import exploreLogo from 'public/images/explore.svg';
@@ -16,6 +15,7 @@ interface TransactionSuccessModal {
   title?: string;
   setIsOpen: (_: boolean) => void;
   closeOnClick: () => void;
+  explorerAddress: string;
 }
 
 const TransactionSuccessModal = ({
@@ -24,6 +24,7 @@ const TransactionSuccessModal = ({
   title,
   setIsOpen,
   closeOnClick,
+  explorerAddress,
 }: TransactionSuccessModal) => {
   const router = useRouter();
 
@@ -41,7 +42,7 @@ const TransactionSuccessModal = ({
           </h1>
           <p className="text-[18px] text-center mt-[32px]">{shortenAddress(stream.hash, 5)}</p>
           <Link
-            href={`${ExternalPages.EXPLORER}/transactions/${stream.hash}`}
+            href={`${explorerAddress}/transactions/${stream.hash}`}
             target="_blank"
             className="w-full mt-[32px]"
           >

@@ -11,7 +11,7 @@ const getStreamList = async (address: string) => {
   const qsAddress = qs.stringify({ address });
   try {
     const { data } = await fetch<IResponseStreamsResult>(
-      `${ExternalPages.FLUXITY_API}/testnet/stream?${qsAddress}`,
+      `${ExternalPages.FLUXITY_API}/testnet/lockup?${qsAddress}`,
       {
         method: 'GET',
         headers: { accept: 'application/json', 'Content-Type': 'application/json' },

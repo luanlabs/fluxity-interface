@@ -1,8 +1,9 @@
 'use client';
 
+import { AccountResponse } from '@stellar/stellar-sdk/lib/horizon';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
 import { IStreamHistory } from 'src/constants/types';
-import { AccountResponse } from 'stellar-sdk/lib/horizon';
 
 interface IUser {
   address: string;

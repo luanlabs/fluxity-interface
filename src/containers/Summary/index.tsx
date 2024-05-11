@@ -45,8 +45,8 @@ const Summary = ({ form, xlmAsset, address, operationType, className }: SummaryP
       errorMessage = 'Insufficient balance';
     }
 
-    const isAccountActived = checkIsUserActive(xlmAsset);
-    if (!isAccountActived) {
+    const isAccountActivated = checkIsUserActive(xlmAsset);
+    if (!isAccountActivated) {
       errorMessage = 'Your account is inactive';
     }
 

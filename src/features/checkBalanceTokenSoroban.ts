@@ -1,6 +1,7 @@
-import { Contract } from 'stellar-sdk';
+import { Contract } from '@stellar/stellar-sdk';
 import getContractIdFromAsset from './getContractIdFromAsset';
 import getERC20Details from './soroban/getERC20Details';
+import { Testnet } from 'src/constants/networks';
 
 const checkBalanceTokenSoroban = async (address: string) => {
   const contracts = await getContractIdFromAsset(address);
@@ -11,7 +12,11 @@ const checkBalanceTokenSoroban = async (address: string) => {
     try {
       const contract = new Contract(contracts[i]);
       console.log(contracts[i]);
-      const tokenDetails = await getERC20Details(address, contract);
+      const tokenDetails = await getERC20Details(
+        contract.toString(),
+        Testnet.networkPassphrase,
+        address,
+      );
 
       availableContracts.push({
         ...tokenDetails,

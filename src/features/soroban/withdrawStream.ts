@@ -1,21 +1,21 @@
-import { Contract } from 'stellar-sdk';
-
-import { FLUXITY_CONTRACT } from 'src/constants/contracts';
 import ToScVal from 'src/utils/createLockup/scVal';
-import getServer from 'src/utils/createLockup/getServer';
-import getAccount from 'src/utils/createLockup/getAccount';
-import createTransaction from 'src/utils/soroban/baseTransaction';
 
-const withdrawStream = async (id: string, address: string) => {
-  const account = await getAccount(address);
+import sorobanSend from './sorobanSend';
+import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
 
-  const server = getServer();
-  const contract = new Contract(FLUXITY_CONTRACT);
+const withdrawStream = async (passPhrase: string, address: string, id: string) => {
+  const idScVal = ToScVal.u64(id);
+  const amountScVal = ToScVal.i128(BigInt(0));
 
-  const call = contract.call('withdraw_stream', ToScVal.u64(id), ToScVal.i128(BigInt(0)));
-  const xdr = createTransaction(account, call);
+  const tx = await sorobanSend(
+    address,
+    passPhrase,
+    passPhraseToNetworkDetail(passPhrase).contract,
+    'withdraw_lockup',
+    [idScVal, amountScVal],
+  );
 
-  return await server.prepareTransaction(xdr);
+  return tx;
 };
 
 export default withdrawStream;

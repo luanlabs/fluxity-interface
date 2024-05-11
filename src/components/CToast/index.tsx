@@ -12,6 +12,7 @@ const toastStyle = (isResponsive: boolean) => ({
     backgroundColor: '#050142',
     width: 'auto',
     minWidth: isResponsive ? '550px' : '200px',
+    zIndex: '9999',
   },
   duration: 2000,
 });
