@@ -1,35 +1,34 @@
 import { Contract } from '@stellar/stellar-sdk';
-import getContractIdFromAsset from './getContractIdFromAsset';
-import getERC20Details from './soroban/getERC20Details';
+import { HorizonApi } from '@stellar/stellar-sdk/lib/horizon';
+
 import { Testnet } from 'src/constants/networks';
 
-const checkBalanceTokenSoroban = async (address: string) => {
-  const contracts = await getContractIdFromAsset(address);
+import getERC20Details from './soroban/getERC20Details';
+import getContractIdFromAsset from './getContractIdFromAsset';
+
+const checkBalanceTokenSoroban = async (
+  address: string,
+  userBalances: HorizonApi.BalanceLineAsset[],
+  networkPassphrase: string,
+) => {
+  const contracts = await getContractIdFromAsset(userBalances, networkPassphrase);
 
   const availableContracts = [];
 
   for (let i = 0; i < contracts.length; i++) {
     try {
       const contract = new Contract(contracts[i]);
-      console.log(contracts[i]);
-      const tokenDetails = await getERC20Details(
-        contract.toString(),
-        Testnet.networkPassphrase,
-        address,
-      );
+      const tokenDetails = getERC20Details(contract.toString(), Testnet.networkPassphrase, address);
 
-      availableContracts.push({
-        ...tokenDetails,
-        name: '',
-        logo: '',
-        _id: '',
-      });
+      availableContracts.push(tokenDetails);
     } catch {
       console.log('not found :', contracts[i]);
     }
   }
 
-  return availableContracts;
+  const result = await Promise.all(availableContracts);
+
+  return result;
 };
 
 export default checkBalanceTokenSoroban;
