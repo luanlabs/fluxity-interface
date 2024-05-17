@@ -3,6 +3,7 @@ import { GroupBase, StylesConfig, MultiValue, SingleValue, ActionMeta } from 're
 
 import { rates } from './constants/rates';
 import { IToken } from './reducers/tokens';
+import { IResponseToken } from './constants/types';
 
 export interface ISelectItem<T> {
   label: string;
@@ -94,3 +95,10 @@ export type CancelAmounts = {
 };
 
 export type OperationType = 'stream' | 'vesting';
+
+export interface ITokenDetails extends IResponseToken {
+  address: string;
+  balance: string;
+  symbol: string;
+  decimals: string;
+}
