@@ -18,7 +18,7 @@ const Header = () => {
   const currentNetwork = useLoadUserNetwork();
 
   return (
-    <header className="flex justify-between w-full items-center py-3 px-6">
+    <header className="flex justify-between w-full items-center py-3 desktop:py-[18px] px-6">
       <div
         className="inline-flex mobile:hidden gap-[14px] cursor-pointer"
         onClick={() => router.push(ExternalPages.LANDING)}
@@ -53,7 +53,7 @@ const Header = () => {
             currentNetwork.network === 'PUBLIC'
               ? '!bg-paleMint !text-forestGreen !border-forestGreen'
               : ''
-          } mobile:w-[122px] h-9 !cursor-default`}
+          } mobile:w-[122px] h-9`}
         />
       </div>
     </header>
