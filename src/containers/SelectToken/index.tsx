@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import Image from 'next/image';
-import { StrKey } from '@stellar/stellar-sdk';
 import React, { useEffect, useState } from 'react';
-import { HorizonApi } from '@stellar/stellar-sdk/lib/horizon';
+import Image from 'next/image';
 
 import Loading from 'src/assets/Loading';
 import toast from 'src/components/CToast';
@@ -12,22 +10,20 @@ import CLabel from 'src/components/CLabel';
 import { IToken } from 'src/reducers/tokens';
 import formatUnits from 'src/utils/formatUnits';
 import useCustomID from 'src/hooks/useCustomId';
-import { Testnet } from 'src/constants/networks';
 import CEmptyList from 'src/components/CEmptyList';
 import { useAppSelector } from 'src/hooks/useRedux';
 import humanizeAmount from 'src/utils/humanizeAmount';
 import { ISelectToken, ITokenDetails } from 'src/models';
 import fromDecimals from 'src/utils/soroban/fromDecimals';
 import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
-import getERC20Details from 'src/features/soroban/getERC20Details';
-import checkBalanceTokenSoroban from 'src/features/checkBalanceTokenSoroban';
 import { xlmAssetType, checkIsUserActive } from 'src/containers/CreateLockup/checkIsUserActive';
 
 import plusLogo from 'public/images/Plus.svg';
 import arrowLogo from 'public/images/arrow.svg';
 import searchLogo from 'public/images/search.svg';
 import defaultTokenLogo from 'public/images/defaultToken.svg';
-import BN from 'src/utils/BN';
+import useFetchTokenDetails from './useFetchTokenDetails';
+import useGetERC20TokenDetail from './useGetERC20TokenDetail';
 
 interface SelectTokenProps {
   onChange: (_: ISelectToken) => void;
@@ -36,60 +32,22 @@ interface SelectTokenProps {
   xlmAsset: xlmAssetType;
 }
 
-const initialTokenDetails: ITokenDetails = {
-  address: '',
-  balance: '',
-  symbol: '',
-  decimals: '',
-  name: '',
-  logo: '',
-  _id: '',
-  claimable: true,
-};
-
 const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedToken, setSelectedToken] = useState<null | IToken>(null);
   const [searchValue, setSearchValue] = useState('');
-  const [showLoading, setShowLoading] = useState(true);
-  const [tokenDetails, setTokenDetails] = useState<ITokenDetails>(initialTokenDetails);
-  const [userTokens, setUserTokens] = useState<ITokenDetails[]>([]);
-  const [tokens, setTokens] = useState<IToken[]>([]);
 
-  const userBalances = useAppSelector((state) => state.user?.info?.balances);
-  const tokensFromStore = useAppSelector((store) => store.tokens);
   const address = useAppSelector((state) => state.user.address);
   const currentNetwork = useLoadUserNetwork();
   const id = useCustomID('selectToken');
+  const { tokens } = useFetchTokenDetails(address, currentNetwork.networkPassphrase);
+  const { showLoading, tokenDetails, isContractAddressValid } = useGetERC20TokenDetail(
+    address,
+    searchValue,
+    currentNetwork.networkPassphrase,
+  );
 
   const isAccountActivated = checkIsUserActive(xlmAsset);
-  const isContractAddressValid = StrKey.isValidContract(searchValue.toUpperCase());
-
-  useEffect(() => {
-    const fetchTokenDetails = async () => {
-      if (currentNetwork.networkPassphrase === Testnet.networkPassphrase) {
-        try {
-          const result = await checkBalanceTokenSoroban(
-            address,
-            userBalances as HorizonApi.BalanceLineAsset<'credit_alphanum4' | 'credit_alphanum12'>[],
-            currentNetwork.networkPassphrase,
-          );
-
-          const filteredTokenBalance = result.filter((e) =>
-            new BN(e.balance).isGreaterThanOrEqualTo(1),
-          );
-
-          setUserTokens(filteredTokenBalance);
-        } catch {}
-      }
-    };
-
-    const filterClaimableTokens = tokensFromStore.filter((token) => token.claimable);
-
-    fetchTokenDetails();
-
-    setTokens([...filterClaimableTokens, ...userTokens]);
-  }, [address, tokensFromStore]);
 
   useEffect(() => {
     const updatedToken = tokens.find((x) => x.address === selectedToken?.address);
@@ -100,23 +58,6 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
       handleTokenSelect(updatedToken);
     }
   }, [tokens]);
-
-  useEffect(() => {
-    const timeout = setTimeout(async () => {
-      if (isContractAddressValid) {
-        setTokenDetails(
-          await getERC20Details(searchValue, currentNetwork.networkPassphrase, address),
-        );
-        setShowLoading(false);
-      }
-    }, 3000);
-
-    if (isContractAddressValid) {
-      setShowLoading(true);
-    }
-
-    return () => clearTimeout(timeout);
-  }, [searchValue, address, currentNetwork.networkPassphrase, isContractAddressValid]);
 
   const handleTokenSelect = (token: IToken) => {
     setIsOpen(false);
@@ -237,7 +178,7 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
                 </div>
               </div>
             ))
-          ) : isAccountActivated && address ? (
+          ) : isAccountActivated && address && tokenDetails ? (
             <div className="pb-4">
               {showLoading ? (
                 <div className="w-full flex justify-center">

@@ -1,8 +1,6 @@
 import { Contract } from '@stellar/stellar-sdk';
 import { HorizonApi } from '@stellar/stellar-sdk/lib/horizon';
 
-import { Testnet } from 'src/constants/networks';
-
 import getERC20Details from './soroban/getERC20Details';
 import getContractIdFromAsset from './getContractIdFromAsset';
 
@@ -18,7 +16,7 @@ const checkBalanceTokenSoroban = async (
   for (let i = 0; i < contracts.length; i++) {
     try {
       const contract = new Contract(contracts[i]);
-      const tokenDetails = getERC20Details(contract.toString(), Testnet.networkPassphrase, address);
+      const tokenDetails = getERC20Details(contract.toString(), networkPassphrase, address);
 
       availableContracts.push(tokenDetails);
     } catch {
@@ -28,7 +26,9 @@ const checkBalanceTokenSoroban = async (
 
   const result = await Promise.all(availableContracts);
 
-  return result;
+  const filteredResult = result.filter((x) => !!x);
+
+  return filteredResult;
 };
 
 export default checkBalanceTokenSoroban;
