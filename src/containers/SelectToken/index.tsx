@@ -18,12 +18,13 @@ import fromDecimals from 'src/utils/soroban/fromDecimals';
 import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 import { xlmAssetType, checkIsUserActive } from 'src/containers/CreateLockup/checkIsUserActive';
 
+import useFetchTokenDetails from './useFetchTokenDetails';
+import useGetERC20TokenDetail from './useGetERC20TokenDetail';
+
 import plusLogo from 'public/images/Plus.svg';
 import arrowLogo from 'public/images/arrow.svg';
 import searchLogo from 'public/images/search.svg';
 import defaultTokenLogo from 'public/images/defaultToken.svg';
-import useFetchTokenDetails from './useFetchTokenDetails';
-import useGetERC20TokenDetail from './useGetERC20TokenDetail';
 
 interface SelectTokenProps {
   onChange: (_: ISelectToken) => void;

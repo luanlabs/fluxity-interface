@@ -15,13 +15,11 @@ const checkBalanceTokenSoroban = async (
 
   for (let i = 0; i < contracts.length; i++) {
     try {
-      const contract = new Contract(contracts[i]);
+      const contract = new Contract(contracts[i].toString());
       const tokenDetails = getERC20Details(contract.toString(), networkPassphrase, address);
 
       availableContracts.push(tokenDetails);
-    } catch {
-      console.log('not found :', contracts[i]);
-    }
+    } catch {}
   }
 
   const result = await Promise.all(availableContracts);

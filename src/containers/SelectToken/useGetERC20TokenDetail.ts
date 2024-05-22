@@ -1,7 +1,8 @@
-import { StrKey } from '@stellar/stellar-sdk';
 import { useEffect, useState } from 'react';
-import getERC20Details from 'src/features/soroban/getERC20Details';
+import { StrKey } from '@stellar/stellar-sdk';
+
 import { ITokenDetails } from 'src/models';
+import getERC20Details from 'src/features/soroban/getERC20Details';
 
 const useGetERC20TokenDetail = (
   address: string,

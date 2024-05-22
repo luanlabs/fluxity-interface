@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { HorizonApi } from '@stellar/stellar-sdk/lib/horizon';
+import BN from 'src/utils/BN';
 
-import checkBalanceTokenSoroban from 'src/features/checkBalanceTokenSoroban';
-import { useAppSelector } from 'src/hooks/useRedux';
 import { ITokenDetails } from 'src/models';
 import { IToken } from 'src/reducers/tokens';
-import BN from 'src/utils/BN';
+import { useAppSelector } from 'src/hooks/useRedux';
+import checkBalanceTokenSoroban from 'src/features/checkBalanceTokenSoroban';
 
 const useFetchTokenDetails = (address: string, networkPassphrase: string) => {
   const [tokens, setTokens] = useState<IToken[]>([]);
