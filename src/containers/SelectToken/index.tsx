@@ -1,8 +1,8 @@
-import Image from 'next/image';
-import { StrKey } from '@stellar/stellar-sdk';
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 
-import { ISelectToken } from 'src/models';
+import Loading from 'src/assets/Loading';
 import toast from 'src/components/CToast';
 import CModal from 'src/components/CModal';
 import CInput from 'src/components/CInput';
@@ -13,15 +13,17 @@ import useCustomID from 'src/hooks/useCustomId';
 import CEmptyList from 'src/components/CEmptyList';
 import { useAppSelector } from 'src/hooks/useRedux';
 import humanizeAmount from 'src/utils/humanizeAmount';
+import { ISelectToken, ITokenDetails } from 'src/models';
 import fromDecimals from 'src/utils/soroban/fromDecimals';
 import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
-import getERC20Details, { TokenDetailsType } from 'src/features/soroban/getERC20Details';
 import { xlmAssetType, checkIsUserActive } from 'src/containers/CreateLockup/checkIsUserActive';
+
+import useFetchTokenDetails from './useFetchTokenDetails';
+import useGetERC20TokenDetail from './useGetERC20TokenDetail';
 
 import plusLogo from 'public/images/Plus.svg';
 import arrowLogo from 'public/images/arrow.svg';
 import searchLogo from 'public/images/search.svg';
-import Loading from 'src/assets/Loading';
 import defaultTokenLogo from 'public/images/defaultToken.svg';
 
 interface SelectTokenProps {
@@ -32,20 +34,21 @@ interface SelectTokenProps {
 }
 
 const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps) => {
-  const [selectedToken, setSelectedToken] = useState<null | IToken>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedToken, setSelectedToken] = useState<null | IToken>(null);
   const [searchValue, setSearchValue] = useState('');
-  const [showLoading, setShowLoading] = useState(true);
-  const [tokenDetails, setTokenDetails] = useState<TokenDetailsType>({});
 
-  const id = useCustomID('selectToken');
-  const currentNetwork = useLoadUserNetwork();
-  const tokens = useAppSelector((store) => store.tokens);
   const address = useAppSelector((state) => state.user.address);
+  const currentNetwork = useLoadUserNetwork();
+  const id = useCustomID('selectToken');
+  const { tokens } = useFetchTokenDetails(address, currentNetwork.networkPassphrase);
+  const { showLoading, tokenDetails, isContractAddressValid } = useGetERC20TokenDetail(
+    address,
+    searchValue,
+    currentNetwork.networkPassphrase,
+  );
 
   const isAccountActivated = checkIsUserActive(xlmAsset);
-
-  const isContractAddressValid = StrKey.isValidContract(searchValue.toUpperCase());
 
   useEffect(() => {
     const updatedToken = tokens.find((x) => x.address === selectedToken?.address);
@@ -56,23 +59,6 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
       handleTokenSelect(updatedToken);
     }
   }, [tokens]);
-
-  useEffect(() => {
-    const timeout = setTimeout(async () => {
-      if (isContractAddressValid) {
-        setTokenDetails(
-          await getERC20Details(searchValue, currentNetwork.networkPassphrase, address),
-        );
-        setShowLoading(false);
-      }
-    }, 3000);
-
-    if (isContractAddressValid) {
-      setShowLoading(true);
-    }
-
-    return () => clearTimeout(timeout);
-  }, [searchValue, address, currentNetwork.networkPassphrase, isContractAddressValid]);
 
   const handleTokenSelect = (token: IToken) => {
     setIsOpen(false);
@@ -86,7 +72,7 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
     });
   };
 
-  const handleTokenDetails = (token: TokenDetailsType) => {
+  const handleTokenDetails = (token: ITokenDetails) => {
     handleTokenSelect({
       ...token,
       name: token.symbol,
@@ -193,7 +179,7 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
                 </div>
               </div>
             ))
-          ) : isAccountActivated && address ? (
+          ) : isAccountActivated && address && tokenDetails ? (
             <div className="pb-4">
               {showLoading ? (
                 <div className="w-full flex justify-center">

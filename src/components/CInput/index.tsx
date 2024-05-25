@@ -19,7 +19,7 @@ interface CInputProps {
   disabled?: boolean;
   className?: string;
   autoFocus?: boolean;
-  copyButton: boolean;
+  copyButton?: boolean;
   clearInput?: boolean;
   placeholder?: string;
   tooltipTitle?: string;
