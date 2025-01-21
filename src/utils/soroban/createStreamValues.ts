@@ -33,7 +33,7 @@ const toXdrValue = (params: FormValues, address: string, opertaionType: Operatio
 
   const amount = toDecimals(calculateTotalAmount(params));
 
-  const is_vesting = opertaionType === 'vesting';
+  const isVesting = opertaionType === 'vesting';
 
   return scvMap([
     new addToMap({
@@ -54,7 +54,7 @@ const toXdrValue = (params: FormValues, address: string, opertaionType: Operatio
     }),
     new addToMap({
       key: ToScVal.symbol('is_vesting'),
-      val: ToScVal.boolean(is_vesting),
+      val: ToScVal.boolean(isVesting),
     }),
     new addToMap({
       key: ToScVal.symbol('rate'),
