@@ -1,4 +1,12 @@
-export const Futurenet = {
+type StellarConfig = {
+  network: string;
+  contract: string;
+  networkUrl: string;
+  networkPassphrase: string;
+  sorobanRpcUrl: string;
+};
+
+export const Futurenet: StellarConfig = {
   network: 'FUTURENET',
   contract: '',
   networkUrl: 'https://horizon-futurenet.stellar.org',
@@ -6,18 +14,19 @@ export const Futurenet = {
   sorobanRpcUrl: 'https://rpc-futurenet.stellar.org',
 };
 
-export const Mainnet = {
+export const Mainnet: StellarConfig = {
   network: 'PUBLIC',
-  contract: '',
-  networkUrl: 'https://horizon.stellar.org',
+  contract: process.env.NEXT_PUBLIC_MAINNET_CONTRACT || '',
+  networkUrl: process.env.NEXT_PUBLIC_MAINNET_NETWORKURL || 'https://horizon.stellar.org',
   networkPassphrase: 'Public Global Stellar Network ; September 2015',
-  sorobanRpcUrl: 'https://soroban-testnet.stellar.org', // TODO: change to actual mainnet RPC
+  sorobanRpcUrl: process.env.MAINNET_SOROBAN_RPCURL || '',
 };
 
-export const Testnet = {
+export const Testnet: StellarConfig = {
   network: 'TESTNET',
-  contract: 'CABMZKIOPVZZOWNY476PBUDG2U7THPPHVBHGNFLINJE4MQF4PA3OPFU2',
-  networkUrl: 'https://horizon-testnet.stellar.org',
+  contract: process.env.NEXT_PUBLIC_TESTNET_CONTRACT || '',
+  networkUrl: process.env.NEXT_PUBLIC_TESTNET_NETWORKURL || 'https://horizon-testnet.stellar.org',
   networkPassphrase: 'Test SDF Network ; September 2015',
-  sorobanRpcUrl: 'https://soroban-testnet.stellar.org',
+  sorobanRpcUrl:
+    process.env.NEXT_PUBLIC_TESTNET_SOROBAN_RPCURL || 'https://soroban-testnet.stellar.org',
 };
