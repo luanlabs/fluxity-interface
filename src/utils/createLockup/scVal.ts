@@ -4,7 +4,9 @@ import numberToScVal from 'src/utils/soroban/numberToScVal';
 import toXdrValue from 'src/utils/soroban/createStreamValues';
 import { FormValues } from 'src/containers/CreateLockup';
 
-const { scvU32, scvU64, scvSymbol } = xdr.ScVal;
+import { OperationType } from 'src/models';
+
+const { scvU32, scvU64, scvSymbol, scvBool } = xdr.ScVal;
 
 class ToScVal {
   public static i128(value: bigint) {
@@ -22,8 +24,11 @@ class ToScVal {
   public static symbol(symbol: string) {
     return scvSymbol(symbol);
   }
-  public static toXdr(params: FormValues, address: string) {
-    return toXdrValue(params, address);
+  public static boolean(bool: boolean) {
+    return scvBool(bool);
+  }
+  public static toXdr(params: FormValues, address: string, opertaionType: OperationType) {
+    return toXdrValue(params, address, opertaionType);
   }
 }
 

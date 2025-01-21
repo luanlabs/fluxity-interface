@@ -1,9 +1,8 @@
-import { scValToNative, xdr } from '@stellar/stellar-sdk';
-import { Api } from '@stellar/stellar-sdk/lib/soroban';
+import { rpc, scValToNative, xdr } from '@stellar/stellar-sdk';
 
 const { scvI128 } = xdr.ScVal;
 
-const withdrawStreamReturnValue = (finalize: Api.GetSuccessfulTransactionResponse) => {
+const withdrawStreamReturnValue = (finalize: rpc.Api.GetSuccessfulTransactionResponse) => {
   const withdrawXdr = Object(finalize?.returnValue)._value;
   const withdrawScVal = scvI128(withdrawXdr);
 

@@ -140,7 +140,7 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
       <CModal title="Select token" isOpen={isOpen} setIsOpen={setIsOpen}>
         {address && isAccountActivated && (
           <CInput
-            placeholder="Search name of token"
+            placeholder="Search name / address of token"
             value={searchValue}
             icon={searchLogo}
             onChange={handleInputChange}
