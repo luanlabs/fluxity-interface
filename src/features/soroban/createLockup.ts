@@ -1,7 +1,7 @@
-import { OperationType } from 'src/models';
 import ToScVal from 'src/utils/createLockup/scVal';
 import { FormValues } from 'src/containers/CreateLockup';
 import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
+import { OperationType } from 'src/models';
 
 import sorobanSend from './sorobanSend';
 
@@ -11,13 +11,13 @@ const createLockup = async (
   params: FormValues,
   operationType: OperationType,
 ) => {
-  const paramsScVal = ToScVal.toXdr(params, address);
+  const paramsScVal = ToScVal.toXdr(params, address, operationType);
 
   const tx = await sorobanSend(
     address,
     passPhrase,
     passPhraseToNetworkDetail(passPhrase).contract,
-    `create_${operationType}`,
+    `create_lockup`,
     [paramsScVal],
   );
 

@@ -1,9 +1,8 @@
-import { scValToNative, xdr } from '@stellar/stellar-sdk';
-import { Api } from '@stellar/stellar-sdk/lib/soroban';
+import { rpc, scValToNative, xdr } from '@stellar/stellar-sdk';
 
 const { scvI128 } = xdr.ScVal;
 
-const cancelStreamReturnValues = (finalize: Api.GetSuccessfulTransactionResponse) => {
+const cancelStreamReturnValues = (finalize: rpc.Api.GetSuccessfulTransactionResponse) => {
   const senderXdr = Object(finalize?.returnValue)._value[0]._value;
   const receiverXdr = Object(finalize?.returnValue)._value[1]._value;
 

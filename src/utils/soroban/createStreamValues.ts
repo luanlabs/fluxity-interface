@@ -8,11 +8,12 @@ import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 
 import BN from '../BN';
 import { rateToNumber } from '../rates';
+import { OperationType } from 'src/models';
 
 const { scvMap } = xdr.ScVal;
 const { ScMapEntry: addToMap } = xdr;
 
-const toXdrValue = (params: FormValues, address: string) => {
+const toXdrValue = (params: FormValues, address: string, opertaionType: OperationType) => {
   let startDate = dateToSeconds(params.startDate ? params.startDate : new Date()).toString();
 
   const endDate = dateToSeconds(params.endDate).toString();
@@ -32,6 +33,8 @@ const toXdrValue = (params: FormValues, address: string) => {
 
   const amount = toDecimals(calculateTotalAmount(params));
 
+  const isVesting = opertaionType === 'vesting';
+
   return scvMap([
     new addToMap({
       key: ToScVal.symbol('amount'),
@@ -50,6 +53,10 @@ const toXdrValue = (params: FormValues, address: string) => {
       val: ToScVal.u64(endDate),
     }),
     new addToMap({
+      key: ToScVal.symbol('is_vesting'),
+      val: ToScVal.boolean(isVesting),
+    }),
+    new addToMap({
       key: ToScVal.symbol('rate'),
       val: ToScVal.u32(rateToNumber(params.rate.rate.value)),
     }),
@@ -59,6 +66,10 @@ const toXdrValue = (params: FormValues, address: string) => {
     }),
     new addToMap({
       key: ToScVal.symbol('sender'),
+      val: ToScVal.address(address),
+    }),
+    new addToMap({
+      key: ToScVal.symbol('spender'),
       val: ToScVal.address(address),
     }),
     new addToMap({

@@ -1,7 +1,6 @@
-import { Contract, xdr, scValToNative } from '@stellar/stellar-sdk';
+import { Contract, xdr, scValToNative, rpc } from '@stellar/stellar-sdk';
 
 import getServer from 'src/utils/soroban/getServer';
-import { Api } from '@stellar/stellar-sdk/lib/soroban';
 import createTransaction from 'src/utils/soroban/baseTransaction';
 
 const sorobanCall = async <T>(
@@ -25,7 +24,7 @@ const sorobanCall = async <T>(
 
   const txSimulate = await server.simulateTransaction(transactionResult);
 
-  if (!Api.isSimulationSuccess(txSimulate)) {
+  if (!rpc.Api.isSimulationSuccess(txSimulate)) {
     throw Error('Failed to fetch data');
   }
 
