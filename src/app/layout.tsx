@@ -18,6 +18,7 @@ import StyledComponentsRegistry from '../styles/registry';
 
 import 'src/styles/globals.css';
 import theme from '../styles/theme';
+import { BluxProvider, networks } from '@bluxcc/react';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [isMinimized, setIsMinimized] = useState(false);
@@ -90,49 +91,60 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         ${currentPath === Pages.FAQ ? 'bg-alabaster' : 'mobile:bg-white desktop:bg-alabaster'}`}
       >
         <Provider store={store}>
-          <StyledComponentsRegistry>
-            <ThemeProvider theme={theme}>
-              <AppDataFetch />
-              <main
-                className="relative mobile:overflow-hidden px-8 mobile:p-0 pt-[9px] pb-7 w-full 
-                xxl:w-[100%] 2xl:!w-[60%] 3xl:!w-[35%] h-screen
-                2xl:h-[80vh] 3xl:h-[50vh] 4xl:h-[30vh] 4xl:!w-[30%] m-auto"
-              >
-                <CCard
-                  className={`!w-full mobile:fixed mobile:top-0 mobile:right-0 mobile:left-0 
-                  desktop:mb-[10px] mobile:rounded-none mobile:border-t-0 z-[999]
-                  ${currentPath === Pages.FAQ ? 'mobile:hidden desktop:block' : 'block'}`}
-                  bgColor="white"
+          <BluxProvider
+            config={{
+              appName: "Fluxity",
+              loginMethods: ['wallet'],
+              appearance: {
+                cornerRadius: 'full',
+              },
+              networks: [networks.mainnet, networks.testnet]
+            }}
+          >
+            <StyledComponentsRegistry>
+              <ThemeProvider theme={theme}>
+                <AppDataFetch />
+                <main
+                  className="relative mobile:overflow-hidden px-8 mobile:p-0 pt-[9px] pb-7 w-full 
+                  xxl:w-[100%] 2xl:!w-[60%] 3xl:!w-[35%] h-screen
+                  2xl:h-[80vh] 3xl:h-[50vh] 4xl:h-[30vh] 4xl:!w-[30%] m-auto"
                 >
-                  <Header />
-                </CCard>
-                <section className="desktop:inline-flex basis-full gap-4 w-full desktop:h-[90%] mobile:h-[100dvh] mobile:!overflow-auto">
                   <CCard
-                    className={`desktop:relative mobile:fixed mobile:bottom-0 
-                    mobile:h-16 mobile:right-0 mobile:left-0 overflow-hidden 
-                    mobile:rounded-none mobile:border-b-0 z-[999] ${
-                      !knownRoutes || currentPath === Pages.FAQ ? 'hidden' : 'block'
-                    } ${
-                      isMinimized
-                        ? 'basis-[80px] transition-all duration-500'
-                        : 'basis-[24%] lg:basis-[20%] transition-all duration-500'
-                    } px-[15px] py-[19px] mobile:p-0`}
+                    className={`!w-full mobile:fixed mobile:top-0 mobile:right-0 mobile:left-0 
+                    desktop:mb-[10px] mobile:rounded-none mobile:border-t-0 z-[999]
+                    ${currentPath === Pages.FAQ ? 'mobile:hidden desktop:block' : 'block'}`}
                     bgColor="white"
                   >
-                    <Aside
-                      isMinimized={isMinimized}
-                      onMinimized={() => setIsMinimized(!isMinimized)}
-                    />
+                    <Header />
                   </CCard>
-                  <article className="basis-full mobile:mt-[60px]">
-                    {children}
-                    <div className="mobile:h-16 mobile:w-full !bg-white"></div>
-                  </article>
-                </section>
-                <Toaster position="bottom-center" />
-              </main>
-            </ThemeProvider>
-          </StyledComponentsRegistry>
+                  <section className="desktop:inline-flex basis-full gap-4 w-full desktop:h-[90%] mobile:h-[100dvh] mobile:!overflow-auto">
+                    <CCard
+                      className={`desktop:relative mobile:fixed mobile:bottom-0 
+                      mobile:h-16 mobile:right-0 mobile:left-0 overflow-hidden 
+                      mobile:rounded-none mobile:border-b-0 z-[999] ${
+                        !knownRoutes || currentPath === Pages.FAQ ? 'hidden' : 'block'
+                      } ${
+                        isMinimized
+                          ? 'basis-[80px] transition-all duration-500'
+                          : 'basis-[24%] lg:basis-[20%] transition-all duration-500'
+                      } px-[15px] py-[19px] mobile:p-0`}
+                      bgColor="white"
+                    >
+                      <Aside
+                        isMinimized={isMinimized}
+                        onMinimized={() => setIsMinimized(!isMinimized)}
+                      />
+                    </CCard>
+                    <article className="basis-full mobile:mt-[60px]">
+                      {children}
+                      <div className="mobile:h-16 mobile:w-full !bg-white"></div>
+                    </article>
+                  </section>
+                  <Toaster position="bottom-center" />
+                </main>
+              </ThemeProvider>
+            </StyledComponentsRegistry>
+          </BluxProvider>
         </Provider>
       </body>
     </html>
