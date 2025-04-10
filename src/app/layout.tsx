@@ -91,6 +91,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         ${currentPath === Pages.FAQ ? 'bg-alabaster' : 'mobile:bg-white desktop:bg-alabaster'}`}
       >
         <Provider store={store}>
+            <StyledComponentsRegistry>
+              <ThemeProvider theme={theme}>
+
           <BluxProvider
             config={{
               appName: "Fluxity",
@@ -101,8 +104,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               networks: [networks.mainnet, networks.testnet]
             }}
           >
-            <StyledComponentsRegistry>
-              <ThemeProvider theme={theme}>
                 <AppDataFetch />
                 <main
                   className="relative mobile:overflow-hidden px-8 mobile:p-0 pt-[9px] pb-7 w-full 
@@ -142,9 +143,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   </section>
                   <Toaster position="bottom-center" />
                 </main>
+          </BluxProvider>
               </ThemeProvider>
             </StyledComponentsRegistry>
-          </BluxProvider>
         </Provider>
       </body>
     </html>

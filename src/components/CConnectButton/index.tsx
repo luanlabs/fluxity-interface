@@ -40,9 +40,8 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
     if (address) {
       return;
     }
-    
-    login();
 
+    login();
   };
 
   const closeModal = () => {

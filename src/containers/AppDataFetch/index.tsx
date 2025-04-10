@@ -22,10 +22,10 @@ const AppDataFetch = () => {
   useLoadStreams(address);
 
   useEffect(() => {
-    setShouldModalOpen(
-      currentNetwork.networkPassphrase !== Mainnet.networkPassphrase &&
-        currentNetwork.networkPassphrase !== Testnet.networkPassphrase,
-    );
+    // setShouldModalOpen(
+    //   currentNetwork.networkPassphrase !== Mainnet.networkPassphrase &&
+    //     currentNetwork.networkPassphrase !== Testnet.networkPassphrase,
+    // );
   }, [currentNetwork]);
 
   return (
