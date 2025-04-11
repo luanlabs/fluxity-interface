@@ -46,8 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           name="keywords"
           content="Fluxity, Stellar, token streaming, cryptocurrency, blockchain, finance, digital payments, smart contracts"
         />
-
-        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="mobile-web-app-capable" content="yes" />
         <meta
           name="viewport"
           content="viewport-fit=cover, width=device-width, initial-scale=1.0, maximum-scale=1.0, initial-scale=1, minimum-scale=1, user-scalable=no"
@@ -91,19 +90,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         ${currentPath === Pages.FAQ ? 'bg-alabaster' : 'mobile:bg-white desktop:bg-alabaster'}`}
       >
         <Provider store={store}>
-            <StyledComponentsRegistry>
-              <ThemeProvider theme={theme}>
-
-          <BluxProvider
-            config={{
-              appName: "Fluxity",
-              loginMethods: ['wallet'],
-              appearance: {
-                cornerRadius: 'full',
-              },
-              networks: [networks.mainnet, networks.testnet]
-            }}
-          >
+          <StyledComponentsRegistry>
+            <ThemeProvider theme={theme}>
+              <BluxProvider
+                config={{
+                  appName: 'Fluxity',
+                  loginMethods: ['wallet', 'passkey'],
+                  appearance: {
+                    cornerRadius: 'full',
+                    font: 'Inter',
+                    logo: '/images/logoWithName.svg',
+                  },
+                  networks: [networks.mainnet, networks.testnet],
+                }}
+              >
                 <AppDataFetch />
                 <main
                   className="relative mobile:overflow-hidden px-8 mobile:p-0 pt-[9px] pb-7 w-full 
@@ -112,7 +112,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 >
                   <CCard
                     className={`!w-full mobile:fixed mobile:top-0 mobile:right-0 mobile:left-0 
-                    desktop:mb-[10px] mobile:rounded-none mobile:border-t-0 z-[999]
+                    desktop:mb-[10px] mobile:rounded-none mobile:border-t-0 z-[999] mobile:z-10
                     ${currentPath === Pages.FAQ ? 'mobile:hidden desktop:block' : 'block'}`}
                     bgColor="white"
                   >
@@ -122,7 +122,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <CCard
                       className={`desktop:relative mobile:fixed mobile:bottom-0 
                       mobile:h-16 mobile:right-0 mobile:left-0 overflow-hidden 
-                      mobile:rounded-none mobile:border-b-0 z-[999] ${
+                      mobile:rounded-none mobile:border-b-0 z-10 ${
                         !knownRoutes || currentPath === Pages.FAQ ? 'hidden' : 'block'
                       } ${
                         isMinimized
@@ -143,9 +143,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   </section>
                   <Toaster position="bottom-center" />
                 </main>
-          </BluxProvider>
-              </ThemeProvider>
-            </StyledComponentsRegistry>
+              </BluxProvider>
+            </ThemeProvider>
+          </StyledComponentsRegistry>
         </Provider>
       </body>
     </html>

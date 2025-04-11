@@ -30,7 +30,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const { login, isAuthenticated, user } = useBlux();
+  const { login, isAuthenticated, user, isReady } = useBlux();
 
   const currentNetwork = useLoadUserNetwork();
   const address = useAppSelector((store) => store.user.address);
@@ -64,7 +64,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
     getAccount(address, currentNetwork.networkPassphrase).then((info) => {
       dispatch(loadAccount(info));
     });
-    
+
     getAlreadyMinted(address).then((isMinted) => {
       if (isMinted) {
         dispatch(hasTestnetTokens());
@@ -74,13 +74,14 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
     getTokenBalances(address, currentNetwork.networkPassphrase, tokens).then((updatedToken) => {
       dispatch(loadTokens(updatedToken));
     });
-    
+
     toast('success', 'Wallet has been successfully connected.');
   }, [isAuthenticated]);
 
   return (
-    <div
-      className={`relative flex items-center rounded-xl mobile:h-11 mobile:w-11 ${
+    <button
+      disabled={!isReady}
+      className={`relative w-full flex items-center rounded-xl mobile:h-11 mobile:w-11 ${
         address
           ? openModal
             ? 'bg-midnightBlue text-white'
@@ -136,9 +137,8 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
         title="Waiting for wallet connection"
         message="You are connecting your wallet to Fluxity."
       />
-    </div>
+    </button>
   );
 };
 
 export default CConnectButton;
-
