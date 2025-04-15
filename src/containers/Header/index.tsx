@@ -21,7 +21,7 @@ const Header = () => {
     <header className="flex justify-between w-full items-center py-3 desktop:py-[18px] px-6">
       <div
         className="inline-flex mobile:hidden gap-[14px] cursor-pointer"
-        onClick={() => router.push(ExternalPages.LANDING)}
+        onClick={() => router.push('/')}
       >
         <FluxityLogo />
         <FluxityTypography />

@@ -19,7 +19,7 @@ import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 import signTransaction from 'src/utils/soroban/signTransaction';
 import DoubleButtonModal from 'src/components/DoubleButtonModal';
 import SingleButtonModal from 'src/components/SingleButtonModal';
-import sendTransaction from 'src/features/soroban/sendTransaction';
+// import sendTransaction from 'src/features/soroban/sendTransaction';
 import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
 import ApproveFormModal from 'src/containers/Modals/ApproveFormModal';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
@@ -27,6 +27,7 @@ import getERC20Allowance from 'src/features/soroban/getERC20Allowance';
 import informCreateLockupAPI from 'src/features/informCreateLockupAPI';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
 import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
+import { useBlux } from '@bluxcc/react';
 
 interface ConfirmTransactions {
   isConfirmClicked: boolean;
@@ -43,8 +44,9 @@ const ConfirmTransaction = ({
   resetFields,
   operationType,
 }: ConfirmTransactions) => {
-  const address = useAppSelector((state) => state.user.address);
+  const { sendTransaction } = useBlux();
   const values: FormValues = form.getValues();
+  const address = useAppSelector((state) => state.user.address);
 
   const variant = capitalizeFirstLetter(operationType);
 
@@ -104,7 +106,11 @@ const ConfirmTransaction = ({
     let signedTx;
 
     try {
-      signedTx = await signTransaction(address, currentNetwork.networkPassphrase, approveXdr);
+      // signedTx = await signTransaction(address, currentNetwork.networkPassphrase, approveXdr);
+
+      const result = await sendTransaction(approveXdr.toXDR());
+
+      console.log(result);
     } catch {
       setIsWalletLoadingApproveModalOpen(false);
       toast('error', 'Error signing approval transaction');
@@ -112,37 +118,37 @@ const ConfirmTransaction = ({
       return;
     }
 
-    let tx;
+    // let tx;
 
-    try {
-      tx = await sendTransaction(signedTx, currentNetwork.networkPassphrase);
-    } catch {
-      toast('error', 'Failed to submit the transaction');
+    // try {
+    //   tx = await sendTransaction(signedTx, currentNetwork.networkPassphrase);
+    // } catch {
+    //   toast('error', 'Failed to submit the transaction');
+    //
+    //   return;
+    // }
 
-      return;
-    }
-
-    if (tx) {
-      setIsWalletLoadingApproveModalOpen(false);
-      await timeout(100);
-      setIsSendingApproveTxModalOpen(true);
-      const finalize = await finalizeTransaction(tx.hash, currentNetwork.networkPassphrase);
-
-      setIsWalletLoadingApproveModalOpen(false);
-
-      if (!finalize) {
-        setIsSendingApproveTxModalOpen(false);
-
-        toast('error', 'Approval transaction failed to finalize');
-        return;
-      }
-    } else {
-      setIsSendingApproveTxModalOpen(false);
-      return;
-    }
-
-    toast('success', 'Transaction has been approved successfully');
-    setIsCreateLockupConfirmModalOpen(true);
+    // if (tx) {
+    //   setIsWalletLoadingApproveModalOpen(false);
+    //   await timeout(100);
+    //   setIsSendingApproveTxModalOpen(true);
+    //   const finalize = await finalizeTransaction(tx.hash, currentNetwork.networkPassphrase);
+    //
+    //   setIsWalletLoadingApproveModalOpen(false);
+    //
+    //   if (!finalize) {
+    //     setIsSendingApproveTxModalOpen(false);
+    //
+    //     toast('error', 'Approval transaction failed to finalize');
+    //     return;
+    //   }
+    // } else {
+    //   setIsSendingApproveTxModalOpen(false);
+    //   return;
+    // }
+    //
+    // toast('success', 'Transaction has been approved successfully');
+    // setIsCreateLockupConfirmModalOpen(true);
   };
 
   const handleCreateLockupConfirmClick = async () => {

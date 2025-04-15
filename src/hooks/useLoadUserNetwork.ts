@@ -1,4 +1,4 @@
-import { getNetworkDetails } from '@stellar/freighter-api';
+// import { getNetworkDetails } from '@stellar/freighter-api';
 import { useEffect, useState } from 'react';
 
 import { INetwork } from 'src/constants/types';
@@ -9,9 +9,9 @@ const useLoadUserNetwork = () => {
 
   useEffect(() => {
     const fetchNetwork = () => {
-      getNetworkDetails().then((network: INetwork) => {
-        setCurrentNetwork(network);
-      });
+      // getNetworkDetails().then((network: INetwork) => {
+      //   setCurrentNetwork(network);
+      // });
     };
 
     const intervalId = setInterval(fetchNetwork, 1000);
