@@ -78,6 +78,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="rating" content="General" />
         <meta name="revisit-after" content="7 days" />
         <meta name="subtitle" content="Unlock New Payment Possibilities" />
+
+        <meta property="og:title" content="Fluxity - Token streaming platform" />
+        <meta
+          property="og:description"
+          content="Fluxity offers a comprehensive token streaming solution built on the Stellar network, designed to facilitate real-time, secure, and automated digital payments. With Fluxity, users can create, manage, and monitor token streams effortlessly."
+        />
+        <meta property="og:image" content="https://app.fluxity.finance/images/fluxity.png" />
+        <meta property="og:url" content="https://fluxity.finance" />
+        <meta property="og:type" content="website" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Fluxity - Token Streaming Platform" />
+        <meta
+          name="twitter:description"
+          content="Fluxity is a token streaming platform unlocking new digital payment possibilities on the Stellar network."
+        />
+        <meta name="twitter:image" content="https://app.fluxity.finance/images/fluxity.png" />
         <link
           rel="stylesheet"
           href="https://unpkg.com/react-spring-bottom-sheet/dist/style.css"
