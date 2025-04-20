@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useAppSelector } from 'src/hooks/useRedux';
 
 import CCard from 'src/components/CCard';
 import { Pages } from 'src/constants/pages';
@@ -15,6 +16,14 @@ import cardLogo from 'public/images/cardLogo.svg';
 const AllStreamsCard = () => {
   const [isClosed, setIsClosed] = useState(false);
   const router = useRouter();
+
+  const history = useAppSelector((state) => state.user.history);
+
+  useEffect(() => {
+    if (history.length > 4) {
+      setIsClosed(true);
+    }
+  }, [history, isClosed, setIsClosed]);
 
   const handleClick = () => {
     router.push(Pages.FAQ);
