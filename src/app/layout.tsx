@@ -37,6 +37,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return false;
   });
 
+  const font = myFont.style.fontFamily;
+
   return (
     <html lang="en" className={myFont.className}>
       <head>
@@ -97,11 +99,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   appName: 'Fluxity',
                   loginMethods: ['wallet', 'passkey'],
                   appearance: {
-                    cornerRadius: 'full',
-                    font: 'Inter',
+                    font,
+                    cornerRadius: '14px',
                     logo: '/images/logoWithName.svg',
                   },
                   networks: [networks.mainnet, networks.testnet],
+                  defaultNetwork: networks.testnet,
                 }}
               >
                 <AppDataFetch />

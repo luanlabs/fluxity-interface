@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { scValToNative } from '@stellar/stellar-sdk';
 import { UseFormReturn } from 'react-hook-form';
+import { scValToNative } from '@stellar/stellar-sdk';
 
 import BN from 'src/utils/BN';
+import { useBlux } from '@bluxcc/react';
 import timeout from 'src/utils/timeout';
 import toast from 'src/components/CToast';
 import { OperationType } from 'src/models';
@@ -19,7 +20,6 @@ import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 import signTransaction from 'src/utils/soroban/signTransaction';
 import DoubleButtonModal from 'src/components/DoubleButtonModal';
 import SingleButtonModal from 'src/components/SingleButtonModal';
-// import sendTransaction from 'src/features/soroban/sendTransaction';
 import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
 import ApproveFormModal from 'src/containers/Modals/ApproveFormModal';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
@@ -27,7 +27,6 @@ import getERC20Allowance from 'src/features/soroban/getERC20Allowance';
 import informCreateLockupAPI from 'src/features/informCreateLockupAPI';
 import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
 import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
-import { useBlux } from '@bluxcc/react';
 
 interface ConfirmTransactions {
   isConfirmClicked: boolean;
@@ -67,7 +66,7 @@ const ConfirmTransaction = ({
 
   useEffect(() => {
     if (isConfirmClicked) {
-      setIsApproveModalOpen(true);
+      handleCreateLockupOnClick();
     }
   }, [isConfirmClicked]);
 
@@ -76,9 +75,6 @@ const ConfirmTransaction = ({
   }, [isApproveModalOpen, setIsConfirmClicked]);
 
   const handleCreateLockupOnClick = async () => {
-    setIsApproveModalOpen(false);
-    setIsWalletLoadingApproveModalOpen(true);
-
     const checkAllowance = await getERC20Allowance(
       values.token.value.address,
       currentNetwork.networkPassphrase,
@@ -91,8 +87,6 @@ const ConfirmTransaction = ({
 
       setIsCreateLockupConfirmModalOpen(true);
 
-      toast('success', 'Transaction has been approved successfully');
-
       return;
     }
 
@@ -103,120 +97,55 @@ const ConfirmTransaction = ({
       calculateTotalAmount(values),
     );
 
-    let signedTx;
-
     try {
-      // signedTx = await signTransaction(address, currentNetwork.networkPassphrase, approveXdr);
+      await sendTransaction(approveXdr.toXDR());
 
-      const result = await sendTransaction(approveXdr.toXDR());
-
-      console.log(result);
+      toast('success', 'Transaction has been approved successfully');
+      setIsCreateLockupConfirmModalOpen(true);
     } catch {
-      setIsWalletLoadingApproveModalOpen(false);
-      toast('error', 'Error signing approval transaction');
+      setIsConfirmClicked(false);
+      toast('error', 'Failed to submit the approve transaction');
 
       return;
     }
-
-    // let tx;
-
-    // try {
-    //   tx = await sendTransaction(signedTx, currentNetwork.networkPassphrase);
-    // } catch {
-    //   toast('error', 'Failed to submit the transaction');
-    //
-    //   return;
-    // }
-
-    // if (tx) {
-    //   setIsWalletLoadingApproveModalOpen(false);
-    //   await timeout(100);
-    //   setIsSendingApproveTxModalOpen(true);
-    //   const finalize = await finalizeTransaction(tx.hash, currentNetwork.networkPassphrase);
-    //
-    //   setIsWalletLoadingApproveModalOpen(false);
-    //
-    //   if (!finalize) {
-    //     setIsSendingApproveTxModalOpen(false);
-    //
-    //     toast('error', 'Approval transaction failed to finalize');
-    //     return;
-    //   }
-    // } else {
-    //   setIsSendingApproveTxModalOpen(false);
-    //   return;
-    // }
-    //
-    // toast('success', 'Transaction has been approved successfully');
-    // setIsCreateLockupConfirmModalOpen(true);
   };
 
   const handleCreateLockupConfirmClick = async () => {
     setIsCreateLockupConfirmModalOpen(false);
-    setIsWalletLoadingConfirmModalOpen(true);
 
-    const CreateLockupXdr = await createLockup(
+    const createLockupXdr = await createLockup(
       currentNetwork.networkPassphrase,
       address,
       values,
       operationType,
     );
 
-    let signedXdr;
-
     try {
-      signedXdr = await signTransaction(address, currentNetwork.networkPassphrase, CreateLockupXdr);
-    } catch (e) {
-      setIsWalletLoadingConfirmModalOpen(false);
-      toast('error', `Error signing create ${operationType} transaction`);
-
-      return;
-    }
-
-    setIsWalletLoadingConfirmModalOpen(false);
-    await timeout(50);
-    setIsSendingCreateLockupTxModalOpen(true);
-
-    let tx;
-
-    try {
-      tx = await sendTransaction(signedXdr, currentNetwork.networkPassphrase);
-    } catch {
-      setIsSendingApproveTxModalOpen(false);
-      toast('error', 'Failed to submit the transaction');
-
-      return;
-    }
-
-    if (tx) {
-      const finalize = await finalizeTransaction(tx.hash, currentNetwork.networkPassphrase);
-
-      if (!finalize) {
-        setIsSendingCreateLockupTxModalOpen(false);
-        toast('error', `Create ${operationType} transaction failed to finalize`);
-
-        return;
-      }
+      const finalize = await sendTransaction(createLockupXdr.toXDR(), { isSoroban: true });
 
       await informCreateLockupAPI(
-        scValToNative(finalize?.returnValue).toString(),
+        scValToNative(finalize.returnValue).toString(),
         passPhraseToNetworkDetail(currentNetwork.networkPassphrase).network,
       );
 
       setStreamDetails({
-        hash: tx.hash,
+        hash: finalize.txHash,
         id: scValToNative(finalize.returnValue).toString(),
       });
-    } else {
+
+      resetFields();
+
       setIsSendingCreateLockupTxModalOpen(false);
+      setIsSendingApproveTxModalOpen(false);
+
+      await timeout(100);
+
+      setIsCreateLockupResultModalOpen(true);
+    } catch (e) {
+      toast('error', `Error signing create ${operationType} transaction`);
+
       return;
     }
-    resetFields();
-
-    setIsSendingCreateLockupTxModalOpen(false);
-    setIsSendingApproveTxModalOpen(false);
-    await timeout(100);
-    setIsCreateLockupResultModalOpen(true);
   };
 
   const handleCloseTransactionSuccessModal = () => {
