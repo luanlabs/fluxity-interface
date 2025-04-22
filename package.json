@@ -11,7 +11,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@bluxcc/react": "file:../../blux/blux",
+    "@bluxcc/react": "^0.1.11",
     "@headlessui/react": "^1.7.17",
     "@hookform/devtools": "^4.3.1",
     "@reduxjs/toolkit": "^1.9.7",

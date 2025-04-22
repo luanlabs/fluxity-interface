@@ -17,7 +17,6 @@ import CModalSuccess from 'src/components/CModalSuccess';
 import toDecimals from 'src/utils/createLockup/toDecimals';
 import createLockup from 'src/features/soroban/createLockup';
 import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
-import signTransaction from 'src/utils/soroban/signTransaction';
 import DoubleButtonModal from 'src/components/DoubleButtonModal';
 import SingleButtonModal from 'src/components/SingleButtonModal';
 import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
@@ -25,7 +24,6 @@ import ApproveFormModal from 'src/containers/Modals/ApproveFormModal';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 import getERC20Allowance from 'src/features/soroban/getERC20Allowance';
 import informCreateLockupAPI from 'src/features/informCreateLockupAPI';
-import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
 import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
 
 interface ConfirmTransactions {
@@ -123,24 +121,29 @@ const ConfirmTransaction = ({
     try {
       const finalize = await sendTransaction(createLockupXdr.toXDR(), { isSoroban: true });
 
-      await informCreateLockupAPI(
-        scValToNative(finalize.returnValue).toString(),
-        passPhraseToNetworkDetail(currentNetwork.networkPassphrase).network,
-      );
+      if (!finalize.returnValue) {
+        // TODO
+        // Show error here
+      } else {
+        await informCreateLockupAPI(
+          scValToNative(finalize.returnValue).toString(),
+          passPhraseToNetworkDetail(currentNetwork.networkPassphrase).network,
+        );
 
-      setStreamDetails({
-        hash: finalize.txHash,
-        id: scValToNative(finalize.returnValue).toString(),
-      });
+        setStreamDetails({
+          hash: finalize.txHash,
+          id: scValToNative(finalize.returnValue).toString(),
+        });
 
-      resetFields();
+        resetFields();
 
-      setIsSendingCreateLockupTxModalOpen(false);
-      setIsSendingApproveTxModalOpen(false);
+        setIsSendingCreateLockupTxModalOpen(false);
+        setIsSendingApproveTxModalOpen(false);
 
-      await timeout(100);
+        await timeout(100);
 
-      setIsCreateLockupResultModalOpen(true);
+        setIsCreateLockupResultModalOpen(true);
+      }
     } catch (e) {
       toast('error', `Error signing create ${operationType} transaction`);
 
