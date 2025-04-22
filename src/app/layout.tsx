@@ -18,6 +18,7 @@ import StyledComponentsRegistry from '../styles/registry';
 
 import 'src/styles/globals.css';
 import theme from '../styles/theme';
+import { BluxProvider, networks } from '@bluxcc/react';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [isMinimized, setIsMinimized] = useState(false);
@@ -36,6 +37,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return false;
   });
 
+  const font = myFont.style.fontFamily;
+
   return (
     <html lang="en" className={myFont.className}>
       <head>
@@ -45,8 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           name="keywords"
           content="Fluxity, Stellar, token streaming, cryptocurrency, blockchain, finance, digital payments, smart contracts"
         />
-
-        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="mobile-web-app-capable" content="yes" />
         <meta
           name="viewport"
           content="viewport-fit=cover, width=device-width, initial-scale=1.0, maximum-scale=1.0, initial-scale=1, minimum-scale=1, user-scalable=no"
@@ -78,6 +80,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="rating" content="General" />
         <meta name="revisit-after" content="7 days" />
         <meta name="subtitle" content="Unlock New Payment Possibilities" />
+
+        <meta property="og:title" content="Fluxity - Token streaming platform" />
+        <meta
+          property="og:description"
+          content="Fluxity offers a comprehensive token streaming solution built on the Stellar network, designed to facilitate real-time, secure, and automated digital payments. With Fluxity, users can create, manage, and monitor token streams effortlessly."
+        />
+        <meta property="og:image" content="https://app.fluxity.finance/images/fluxity.png" />
+        <meta property="og:url" content="https://fluxity.finance" />
+        <meta property="og:type" content="website" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Fluxity - Token Streaming Platform" />
+        <meta
+          name="twitter:description"
+          content="Fluxity is a token streaming platform unlocking new digital payment possibilities on the Stellar network."
+        />
+        <meta name="twitter:image" content="https://app.fluxity.finance/images/fluxity.png" />
         <link
           rel="stylesheet"
           href="https://unpkg.com/react-spring-bottom-sheet/dist/style.css"
@@ -92,45 +111,59 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Provider store={store}>
           <StyledComponentsRegistry>
             <ThemeProvider theme={theme}>
-              <AppDataFetch />
-              <main
-                className="relative mobile:overflow-hidden px-8 mobile:p-0 pt-[9px] pb-7 w-full 
-                xxl:w-[100%] 2xl:!w-[60%] 3xl:!w-[35%] h-screen
-                2xl:h-[80vh] 3xl:h-[50vh] 4xl:h-[30vh] 4xl:!w-[30%] m-auto"
+              <BluxProvider
+                config={{
+                  appName: 'Fluxity',
+                  loginMethods: ['wallet', 'passkey'],
+                  appearance: {
+                    font,
+                    cornerRadius: '14px',
+                    logo: '/images/logoWithName.svg',
+                  },
+                  networks: [networks.mainnet, networks.testnet],
+                  defaultNetwork: networks.testnet,
+                }}
               >
-                <CCard
-                  className={`!w-full mobile:fixed mobile:top-0 mobile:right-0 mobile:left-0 
-                  desktop:mb-[10px] mobile:rounded-none mobile:border-t-0 z-[999]
-                  ${currentPath === Pages.FAQ ? 'mobile:hidden desktop:block' : 'block'}`}
-                  bgColor="white"
+                <AppDataFetch />
+                <main
+                  className="relative mobile:overflow-hidden px-8 mobile:p-0 pt-[9px] pb-7 w-full 
+                  xxl:w-[100%] 2xl:!w-[60%] 3xl:!w-[35%] h-screen
+                  2xl:h-[80vh] 3xl:h-[50vh] 4xl:h-[30vh] 4xl:!w-[30%] m-auto"
                 >
-                  <Header />
-                </CCard>
-                <section className="desktop:inline-flex basis-full gap-4 w-full desktop:h-[90%] mobile:h-[100dvh] mobile:!overflow-auto">
                   <CCard
-                    className={`desktop:relative mobile:fixed mobile:bottom-0 
-                    mobile:h-16 mobile:right-0 mobile:left-0 overflow-hidden 
-                    mobile:rounded-none mobile:border-b-0 z-[999] ${
-                      !knownRoutes || currentPath === Pages.FAQ ? 'hidden' : 'block'
-                    } ${
-                      isMinimized
-                        ? 'basis-[80px] transition-all duration-500'
-                        : 'basis-[24%] lg:basis-[20%] transition-all duration-500'
-                    } px-[15px] py-[19px] mobile:p-0`}
+                    className={`!w-full mobile:fixed mobile:top-0 mobile:right-0 mobile:left-0 
+                    desktop:mb-[10px] mobile:rounded-none mobile:border-t-0 z-[999] mobile:z-10
+                    ${currentPath === Pages.FAQ ? 'mobile:hidden desktop:block' : 'block'}`}
                     bgColor="white"
                   >
-                    <Aside
-                      isMinimized={isMinimized}
-                      onMinimized={() => setIsMinimized(!isMinimized)}
-                    />
+                    <Header />
                   </CCard>
-                  <article className="basis-full mobile:mt-[60px]">
-                    {children}
-                    <div className="mobile:h-16 mobile:w-full !bg-white"></div>
-                  </article>
-                </section>
-                <Toaster position="bottom-center" />
-              </main>
+                  <section className="desktop:inline-flex basis-full gap-4 w-full desktop:h-[90%] mobile:h-[100dvh] mobile:!overflow-auto">
+                    <CCard
+                      className={`desktop:relative mobile:fixed mobile:bottom-0 
+                      mobile:h-16 mobile:right-0 mobile:left-0 overflow-hidden 
+                      mobile:rounded-none mobile:border-b-0 z-10 ${
+                        !knownRoutes || currentPath === Pages.FAQ ? 'hidden' : 'block'
+                      } ${
+                        isMinimized
+                          ? 'basis-[80px] transition-all duration-500'
+                          : 'basis-[24%] lg:basis-[20%] transition-all duration-500'
+                      } px-[15px] py-[19px] mobile:p-0`}
+                      bgColor="white"
+                    >
+                      <Aside
+                        isMinimized={isMinimized}
+                        onMinimized={() => setIsMinimized(!isMinimized)}
+                      />
+                    </CCard>
+                    <article className="basis-full mobile:mt-[60px]">
+                      {children}
+                      <div className="mobile:h-16 mobile:w-full !bg-white"></div>
+                    </article>
+                  </section>
+                  <Toaster position="bottom-center" />
+                </main>
+              </BluxProvider>
             </ThemeProvider>
           </StyledComponentsRegistry>
         </Provider>

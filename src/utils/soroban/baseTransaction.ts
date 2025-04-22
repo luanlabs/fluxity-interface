@@ -15,7 +15,7 @@ const baseTransaction = (
   });
 
   transaction = transaction.addOperation(call);
-  transaction = transaction.setTimeout(30);
+  transaction = transaction.setTimeout(180);
 
   return transaction.build();
 };
