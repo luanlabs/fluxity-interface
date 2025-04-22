@@ -1,8 +1,8 @@
 version: '3'
 services:
   fluxity-interface:
-    image: fluxity-interface:latest
+    image: .
     pull_policy: never
-    restart: on-failure
+    restart: unless-stopped
     ports:
       - '3001:3001'

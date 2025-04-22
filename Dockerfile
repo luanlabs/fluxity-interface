@@ -3,7 +3,7 @@ FROM node:16.14.2-slim
 COPY package.json package-lock.json /app/
 WORKDIR /app
 
-RUN npm ci
+RUN npm i
 
 COPY . /app
 
