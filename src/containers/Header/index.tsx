@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useSwitchNetwork, useNetwork, networks } from '@bluxcc/react';
 
 import CLink from 'src/components/CLink';
 import CButton from 'src/components/CButton';
@@ -10,12 +11,14 @@ import StellarLogo from 'src/assets/StellarLogo';
 import logoWithName from 'public/images/logoWithName.svg';
 import FluxityLogo from 'src/assets/FluxityLogo';
 import FluxityTypography from 'src/assets/FluxityTypography';
-import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
-import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 
 const Header = () => {
   const router = useRouter();
-  const currentNetwork = useLoadUserNetwork();
+  const { switchNetwork } = useSwitchNetwork();
+  const currentNetwork = useNetwork();
+  const mainnetPassphrase = 'Public Global Stellar Network ; September 2015';
+
+  const isMainnet = currentNetwork === mainnetPassphrase;
 
   return (
     <header className="flex justify-between w-full items-center py-3 desktop:py-[18px] px-6">
@@ -41,19 +44,16 @@ const Header = () => {
         <CButton
           variant="simple"
           color="gray"
+          onClick={() => switchNetwork(isMainnet ? networks.testnet : networks.mainnet)}
           content={
             <span className="flex gap-2 items-center">
-              <StellarLogo fill={`${currentNetwork.network === 'PUBLIC' ? '#1C9B47' : 'black'}`} />
-              {currentNetwork.network === 'PUBLIC'
-                ? 'Mainnet'
-                : capitalizeFirstLetter(currentNetwork.network.toLowerCase())}
+              <StellarLogo fill={isMainnet ? '#1C9B47' : 'black'} />
+              <span className="w-[57px]"> {isMainnet ? 'Mainnet' : 'Testnet'}</span>
             </span>
           }
           className={`${
-            currentNetwork.network === 'PUBLIC'
-              ? '!bg-paleMint !text-forestGreen !border-forestGreen'
-              : ''
-          } mobile:w-[122px] h-9`}
+            isMainnet ? '!bg-paleMint !text-forestGreen !border-forestGreen' : ''
+          } w-[122px] h-9`}
         />
       </div>
     </header>

@@ -117,6 +117,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   loginMethods: ['wallet', 'passkey'],
                   appearance: {
                     font,
+                    borderColor: '#0501421A',
+                    bgField: '#fafafa',
+                    background: '#ffffff',
+                    textColor: '#050142',
                     cornerRadius: '14px',
                     logo: '/images/logoWithName.svg',
                   },

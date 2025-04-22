@@ -7,7 +7,7 @@ import { shortenAddress } from 'src/utils/shortenAddress';
 
 import wallet from 'public/images/blackWallet.svg';
 import usdc from 'public/images/assets/fusdc.svg';
-import dai from 'public/images/assets/fdai.svg';
+// import dai from 'public/images/assets/fdai.svg';
 import yxlm from 'public/images/assets/yxlm.png';
 import blueDivider from 'public/images/blueDivider.svg';
 
@@ -25,10 +25,10 @@ const ModalContent = ({ handleClaim, address, handleClose }: ModalContentProps) 
           <Image src={usdc} alt="usdc" draggable={false} />
           <p>fUSDC</p>
         </span>
-        <span className="flex bg-white rounded-full gap-1 p-[10px] pr-4 items-center">
+        {/* <span className="flex bg-white rounded-full gap-1 p-[10px] pr-4 items-center">
           <Image src={dai} alt="dai" draggable={false} />
           <p>fDAI</p>
-        </span>
+        </span> */}
         <span className="flex bg-white rounded-full gap-1 p-[10px] pr-4 items-center">
           <Image src={yxlm} alt="xlm" width={32} height={32} draggable={false} />
           <p>XLM</p>

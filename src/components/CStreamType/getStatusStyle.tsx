@@ -4,7 +4,7 @@ const getStatusStyles = (streamStatus: StreamStatus, isSender: boolean) => {
   switch (streamStatus) {
     case StreamStatus.ONGOING:
       if (isSender) {
-        return 'bg-paleCyan text-royalBlue';
+        return 'bg-mistyBlue text-royalBlue';
       }
       return 'bg-paleMint text-forestGreen';
 
