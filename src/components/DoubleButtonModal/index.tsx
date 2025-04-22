@@ -16,9 +16,9 @@ const DoubleButtonModal = ({ closeOnClick, stream, buttonText }: DoubleButtonMod
   };
 
   return (
-    <div className="flex flex-row items-center justify-end w-full mt-[24px] ">
+    <div className="flex flex-row items-center gap-2 justify-between w-full mt-[24px]">
       <a
-        className="mr-8 text-base text-midnightBlue cursor-pointer select-none"
+        className="w-full h-[56px] flex justify-center items-center text-base text-midnightBlue cursor-pointer select-none"
         onClick={closeOnClick}
       >
         Close
@@ -28,7 +28,7 @@ const DoubleButtonModal = ({ closeOnClick, stream, buttonText }: DoubleButtonMod
         content={buttonText}
         variant="simple"
         color="blue"
-        className="!rounded-[10px] h-[56px] !w-[200px] font-med"
+        className="!rounded-[10px] w-full h-[56px]"
         onClick={handleClick}
       />
     </div>
