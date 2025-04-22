@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useBlux } from '@bluxcc/react';
 
 import BN from 'src/utils/BN';
 import timeout from 'src/utils/timeout';
@@ -12,16 +13,12 @@ import CProcessModal from 'src/components/CProcessModal';
 import CSummaryField from 'src/components/CSummaryField';
 import CModalSuccess from 'src/components/CModalSuccess';
 import { IResponseStream, OperationType } from 'src/models';
-import { ExternalPages } from 'src/constants/externalPages';
 import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 import informWithdrawAPI from 'src/features/informWithdrawAPI';
-import signTransaction from 'src/utils/soroban/signTransaction';
 import SingleButtonModal from 'src/components/SingleButtonModal';
 import withdrawStream from 'src/features/soroban/withdrawStream';
-import sendTransaction from 'src/features/soroban/sendTransaction';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import isStreamWithdrawable from 'src/features/isStreamWithdrawable';
-import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
 import withdrawStreamReturnValue from 'src/utils/soroban/withdrawStreamReturnValue';
 
 import whiteWithdrawLogo from '/public/images/whiteWithdraw.svg';
@@ -44,6 +41,7 @@ const ReceiverStatusCard = ({
   decimalToken,
   operationType,
 }: ReceiverStatusCardProps) => {
+  const { sendTransaction } = useBlux();
   const address = useAppSelector((state) => state.user.address);
   const withdrawn = formatUnits(stream.withdrawn, decimalToken);
 
@@ -69,49 +67,24 @@ const ReceiverStatusCard = ({
   const withdrawable = isStreamWithdrawable(stream);
 
   const handleWithdrawClick = async () => {
-    setIsApprovalOpen(true);
-
     const withdrawStreamXdr = await withdrawStream(
       currentNetwork.networkPassphrase,
       address,
       stream.id,
     );
 
-    let signedXdr;
     let tx;
 
     try {
-      signedXdr = await signTransaction(
-        address,
-        currentNetwork.networkPassphrase,
-        withdrawStreamXdr,
-      );
-      tx = await sendTransaction(signedXdr, currentNetwork.networkPassphrase);
+      tx = await sendTransaction(withdrawStreamXdr.toXDR(), { isSoroban: true });
     } catch (e) {
-      setIsApprovalOpen(false);
       toast('error', 'Failed to sign the transaction');
 
       return;
     }
 
-    if (!tx) {
-      setIsApprovalOpen(false);
-      toast('error', 'Token withdrawal unsuccessful');
+    setTxHash(tx.txHash);
 
-      return;
-    }
-
-    const finalize = await finalizeTransaction(tx.hash, currentNetwork.networkPassphrase);
-    setTxHash(tx.hash);
-
-    if (!finalize) {
-      setIsApprovalOpen(false);
-      toast('error', 'Token withdrawal unsuccessful');
-
-      return;
-    }
-
-    setIsApprovalOpen(false);
     await timeout(100);
     setIsWithdrawSuccessOpen(true);
 
@@ -119,7 +92,7 @@ const ReceiverStatusCard = ({
       stream.id,
       passPhraseToNetworkDetail(currentNetwork.networkPassphrase).network,
     );
-    const withdrawFinalize = withdrawStreamReturnValue(finalize);
+    const withdrawFinalize = withdrawStreamReturnValue(tx);
     setWithdrawnAmount(withdrawFinalize);
 
     setTotalWithdrawnAmount(

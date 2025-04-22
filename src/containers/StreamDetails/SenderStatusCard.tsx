@@ -1,3 +1,4 @@
+import { useBlux } from '@bluxcc/react';
 import { useEffect, useState } from 'react';
 
 import BN from 'src/utils/BN';
@@ -16,12 +17,9 @@ import informCancelAPI from 'src/features/informCancelAPI';
 import cancelStream from 'src/features/soroban/cancelStream';
 import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 import SingleButtonModal from 'src/components/SingleButtonModal';
-import signTransaction from 'src/utils/soroban/signTransaction';
-import sendTransaction from 'src/features/soroban/sendTransaction';
 import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import calculateVestingAmounts from 'src/utils/calculateVestingAmount';
-import finalizeTransaction from 'src/utils/soroban/finalizeTransaction';
 import { ITokenStream, CancelAmounts, OperationType } from 'src/models';
 import cancelStreamReturnValues from 'src/utils/soroban/cancelStreamReturnValues';
 
@@ -64,6 +62,7 @@ const SenderStatusCard = ({
   operationType,
   isVesting,
 }: SenderStatusCardProps) => {
+  const { sendTransaction } = useBlux();
   const address = useAppSelector((state) => state.user.address);
 
   const [isApprovalOpen, setIsApprovalOpen] = useState(false);
@@ -84,49 +83,24 @@ const SenderStatusCard = ({
   }, [isApprovalOpen, setIsOpenCancelModal]);
 
   const handleCancelClick = async () => {
-    setIsApprovalOpen(true);
-
     const cancelStreamXdr = await cancelStream(currentNetwork.networkPassphrase, address, id);
 
-    let signedXdr;
     let tx;
 
     try {
-      signedXdr = await signTransaction(address, currentNetwork.networkPassphrase, cancelStreamXdr);
-      tx = await sendTransaction(signedXdr, currentNetwork.networkPassphrase);
+      tx = await sendTransaction(cancelStreamXdr.toXDR(), { isSoroban: true });
     } catch (e) {
-      setIsApprovalOpen(false);
       toast('error', 'Failed to sign the transaction');
 
       return;
     }
 
-    setIsApprovalOpen(false);
+    setTxHash(tx.txHash);
+
     await timeout(100);
-    setIsReclamationModalOpen(true);
 
-    if (!tx) {
-      setIsReclamationModalOpen(false);
-      toast('error', `Token ${operationType} cancellation unsuccessful`);
-
-      return;
-    }
-
-    setTxHash(tx.hash);
-
-    const finalize = await finalizeTransaction(tx.hash, currentNetwork.networkPassphrase);
-
-    if (!finalize) {
-      setIsReclamationModalOpen(false);
-      toast('error', `Token ${operationType} cancellation unsuccessful`);
-
-      return;
-    }
-
-    setIsReclamationModalOpen(false);
-    await timeout(100);
     setIsCancelStreamConfirmOpen(true);
-    setCancelAmount(cancelStreamReturnValues(finalize));
+    setCancelAmount(cancelStreamReturnValues(tx));
     informCancelAPI(id);
   };
 

@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
 import Image from 'next/image';
-import freighterApi from '@stellar/freighter-api';
+import { useBlux } from '@bluxcc/react';
+import React, { useEffect, useState } from 'react';
 
 import copyText from 'src/utils/copyText';
 import getAccount from 'src/utils/getAccount';
@@ -28,8 +28,9 @@ type CConnectButtonProps = {
 
 const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
   const dispatch = useAppDispatch();
-  const [openModal, setOpenModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const { login, isAuthenticated, user, isReady } = useBlux();
 
   const currentNetwork = useLoadUserNetwork();
   const address = useAppSelector((store) => store.user.address);
@@ -39,48 +40,48 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
     if (address) {
       return;
     }
-    setIsOpen(true);
 
-    freighterApi.isConnected().then((isConnected) => {
-      if (!isConnected) {
-        toast('error', 'Freighter wallet is not installed.');
-        setIsOpen(false);
-      }
-    });
-
-    try {
-      const address = await freighterApi.getPublicKey();
-      dispatch(setAddress(address));
-
-      getAccount(address, currentNetwork.networkPassphrase).then((info) => {
-        dispatch(loadAccount(info));
-      });
-
-      getAlreadyMinted(address).then((isMinted) => {
-        if (isMinted) {
-          dispatch(hasTestnetTokens());
-        }
-      });
-
-      getTokenBalances(address, currentNetwork.networkPassphrase, tokens).then((updatedToken) => {
-        dispatch(loadTokens(updatedToken));
-      });
-
-      toast('success', 'Wallet has been successfully connected.');
-    } catch (e) {
-      toast('error', 'User has declined to be connected.');
-    } finally {
-      setIsOpen(false);
-    }
+    login();
   };
 
   const closeModal = () => {
     setOpenModal(false);
   };
 
+  useEffect(() => {
+    if (!isAuthenticated) {
+      return;
+    }
+
+    const address = user.wallet?.address;
+
+    if (!address) {
+      return;
+    }
+
+    dispatch(setAddress(address));
+
+    getAccount(address, currentNetwork.networkPassphrase).then((info) => {
+      dispatch(loadAccount(info));
+    });
+
+    getAlreadyMinted(address).then((isMinted) => {
+      if (isMinted) {
+        dispatch(hasTestnetTokens());
+      }
+    });
+
+    getTokenBalances(address, currentNetwork.networkPassphrase, tokens).then((updatedToken) => {
+      dispatch(loadTokens(updatedToken));
+    });
+
+    toast('success', 'Wallet has been successfully connected.');
+  }, [isAuthenticated]);
+
   return (
-    <div
-      className={`relative flex items-center rounded-xl mobile:h-11 mobile:w-11 ${
+    <button
+      disabled={!isReady}
+      className={`relative w-full flex items-center rounded-xl mobile:h-11 mobile:w-11 ${
         address
           ? openModal
             ? 'bg-midnightBlue text-white'
@@ -136,7 +137,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
         title="Waiting for wallet connection"
         message="You are connecting your wallet to Fluxity."
       />
-    </div>
+    </button>
   );
 };
 
