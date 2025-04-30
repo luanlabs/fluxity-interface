@@ -70,7 +70,7 @@ const SenderStatusCard = ({
   const [isReclamationModalOpen, setIsReclamationModalOpen] = useState(false);
   const [txHash, setTxHash] = useState('');
 
-  const currentNetwork = useLoadUserNetwork();
+  const currentNetwork = useAppSelector((state) => state.user.network);
 
   useEffect(() => {
     if (isOpenCancelModal) {
@@ -101,7 +101,7 @@ const SenderStatusCard = ({
 
     setIsCancelStreamConfirmOpen(true);
     setCancelAmount(cancelStreamReturnValues(tx));
-    informCancelAPI(id);
+    informCancelAPI(id, currentNetwork.network);
   };
 
   const handleModalButton = () => {

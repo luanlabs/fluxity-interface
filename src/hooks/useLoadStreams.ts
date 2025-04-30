@@ -7,13 +7,13 @@ import getStreamList from 'src/features/getStreamList';
 import { loadStreamHistory } from 'src/reducers/user';
 import { calculateCompletionPercentage } from 'src/utils/calculateCompletionPercentage';
 
-const useLoadStreams = (address: string) => {
+const useLoadStreams = (address: string, network: string) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (address) {
       const fetchStreams = () => {
-        getStreamList(address).then((data) => {
+        getStreamList(address, network).then((data) => {
           const streamHistories: IStreamHistory[] = data.map((stream) => {
             const completionPercentage = calculateCompletionPercentage(
               stream.start_date,
@@ -37,7 +37,7 @@ const useLoadStreams = (address: string) => {
 
       return () => clearInterval(intervalId);
     }
-  }, [dispatch, address]);
+  }, [dispatch, address, network]);
 };
 
 export default useLoadStreams;

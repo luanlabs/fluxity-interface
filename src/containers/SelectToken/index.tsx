@@ -39,7 +39,8 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
   const [searchValue, setSearchValue] = useState('');
 
   const address = useAppSelector((state) => state.user.address);
-  const currentNetwork = useLoadUserNetwork();
+  const currentNetwork = useAppSelector((state) => state.user.network);
+
   const id = useCustomID('selectToken');
   const { tokens } = useFetchTokenDetails(address, currentNetwork.networkPassphrase);
   const { showLoading, tokenDetails, isContractAddressValid } = useGetERC20TokenDetail(

@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       return true;
     }
 
-    if (currentPath.startsWith(Pages.STREAM_DETAILS)) {
+    if (currentPath.match(/^\/(mainnet|testnet)\/lockup(\/.*)?$/)) {
       return true;
     }
 

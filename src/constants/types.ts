@@ -45,6 +45,7 @@ export interface IResponseToken {
   symbol: string;
   logo: string;
   _id: string;
+  network: string;
   claimable: boolean;
 }
 

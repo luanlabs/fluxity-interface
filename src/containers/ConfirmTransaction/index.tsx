@@ -4,6 +4,7 @@ import { scValToNative } from '@stellar/stellar-sdk';
 
 import BN from 'src/utils/BN';
 import { useBlux } from '@bluxcc/react';
+
 import timeout from 'src/utils/timeout';
 import toast from 'src/components/CToast';
 import { OperationType } from 'src/models';
@@ -16,7 +17,6 @@ import explorersLink from 'src/constants/explorersLink';
 import CModalSuccess from 'src/components/CModalSuccess';
 import toDecimals from 'src/utils/createLockup/toDecimals';
 import createLockup from 'src/features/soroban/createLockup';
-import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 import DoubleButtonModal from 'src/components/DoubleButtonModal';
 import SingleButtonModal from 'src/components/SingleButtonModal';
 import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
@@ -44,6 +44,7 @@ const ConfirmTransaction = ({
   const { sendTransaction } = useBlux();
   const values: FormValues = form.getValues();
   const address = useAppSelector((state) => state.user.address);
+  const currentNetwork = useAppSelector((state) => state.user.network);
 
   const variant = capitalizeFirstLetter(operationType);
 
@@ -59,8 +60,6 @@ const ConfirmTransaction = ({
     hash: '',
     id: 0,
   });
-
-  const currentNetwork = useLoadUserNetwork();
 
   useEffect(() => {
     if (isConfirmClicked) {
@@ -122,12 +121,11 @@ const ConfirmTransaction = ({
       const finalize = await sendTransaction(createLockupXdr.toXDR(), { isSoroban: true });
 
       if (!finalize.returnValue) {
-        // TODO
-        // Show error here
+        toast('error', 'Failed to send transaction');
       } else {
         await informCreateLockupAPI(
           scValToNative(finalize.returnValue).toString(),
-          passPhraseToNetworkDetail(currentNetwork.networkPassphrase).network,
+          currentNetwork.network,
         );
 
         setStreamDetails({
@@ -166,6 +164,7 @@ const ConfirmTransaction = ({
       buttonText={`View ${variant} Details`}
       closeOnClick={handleCloseTransactionSuccessModal}
       stream={streamDetails}
+      network={currentNetwork.network}
     />
   );
 

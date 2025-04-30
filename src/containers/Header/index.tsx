@@ -1,11 +1,15 @@
 import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useSwitchNetwork, useNetwork, networks } from '@bluxcc/react';
+import { useSwitchNetwork, useNetwork } from '@bluxcc/react';
 
 import CLink from 'src/components/CLink';
 import CButton from 'src/components/CButton';
 import { ExternalPages } from 'src/constants/externalPages';
+import { setNetwork } from 'src/reducers/user';
+import { useAppDispatch } from 'src/hooks/useRedux';
+import { Mainnet, Testnet } from 'src/constants/networks';
+import { clearToken } from 'src/reducers/tokens';
 
 import StellarLogo from 'src/assets/StellarLogo';
 import logoWithName from 'public/images/logoWithName.svg';
@@ -16,10 +20,19 @@ const Header = () => {
   const router = useRouter();
   const { switchNetwork } = useSwitchNetwork();
   const currentNetwork = useNetwork();
+  const dispatch = useAppDispatch();
+
   const mainnetPassphrase = 'Public Global Stellar Network ; September 2015';
 
   const isMainnet = currentNetwork === mainnetPassphrase;
 
+  const handleSwitchNetwork = () => {
+    const newNetwork = isMainnet ? Testnet : Mainnet;
+
+    switchNetwork(newNetwork.networkPassphrase);
+    dispatch(setNetwork(newNetwork));
+    dispatch(clearToken());
+  };
   return (
     <header className="flex justify-between w-full items-center py-3 desktop:py-[18px] px-6">
       <div
@@ -44,7 +57,7 @@ const Header = () => {
         <CButton
           variant="simple"
           color="gray"
-          onClick={() => switchNetwork(isMainnet ? networks.testnet : networks.mainnet)}
+          onClick={handleSwitchNetwork}
           content={
             <span className="flex gap-2 items-center">
               <StellarLogo fill={isMainnet ? '#1C9B47' : 'black'} />

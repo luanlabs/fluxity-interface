@@ -9,13 +9,14 @@ const checkBalanceTokenSoroban = async (
   userBalances: HorizonApi.BalanceLineAsset[],
   networkPassphrase: string,
 ) => {
-  const contracts = await getContractIdFromAsset(userBalances, networkPassphrase);
+  const contracts = getContractIdFromAsset(userBalances, networkPassphrase);
 
   const availableContracts = [];
 
   for (let i = 0; i < contracts.length; i++) {
     try {
       const contract = new Contract(contracts[i].toString());
+
       const tokenDetails = getERC20Details(contract.toString(), networkPassphrase, address);
 
       availableContracts.push(tokenDetails);

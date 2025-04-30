@@ -9,7 +9,6 @@ import getAccount from 'src/utils/getAccount';
 import { loadTokens } from 'src/reducers/tokens';
 import { shortenAddress } from 'src/utils/shortenAddress';
 import getTokenBalances from 'src/features/getTokenBalances';
-import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 import { getAlreadyMinted } from 'src/features/getAlreadyMinted';
 import { useAppDispatch, useAppSelector } from 'src/hooks/useRedux';
 import { setAddress, loadAccount, hasTestnetTokens } from 'src/reducers/user';
@@ -32,7 +31,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
   const [openModal, setOpenModal] = useState(false);
   const { login, isAuthenticated, user, isReady } = useBlux();
 
-  const currentNetwork = useLoadUserNetwork();
+  const currentNetwork = useAppSelector((state) => state.user.network);
   const address = useAppSelector((store) => store.user.address);
   const tokens = useAppSelector((store) => store.tokens);
 
@@ -76,7 +75,7 @@ const CConnectButton = ({ isMinimized }: CConnectButtonProps) => {
     });
 
     toast('success', 'Wallet has been successfully connected.');
-  }, [isAuthenticated]);
+  }, [isAuthenticated, currentNetwork.networkPassphrase]);
 
   return (
     <button
