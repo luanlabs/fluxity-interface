@@ -19,8 +19,6 @@ const getERC20Details = async (
 
     const networkName = passPhraseToNetworkDetail(passPhrase).network;
 
-    console.log(result);
-
     return {
       address: contract,
       balance: result[0],
