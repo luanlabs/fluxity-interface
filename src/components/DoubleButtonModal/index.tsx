@@ -6,13 +6,19 @@ interface DoubleButtonModalProps {
   stream: { hash: string; id: number };
   closeOnClick: () => void;
   buttonText: string;
+  network: string;
 }
 
-const DoubleButtonModal = ({ closeOnClick, stream, buttonText }: DoubleButtonModalProps) => {
+const DoubleButtonModal = ({
+  closeOnClick,
+  stream,
+  buttonText,
+  network,
+}: DoubleButtonModalProps) => {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/lockup/${stream.id}`);
+    router.push(`/${network}/lockup/${stream.id}`);
   };
 
   return (

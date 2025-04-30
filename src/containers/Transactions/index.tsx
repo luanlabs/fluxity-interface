@@ -37,9 +37,10 @@ const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamList
   const tokens = useAppSelector((state) => state.tokens);
   const history = useAppSelector((state) => state.user.history);
   const isLoading = useAppSelector((state) => state.user.loadingHistory);
+  const currentNetwork = useAppSelector((state) => state.user.network);
 
   const handleClick = (streamId: string) => {
-    router.push(`/lockup/${streamId}`);
+    router.push(`${currentNetwork.network}/lockup/${streamId}`);
   };
 
   const filteredStreamsByStatus = history.filter((stream) => {
