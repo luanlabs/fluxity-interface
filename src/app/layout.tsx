@@ -114,14 +114,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <BluxProvider
                 config={{
                   appName: 'Fluxity',
-                  loginMethods: ['wallet', 'passkey'],
+                  loginMethods: ['wallet'],
                   appearance: {
                     font,
                     borderColor: '#0501421A',
-                    bgField: '#fafafa',
-                    background: '#ffffff',
+                    accent: '#3a21d4',
+                    background: '#fafafa',
+                    bgField: '#ffffff',
                     textColor: '#050142',
-                    cornerRadius: '14px',
+                    borderRadius: '16px',
                     logo: '/images/logoWithName.svg',
                   },
                   networks: [networks.mainnet, networks.testnet],
