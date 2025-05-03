@@ -13,6 +13,7 @@ const useFetchTokenDetails = (address: string, networkPassphrase: string) => {
 
   const userBalances = useAppSelector((state) => state.user?.info?.balances);
   const tokensFromStore = useAppSelector((store) => store.tokens);
+  const currentNetwork = useAppSelector((state) => state.user.network);
 
   useEffect(() => {
     const fetchTokenDetails = async () => {
@@ -31,12 +32,20 @@ const useFetchTokenDetails = (address: string, networkPassphrase: string) => {
       } catch {}
     };
 
-    const filterClaimableTokens = tokensFromStore.filter((token) => token.claimable);
+    const filterCurrentNetworkTokens = tokensFromStore.filter(
+      (token) => token.network === currentNetwork.network,
+    );
 
     fetchTokenDetails();
 
-    setTokens([...filterClaimableTokens, ...userTokens]);
-  }, [address, tokensFromStore]);
+    const mergedTokens = [...filterCurrentNetworkTokens, ...userTokens];
+
+    const uniqueToken = Array.from(
+      new Map(mergedTokens.map((token) => [token.address, token])).values(),
+    );
+
+    setTokens(uniqueToken);
+  }, [address, tokensFromStore, currentNetwork]);
 
   return {
     tokens,

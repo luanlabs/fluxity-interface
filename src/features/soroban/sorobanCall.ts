@@ -2,6 +2,8 @@ import { Contract, xdr, scValToNative, rpc } from '@stellar/stellar-sdk';
 
 import getServer from 'src/utils/soroban/getServer';
 import createTransaction from 'src/utils/soroban/baseTransaction';
+import { store } from 'src/store';
+import { updateRequest } from 'src/reducers/request';
 
 const sorobanCall = async <T>(
   user: string,
@@ -10,6 +12,13 @@ const sorobanCall = async <T>(
   callSignature: string,
   callParameters?: xdr.ScVal[],
 ) => {
+  const dispatch = store.dispatch;
+  dispatch(updateRequest(1));
+
+  const state = store.getState();
+  const requestCount = state.requests.count;
+  console.log(requestCount);
+
   const { soroban: server } = getServer(passPhrase);
   const account = await server.getAccount(user);
   const contract = new Contract(contractAddress);

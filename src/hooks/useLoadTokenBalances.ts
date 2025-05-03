@@ -22,7 +22,7 @@ const useLoadTokenBalances = (address: string, passPhrase: string) => {
     const intervalId = setInterval(fetchTokenBalances, 25000);
 
     return () => clearInterval(intervalId);
-  }, [address, dispatch, tokens, passPhrase]);
+  }, [address, dispatch, passPhrase]);
 };
 
 export default useLoadTokenBalances;

@@ -9,7 +9,7 @@ import BN from 'src/utils/BN';
 import { CancelAmounts } from 'src/models';
 import formatUnits from 'src/utils/formatUnits';
 import CPageCard from 'src/components/CPageCard';
-import { useAppSelector } from 'src/hooks/useRedux';
+import { useAppDispatch, useAppSelector } from 'src/hooks/useRedux';
 import useGetStreamById from 'src/utils/getStreamById';
 import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
@@ -25,18 +25,27 @@ import SummaryFields from './SummaryFields';
 import SenderStatusCard from './SenderStatusCard';
 import ReceiverStatusCard from './ReceiverStatusCard';
 import DynamicStreamedAmount from './DynamicStreamedAmount';
+import { useSwitchNetwork } from '@bluxcc/react';
+import nameToNetworkDetail from 'src/utils/nameToNetworkDetail';
+import { setNetwork } from 'src/reducers/user';
 
 interface StreamDetailsProps {
   id: string;
+  network: string;
 }
 
-const StreamDetails = ({ id }: StreamDetailsProps) => {
+const StreamDetails = ({ id, network }: StreamDetailsProps) => {
+  const { switchNetwork } = useSwitchNetwork();
+  const dispatch = useAppDispatch();
+  const currentNetwork = nameToNetworkDetail(network);
+
+  useEffect(() => {
+    switchNetwork(currentNetwork.networkPassphrase);
+    dispatch(setNetwork(currentNetwork));
+  }, [currentNetwork]);
+
   const address = useAppSelector((state) => state.user.address);
-  const currentNetwork = useLoadUserNetwork();
-  const { loading, data, error } = useGetStreamById(
-    id,
-    passPhraseToNetworkDetail(currentNetwork.networkPassphrase).network,
-  );
+  const { loading, data, error } = useGetStreamById(id, network);
 
   const [cancelAmounts, setCancelAmounts] = useState<CancelAmounts>({
     senderAmount: 0,
@@ -129,6 +138,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
       />
     </div>
   );
+  const symbol = data.token.symbol === 'native' ? 'XLM' : data.token.symbol;
 
   return (
     <div className="w-full flex mobile:overflow-auto gap-4 md:gap-2 md:px-2 h-[87vh] 2xl:h-[69vh] 3xl:h-[43vh] 4xl:h-[26vh] md:h-[83vh] sm:flex-col sm:w-[90%] sm:m-auto">
@@ -157,7 +167,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
           </div>
 
           <DynamicStreamedAmount
-            token={data.token.symbol}
+            token={symbol}
             streamAmount={isStreamCancelled ? receiverAmount : sendLockupAmount.toFixed(3)}
             isCancelled={data.is_cancelled}
             isVesting={data.is_vesting}
@@ -171,7 +181,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
             startDate={data.start_date}
             endDate={data.end_date}
             amount={amount}
-            token={data.token.symbol}
+            token={symbol}
             isStreamCancelled={isStreamCancelled}
             isCancelable={cancellable}
             isSender={isSender}
@@ -209,7 +219,7 @@ const StreamDetails = ({ id }: StreamDetailsProps) => {
         {isReceiver && (
           <ReceiverStatusCard
             stream={data}
-            token={data.token.symbol}
+            token={symbol}
             withdrawnAmount={withdrawnAmount}
             setWithdrawnAmount={setWithdrawnAmount}
             decimalToken={data.token.decimals}

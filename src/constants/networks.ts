@@ -1,10 +1,4 @@
-type StellarConfig = {
-  network: string;
-  contract: string;
-  networkUrl: string;
-  networkPassphrase: string;
-  sorobanRpcUrl: string;
-};
+import { StellarConfig } from 'src/models';
 
 export const Futurenet: StellarConfig = {
   network: 'FUTURENET',
@@ -15,15 +9,15 @@ export const Futurenet: StellarConfig = {
 };
 
 export const Mainnet: StellarConfig = {
-  network: 'PUBLIC',
+  network: 'mainnet',
   contract: process.env.NEXT_PUBLIC_MAINNET_CONTRACT || '',
   networkUrl: process.env.NEXT_PUBLIC_MAINNET_HORIZONURL || 'https://horizon.stellar.org',
   networkPassphrase: 'Public Global Stellar Network ; September 2015',
-  sorobanRpcUrl: process.env.MAINNET_SOROBAN_RPCURL || '',
+  sorobanRpcUrl: process.env.NEXT_PUBLIC_MAINNET_SOROBAN_RPCURL || '',
 };
 
 export const Testnet: StellarConfig = {
-  network: 'TESTNET',
+  network: 'testnet',
   contract: process.env.NEXT_PUBLIC_TESTNET_CONTRACT || '',
   networkUrl: process.env.NEXT_PUBLIC_TESTNET_HORIZONURL || 'https://horizon-testnet.stellar.org',
   networkPassphrase: 'Test SDF Network ; September 2015',

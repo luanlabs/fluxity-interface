@@ -2,8 +2,9 @@
 
 import { AccountResponse } from '@stellar/stellar-sdk/lib/horizon';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-
+import { Testnet } from 'src/constants/networks';
 import { IStreamHistory } from 'src/constants/types';
+import { StellarConfig } from 'src/models';
 
 interface IUser {
   address: string;
@@ -12,6 +13,7 @@ interface IUser {
   hasReceivedTokens: boolean;
   history: IStreamHistory[];
   loadingHistory: boolean;
+  network: StellarConfig;
 }
 
 const initialState: IUser = {
@@ -21,6 +23,7 @@ const initialState: IUser = {
   hasReceivedTokens: false,
   history: [],
   loadingHistory: true,
+  network: Testnet,
 };
 
 export const user = createSlice({
@@ -31,6 +34,9 @@ export const user = createSlice({
       state.address = action.payload;
       state.loading = true;
       state.loadingHistory = true;
+    },
+    setNetwork: (state, action: PayloadAction<StellarConfig>) => {
+      state.network = action.payload;
     },
     loadAccount: (state, action: PayloadAction<AccountResponse | null>) => {
       state.info = action.payload;
@@ -54,7 +60,13 @@ export const user = createSlice({
   },
 });
 
-export const { setAddress, disconnect, loadAccount, hasTestnetTokens, loadStreamHistory } =
-  user.actions;
+export const {
+  setAddress,
+  disconnect,
+  setNetwork,
+  loadAccount,
+  hasTestnetTokens,
+  loadStreamHistory,
+} = user.actions;
 
 export default user.reducer;

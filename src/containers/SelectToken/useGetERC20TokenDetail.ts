@@ -3,6 +3,7 @@ import { StrKey } from '@stellar/stellar-sdk';
 
 import { ITokenDetails } from 'src/models';
 import getERC20Details from 'src/features/soroban/getERC20Details';
+import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
 
 const useGetERC20TokenDetail = (
   address: string,
@@ -10,6 +11,7 @@ const useGetERC20TokenDetail = (
   networkPassphrase: string,
 ) => {
   const [showLoading, setShowLoading] = useState(true);
+  const networkName = passPhraseToNetworkDetail(networkPassphrase).network;
   const [tokenDetails, setTokenDetails] = useState<ITokenDetails | null>({
     address: '',
     balance: '',
@@ -19,6 +21,7 @@ const useGetERC20TokenDetail = (
     logo: '',
     _id: '',
     claimable: true,
+    network: networkName,
   });
 
   const isContractAddressValid = StrKey.isValidContract(searchValue.toUpperCase());

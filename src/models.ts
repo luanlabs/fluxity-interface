@@ -102,3 +102,11 @@ export interface ITokenDetails extends IResponseToken {
   symbol: string;
   decimals: string;
 }
+
+export type StellarConfig = {
+  network: string;
+  contract: string;
+  networkUrl: string;
+  networkPassphrase: string;
+  sorobanRpcUrl: string;
+};

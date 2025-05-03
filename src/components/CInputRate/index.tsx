@@ -115,6 +115,7 @@ const CInputRate = ({
         defaultValue={flowRateOptions[2]}
         onChange={handleSelectChange}
         value={selectValue}
+        id="rate"
       />
     </div>
   );

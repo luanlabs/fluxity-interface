@@ -46,7 +46,8 @@ const CreateLockup = ({ operationType }: lockupProps) => {
   const [isOpenSheet, setIsOpenSheet] = useState(false);
 
   const { address } = useAppSelector((state) => state.user);
-  const xlmAsset = useAppSelector((state) => state.user?.info?.balances[0]);
+  const userAssets = useAppSelector((state) => state.user?.info?.balances);
+  const xlmAsset = userAssets?.filter((asset) => asset.asset_type === 'native')[0];
 
   const form = useForm<FormValues>({
     mode: 'onChange',

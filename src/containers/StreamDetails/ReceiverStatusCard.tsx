@@ -51,7 +51,7 @@ const ReceiverStatusCard = ({
   const [approvalOpen, setIsApprovalOpen] = useState(false);
   const [withdrawSuccessOpen, setIsWithdrawSuccessOpen] = useState(false);
 
-  const currentNetwork = useLoadUserNetwork();
+  const currentNetwork = useAppSelector((state) => state.user.network);
 
   const amount = formatUnits(stream.amount, decimalToken);
 
@@ -88,10 +88,7 @@ const ReceiverStatusCard = ({
     await timeout(100);
     setIsWithdrawSuccessOpen(true);
 
-    informWithdrawAPI(
-      stream.id,
-      passPhraseToNetworkDetail(currentNetwork.networkPassphrase).network,
-    );
+    informWithdrawAPI(stream.id, currentNetwork.network);
     const withdrawFinalize = withdrawStreamReturnValue(tx);
     setWithdrawnAmount(withdrawFinalize);
 

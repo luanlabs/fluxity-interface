@@ -15,6 +15,10 @@ export const tokens = createSlice({
       return action.payload;
     },
 
+    clearToken: (state) => {
+      state.length = 0;
+    },
+
     loadClaimedTokens: (state, action: PayloadAction<IToken[]>) => {
       for (let i = 0; i < action.payload.length; ++i) {
         let index = state.findIndex(
@@ -34,6 +38,6 @@ export const tokens = createSlice({
   },
 });
 
-export const { loadTokens, loadClaimedTokens, clearTokenBalances } = tokens.actions;
+export const { loadTokens, loadClaimedTokens, clearTokenBalances, clearToken } = tokens.actions;
 
 export default tokens.reducer;

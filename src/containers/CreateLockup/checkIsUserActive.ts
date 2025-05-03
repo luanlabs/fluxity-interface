@@ -17,6 +17,7 @@ export const checkIsUserActive = (token: xlmAssetType) => {
 
 export const checkUserBalance = (token: xlmAssetType) => {
   let isXLMInsufficient;
+
   if (token.balance && token.sellingLiabilities && token.buyingLiabilities) {
     isXLMInsufficient = new BN(token.balance).minus(
       new BN(token.sellingLiabilities).plus(token.buyingLiabilities),
