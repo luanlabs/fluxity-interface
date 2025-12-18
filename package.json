@@ -59,6 +59,6 @@
     "postcss": "^8.4.38",
     "postcss-nested": "^6.0.1",
     "postcss-nesting": "^12.0.4",
-    "storybook": "^7.2.3"
+    "storybook": "^7.6.21"
   }
 }
