@@ -11,8 +11,14 @@ export const metadata: Metadata = {
     'create token stream, cryptocurrency, Stellar, time-based payment, automated transactions',
 };
 
-const StreamDetailsPage = ({ params }: { params: { id: string; network: string } }) => {
-  return <StreamDetails id={params.id} network={params.network} />;
+const StreamDetailsPage = async ({
+  params,
+}: {
+  params: Promise<{ id: string; network: string }>;
+}) => {
+  const { id, network } = await params;
+
+  return <StreamDetails id={id} network={network} />;
 };
 
 export default StreamDetailsPage;

@@ -10,7 +10,7 @@ import { shortenAddress } from 'src/utils/shortenAddress';
 
 import tokenLogo from 'public/images/token.svg';
 
-const options = {
+const options: Intl.DateTimeFormatOptions = {
   year: 'numeric',
   month: 'short',
   day: 'numeric',

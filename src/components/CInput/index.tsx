@@ -27,12 +27,16 @@ interface CInputProps {
   clipboardText?: string;
   tooltipDetails?: string;
   inputClassName?: string;
-  value?: string | number | any;
-  onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  clearInputClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  handlePaste?: (event: React.MouseEventHandler<HTMLDivElement>) => void;
-  handleCopyButton?: (event: React.MouseEvent<HTMLImageElement, MouseEvent>) => void;
+  value?: string | number;
+  type?: React.HTMLInputTypeAttribute;
+  maxLength?: number;
+  onClick?: React.MouseEventHandler<HTMLInputElement>;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onPaste?: React.ClipboardEventHandler<HTMLInputElement>;
+  onKeyPress?: React.KeyboardEventHandler<HTMLInputElement>;
+  clearInputClick?: React.MouseEventHandler<HTMLImageElement>;
+  handlePaste?: React.MouseEventHandler<HTMLDivElement>;
+  handleCopyButton?: React.MouseEventHandler<HTMLDivElement>;
   enterKeyHint?: 'search' | 'done' | 'enter' | 'go' | 'next' | 'previous' | 'send';
 }
 

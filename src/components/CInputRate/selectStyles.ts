@@ -1,8 +1,8 @@
-import { CSSObjectWithLabel } from 'react-select';
+import { CSSObjectWithLabel, StylesConfig } from 'react-select';
 
-import { ReactSelectType } from 'src/models';
+import { RateValue } from 'src/models';
 
-const selectStyles: ReactSelectType = {
+const selectStyles: StylesConfig<RateValue, false> = {
   option: (provided: CSSObjectWithLabel, state) => ({
     ...provided,
     display: 'flex',

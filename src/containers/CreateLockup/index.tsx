@@ -2,7 +2,7 @@
 
 import cn from 'classnames';
 import React, { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, Resolver } from 'react-hook-form';
 
 import CButton from 'src/components/CButton';
 import CPageCard from 'src/components/CPageCard';
@@ -51,13 +51,13 @@ const CreateLockup = ({ operationType }: lockupProps) => {
 
   const form = useForm<FormValues>({
     mode: 'onChange',
-    resolver: (formValues) =>
+    resolver: ((formValues: FormValues) =>
       validateForm(formValues, setIsFormValidated, address, {
         asset_type: xlmAsset?.asset_type,
         balance: xlmAsset?.balance,
         buyingLiabilities: xlmAsset?.buying_liabilities,
         sellingLiabilities: xlmAsset?.selling_liabilities,
-      }),
+      })) as unknown as Resolver<FormValues>,
     defaultValues: {
       ...(operationType === 'stream' && { streamingModel: 'linear' }),
       isCancellable: 'OFF',

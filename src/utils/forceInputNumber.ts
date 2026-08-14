@@ -2,7 +2,7 @@ export const forceInputNumber = (e: React.KeyboardEvent<HTMLInputElement>) => {
   const {
     which,
     keyCode,
-    target: { value },
+    currentTarget: { value },
   } = e;
 
   const charCode = typeof which === 'undefined' ? keyCode : which;

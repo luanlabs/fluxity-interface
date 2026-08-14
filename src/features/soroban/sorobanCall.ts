@@ -15,10 +15,6 @@ const sorobanCall = async <T>(
   const dispatch = store.dispatch;
   dispatch(updateRequest(1));
 
-  const state = store.getState();
-  const requestCount = state.requests.count;
-  console.log(requestCount);
-
   const { soroban: server } = getServer(passPhrase);
   const account = await server.getAccount(user);
   const contract = new Contract(contractAddress);

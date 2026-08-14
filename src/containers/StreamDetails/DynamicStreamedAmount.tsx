@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import humanizeAmount from 'src/utils/humanizeAmount';
 
 interface DynamicStreamedAmountProps {

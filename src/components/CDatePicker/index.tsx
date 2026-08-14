@@ -108,7 +108,10 @@ const CDatePicker = ({
   const handleConfirmSheetClick = () => {
     setIsOpenSheet(false);
   };
-  const CustomInput = forwardRef<HTMLInputElement>(({ value, onClick }, ref) => (
+  const CustomInput = forwardRef<
+    HTMLButtonElement,
+    { value?: string; onClick?: React.MouseEventHandler<HTMLButtonElement> }
+  >(({ value, onClick }, ref) => (
     <div className={cn('relative w-full', className)} onClick={handleOpenSheet}>
       <button
         className="text-left rounded-xl h-14 px-4 outline-none text-lg placeholder-[#7D7B9B] text-[#7D7B9B] leading-[18.78px] !w-full bg-neutral-100"

@@ -1,6 +1,7 @@
 import qs from 'qs';
 
 import fetch from 'src/utils/request';
+import logger from 'src/utils/logger';
 import { ExternalPages } from 'src/constants/externalPages';
 import { IResponseStreamsResult } from 'src/constants/types';
 
@@ -19,7 +20,9 @@ const getStreamList = async (address: string, network: string) => {
     );
 
     return data.result;
-  } catch (e) {}
+  } catch (error) {
+    logger.error('Failed to fetch stream list', error);
+  }
   return [];
 };
 

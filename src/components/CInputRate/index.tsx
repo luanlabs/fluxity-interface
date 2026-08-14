@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
-import Select from 'react-select';
+import { type ClipboardEvent, useEffect, useState } from 'react';
+import Select, { SingleValue } from 'react-select';
 
 import { RateValue } from 'src/models';
 import CInput from 'src/components/CInput';
@@ -69,7 +69,11 @@ const CInputRate = ({
     }
   }, [value, isFormReset]);
 
-  const handleSelectChange = (e: RateValue) => {
+  const handleSelectChange = (e: SingleValue<RateValue>) => {
+    if (!e) {
+      return;
+    }
+
     onChange({
       amount: inputValue,
       rate: e,
@@ -78,13 +82,13 @@ const CInputRate = ({
     setSelectValue(e);
   };
 
-  const handleOnPaste = (e) => {
-    let paste = (e.clipboardData || window.clipboardData).getData('text');
+  const handleOnPaste = (e: ClipboardEvent<HTMLInputElement>) => {
+    const paste = e.clipboardData.getData('text');
 
     if (!paste.match(/^[0-9]*\.?[0-9]*$/)) {
       e.preventDefault();
     }
-    if (e.target.value.includes('.') && paste.includes('.')) {
+    if (e.currentTarget.value.includes('.') && paste.includes('.')) {
       e.preventDefault();
     }
   };
@@ -104,10 +108,10 @@ const CInputRate = ({
         errorMsg={errorMsg}
         error={error}
         onPaste={handleOnPaste}
-        maxLength="15"
+        maxLength={15}
       />
 
-      <Select
+      <Select<RateValue, false>
         options={flowRateOptions}
         components={{ DropdownIndicator }}
         styles={selectStyles}

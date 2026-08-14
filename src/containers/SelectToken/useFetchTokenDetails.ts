@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { HorizonApi } from '@stellar/stellar-sdk/lib/horizon';
+import { Horizon } from '@stellar/stellar-sdk';
 import BN from 'src/utils/BN';
+import logger from 'src/utils/logger';
 
 import { ITokenDetails } from 'src/models';
 import { IToken } from 'src/reducers/tokens';
@@ -20,7 +21,9 @@ const useFetchTokenDetails = (address: string, networkPassphrase: string) => {
       try {
         const result = await checkBalanceTokenSoroban(
           address,
-          userBalances as HorizonApi.BalanceLineAsset<'credit_alphanum4' | 'credit_alphanum12'>[],
+          userBalances as Horizon.HorizonApi.BalanceLineAsset<
+            'credit_alphanum4' | 'credit_alphanum12'
+          >[],
           networkPassphrase,
         );
 
@@ -29,7 +32,9 @@ const useFetchTokenDetails = (address: string, networkPassphrase: string) => {
         );
 
         setUserTokens(filteredTokenBalance);
-      } catch {}
+      } catch (error) {
+        logger.debug('Failed to fetch token balances from Soroban', error);
+      }
     };
 
     const filterCurrentNetworkTokens = tokensFromStore.filter(

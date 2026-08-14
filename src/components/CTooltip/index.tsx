@@ -6,7 +6,7 @@ import { ArrowStyle } from './arrowStyle';
 export type Placement = 'top' | 'bottom';
 
 interface TooltipProps {
-  title: string;
+  title?: string;
   text: string;
   children: JSX.Element | React.ReactNode;
   placement?: Placement;

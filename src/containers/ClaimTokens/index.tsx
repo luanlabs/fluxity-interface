@@ -12,6 +12,7 @@ import CProcessModal from 'src/components/CProcessModal';
 import { ExternalPages } from 'src/constants/externalPages';
 
 import fetch from 'src/utils/request';
+import logger from 'src/utils/logger';
 import { loadClaimedTokens } from 'src/reducers/tokens';
 import { hasTestnetTokens } from 'src/reducers/user';
 import { IResponseTokenResult } from 'src/constants/types';
@@ -56,7 +57,9 @@ const ClaimTokens = () => {
     if (!info) {
       try {
         await fetch(ExternalPages.FRIENDBOT + encodeURIComponent(address));
-      } catch (e) {}
+      } catch (error) {
+        logger.debug('Friendbot funding request failed (account may already be funded)', error);
+      }
     }
     try {
       const { data } = await fetch<IResponseTokenResult>(

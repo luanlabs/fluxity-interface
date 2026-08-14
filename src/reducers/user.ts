@@ -1,6 +1,6 @@
 'use client';
 
-import { AccountResponse } from '@stellar/stellar-sdk/lib/horizon';
+import { Horizon } from '@stellar/stellar-sdk';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { Testnet } from 'src/constants/networks';
 import { IStreamHistory } from 'src/constants/types';
@@ -8,7 +8,7 @@ import { StellarConfig } from 'src/models';
 
 interface IUser {
   address: string;
-  info: AccountResponse | null;
+  info: Horizon.AccountResponse | null;
   loading: boolean;
   hasReceivedTokens: boolean;
   history: IStreamHistory[];
@@ -38,7 +38,7 @@ export const user = createSlice({
     setNetwork: (state, action: PayloadAction<StellarConfig>) => {
       state.network = action.payload;
     },
-    loadAccount: (state, action: PayloadAction<AccountResponse | null>) => {
+    loadAccount: (state, action: PayloadAction<Horizon.AccountResponse | null>) => {
       state.info = action.payload;
       state.loading = false;
     },

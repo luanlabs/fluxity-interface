@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+import logger from 'src/utils/logger';
 import getServer from 'src/utils/soroban/getServer';
 import { getAlreadyMinted } from 'src/features/getAlreadyMinted';
 import { loadAccount, hasTestnetTokens } from 'src/reducers/user';
@@ -11,22 +12,32 @@ const useLoadUserInfo = (address: string, passPhrase: string) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (address) {
-        const { horizon: server } = getServer(passPhrase);
+      if (!address) {
+        return;
+      }
 
-        try {
-          const info = await server.loadAccount(address);
+      const { horizon: server } = getServer(passPhrase);
 
-          dispatch(loadAccount(info));
-        } catch (e) {}
+      try {
+        const info = await server.loadAccount(address);
 
+        dispatch(loadAccount(info));
+      } catch (error) {
+        // A 404 here is expected for wallets that have never been funded.
+        logger.debug('Unable to load Horizon account (it may be unfunded)', error);
+      }
+
+      try {
         const isMinted = await getAlreadyMinted(address);
 
         if (isMinted) {
           dispatch(hasTestnetTokens());
         }
+      } catch (error) {
+        logger.debug('Failed to check testnet mint status', error);
       }
     };
+
     fetchData();
   }, [dispatch, address, passPhrase]);
 };

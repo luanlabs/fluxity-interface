@@ -14,7 +14,7 @@ import tickLogo from 'public/images/tick.svg';
 
 interface WalletAddressContainer {
   onChange: (value: string) => void;
-  clearInputClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  clearInputClick: (event: React.MouseEvent<HTMLElement>) => void;
   tooltipDetails: string;
   tooltipTitle: string;
   value: string;
@@ -77,13 +77,13 @@ const WalletAddressContainer = ({
     setRecipientWalletAddress(e.target.value.trim());
   };
 
-  const handleClearInput = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClearInput = (e: React.MouseEvent<HTMLElement>) => {
     clearInputClick(e);
     setRecipientWalletAddress('');
     setInputValue('');
   };
 
-  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleButtonClick = (e: React.MouseEvent<HTMLElement>) => {
     clearInputClick(e);
     setRecipientWalletAddress('');
     setInputValue('');

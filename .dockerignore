@@ -1,0 +1,27 @@
+# Build artifacts and dependencies (reinstalled/rebuilt inside the image)
+node_modules
+.next
+out
+build
+coverage
+
+# Version control & CI
+.git
+.gitignore
+.github
+
+# Local-only env files (the committed .env / .env.example may still flow in)
+.env*.local
+
+# Editor / OS noise
+.vscode
+.idea
+.DS_Store
+*.log
+npm-debug.log*
+
+# Docker & docs (not needed at build time)
+Dockerfile
+.dockerignore
+docker-compose.yml
+README.md

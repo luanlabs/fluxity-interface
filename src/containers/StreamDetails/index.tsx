@@ -1,6 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable @next/next/no-async-client-component */
 'use client';
 import { useEffect, useState } from 'react';
 import { redirect } from 'next/navigation';
@@ -65,7 +63,7 @@ const StreamDetails = ({ id, network }: StreamDetailsProps) => {
   );
 
   useEffect(() => {
-    let intervalId: NodeJS.Timer;
+    let intervalId: ReturnType<typeof setInterval>;
 
     if (!isStreamCancelled) {
       intervalId = setInterval(() => {

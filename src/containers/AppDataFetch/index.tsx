@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import CModal from 'src/components/CModal';
+import validateEnv from 'src/constants/env';
 import useLoadTokens from 'src/hooks/useLoadTokens';
 import { useAppSelector } from 'src/hooks/useRedux';
 import useLoadStreams from 'src/hooks/useLoadStreams';
@@ -12,6 +13,10 @@ const AppDataFetch = () => {
   const [shouldModalOpen, setShouldModalOpen] = useState(false);
   const address = useAppSelector((state) => state.user.address);
   const currentNetwork = useAppSelector((state) => state.user.network);
+
+  useEffect(() => {
+    validateEnv();
+  }, []);
 
   useLoadUserInfo(address, currentNetwork.networkPassphrase);
   useLoadTokens(currentNetwork.network, currentNetwork.networkPassphrase);

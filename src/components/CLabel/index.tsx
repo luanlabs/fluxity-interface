@@ -9,7 +9,7 @@ interface CLabelProps {
   htmlFor?: string;
   className?: string;
   disabled?: boolean;
-  tooltipTitle: string;
+  tooltipTitle?: string;
   tooltipDetails?: string;
 }
 

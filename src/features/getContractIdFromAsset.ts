@@ -1,7 +1,7 @@
-import { Asset } from '@stellar/stellar-sdk';
-import { HorizonApi } from '@stellar/stellar-sdk/lib/horizon';
+import { Asset, Horizon } from '@stellar/stellar-sdk';
 
-export type UserBalancesType = HorizonApi.BalanceLineNative | HorizonApi.BalanceLineAsset;
+export type UserBalancesType =
+  Horizon.HorizonApi.BalanceLineNative | Horizon.HorizonApi.BalanceLineAsset;
 
 const getContractIdFromAsset = (userBalances: UserBalancesType[], networkPassphrase: string) => {
   return userBalances.map((asset) => {

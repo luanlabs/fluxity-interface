@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import BN from 'src/utils/BN';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
 import { checkBalance } from 'src/utils/checkBalance';
