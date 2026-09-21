@@ -1,131 +1,42 @@
-'use client';
-
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React from 'react';
 
 import CCard from 'src/components/CCard';
-import toast from 'src/components/CToast';
-import CModal from 'src/components/CModal';
-import CButton from 'src/components/CButton';
-import CProcessModal from 'src/components/CProcessModal';
-
-import { ExternalPages } from 'src/constants/externalPages';
-
-import fetch from 'src/utils/request';
-import logger from 'src/utils/logger';
-import { loadClaimedTokens } from 'src/reducers/tokens';
-import { hasTestnetTokens } from 'src/reducers/user';
-import { IResponseTokenResult } from 'src/constants/types';
-import { useAppSelector, useAppDispatch } from 'src/hooks/useRedux';
-
-import glass from 'public/images/glass.svg';
-
-import modalImage from 'public/images/modalImage.png';
 import blueDivider from 'public/images/blueDivider.svg';
-import ModalContent from './ModalContent';
 
 const ClaimTokens = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [openSecondModal, setOpenSecondModal] = useState(false);
-
-  const address = useAppSelector((state) => state.user.address);
-  const hasReceivedTokens = useAppSelector((state) => state.user.hasReceivedTokens);
-  const info = useAppSelector((state) => state.user.info);
-  const dispatch = useAppDispatch();
-
-  const handleClick = () => {
-    if (!address) {
-      toast('error', 'You need to connect your wallet first.');
-      return;
-    }
-
-    if (hasReceivedTokens) {
-      toast('error', 'You have already received testnet tokens.');
-      return;
-    }
-    setIsOpen(true);
-  };
-
-  const onCloseModalSheet = () => {
-    setIsOpen(false);
-  };
-
-  const handleClaim = async () => {
-    setIsOpen(false);
-    setOpenSecondModal(true);
-
-    if (!info) {
-      try {
-        await fetch(ExternalPages.FRIENDBOT + encodeURIComponent(address));
-      } catch (error) {
-        logger.debug('Friendbot funding request failed (account may already be funded)', error);
-      }
-    }
-    try {
-      const { data } = await fetch<IResponseTokenResult>(
-        ExternalPages.FLUXITY_API + '/testnet/token/mint',
-        {
-          method: 'POST',
-          body: JSON.stringify({ user: address }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-
-      const mappedTokens = data.result.map((token) => {
-        return { ...token, balance: '10000000000' };
-      });
-
-      dispatch(loadClaimedTokens(mappedTokens));
-      dispatch(hasTestnetTokens());
-
-      toast('success', 'Test tokens have been transferred to your wallet successfully.');
-    } catch (error) {
-      toast('error', 'Failed to claim tokens, try again later.');
-    } finally {
-      setOpenSecondModal(false);
-    }
-  };
-
   return (
     <CCard
       borderColor="#0000001A"
       className="relative bg-white p-[19.6px] short:h-[215px] h-[238px] mobile:h-[208px] w-1/2 mobile:w-full"
     >
-      <h1 className="font-medium text-2xl mobile:text-lg">Claim Testnet Tokens!</h1>
+      <h1 className="font-medium text-2xl mobile:text-lg">Get USDC for testing</h1>
 
-      <Image src={blueDivider} alt="Divider" className="py-4 select-none" />
+      <Image src={blueDivider} alt="" className="py-4 select-none" />
 
-      <p className="mobile:text-sm">
-        Try how token streaming works with some test tokens at no cost.
-      </p>
-
-      <div className="absolute mobile:bottom-[18px] bottom-[22px] left-[24.47px]">
-        <CButton
-          onClick={handleClick}
-          content="Claim Tokens"
-          variant="simple"
-          logo={glass}
-          className="w-[161px] mobile:w-[140px] mobile:h-10 mobile:text-sm font-medium border-royalBlue border hover:bg-lavenderBlush transition-all duration-700"
-        />
-      </div>
-      <CModal
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        hasCloseButton
-        headerImage={modalImage}
-        headerClassName="bg-[#9CFFBE] select-none mobile:rounded-t-[20px] mobile:relative"
-      >
-        <ModalContent address={address} handleClaim={handleClaim} handleClose={onCloseModalSheet} />
-      </CModal>
-
-      <CProcessModal
-        isOpen={openSecondModal}
-        setIsOpen={setOpenSecondModal}
-        title="Receiving Test Tokens"
-        message="Test tokens are being transferred to your wallet."
-      />
+      <ol className="space-y-2 text-sm text-midnightBlue">
+        <li className="flex items-start gap-2">
+          <span className="font-medium text-royalBlue" aria-hidden="true">
+            1.
+          </span>
+          <span>Switch to Testnet above.</span>
+        </li>
+        <li className="flex items-start gap-2">
+          <span className="font-medium text-royalBlue" aria-hidden="true">
+            2.
+          </span>
+          <span>
+            In the bottom-right wallet menu, choose <strong>Show Profile</strong>, then{' '}
+            <strong>Swap</strong>.
+          </span>
+        </li>
+        <li className="flex items-start gap-2">
+          <span className="font-medium text-royalBlue" aria-hidden="true">
+            3.
+          </span>
+          <span>Select USDC and complete the swap.</span>
+        </li>
+      </ol>
     </CCard>
   );
 };

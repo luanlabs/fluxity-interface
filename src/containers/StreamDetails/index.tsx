@@ -1,15 +1,13 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import { useEffect, useState } from 'react';
 import { redirect } from 'next/navigation';
+import { useBlux, useSwitchNetwork } from '@bluxcc/react';
 import BN from 'src/utils/BN';
 
 import { CancelAmounts } from 'src/models';
 import formatUnits from 'src/utils/formatUnits';
 import CPageCard from 'src/components/CPageCard';
-import { useAppDispatch, useAppSelector } from 'src/hooks/useRedux';
 import useGetStreamById from 'src/utils/getStreamById';
-import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import CStreamStatusButton from 'src/components/CStreamStatusButton';
 import calculateVestingAmounts from 'src/utils/calculateVestingAmount';
@@ -23,9 +21,7 @@ import SummaryFields from './SummaryFields';
 import SenderStatusCard from './SenderStatusCard';
 import ReceiverStatusCard from './ReceiverStatusCard';
 import DynamicStreamedAmount from './DynamicStreamedAmount';
-import { useSwitchNetwork } from '@bluxcc/react';
 import nameToNetworkDetail from 'src/utils/nameToNetworkDetail';
-import { setNetwork } from 'src/reducers/user';
 
 interface StreamDetailsProps {
   id: string;
@@ -34,26 +30,30 @@ interface StreamDetailsProps {
 
 const StreamDetails = ({ id, network }: StreamDetailsProps) => {
   const { switchNetwork } = useSwitchNetwork();
-  const dispatch = useAppDispatch();
-  const currentNetwork = nameToNetworkDetail(network);
+  const { isReady, user } = useBlux();
+  const networkPassphrase = nameToNetworkDetail(network).networkPassphrase;
 
   useEffect(() => {
-    switchNetwork(currentNetwork.networkPassphrase);
-    dispatch(setNetwork(currentNetwork));
-  }, [currentNetwork]);
+    if (!isReady) {
+      return;
+    }
 
-  const address = useAppSelector((state) => state.user.address);
+    switchNetwork(networkPassphrase);
+  }, [isReady, networkPassphrase, switchNetwork]);
+
+  const address = user?.address ?? '';
   const { loading, data, error } = useGetStreamById(id, network);
 
   const [cancelAmounts, setCancelAmounts] = useState<CancelAmounts>({
-    senderAmount: 0,
-    receiverAmount: 0,
+    senderAmount: BigInt(0),
+    receiverAmount: BigInt(0),
   });
 
-  const [withdrawnAmount, setWithdrawnAmount] = useState(0);
+  const [withdrawnAmount, setWithdrawnAmount] = useState(BigInt(0));
   const [isOpenCancelModal, setIsOpenCancelModal] = useState(false);
 
-  const isStreamCancelled = cancelAmounts.senderAmount !== 0 || cancelAmounts.receiverAmount !== 0;
+  const isStreamCancelled =
+    cancelAmounts.senderAmount !== BigInt(0) || cancelAmounts.receiverAmount !== BigInt(0);
   const operationType = data?.is_vesting ? 'vesting' : 'stream';
 
   const [sendLockupAmount, setSendLockupAmount] = useState(

@@ -3,11 +3,12 @@
 import cn from 'classnames';
 import React, { useState } from 'react';
 import { useForm, Controller, Resolver } from 'react-hook-form';
+import { useBalances, useBlux } from '@bluxcc/react';
+import { Horizon } from '@stellar/stellar-sdk';
 
 import CButton from 'src/components/CButton';
 import CPageCard from 'src/components/CPageCard';
 import { INFINITY_DATE } from 'src/constants/dates';
-import { useAppSelector } from 'src/hooks/useRedux';
 import CDatePicker from 'src/components/CDatePicker';
 import SummaryContainer from 'src/containers/Summary';
 import { Model } from 'src/components/CStreamingModel';
@@ -45,9 +46,14 @@ const CreateLockup = ({ operationType }: lockupProps) => {
   const [isConfirmClicked, setIsConfirmClicked] = useState(false);
   const [isOpenSheet, setIsOpenSheet] = useState(false);
 
-  const { address } = useAppSelector((state) => state.user);
-  const userAssets = useAppSelector((state) => state.user?.info?.balances);
-  const xlmAsset = userAssets?.filter((asset) => asset.asset_type === 'native')[0];
+  const { user } = useBlux();
+  const address = user?.address ?? '';
+  const { data: userAssets } = useBalances(undefined, {
+    enabled: Boolean(address),
+  });
+  const xlmAsset = userAssets?.find(
+    (asset: Horizon.HorizonApi.BalanceLine) => asset.asset_type === 'native',
+  );
 
   const form = useForm<FormValues>({
     mode: 'onChange',

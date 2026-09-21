@@ -1,56 +1,72 @@
-import { useEffect, useState } from 'react';
-import { Horizon } from '@stellar/stellar-sdk';
+import { useMemo } from 'react';
+import { useBalances, useBlux, useNetwork, useReadContracts } from '@bluxcc/react';
 import BN from 'src/utils/BN';
-import logger from 'src/utils/logger';
 
 import { ITokenDetails } from 'src/models';
-import { IToken } from 'src/reducers/tokens';
 import { useAppSelector } from 'src/hooks/useRedux';
-import checkBalanceTokenSoroban from 'src/features/checkBalanceTokenSoroban';
+import getContractIdFromAsset from 'src/features/getContractIdFromAsset';
+import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
 
-const useFetchTokenDetails = (address: string, networkPassphrase: string) => {
-  const [tokens, setTokens] = useState<IToken[]>([]);
-  const [userTokens, setUserTokens] = useState<ITokenDetails[]>([]);
-
-  const userBalances = useAppSelector((state) => state.user?.info?.balances);
+const useFetchTokenDetails = () => {
+  const { user } = useBlux();
+  const networkPassphrase = useNetwork();
+  const address = user?.address ?? '';
+  const { data: userBalances = [] } = useBalances(undefined, {
+    enabled: Boolean(address),
+  });
   const tokensFromStore = useAppSelector((store) => store.tokens);
-  const currentNetwork = useAppSelector((state) => state.user.network);
+  const contracts = useMemo(
+    () => getContractIdFromAsset(userBalances, networkPassphrase),
+    [networkPassphrase, userBalances],
+  );
+  const calls = useMemo(
+    () =>
+      contracts.flatMap((contract) => [
+        { address: contract, fn: 'balance', args: [address] },
+        { address: contract, fn: 'symbol', args: [] },
+        { address: contract, fn: 'decimals', args: [] },
+      ]),
+    [address, contracts],
+  );
+  const { data: tokenDetails } = useReadContracts(
+    calls,
+    { network: networkPassphrase },
+    {
+      enabled: Boolean(address && calls.length),
+    },
+  );
+  const network = passPhraseToNetworkDetail(networkPassphrase).network;
+  const tokens = useMemo(() => {
+    const userTokens: ITokenDetails[] = [];
 
-  useEffect(() => {
-    const fetchTokenDetails = async () => {
-      try {
-        const result = await checkBalanceTokenSoroban(
-          address,
-          userBalances as Horizon.HorizonApi.BalanceLineAsset<
-            'credit_alphanum4' | 'credit_alphanum12'
-          >[],
-          networkPassphrase,
-        );
+    contracts.forEach((contract, index) => {
+      const balance = tokenDetails?.values[index * 3];
+      const symbol = tokenDetails?.values[index * 3 + 1];
+      const decimals = tokenDetails?.values[index * 3 + 2];
 
-        const filteredTokenBalance = result.filter((e) =>
-          new BN(e.balance).isGreaterThanOrEqualTo(1),
-        );
-
-        setUserTokens(filteredTokenBalance);
-      } catch (error) {
-        logger.debug('Failed to fetch token balances from Soroban', error);
+      if (balance == null || !new BN(balance.toString()).isGreaterThanOrEqualTo(1)) {
+        return;
       }
-    };
 
-    const filterCurrentNetworkTokens = tokensFromStore.filter(
-      (token) => token.network === currentNetwork.network,
+      userTokens.push({
+        address: contract,
+        balance: balance.toString(),
+        symbol: symbol === 'native' ? 'XLM' : String(symbol),
+        decimals: String(decimals),
+        name: '',
+        logo: '',
+        _id: '',
+        claimable: false,
+        network,
+      });
+    });
+
+    const networkTokens = tokensFromStore.filter((token) => token.network === network);
+
+    return Array.from(
+      new Map([...networkTokens, ...userTokens].map((token) => [token.address, token])).values(),
     );
-
-    fetchTokenDetails();
-
-    const mergedTokens = [...filterCurrentNetworkTokens, ...userTokens];
-
-    const uniqueToken = Array.from(
-      new Map(mergedTokens.map((token) => [token.address, token])).values(),
-    );
-
-    setTokens(uniqueToken);
-  }, [address, tokensFromStore, currentNetwork]);
+  }, [contracts, network, tokenDetails, tokensFromStore]);
 
   return {
     tokens,

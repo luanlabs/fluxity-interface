@@ -1,7 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { useBlux } from '@bluxcc/react';
 
+import BN from 'src/utils/BN';
 import Loading from 'src/assets/Loading';
 import toast from 'src/components/CToast';
 import CModal from 'src/components/CModal';
@@ -11,11 +13,9 @@ import { IToken } from 'src/reducers/tokens';
 import formatUnits from 'src/utils/formatUnits';
 import useCustomID from 'src/hooks/useCustomId';
 import CEmptyList from 'src/components/CEmptyList';
-import { useAppSelector } from 'src/hooks/useRedux';
 import humanizeAmount from 'src/utils/humanizeAmount';
 import { ISelectToken, ITokenDetails } from 'src/models';
 import fromDecimals from 'src/utils/soroban/fromDecimals';
-import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 import { xlmAssetType, checkIsUserActive } from 'src/containers/CreateLockup/checkIsUserActive';
 
 import useFetchTokenDetails from './useFetchTokenDetails';
@@ -38,16 +38,12 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
   const [selectedToken, setSelectedToken] = useState<null | IToken>(null);
   const [searchValue, setSearchValue] = useState('');
 
-  const address = useAppSelector((state) => state.user.address);
-  const currentNetwork = useAppSelector((state) => state.user.network);
+  const { user } = useBlux();
+  const address = user?.address ?? '';
 
   const id = useCustomID('selectToken');
-  const { tokens } = useFetchTokenDetails(address, currentNetwork.networkPassphrase);
-  const { showLoading, tokenDetails, isContractAddressValid } = useGetERC20TokenDetail(
-    address,
-    searchValue,
-    currentNetwork.networkPassphrase,
-  );
+  const { tokens } = useFetchTokenDetails();
+  const { showLoading, tokenDetails, isContractAddressValid } = useGetERC20TokenDetail(searchValue);
 
   const isAccountActivated = checkIsUserActive(xlmAsset);
 
@@ -105,18 +101,23 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
   const handlePaste = () => {
     try {
       navigator.clipboard.readText().then((clipText) => {
-        setSearchValue(clipText);
+        setSearchValue(clipText.trim());
       });
     } catch (e) {
       toast('error', 'The Clipboard API is not available for this browser.');
     }
   };
 
+  const hasCustomTokenBalance = Boolean(
+    tokenDetails && new BN(tokenDetails.balance).isGreaterThan(0),
+  );
+
   return (
     <div className={`${className}`}>
       <CLabel label="Token" htmlFor={id} tooltipTitle="Token" />
 
       <button
+        type="button"
         className="flex justify-between w-full items-center h-14 px-4 text-lg text-mutedBlue rounded-xl bg-[#f5f5f5]"
         onClick={openModal}
         id={id}
@@ -141,7 +142,7 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
       <CModal title="Select token" isOpen={isOpen} setIsOpen={setIsOpen}>
         {address && isAccountActivated && (
           <CInput
-            placeholder="Search name/address of token"
+            placeholder="Search token or paste a C… address"
             value={searchValue}
             icon={searchLogo}
             onChange={handleInputChange}
@@ -151,7 +152,54 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
         )}
 
         <div className="mt-[23px]">
-          {address && isAccountActivated && !isContractAddressValid ? (
+          {!address ? (
+            <CEmptyList status="Connect your wallet" description="Connect to view token balances" />
+          ) : !isAccountActivated ? (
+            <CEmptyList
+              status="Account inactive"
+              description="Fund this wallet before selecting a token"
+            />
+          ) : isContractAddressValid ? (
+            showLoading ? (
+              <div className="w-full flex min-h-[160px] items-center justify-center">
+                <Loading fill="#222" />
+              </div>
+            ) : tokenDetails && hasCustomTokenBalance ? (
+              <div className="pb-4">
+                <div className="flex justify-center mt-3 items-center w-full">
+                  <div
+                    className="flex justify-between items-center cursor-pointer rounded-xl bg-[#F9F9F9] px-2 py-[10px] w-full"
+                    onClick={() => handleTokenDetails(tokenDetails)}
+                  >
+                    <div className="flex items-center">
+                      <Image src={defaultTokenLogo} width={30} alt="defaultTokenLogo" />
+                      <span className="ml-3 text-lg">{tokenDetails.symbol}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="mr-5">
+                        {humanizeAmount(
+                          formatUnits(tokenDetails.balance, Number(tokenDetails.decimals)),
+                        )}
+                      </span>
+                      <div className="h-[35px] w-[35px] rounded-[100px] bg-lavenderBlush hover:bg-[#f0efff95] flex justify-center items-center">
+                        <Image src={plusLogo} width={0} height={0} alt="plusLogo" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : tokenDetails ? (
+              <CEmptyList
+                status="No token balance"
+                description="This wallet needs a balance before the token can be used"
+              />
+            ) : (
+              <CEmptyList
+                status="Token not found"
+                description="Check the contract address and selected network"
+              />
+            )
+          ) : filteredTokens.length ? (
             filteredTokens.map((token) => (
               <div
                 className="flex items-center px-2 w-full cursor-pointer h-[72px] border-b last:border-none"
@@ -180,40 +228,11 @@ const SelectToken = ({ onChange, className, xlmAsset, value }: SelectTokenProps)
                 </div>
               </div>
             ))
-          ) : isAccountActivated && address && tokenDetails ? (
-            <div className="pb-4">
-              {showLoading ? (
-                <div className="w-full flex justify-center">
-                  <Loading fill="#222" />
-                </div>
-              ) : (
-                <div className="flex justify-center mt-3 items-center w-full">
-                  <div
-                    className="flex justify-between items-center cursor-pointer rounded-xl bg-[#F9F9F9] px-2 py-[10px] w-full"
-                    onClick={() => handleTokenDetails(tokenDetails)}
-                  >
-                    <div className="flex items-center">
-                      <Image src={defaultTokenLogo} width={30} alt="defaultTokenLogo" />
-                      <span className="ml-3 text-lg">{tokenDetails.symbol}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="mr-5">
-                        {humanizeAmount(
-                          formatUnits(tokenDetails.balance, Number(tokenDetails.decimals)),
-                        )}
-                      </span>
-                      <div className="h-[35px] w-[35px] rounded-[100px] bg-lavenderBlush hover:bg-[#f0efff95] flex justify-center items-center">
-                        <Image src={plusLogo} width={0} height={0} alt="plusLogo" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
           ) : (
-            <div>
-              <CEmptyList status="No token found" description="Please connect your wallet first" />
-            </div>
+            <CEmptyList
+              status="No token found"
+              description="Search by symbol or paste a C… contract address"
+            />
           )}
         </div>
       </CModal>

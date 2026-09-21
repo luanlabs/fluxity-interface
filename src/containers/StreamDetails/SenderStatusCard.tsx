@@ -1,4 +1,4 @@
-import { useBlux } from '@bluxcc/react';
+import { useBlux, useNetwork, useWriteContract } from '@bluxcc/react';
 import { useEffect, useState } from 'react';
 
 import BN from 'src/utils/BN';
@@ -7,21 +7,18 @@ import toast from 'src/components/CToast';
 import CButton from 'src/components/CButton';
 import formatUnits from 'src/utils/formatUnits';
 import CPageCard from 'src/components/CPageCard';
-import { useAppSelector } from 'src/hooks/useRedux';
 import humanizeAmount from 'src/utils/humanizeAmount';
 import explorersLink from 'src/constants/explorersLink';
 import CSummaryField from 'src/components/CSummaryField';
 import CModalSuccess from 'src/components/CModalSuccess';
 import CProcessModal from 'src/components/CProcessModal';
 import informCancelAPI from 'src/features/informCancelAPI';
-import cancelStream from 'src/features/soroban/cancelStream';
-import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 import SingleButtonModal from 'src/components/SingleButtonModal';
 import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import calculateVestingAmounts from 'src/utils/calculateVestingAmount';
 import { ITokenStream, CancelAmounts, OperationType } from 'src/models';
-import cancelStreamReturnValues from 'src/utils/soroban/cancelStreamReturnValues';
+import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
 
 interface SenderStatusCardProps {
   amount: string;
@@ -62,15 +59,17 @@ const SenderStatusCard = ({
   operationType,
   isVesting,
 }: SenderStatusCardProps) => {
-  const { sendTransaction } = useBlux();
-  const address = useAppSelector((state) => state.user.address);
+  const { user } = useBlux();
+  const networkPassphrase = useNetwork();
+  const { mutateAsync: writeContract, isPending } = useWriteContract<readonly [bigint, bigint]>();
+  const address = user?.address ?? '';
 
   const [isApprovalOpen, setIsApprovalOpen] = useState(false);
   const [isCancelStreamConfirmOpen, setIsCancelStreamConfirmOpen] = useState(false);
   const [isReclamationModalOpen, setIsReclamationModalOpen] = useState(false);
   const [txHash, setTxHash] = useState('');
 
-  const currentNetwork = useAppSelector((state) => state.user.network);
+  const currentNetwork = passPhraseToNetworkDetail(networkPassphrase);
 
   useEffect(() => {
     if (isOpenCancelModal) {
@@ -83,25 +82,36 @@ const SenderStatusCard = ({
   }, [isApprovalOpen, setIsOpenCancelModal]);
 
   const handleCancelClick = async () => {
-    const cancelStreamXdr = await cancelStream(currentNetwork.networkPassphrase, address, id);
-
-    let tx;
-
     try {
-      tx = await sendTransaction(cancelStreamXdr.toXDR(), { isSoroban: true });
+      const transaction = await writeContract({
+        call: {
+          address: currentNetwork.contract,
+          fn: 'cancel_lockup',
+          args: [id],
+        },
+        options: { network: networkPassphrase },
+      });
+      const cancelResult = await transaction.returnValue();
+
+      if (cancelResult === null) {
+        throw new Error('The cancellation did not return refund amounts');
+      }
+
+      setTxHash(transaction.hash);
+
+      await timeout(100);
+
+      setIsCancelStreamConfirmOpen(true);
+      setCancelAmount({
+        senderAmount: BigInt(cancelResult[0]),
+        receiverAmount: BigInt(cancelResult[1]),
+      });
+      informCancelAPI(id, currentNetwork.network);
     } catch (e) {
       toast('error', 'Failed to sign the transaction');
 
       return;
     }
-
-    setTxHash(tx.txHash);
-
-    await timeout(100);
-
-    setIsCancelStreamConfirmOpen(true);
-    setCancelAmount(cancelStreamReturnValues(tx));
-    informCancelAPI(id, currentNetwork.network);
   };
 
   const handleModalButton = () => {
@@ -140,7 +150,7 @@ const SenderStatusCard = ({
         variant="simple"
         color="outline"
         content={`Cancel ${capitalizeFirstLetter(operationType)}`}
-        disabled={!isCancelable || isStreamCancelled}
+        disabled={!isCancelable || isStreamCancelled || isPending}
         className={`w-[146px] !py-2 h-[40px] text-[14px] ${
           (!isCancelable || isStreamCancelled) &&
           '!text-softGray !border-softGray hover:!bg-transparent'
@@ -195,9 +205,7 @@ const SenderStatusCard = ({
           token={token.symbol}
           amountTitle="Amount"
           amount={humanizeAmount(cancelledAmount).toString()}
-          explorerLink={
-            explorersLink(currentNetwork.network).toLowerCase() + '/transactions/' + txHash
-          }
+          explorerLink={explorersLink(networkPassphrase).toLowerCase() + '/transactions/' + txHash}
           isOpen={isCancelStreamConfirmOpen}
           setIsOpen={setIsCancelStreamConfirmOpen}
           ButtonPart={ModalButton}

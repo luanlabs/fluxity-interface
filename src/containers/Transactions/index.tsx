@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useBlux, useNetwork } from '@bluxcc/react';
 
 import CCard from 'src/components/CCard';
 import CStreamType from 'src/components/CStreamType';
@@ -24,6 +25,7 @@ import { IFilterTokens, IStreamHistory } from 'src/constants/types';
 import getStatusStyles from './getStatusStyle';
 import isStreamWithdrawable from 'src/features/isStreamWithdrawable';
 import CEmptyList from 'src/components/CEmptyList';
+import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
 
 type StreamListProps = {
   searchValue: string;
@@ -33,14 +35,16 @@ type StreamListProps = {
 
 const StreamsList = ({ searchValue, selectedStatus, filteredValues }: StreamListProps) => {
   const router = useRouter();
-  const address = useAppSelector((state) => state.user.address);
+  const { user } = useBlux();
+  const networkPassphrase = useNetwork();
+  const address = user?.address ?? '';
   const tokens = useAppSelector((state) => state.tokens);
   const history = useAppSelector((state) => state.user.history);
   const isLoading = useAppSelector((state) => state.user.loadingHistory);
-  const currentNetwork = useAppSelector((state) => state.user.network);
+  const network = passPhraseToNetworkDetail(networkPassphrase).network;
 
   const handleClick = (streamId: string) => {
-    router.push(`${currentNetwork.network}/lockup/${streamId}`);
+    router.push(`${network}/lockup/${streamId}`);
   };
 
   const filteredStreamsByStatus = history.filter((stream) => {

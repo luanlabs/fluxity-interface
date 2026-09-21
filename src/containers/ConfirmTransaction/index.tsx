@@ -1,28 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { scValToNative } from '@stellar/stellar-sdk';
 
 import BN from 'src/utils/BN';
-import { useBlux } from '@bluxcc/react';
+import { readContracts, useBlux, useLedgers, useNetwork, useWriteContract } from '@bluxcc/react';
 
 import timeout from 'src/utils/timeout';
 import toast from 'src/components/CToast';
 import { OperationType } from 'src/models';
-import approve from 'src/features/soroban/approve';
-import { useAppSelector } from 'src/hooks/useRedux';
 import humanizeAmount from 'src/utils/humanizeAmount';
 import { FormValues } from 'src/containers/CreateLockup';
 import CProcessModal from 'src/components/CProcessModal';
 import explorersLink from 'src/constants/explorersLink';
 import CModalSuccess from 'src/components/CModalSuccess';
 import toDecimals from 'src/utils/createLockup/toDecimals';
-import createLockup from 'src/features/soroban/createLockup';
+import createStreamValues from 'src/utils/soroban/createStreamValues';
 import DoubleButtonModal from 'src/components/DoubleButtonModal';
 import SingleButtonModal from 'src/components/SingleButtonModal';
 import capitalizeFirstLetter from 'src/utils/capitalizeFirstLetter';
 import ApproveFormModal from 'src/containers/Modals/ApproveFormModal';
 import { calculateTotalAmount } from 'src/utils/calculateTotalAmount';
-import getERC20Allowance from 'src/features/soroban/getERC20Allowance';
 import informCreateLockupAPI from 'src/features/informCreateLockupAPI';
 import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
 
@@ -41,10 +37,19 @@ const ConfirmTransaction = ({
   resetFields,
   operationType,
 }: ConfirmTransactions) => {
-  const { sendTransaction } = useBlux();
+  const { user } = useBlux();
+  const networkPassphrase = useNetwork();
+  const { mutateAsync: writeContract, error } = useWriteContract<string | bigint>();
+  const { data: latestLedger } = useLedgers({
+    limit: 1,
+    order: 'desc',
+    network: networkPassphrase,
+  });
   const values: FormValues = form.getValues();
-  const address = useAppSelector((state) => state.user.address);
-  const currentNetwork = useAppSelector((state) => state.user.network);
+  const address = user?.address ?? '';
+  const currentNetwork = passPhraseToNetworkDetail(networkPassphrase);
+  const contractAddress = currentNetwork.contract;
+  const expirationLedger = Number(latestLedger?.response.records[0]?.sequence ?? 0) + 1000;
 
   const variant = capitalizeFirstLetter(operationType);
 
@@ -56,30 +61,34 @@ const ConfirmTransaction = ({
   const [isSendingCreateLockupTxModalOpen, setIsSendingCreateLockupTxModalOpen] = useState(false);
   const [isCreateLockupResultModalOpen, setIsCreateLockupResultModalOpen] = useState(false);
 
+  console.log('write contract error');
+  console.log(error);
+
   const [streamDetails, setStreamDetails] = useState({
     hash: '',
     id: 0,
   });
 
-  useEffect(() => {
-    if (isConfirmClicked) {
-      handleCreateLockupOnClick();
+  const handleCreateLockupOnClick = useCallback(async () => {
+    if (!address) {
+      toast('error', 'You need to connect your wallet first.');
+      return;
     }
-  }, [isConfirmClicked]);
 
-  useEffect(() => {
-    setIsConfirmClicked(false);
-  }, [isApproveModalOpen, setIsConfirmClicked]);
-
-  const handleCreateLockupOnClick = async () => {
-    const checkAllowance = await getERC20Allowance(
-      values.token.value.address,
-      currentNetwork.networkPassphrase,
-      address,
-      passPhraseToNetworkDetail(currentNetwork.networkPassphrase).contract,
+    const currentValues = form.getValues() as FormValues;
+    const allowanceResult = await readContracts<readonly [string | bigint]>(
+      [
+        {
+          address: currentValues.token.value.address,
+          fn: 'allowance',
+          args: [address, contractAddress],
+        },
+      ],
+      { network: networkPassphrase },
     );
+    const checkAllowance = BigInt(allowanceResult.values[0] ?? 0);
 
-    if (toDecimals(calculateTotalAmount(values)) <= BigInt(checkAllowance)) {
+    if (toDecimals(calculateTotalAmount(currentValues)) <= checkAllowance) {
       setIsWalletLoadingApproveModalOpen(false);
 
       setIsCreateLockupConfirmModalOpen(true);
@@ -87,15 +96,20 @@ const ConfirmTransaction = ({
       return;
     }
 
-    const approveXdr = await approve(
-      values.token.value.address,
-      currentNetwork.networkPassphrase,
-      address,
-      calculateTotalAmount(values),
-    );
-
     try {
-      await sendTransaction(approveXdr.toXDR());
+      await writeContract({
+        call: {
+          address: currentValues.token.value.address,
+          fn: 'approve',
+          args: [
+            address,
+            contractAddress,
+            toDecimals(calculateTotalAmount(currentValues)),
+            expirationLedger,
+          ],
+        },
+        options: { network: networkPassphrase },
+      });
 
       toast('success', 'Transaction has been approved successfully');
       setIsCreateLockupConfirmModalOpen(true);
@@ -105,32 +119,56 @@ const ConfirmTransaction = ({
 
       return;
     }
-  };
+  }, [
+    address,
+    contractAddress,
+    expirationLedger,
+    form,
+    networkPassphrase,
+    setIsConfirmClicked,
+    writeContract,
+  ]);
+
+  useEffect(() => {
+    if (isConfirmClicked) {
+      setIsConfirmClicked(false);
+      void handleCreateLockupOnClick();
+    }
+  }, [handleCreateLockupOnClick, isConfirmClicked, setIsConfirmClicked]);
 
   const handleCreateLockupConfirmClick = async () => {
     setIsCreateLockupConfirmModalOpen(false);
 
-    const createLockupXdr = await createLockup(
-      currentNetwork.networkPassphrase,
-      address,
-      values,
-      operationType,
-    );
+    console.log('abcd');
 
     try {
-      const finalize = await sendTransaction(createLockupXdr.toXDR(), { isSoroban: true });
+      console.log('efgh');
+      console.log(currentNetwork.contract);
+      console.log('values');
+      console.log(createStreamValues(values, address, operationType));
 
-      if (!finalize.returnValue) {
+      const transaction = await writeContract({
+        call: {
+          address: currentNetwork.contract,
+          fn: 'create_lockup',
+          args: [createStreamValues(values, address, operationType)],
+        },
+        options: { network: networkPassphrase },
+      });
+
+      console.log('transaction');
+      console.log(transaction);
+
+      const streamId = await transaction.returnValue();
+
+      if (streamId === null) {
         toast('error', 'Failed to send transaction');
       } else {
-        await informCreateLockupAPI(
-          scValToNative(finalize.returnValue).toString(),
-          currentNetwork.network,
-        );
+        await informCreateLockupAPI(streamId.toString(), currentNetwork.network);
 
         setStreamDetails({
-          hash: finalize.txHash,
-          id: scValToNative(finalize.returnValue).toString(),
+          hash: transaction.hash,
+          id: Number(streamId),
         });
 
         resetFields();
@@ -157,7 +195,7 @@ const ConfirmTransaction = ({
 
   try {
     totalAmount = calculateTotalAmount(values).toString();
-  } catch (e) {}
+  } catch (e) { }
 
   const ModalButton = (
     <DoubleButtonModal
@@ -209,9 +247,7 @@ const ConfirmTransaction = ({
         successLogoColor="green"
         title="Transaction Successful"
         explorerLink={
-          explorersLink(currentNetwork.network).toLowerCase() +
-          '/transactions/' +
-          streamDetails.hash
+          explorersLink(networkPassphrase).toLowerCase() + '/transactions/' + streamDetails.hash
         }
         isOpen={isCreateLockupResultModalOpen}
         setIsOpen={setIsCreateLockupResultModalOpen}

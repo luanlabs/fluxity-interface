@@ -40,7 +40,7 @@ const FAQContent = [
       {
         question: 'How can I get test tokens to try token streaming on Fluxity? ',
         answer:
-          'You can receive test tokens to try out Fluxity at no cost by clicking the Claim Test Tokens button from the Home page of the app.',
+          'Switch to Testnet, open the bottom-right wallet menu, and choose Show Profile, then Swap. Select USDC and complete the swap to use it in Fluxity.',
       },
       {
         question: 'What kinds of tokens can I use in Fluxity? ',

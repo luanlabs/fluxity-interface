@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useBlux } from '@bluxcc/react';
+import { useBlux, useNetwork, useWriteContract } from '@bluxcc/react';
 
 import BN from 'src/utils/BN';
 import timeout from 'src/utils/timeout';
@@ -7,19 +7,15 @@ import toast from 'src/components/CToast';
 import CButton from 'src/components/CButton';
 import formatUnits from 'src/utils/formatUnits';
 import CPageCard from 'src/components/CPageCard';
-import { useAppSelector } from 'src/hooks/useRedux';
 import humanizeAmount from 'src/utils/humanizeAmount';
 import CProcessModal from 'src/components/CProcessModal';
 import CSummaryField from 'src/components/CSummaryField';
 import CModalSuccess from 'src/components/CModalSuccess';
 import { IResponseStream, OperationType } from 'src/models';
-import useLoadUserNetwork from 'src/hooks/useLoadUserNetwork';
 import informWithdrawAPI from 'src/features/informWithdrawAPI';
 import SingleButtonModal from 'src/components/SingleButtonModal';
-import withdrawStream from 'src/features/soroban/withdrawStream';
 import calculateStreamAmounts from 'src/utils/calculateStreamAmount';
 import isStreamWithdrawable from 'src/features/isStreamWithdrawable';
-import withdrawStreamReturnValue from 'src/utils/soroban/withdrawStreamReturnValue';
 
 import whiteWithdrawLogo from '/public/images/whiteWithdraw.svg';
 import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
@@ -28,8 +24,8 @@ import explorersLink from 'src/constants/explorersLink';
 interface ReceiverStatusCardProps {
   stream: IResponseStream;
   token: string;
-  setWithdrawnAmount: (_: number) => void;
-  withdrawnAmount: number;
+  setWithdrawnAmount: (_: bigint) => void;
+  withdrawnAmount: bigint;
   decimalToken: number;
   operationType: OperationType;
 }
@@ -41,8 +37,10 @@ const ReceiverStatusCard = ({
   decimalToken,
   operationType,
 }: ReceiverStatusCardProps) => {
-  const { sendTransaction } = useBlux();
-  const address = useAppSelector((state) => state.user.address);
+  const { user } = useBlux();
+  const networkPassphrase = useNetwork();
+  const { mutateAsync: writeContract, isPending } = useWriteContract<bigint>();
+  const address = user?.address ?? '';
   const withdrawn = formatUnits(stream.withdrawn, decimalToken);
 
   const [totalWithdrawnAmount, setTotalWithdrawnAmount] = useState(withdrawn);
@@ -51,7 +49,7 @@ const ReceiverStatusCard = ({
   const [approvalOpen, setIsApprovalOpen] = useState(false);
   const [withdrawSuccessOpen, setIsWithdrawSuccessOpen] = useState(false);
 
-  const currentNetwork = useAppSelector((state) => state.user.network);
+  const currentNetwork = passPhraseToNetworkDetail(networkPassphrase);
 
   const amount = formatUnits(stream.amount, decimalToken);
 
@@ -67,36 +65,39 @@ const ReceiverStatusCard = ({
   const withdrawable = isStreamWithdrawable(stream);
 
   const handleWithdrawClick = async () => {
-    const withdrawStreamXdr = await withdrawStream(
-      currentNetwork.networkPassphrase,
-      address,
-      stream.id,
-    );
-
-    let tx;
-
     try {
-      tx = await sendTransaction(withdrawStreamXdr.toXDR(), { isSoroban: true });
+      const transaction = await writeContract({
+        call: {
+          address: currentNetwork.contract,
+          fn: 'withdraw_lockup',
+          args: [stream.id, 0],
+        },
+        options: { network: networkPassphrase },
+      });
+      const withdrawFinalize = await transaction.returnValue();
+
+      if (withdrawFinalize === null) {
+        throw new Error('The withdrawal did not return an amount');
+      }
+
+      setTxHash(transaction.hash);
+
+      await timeout(100);
+      setIsWithdrawSuccessOpen(true);
+
+      informWithdrawAPI(stream.id, currentNetwork.network);
+      setWithdrawnAmount(withdrawFinalize);
+
+      setTotalWithdrawnAmount(
+        new BN(formatUnits(withdrawFinalize.toString(), decimalToken))
+          .plus(new BN(totalWithdrawnAmount))
+          .toString(),
+      );
     } catch (e) {
       toast('error', 'Failed to sign the transaction');
 
       return;
     }
-
-    setTxHash(tx.txHash);
-
-    await timeout(100);
-    setIsWithdrawSuccessOpen(true);
-
-    informWithdrawAPI(stream.id, currentNetwork.network);
-    const withdrawFinalize = withdrawStreamReturnValue(tx);
-    setWithdrawnAmount(withdrawFinalize);
-
-    setTotalWithdrawnAmount(
-      new BN(formatUnits(withdrawFinalize, decimalToken))
-        .plus(new BN(totalWithdrawnAmount))
-        .toString(),
-    );
   };
 
   const handleModalButton = () => {
@@ -110,12 +111,11 @@ const ReceiverStatusCard = ({
         variant="simple"
         color="outline"
         content="Withdraw"
-        disabled={!withdrawable}
+        disabled={!withdrawable || isPending}
         svgLogo="withdraw"
         fill={!withdrawable ? '#9C9EA5' : '#3a21d4'}
-        className={`!px-3 !py-2 h-[40px] ${
-          !withdrawable && '!text-softGray !border-softGray hover:!bg-transparent'
-        }`}
+        className={`!px-3 !py-2 h-[40px] ${!withdrawable && '!text-softGray !border-softGray hover:!bg-transparent'
+          }`}
         onClick={handleWithdrawClick}
       />
     </div>
@@ -164,9 +164,7 @@ const ReceiverStatusCard = ({
         tooltipTitle="withdraw"
         tooltipDetails={`This is the amount withdrawn from the ${operationType}`}
         successLogoColor="green"
-        explorerLink={
-          explorersLink(currentNetwork.network).toLowerCase() + '/transactions/' + txHash
-        }
+        explorerLink={explorersLink(networkPassphrase).toLowerCase() + '/transactions/' + txHash}
         title="Token withdrawal successful"
         amountTitle="Amount"
         amount={withdrawAmount}
@@ -179,11 +177,10 @@ const ReceiverStatusCard = ({
           variant="simple"
           color="blue"
           content="Withdraw"
-          disabled={!withdrawable}
+          disabled={!withdrawable || isPending}
           logo={whiteWithdrawLogo}
-          className={`!px-6 !py-8 h-[40px] rounded-xl !text-[18px] font-medium tracking-wide !bg-royalBlue hover:!bg-darkPurple shadow-xl ${
-            !withdrawable && '!text-softGray !border-softGray hover:!bg-transparent'
-          }`}
+          className={`!px-6 !py-8 h-[40px] rounded-xl !text-[18px] font-medium tracking-wide !bg-royalBlue hover:!bg-darkPurple shadow-xl ${!withdrawable && '!text-softGray !border-softGray hover:!bg-transparent'
+            }`}
           onClick={handleWithdrawClick}
         />
       </div>

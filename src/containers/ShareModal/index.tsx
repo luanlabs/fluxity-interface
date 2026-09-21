@@ -4,7 +4,8 @@ import CModal from 'src/components/CModal';
 import CShare from 'src/components/CShare';
 import shareLinks from 'src/constants/shareLinks';
 import copyText from 'src/utils/copyText';
-import { useAppSelector } from 'src/hooks/useRedux';
+import { useNetwork } from '@bluxcc/react';
+import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
 
 interface ShareModalProps {
   isOpenModal: boolean;
@@ -14,8 +15,9 @@ interface ShareModalProps {
 
 const ShareModal = ({ isOpenModal, setIsOpenModal, id }: ShareModalProps) => {
   const shareOptions = shareLinks(id);
-  const currentNetwork = useAppSelector((state) => state.user.network);
-  const inputValue = `https://app.fluxity.finance/${currentNetwork.network}/lockup/${id}`;
+  const networkPassphrase = useNetwork();
+  const network = passPhraseToNetworkDetail(networkPassphrase).network;
+  const inputValue = `https://app.fluxity.finance/${network}/lockup/${id}`;
 
   const handleCopy = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
     e.stopPropagation();

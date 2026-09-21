@@ -1,5 +1,7 @@
 'use client';
 
+import { memo } from 'react';
+
 import { Pages } from 'src/constants/pages';
 import CNavLink from 'src/components/CNavLink';
 import { navLinks } from 'src/constants/navbarLinks';
@@ -43,4 +45,4 @@ const Aside = ({ isMinimized, onMinimized }: AsideProps) => {
   );
 };
 
-export default Aside;
+export default memo(Aside);

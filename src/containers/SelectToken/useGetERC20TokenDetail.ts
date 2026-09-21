@@ -1,45 +1,67 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { StrKey } from '@stellar/stellar-sdk';
+import { useBlux, useNetwork, useReadContracts, useTokenMetadata } from '@bluxcc/react';
 
 import { ITokenDetails } from 'src/models';
-import getERC20Details from 'src/features/soroban/getERC20Details';
 import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
 
-const useGetERC20TokenDetail = (
-  address: string,
-  searchValue: string,
-  networkPassphrase: string,
-) => {
-  const [showLoading, setShowLoading] = useState(true);
+const useGetERC20TokenDetail = (searchValue: string) => {
+  const { user } = useBlux();
+  const networkPassphrase = useNetwork();
+  const address = user?.address ?? '';
+  const [contractAddress, setContractAddress] = useState('');
   const networkName = passPhraseToNetworkDetail(networkPassphrase).network;
-  const [tokenDetails, setTokenDetails] = useState<ITokenDetails | null>({
-    address: '',
-    balance: '',
-    symbol: '',
-    decimals: '',
-    name: '',
-    logo: '',
-    _id: '',
-    claimable: true,
-    network: networkName,
-  });
-
-  const isContractAddressValid = StrKey.isValidContract(searchValue.toUpperCase());
+  const normalizedSearch = searchValue.toUpperCase();
+  const isContractAddressValid = StrKey.isValidContract(normalizedSearch);
 
   useEffect(() => {
-    const timeout = setTimeout(async () => {
-      if (isContractAddressValid) {
-        setTokenDetails(await getERC20Details(searchValue, networkPassphrase, address));
-        setShowLoading(false);
-      }
-    }, 3000);
-
-    if (isContractAddressValid) {
-      setShowLoading(true);
+    if (!isContractAddressValid) {
+      setContractAddress('');
+      return;
     }
 
+    const timeout = setTimeout(() => setContractAddress(normalizedSearch), 300);
+
     return () => clearTimeout(timeout);
-  }, [searchValue, address, networkPassphrase]);
+  }, [isContractAddressValid, normalizedSearch]);
+
+  const queryEnabled = Boolean(address && contractAddress);
+  const { data: metadata, isLoading: isMetadataLoading } = useTokenMetadata(
+    contractAddress,
+    { network: networkPassphrase },
+    { enabled: queryEnabled },
+  );
+  const balanceCalls = useMemo(
+    () => [{ address: contractAddress, fn: 'balance', args: [address] }],
+    [address, contractAddress],
+  );
+  const { data: balanceResult, isLoading: isBalanceLoading } = useReadContracts(
+    balanceCalls,
+    { network: networkPassphrase },
+    { enabled: queryEnabled },
+  );
+  const tokenDetails = useMemo<ITokenDetails | null>(() => {
+    const balance = balanceResult?.values[0];
+
+    if (!contractAddress || !metadata || balance == null) {
+      return null;
+    }
+
+    return {
+      address: contractAddress,
+      balance: balance.toString(),
+      symbol: metadata.symbol === 'native' ? 'XLM' : metadata.symbol,
+      decimals: metadata.decimals.toString(),
+      name: metadata.name,
+      logo: '',
+      _id: '',
+      claimable: false,
+      network: networkName,
+    };
+  }, [balanceResult, contractAddress, metadata, networkName]);
+  const showLoading =
+    isContractAddressValid &&
+    (contractAddress !== normalizedSearch || isMetadataLoading || isBalanceLoading);
 
   return {
     tokenDetails,

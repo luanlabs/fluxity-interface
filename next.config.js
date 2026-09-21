@@ -23,6 +23,19 @@ const nextConfig = {
       },
     ],
   },
+  webpack: (config, { isServer, webpack }) => {
+    if (isServer) {
+      // A wallet adapter bundled into Blux detects Node during prerendering and
+      // selects a crypto path that its browser bundle does not include.
+      config.plugins.push(
+        new webpack.DefinePlugin({
+          'process.type': JSON.stringify('renderer'),
+        }),
+      );
+    }
+
+    return config;
+  },
 };
 
 module.exports = nextConfig;

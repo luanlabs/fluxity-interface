@@ -1,6 +1,14 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import cn from 'classnames';
 import DatePicker from 'react-datepicker';
+import { createPortal } from 'react-dom';
 
 import useCustomID from 'src/hooks/useCustomId';
 import CToggle from 'src/components/CToggle';
@@ -11,6 +19,85 @@ import CButton from 'src/components/CButton';
 import { Wrapper } from './datePickerStyles';
 
 import 'react-datepicker/dist/react-datepicker.css';
+
+type DatePickerInputProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  containerClassName?: string;
+  isDatePickerUsed: boolean;
+  isEnabled: boolean;
+  onOpenPicker: React.MouseEventHandler<HTMLDivElement>;
+};
+
+const DatePickerInput = forwardRef<HTMLButtonElement, DatePickerInputProps>(
+  (
+    {
+      value,
+      onClick,
+      className,
+      id,
+      name,
+      form,
+      title,
+      disabled,
+      autoFocus,
+      tabIndex,
+      onBlur,
+      onFocus,
+      onKeyDown,
+      'aria-describedby': ariaDescribedBy,
+      'aria-labelledby': ariaLabelledBy,
+      containerClassName,
+      isDatePickerUsed,
+      isEnabled,
+      onOpenPicker,
+    },
+    ref,
+  ) => (
+    <div className={cn('relative w-full', containerClassName)} onClick={onOpenPicker}>
+      <button
+        type="button"
+        id={id}
+        name={name}
+        form={form}
+        title={title}
+        disabled={disabled}
+        autoFocus={autoFocus}
+        tabIndex={tabIndex}
+        onBlur={onBlur}
+        onFocus={onFocus}
+        onKeyDown={onKeyDown}
+        aria-describedby={ariaDescribedBy}
+        aria-labelledby={ariaLabelledBy}
+        className={cn(
+          'text-left rounded-xl h-14 px-4 outline-none text-lg placeholder-[#7D7B9B] text-[#7D7B9B] leading-[18.78px] !w-full bg-neutral-100',
+          className,
+        )}
+        onClick={onClick}
+        ref={ref}
+      >
+        <span className={isDatePickerUsed ? 'text-sm text-midnightBlue' : ''}>
+          <span className={!isEnabled ? 'text-[#a2a1b7]' : ''}>
+            {isDatePickerUsed ? String(value) : 'Choose date'}
+          </span>
+        </span>
+        <span
+          aria-hidden="true"
+          className={`
+            absolute
+            right-4
+            bottom-[10px]
+            w-[25px]
+            h-[30px]
+            ${isEnabled ? 'bg-calendar' : 'bg-disableCalendar'}
+            bg-no-repeat
+            bg-right
+          `}
+        />
+      </button>
+    </div>
+  ),
+);
+
+DatePickerInput.displayName = 'DatePickerInput';
 
 interface CDatePickerProps {
   label?: string;
@@ -44,41 +131,41 @@ const CDatePicker = ({
   const id = useCustomID('CDatePicker');
   const [selectedDate, setSelectedDate] = useState(minDate || new Date());
   const [isDatePickerUsed, setIsDatePickerUsed] = useState(false);
-  const [isOpenDatePicker, setIsOpenDatePicker] = useState(false);
   const [enabledDatePicker, setEnabledDatePicker] = useState(false);
   const [isToggleEnabled, setIsToggleEnabled] = useState(false);
   const [isOpenSheet, setIsOpenSheet] = useState(false);
+  const [isOpenDesktop, setIsOpenDesktop] = useState(false);
+  const [desktopPosition, setDesktopPosition] = useState({ top: 0, left: 0 });
+  const desktopAnchorRef = useRef<HTMLDivElement | null>(null);
+  const desktopCalendarRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!value) {
       setIsDatePickerUsed(false);
       setIsToggleEnabled(false);
       setEnabledDatePicker(false);
-
-      if (isFormReset && setIsFormReset) {
-        if (!isToggleEnabled && !isDatePickerUsed && enabledDatePicker) {
-          setIsToggleEnabled(true);
-          setIsFormReset(false);
-        } else {
-          setIsFormReset(true);
-          setIsToggleEnabled(false);
-        }
-      }
     } else {
+      setSelectedDate(value);
+      setIsDatePickerUsed(true);
       setIsToggleEnabled(true);
       setEnabledDatePicker(true);
     }
-    if (setIsFormReset) {
+
+    if (isFormReset && setIsFormReset) {
       setIsFormReset(false);
     }
-  }, [value, isToggleEnabled, isFormReset, setIsFormReset]);
+  }, [value, isFormReset, setIsFormReset]);
 
   const handleToggleStatus = (value: boolean) => {
     setEnabledDatePicker(value);
+
+    if (!value) {
+      setIsOpenDesktop(false);
+      setIsOpenSheet(false);
+    }
   };
 
   const handleChange = (value: Date) => {
-    setIsOpenDatePicker(!isOpenDatePicker);
     setSelectedDate(value);
     onChange(value);
 
@@ -94,11 +181,117 @@ const CDatePicker = ({
     return minDate.getTime() < time.getTime() && maxDate.getTime() > time.getTime();
   };
 
-  const handleOpenSheet = () => {
-    if (enabledDatePicker || readonly) {
-      setIsOpenSheet(true);
+  const updateDesktopPosition = useCallback(() => {
+    const anchor = desktopAnchorRef.current;
+
+    if (!anchor) {
+      return;
     }
+
+    const anchorRect = anchor.getBoundingClientRect();
+    const calendarRect = desktopCalendarRef.current?.getBoundingClientRect();
+    const calendarWidth = calendarRect?.width ?? 520;
+    const calendarHeight = calendarRect?.height ?? 390;
+    const viewportPadding = 16;
+    const gap = 8;
+    const spaceBelow = window.innerHeight - anchorRect.bottom - viewportPadding;
+    const spaceAbove = anchorRect.top - viewportPadding;
+    const shouldOpenAbove = spaceBelow < calendarHeight && spaceAbove > spaceBelow;
+    const top = shouldOpenAbove
+      ? Math.max(viewportPadding, anchorRect.top - calendarHeight - gap)
+      : Math.min(
+          anchorRect.bottom + gap,
+          Math.max(viewportPadding, window.innerHeight - calendarHeight - viewportPadding),
+        );
+    const left = Math.min(
+      Math.max(viewportPadding, anchorRect.left),
+      Math.max(viewportPadding, window.innerWidth - calendarWidth - viewportPadding),
+    );
+
+    setDesktopPosition((currentPosition) => {
+      if (currentPosition.top === top && currentPosition.left === left) {
+        return currentPosition;
+      }
+
+      return { top, left };
+    });
+  }, []);
+
+  const handleOpenPicker: React.MouseEventHandler<HTMLDivElement> = (event) => {
+    if (!enabledDatePicker && !readonly) {
+      return;
+    }
+
+    if (window.matchMedia('(max-width: 1023px)').matches) {
+      setIsOpenDesktop(false);
+      setIsOpenSheet(true);
+
+      return;
+    }
+
+    const anchor = event.currentTarget;
+
+    if (isOpenDesktop && desktopAnchorRef.current === anchor) {
+      setIsOpenDesktop(false);
+      return;
+    }
+
+    desktopAnchorRef.current = anchor;
+    const anchorRect = anchor.getBoundingClientRect();
+    setDesktopPosition({ top: anchorRect.bottom + 8, left: anchorRect.left });
+    setIsOpenDesktop(true);
   };
+
+  useLayoutEffect(() => {
+    if (isOpenDesktop) {
+      updateDesktopPosition();
+    }
+  }, [isOpenDesktop, updateDesktopPosition]);
+
+  useEffect(() => {
+    if (!isOpenDesktop) {
+      return;
+    }
+
+    const handleOutsideClick = (event: MouseEvent) => {
+      const target = event.target as Node;
+
+      if (
+        desktopCalendarRef.current?.contains(target) ||
+        desktopAnchorRef.current?.contains(target)
+      ) {
+        return;
+      }
+
+      setIsOpenDesktop(false);
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsOpenDesktop(false);
+        desktopAnchorRef.current?.querySelector('button')?.focus();
+      }
+    };
+    const handleViewportChange = () => {
+      if (window.matchMedia('(max-width: 1023px)').matches) {
+        setIsOpenDesktop(false);
+        return;
+      }
+
+      updateDesktopPosition();
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    document.addEventListener('scroll', handleViewportChange, true);
+    document.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('resize', handleViewportChange);
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener('scroll', handleViewportChange, true);
+      document.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('resize', handleViewportChange);
+    };
+  }, [isOpenDesktop, updateDesktopPosition]);
 
   const handleCloseSheetClick = () => {
     setIsDatePickerUsed(false);
@@ -108,38 +301,15 @@ const CDatePicker = ({
   const handleConfirmSheetClick = () => {
     setIsOpenSheet(false);
   };
-  const CustomInput = forwardRef<
-    HTMLButtonElement,
-    { value?: string; onClick?: React.MouseEventHandler<HTMLButtonElement> }
-  >(({ value, onClick }, ref) => (
-    <div className={cn('relative w-full', className)} onClick={handleOpenSheet}>
-      <button
-        className="text-left rounded-xl h-14 px-4 outline-none text-lg placeholder-[#7D7B9B] text-[#7D7B9B] leading-[18.78px] !w-full bg-neutral-100"
-        onClick={onClick}
-        ref={ref}
-      >
-        <span className={`${!isDatePickerUsed ? '' : 'text-sm text-midnightBlue'} `}>
-          <span className={!enabledDatePicker && !readonly ? 'text-[#a2a1b7]' : ''}>
-            {!isDatePickerUsed ? 'Choose date' : value}
-          </span>
-        </span>
-        <div
-          className={`
-        absolute
-        right-4
-        bottom-[10px]
-        w-[25px]
-        h-[30px]
-        ${enabledDatePicker || readonly ? 'bg-calendar' : 'bg-disableCalendar'}
-        bg-no-repeat
-        bg-right
-        `}
-        />
-      </button>
-    </div>
-  ));
 
-  CustomInput.displayName = 'datepickerCustomInput';
+  const customInput = (
+    <DatePickerInput
+      containerClassName={className}
+      isDatePickerUsed={isDatePickerUsed}
+      isEnabled={Boolean(enabledDatePicker || readonly)}
+      onOpenPicker={handleOpenPicker}
+    />
+  );
 
   return (
     <div>
@@ -164,9 +334,11 @@ const CDatePicker = ({
       <div className="w-full">
         <Wrapper>
           <DatePicker
+            id={id}
+            open={false}
             selected={selectedDate}
             onChange={handleChange}
-            customInput={<CustomInput />}
+            customInput={customInput}
             minDate={minDate}
             maxDate={maxDate}
             showTimeSelect
@@ -176,9 +348,38 @@ const CDatePicker = ({
             timeCaption="Time"
             dateFormat="MMM dd, yyyy HH:mm"
             disabled={!enabledDatePicker && !readonly}
-            calendarClassName="mobile:!hidden"
           />
         </Wrapper>
+
+        {isOpenDesktop &&
+          typeof document !== 'undefined' &&
+          createPortal(
+            <div
+              ref={desktopCalendarRef}
+              role="dialog"
+              aria-label={`${label || 'Date'} picker`}
+              className="fixed z-[1000] mobile:hidden"
+              style={{ top: desktopPosition.top, left: desktopPosition.left }}
+            >
+              <Wrapper>
+                <DatePicker
+                  selected={selectedDate}
+                  onChange={handleChange}
+                  minDate={minDate}
+                  maxDate={maxDate}
+                  showTimeSelect
+                  timeFormat="HH:mm"
+                  timeIntervals={60}
+                  filterTime={filterPassedTime}
+                  timeCaption="Time"
+                  dateFormat="MMM dd, yyyy HH:mm"
+                  disabled={!enabledDatePicker && !readonly}
+                  inline
+                />
+              </Wrapper>
+            </div>,
+            document.body,
+          )}
 
         <CBottomSheet
           contentClass="justify-center items-center w-full"
@@ -191,7 +392,6 @@ const CDatePicker = ({
             <DatePicker
               selected={selectedDate}
               onChange={handleChange}
-              customInput={<CustomInput />}
               minDate={minDate}
               maxDate={maxDate}
               showTimeSelect

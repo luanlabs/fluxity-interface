@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Provider } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
 import { usePathname } from 'next/navigation';
@@ -24,6 +24,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const [isMinimized, setIsMinimized] = useState(false);
 
   const currentPath = usePathname();
+  const handleMinimized = useCallback(() => {
+    setIsMinimized((isCurrentlyMinimized) => !isCurrentlyMinimized);
+  }, []);
 
   const knownRoutes = Object.values(Pages).find((path) => {
     if (currentPath === path) {
@@ -38,6 +41,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   });
 
   const font = myFont.style.fontFamily;
+  const bluxConfig = useMemo(
+    () => ({
+      appName: 'Fluxity',
+      appId: 'dgqlrtlop8pazxwau6us',
+      loginMethods: ['wallet'],
+      showWalletUIs: false,
+      appearance: {
+        fontFamily: font,
+        borderColor: '#0501421A',
+        accent: '#3a21d4',
+        background: '#fafafa',
+        bgField: '#ffffff',
+        textColor: '#050142',
+        borderRadius: '16px',
+        logo: '/images/logoWithName.svg',
+      },
+      networks: [networks.mainnet, networks.testnet],
+      defaultNetwork: networks.testnet,
+    }),
+    [font],
+  );
 
   return (
     <html lang="en" className={myFont.className}>
@@ -111,24 +135,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Provider store={store}>
           <StyledComponentsRegistry>
             <ThemeProvider theme={theme}>
-              <BluxProvider
-                config={{
-                  appName: 'Fluxity',
-                  loginMethods: ['wallet'],
-                  appearance: {
-                    font,
-                    borderColor: '#0501421A',
-                    accent: '#3a21d4',
-                    background: '#fafafa',
-                    bgField: '#ffffff',
-                    textColor: '#050142',
-                    borderRadius: '16px',
-                    logo: '/images/logoWithName.svg',
-                  },
-                  networks: [networks.mainnet, networks.testnet],
-                  defaultNetwork: networks.testnet,
-                }}
-              >
+              <BluxProvider config={bluxConfig}>
                 <AppDataFetch />
                 <main
                   className="relative mobile:overflow-hidden px-8 mobile:p-0 pt-[9px] pb-7 w-full 
@@ -147,19 +154,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <CCard
                       className={`desktop:relative mobile:fixed mobile:bottom-0 
                       mobile:h-16 mobile:right-0 mobile:left-0 overflow-hidden 
-                      mobile:rounded-none mobile:border-b-0 z-10 ${
-                        !knownRoutes || currentPath === Pages.FAQ ? 'hidden' : 'block'
-                      } ${
-                        isMinimized
+                      mobile:rounded-none mobile:border-b-0 z-10 ${!knownRoutes || currentPath === Pages.FAQ ? 'hidden' : 'block'
+                        } ${isMinimized
                           ? 'basis-[80px] transition-all duration-500'
                           : 'basis-[24%] lg:basis-[20%] transition-all duration-500'
-                      } px-[15px] py-[19px] mobile:p-0`}
+                        } px-[15px] py-[19px] mobile:p-0`}
                       bgColor="white"
                     >
-                      <Aside
-                        isMinimized={isMinimized}
-                        onMinimized={() => setIsMinimized(!isMinimized)}
-                      />
+                      <Aside isMinimized={isMinimized} onMinimized={handleMinimized} />
                     </CCard>
                     <article className="basis-full mobile:mt-[60px]">
                       {children}

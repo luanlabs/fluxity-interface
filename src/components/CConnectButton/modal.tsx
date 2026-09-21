@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import React, { useRef } from 'react';
-import { useBlux } from '@bluxcc/react';
+import { useBlux, useNetwork } from '@bluxcc/react';
 
 import toast from '../CToast';
 import CButton from '../CButton';
@@ -14,16 +14,16 @@ import arrowRight from 'public/images/arrowCircleRight.svg';
 
 import { Optional } from 'src/models';
 import copyText from 'src/utils/copyText';
-import { disconnect } from 'src/reducers/user';
 import { useAppDispatch } from 'src/hooks/useRedux';
 import { clearTokenBalances } from 'src/reducers/tokens';
+import { clearStreamHistory } from 'src/reducers/user';
 import { shortenAddress } from 'src/utils/shortenAddress';
 import useOutsideClickHandler from 'src/hooks/useOutsideClickHandler';
+import explorersLink from 'src/constants/explorersLink';
 
 type ModalProps = {
   isModalOpen: boolean;
   address: string;
-  explorerAddress: string;
   isMinimized: boolean;
   handleCloseModal: () => void;
   setIsModalOpen: (_: boolean) => void;
@@ -34,9 +34,10 @@ const Modal = ({
   handleCloseModal,
   isMinimized,
   setIsModalOpen,
-  explorerAddress,
 }: ModalProps) => {
-  const { logout } = useBlux();
+  const { logout, profile } = useBlux();
+  const networkPassphrase = useNetwork();
+  const explorerAddress = explorersLink(networkPassphrase).toLowerCase();
   const modalRef = useRef<Optional<HTMLDivElement>>(null);
   const bottomSheetRef = useRef<Optional<HTMLDivElement>>(null);
   useOutsideClickHandler(isModalOpen, handleCloseModal, modalRef, bottomSheetRef);
@@ -46,8 +47,14 @@ const Modal = ({
   const handleDisconnect = () => {
     logout();
 
-    dispatch(disconnect());
+    dispatch(clearStreamHistory());
     dispatch(clearTokenBalances());
+  };
+
+  const handleProfile = () => {
+    handleCloseModal();
+
+    profile();
   };
 
   const handleCopy = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
@@ -60,11 +67,10 @@ const Modal = ({
     <>
       <div
         ref={modalRef}
-        className={`bg-midnightBlue p-[6px] rounded-[10px] mobile:!hidden ${
-          isModalOpen
+        className={`bg-midnightBlue p-[6px] rounded-[10px] mobile:!hidden ${isModalOpen
             ? `fixed bottom-11 ${isMinimized ? 'left-[100px]' : 'left-[20%]'} w-[203px] z-50`
             : 'hidden'
-        }`}
+          }`}
       >
         <div
           className="h-12 px-2 rounded-md bg-white text-midnightBlue flex justify-between items-center w-full"
@@ -84,6 +90,12 @@ const Modal = ({
               <Image src={arrowRight} alt="arrow" />
             </Link>
           </div>
+
+          <div className="py-2 flex justify-between items-center w-full" onClick={handleProfile}>
+            <span>Show Profile</span>
+            <Image src={arrowRight} alt="arrow" />
+          </div>
+
           <div className="py-2 flex justify-between items-center w-full" onClick={handleDisconnect}>
             <span>Disconnect Wallet</span>
             <Image src={power} alt="power" />

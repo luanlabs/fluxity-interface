@@ -1,14 +1,12 @@
 import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useSwitchNetwork, useNetwork } from '@bluxcc/react';
+import { useBlux, useSwitchNetwork, useNetwork } from '@bluxcc/react';
 
 import CLink from 'src/components/CLink';
 import CButton from 'src/components/CButton';
 import { ExternalPages } from 'src/constants/externalPages';
-import { setNetwork } from 'src/reducers/user';
 import { useAppDispatch } from 'src/hooks/useRedux';
-import { Mainnet, Testnet } from 'src/constants/networks';
 import { clearToken } from 'src/reducers/tokens';
 
 import StellarLogo from 'src/assets/StellarLogo';
@@ -18,19 +16,21 @@ import FluxityTypography from 'src/assets/FluxityTypography';
 
 const Header = () => {
   const router = useRouter();
-  const { switchNetwork } = useSwitchNetwork();
+  const { networks, switchNetwork } = useSwitchNetwork();
+  const { isReady } = useBlux();
   const currentNetwork = useNetwork();
   const dispatch = useAppDispatch();
 
-  const mainnetPassphrase = 'Public Global Stellar Network ; September 2015';
-
-  const isMainnet = currentNetwork === mainnetPassphrase;
+  const isMainnet = currentNetwork === networks.mainnet;
 
   const handleSwitchNetwork = () => {
-    const newNetwork = isMainnet ? Testnet : Mainnet;
+    if (!isReady) {
+      return;
+    }
 
-    switchNetwork(newNetwork.networkPassphrase);
-    dispatch(setNetwork(newNetwork));
+    const newNetwork = isMainnet ? networks.testnet : networks.mainnet;
+
+    switchNetwork(newNetwork);
     dispatch(clearToken());
   };
   return (
@@ -55,8 +55,10 @@ const Header = () => {
           <CLink title="Community" url={ExternalPages.COMMUNITY} />
         </span>
         <CButton
+          type="button"
           variant="simple"
           color="gray"
+          disabled={!isReady}
           onClick={handleSwitchNetwork}
           content={
             <span className="flex gap-2 items-center">

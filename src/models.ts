@@ -90,8 +90,8 @@ export interface StreamDetailsIconProps {
 }
 
 export type CancelAmounts = {
-  senderAmount: number;
-  receiverAmount: number;
+  senderAmount: bigint;
+  receiverAmount: bigint;
 };
 
 export type OperationType = 'stream' | 'vesting';
