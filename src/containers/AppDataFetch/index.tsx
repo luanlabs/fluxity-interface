@@ -5,12 +5,13 @@ import CModal from 'src/components/CModal';
 import validateEnv from 'src/constants/env';
 import useLoadTokens from 'src/hooks/useLoadTokens';
 import useLoadStreams from 'src/hooks/useLoadStreams';
+import useFundTestnetAccount from 'src/hooks/useFundTestnetAccount';
 import ChangeNetworkModal from '../ChangeNetworkModal';
 import passPhraseToNetworkDetail from 'src/utils/passPhraseToNetworkDetail';
 
 const AppDataFetch = () => {
   const [shouldModalOpen, setShouldModalOpen] = useState(false);
-  const { user } = useBlux();
+  const { isAuthenticated, isReady, user } = useBlux();
   const networkPassphrase = useNetwork();
   const address = user?.address ?? '';
   const network = passPhraseToNetworkDetail(networkPassphrase).network;
@@ -21,6 +22,7 @@ const AppDataFetch = () => {
 
   useLoadTokens(network, networkPassphrase, address);
   useLoadStreams(address, network);
+  useFundTestnetAccount(address, isAuthenticated, isReady);
 
   return (
     <>
